@@ -12,7 +12,7 @@ class electrongas
 public:
     electrongas();
     void generate_state_list(int Ne, double rs);
-    double absdiff2(vec A, vec B);
+    double absdiff2(rowvec A, rowvec B);
     double v(int P, int Q, int R, int S);
     double f(int P, int Q);
     double h(int P, int Q);

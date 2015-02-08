@@ -49,3 +49,27 @@ double ccsolve::t2(int a, int b, int i, int j){
 double ccsolve::t3(int a, int b, int c, int i, int j, int k){
     return t3a(a + iNs*b + iNs2*c,i + iNs*j + iNs2*k);
 }
+
+void ccsolve::scan_amplitudes(){
+    //accessing all amplitudes
+    double val = 0.0;
+    for(int a = 0; a<iNs;a++){
+        for(int i = 0; i<iNs; i++){
+            val += t1(a,i);
+            for(int b = 0; b< iNs; b++){
+                for(int j =0; j < iNs; j++){
+                    val += t2(a,b,i,j);
+
+                    for(int c= 0; c < iNs; c++){
+                        for(int k= 0; k<iNs; k++){
+                            val += t3(a,b,c,i,j,k);
+                        }
+                    }
+
+                    //cout << a << " " << b << " " <<  i << " " << j << endl;
+                }
+            }
+        }
+    }
+    cout << "Done summing all amplitudes:" << val << endl;
+}

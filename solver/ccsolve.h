@@ -36,6 +36,9 @@ public:
     int iNs2; // squared number of particles
     int iNp; //number of particles
 
+    //calibration functions
+    void scan_amplitudes(); //scan through all elements in the amplitudes
+
 };
 
 #endif // CCSOLVE_H

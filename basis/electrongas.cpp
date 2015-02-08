@@ -94,7 +94,7 @@ void electrongas::generate_state_list(int Ne, double rs){
     cout << "Initialized " << nStates << " states." << endl;
 }
 
-double electrongas::absdiff2(vec A, vec B){
+double electrongas::absdiff2(rowvec A, rowvec B){
     double D = 0;
     for (int i =0; i < 3; i++){
         D += (A(i) - B(i))*(A(i) - B(i));
