@@ -1,10 +1,13 @@
+#define ARMA_64BIT_WORD
+#include <armadillo>
+
 #include <fstream>
 #include <iomanip>
 #include <time.h>
-#include <armadillo>
 #include <string>
 #include "basis/electrongas.h"
 #include "solver/ccsolve.h"
+
 
 
 
@@ -14,8 +17,9 @@ using namespace arma;
 int main()
 {
     electrongas fgas;
-    fgas.generate_state_list(36,1.0);
-    //ccsolve solver(fgas);
+    fgas.generate_state_list(4,1.0);
+    ccsolve solver(fgas);
+    return 0;
 
 }
 

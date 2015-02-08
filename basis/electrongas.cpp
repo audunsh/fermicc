@@ -1,3 +1,4 @@
+//#define ARMA_64BIT_WORD
 #include <armadillo>
 
 #include "solver/ccsolve.h"

@@ -1,10 +1,10 @@
 #ifndef CCSOLVE_H
 #define CCSOLVE_H
-
-#include "basis/electrongas.h"
-
+#define ARMA_64BIT_WORD
 #include <armadillo>
 #include <iomanip>
+#include "basis/electrongas.h"
+//#include "solver/t3amps.h"
 
 using namespace std;
 using namespace arma;
@@ -27,12 +27,19 @@ public:
     double t2(int a, int b, int i, int j);
     double t3(int a, int b, int c, int i, int j, int k);
 
-    sp_mat md_t1amps;
-    field<sp_mat> fm_t2amps; //(field<mat>);
-    field<sp_mat> fm_gas;
+    mat t1a;
+    //field<mat> t2a;
+    SpMat<double> t2a;
+    SpMat<double> t3a;
+    //t3amps t3a;
+    //SpMat<double> t3a;
+    //sp_mat t3a;
+
+
 
     //parameters
     int iNs; //number of states
+    int iNs2; // squared number of particles
     int iNp; //number of particles
 
 

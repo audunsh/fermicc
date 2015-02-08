@@ -5,16 +5,14 @@ CONFIG -= qt
 
 SOURCES += main.cpp \
     basis/electrongas.cpp \
-    solver/ccsolve.cpp \
-    solver/amplitude_tensor.cpp
+    solver/ccsolve.cpp
 
 include(deployment.pri)
 qtcAddDeployment()
 
 HEADERS += \
     basis/electrongas.h \
-    solver/ccsolve.h \
-    solver/amplitude_tensor.h
+    solver/ccsolve.h
 
 LIBS += -larmadillo -lblas -llapack
 

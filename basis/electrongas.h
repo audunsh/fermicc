@@ -1,6 +1,6 @@
 #ifndef ELECTRONGAS_H
 #define ELECTRONGAS_H
-
+#define ARMA_64BIT_WORD
 #include <armadillo>
 #include <iomanip>
 
