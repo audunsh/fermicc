@@ -28,24 +28,13 @@ public:
     double t3(int a, int b, int c, int i, int j, int k);
 
     mat t1a;
-    //field<mat> t2a;
     SpMat<double> t2a;
     SpMat<double> t3a;
-    //t3amps t3a;
-    //SpMat<double> t3a;
-    //sp_mat t3a;
-
-
 
     //parameters
     int iNs; //number of states
     int iNs2; // squared number of particles
     int iNp; //number of particles
-
-
-
-
-
 
 };
 
