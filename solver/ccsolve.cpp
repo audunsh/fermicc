@@ -52,9 +52,23 @@ double ccsolve::CCSD_SG(int iNparticles){
     cout << CCSD_SG_energy() << endl;
 
     //Initial guess for amplitudes
-    SpMat<double> t2a;
-    SpMat<double> t3a;
+    //SpMat<double> t2a;
+    //SpMat<double> t3a;
+    for(i = 0; i<iNp; i++){
+        for(a = iNp; a<iNs; a++){
+            t1a(a,i) = h(a,i)/(h(i,i) - h(a,a));
+            cout << h(a,a) << endl;
+            cout << h(i,i) << endl;
+            for(j = 0; j<iNp; j++){
+                for(b = iNp; b<iNs; b++){
+                    t2a(a+b*iNs,i+j*iNs) = v(a,b,i,j)/(h(i,i) + h(j,j) - h(a,a) - h(b,b));
+                }
+            }
+        }
+    }
+    cout << CCSD_SG_energy() << endl;
     for(j = 0; j<15; j++){
+        update_SGIntermediates();
         CCSD_SG_advance();
         cout << CCSD_SG_energy() << endl;
     }
@@ -65,10 +79,10 @@ void ccsolve::CCSD_SG_advance(){
     int a,b,i,j;
     for(a=iNp; a<iNs; a++){
         for(i = 0; i<iNp; i++){
-            t1a_new(a,i) = CCSD_SG_dt1(a,i);
+            t1a_new(a,i) = CCSD_SG_dt1(a,i)/(h(i,i) - h(a,a));
             for(b=iNp; b<iNs; b++){
                 for(j = 0; j<iNp; j++){
-                    t2a_new(a+b*iNs,i+j*iNs) = CCSD_SG_dt2(a,b,i,j);
+                    t2a_new(a+b*iNs,i+j*iNs) = CCSD_SG_dt2(a,b,i,j)/(h(i,i) + h(j,j) - h(a,a) - h(b,b));
                 }
             }
         }
