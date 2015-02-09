@@ -20,7 +20,24 @@ public:
 
     //solver functions
     void initialize_amplitudes();
+    void initialize_t3amplitudes();
     void update_intermediates();
+
+    //Stanton-Gauss intermediates
+    double CCSD_SG(int iNparticles);
+
+    double CCSD_SG_dt1(int a, int i);
+    double CCSD_SG_dt2(int a, int b, int i, int j);
+
+    void update_SGIntermediates();
+    void initialize_SGIntermediates();
+    field<mat> w1a; //4D-tensors
+    field<mat> w2a;
+    field<mat> w3a;
+    field<mat> w4a;
+    mat f1a;        //2D-tensors
+    mat f2a;
+    mat f3a;
 
     //amplitudes
     double t1(int a, int i);

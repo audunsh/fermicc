@@ -17,12 +17,13 @@ using namespace arma;
 int main()
 {
     electrongas fgas;
-    fgas.generate_state_list(3,1.0);
+    fgas.generate_state_list(1,1.0);
     //cout << fgas.v(0,2,0,2) << endl;
     //double ref_e = fgas.eref(65);
     //cout << "Energy:" << ref_e/65.0 << endl;
     ccsolve solver(fgas);
-    solver.scan_amplitudes();
+    //solver.scan_amplitudes();
+    solver.CCSD_SG(4);
     return 0;
 
 }
