@@ -29,6 +29,8 @@ public:
     double CCSD_SG_dt1(int a, int i);
     double CCSD_SG_dt2(int a, int b, int i, int j);
 
+    double CCSD_SG_energy();
+
     void update_SGIntermediates();
     void initialize_SGIntermediates();
     field<mat> w1a; //4D-tensors

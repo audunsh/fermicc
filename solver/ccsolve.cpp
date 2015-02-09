@@ -40,8 +40,57 @@ void ccsolve::initialize_t3amplitudes(){
 
 double ccsolve::CCSD_SG(int iNparticles){
     iNp = iNparticles;
+    int a,b,i,j;
     initialize_SGIntermediates();
     update_SGIntermediates();
+
+    //test routines
+    cout << CCSD_SG_dt1(0,0) << endl;
+    cout << CCSD_SG_dt2(0,0,0,0) << endl;
+    cout << CCSD_SG_energy() << endl;
+
+    //Initial guess for amplitudes
+
+
+}
+
+double ccsolve::CCSD_SG_energy(){
+    //return correlation energy
+    double val1, val2;
+    int a,b,i,j;
+
+    val1 = 0.0;
+    for(a=iNp; a<iNs; a++){
+        for(i = 0; i<iNp; i++){
+            val1 += h(a,i)*t1(a,i);
+        }
+    }
+
+    val2 = 0.0;
+    for(a=iNp; a<iNs; a++){
+        for(i = 0; i<iNp; i++){
+            for(b = iNp; b<iNs; b++){
+                for(j = 0; j<iNp; j++){
+                    val2 += v(i,j,a,b)*t2(a,b,i,j);
+                }
+            }
+        }
+    }
+    val1 += .25*val2;
+
+    val2 = 0.0;
+    for(a=iNp; a<iNs; a++){
+        for(i = 0; i<iNp; i++){
+            for(b = iNp; b<iNs; b++){
+                for(j = 0; j<iNp; j++){
+                    val2 += v(i,j,a,b)*t1(a,i)*t1(b,j);
+                }
+            }
+        }
+    }
+    val1 += .5*val2;
+
+    return val1;
 }
 
 double ccsolve::CCSD_SG_dt2(int a, int b, int i, int j){
