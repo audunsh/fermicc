@@ -23,7 +23,7 @@ int main()
     //cout << "Energy:" << ref_e/65.0 << endl;
     ccsolve solver(fgas);
     //solver.scan_amplitudes();
-    solver.CCSD_SG(4);
+    double e_corr = solver.CCSD_SG(4);
     return 0;
 
 }

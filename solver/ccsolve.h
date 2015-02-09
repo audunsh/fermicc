@@ -26,6 +26,8 @@ public:
     //Stanton-Gauss intermediates
     double CCSD_SG(int iNparticles);
 
+    void CCSD_SG_advance();
+
     double CCSD_SG_dt1(int a, int i);
     double CCSD_SG_dt2(int a, int b, int i, int j);
 
@@ -49,6 +51,10 @@ public:
     mat t1a;
     SpMat<double> t2a;
     SpMat<double> t3a;
+
+    mat t1a_new;
+    SpMat<double> t2a_new;
+    SpMat<double> t3a_new;
 
     //parameters
     int iNs; //number of states

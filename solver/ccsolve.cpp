@@ -30,7 +30,9 @@ double ccsolve::h(int a, int i){
 void ccsolve::initialize_amplitudes(){
     //initializing amplitude tensors
     t1a.set_size(iNs,iNs);
+    t1a_new.set_size(iNs,iNs);
     t2a.set_size(iNs2,iNs2);
+    t2a_new.set_size(iNs2,iNs2);
     //t3a.set_size(iNs2*iNs, iNs2*iNs);
 }
 
@@ -50,9 +52,33 @@ double ccsolve::CCSD_SG(int iNparticles){
     cout << CCSD_SG_energy() << endl;
 
     //Initial guess for amplitudes
-
-
+    SpMat<double> t2a;
+    SpMat<double> t3a;
+    for(j = 0; j<15; j++){
+        CCSD_SG_advance();
+        cout << CCSD_SG_energy() << endl;
+    }
+    return CCSD_SG_energy();
 }
+
+void ccsolve::CCSD_SG_advance(){
+    int a,b,i,j;
+    for(a=iNp; a<iNs; a++){
+        for(i = 0; i<iNp; i++){
+            t1a_new(a,i) = CCSD_SG_dt1(a,i);
+            for(b=iNp; b<iNs; b++){
+                for(j = 0; j<iNp; j++){
+                    t2a_new(a+b*iNs,i+j*iNs) = CCSD_SG_dt2(a,b,i,j);
+                }
+            }
+        }
+    }
+
+    //updating amplitudes
+    t2a = t2a_new;
+    t1a = t1a_new;
+}
+
 
 double ccsolve::CCSD_SG_energy(){
     //return correlation energy
