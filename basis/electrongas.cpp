@@ -13,7 +13,7 @@ electrongas::electrongas()
 {
 }
 
-void electrongas::generate_state_list(int Ne, double rs){
+void electrongas::generate_state_list(int Ne, double rs, int Np){
     iN = Ne;
 
     //Volum = nokkuperte*4.d0*pi*r_s**3/3.d0
@@ -28,6 +28,7 @@ void electrongas::generate_state_list(int Ne, double rs){
     double Nmax = iN + 1; //sqrt(iN) + 1;
     int energy = 0;
     int nStates = 0;
+    iNparticles = Np;
 
     //Counting the number of states needed up to energy level N
     for(int x = -Nmax; x<Nmax+1; x++){
@@ -44,9 +45,13 @@ void electrongas::generate_state_list(int Ne, double rs){
     //cout << "Up to energy level " << N << " there will be " << nStates << " states." << endl;
 
 
-    dPrefactor1 = 3.0/(nStates*dr_s*dr_s*dr_s);
-    dL3 = nStates*4.0*pi*dr_s*dr_s*dr_s/3.0;
-    dL = pow(dL3, 1.0/3.0);
+    dPrefactor1 = 3.0/(iNparticles*dr_s*dr_s*dr_s); //this is correct
+
+    //dL3 = nStates*4.0*pi*dr_s*dr_s*dr_s/3.0;
+    dL3 = iNparticles*4.0*pi*dr_s*dr_s*dr_s/3.0;
+    dL2 = pow(dL3, 2.0/3.0);
+    dPrefactor1 = 2*pi/dL2;
+    mu =0;
     //Setting up all all states
     mat k_combinations = zeros(nStates, 5);
     mSortedEnergy.zeros(nStates, 4);
@@ -57,7 +62,7 @@ void electrongas::generate_state_list(int Ne, double rs){
         for(int y = -Nmax; y<Nmax+1; y++){
             for(int z = -Nmax; z<Nmax+1; z++){
                 energy = (x*x + y*y + z*z);
-                e2 = 2*energy*(pi*pi)/(dL*dL);
+                e2 = 2*energy*(pi*pi)/(dL2);
                 if(energy < iN + 1){
                     k_combinations(index_count, 0) = e2; //energy*prefactor2*(53.63609*pi*pi/L3);
                     k_combinations(index_count, 1) = x;
@@ -151,17 +156,18 @@ double electrongas::v(int P, int Q, int R, int S){
         term1 = kd(spinP, spinR)*kd(spinQ,spinS);
         kd1 = kd_vec(kp, kr);
         if(kd1!= 1.0){
-            term1 = term1 / absdiff2(kr, kp);
+            //term1 = term1 / (mu*mu + 4*pi*pi*absdiff2(kr, kp));
+            term1 = dL2 / (mu*mu + 4*pi*pi*absdiff2(kr, kp));
         }
 
         term2 = kd(spinP, spinS)*kd(spinQ,spinR);
         kd2 = kd_vec(kp, ks);
         if(kd2!= 1.0){
-            term2 = term2 / absdiff2(ks, kp);
+            term2 = dL2 / (mu*mu + 4*pi*pi*absdiff2(ks, kp));
         }
 
         //value *= (term1 - term2);
-        return dPrefactor1*(term1 - term2);
+        return 4.0*pi*(term1 - term2)/dL3; //dPrefactor1*
     }
 }
 
@@ -190,8 +196,8 @@ double electrongas::f(int P, int Q){
 double electrongas::eref(int nParticles){
     //returns the reference energy in the current basis
     double reference_energy = 0.0;
-    for(int i =0; i <nParticles+1; i++){
-        reference_energy += 0*h(i,i);
+    for(int i =0; i <nParticles; i++){
+        reference_energy += h(i,i);
         for(int j=0; j<nParticles; j++){
             if(i!=j){
                 reference_energy += .5*v(i,j, i,j);

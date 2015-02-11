@@ -11,7 +11,7 @@ class electrongas
 {
 public:
     electrongas();
-    void generate_state_list(int Ne, double rs);
+    void generate_state_list(int Ne, double rs, int Np);
     double absdiff2(rowvec A, rowvec B);
     double v(int P, int Q, int R, int S);
     double f(int P, int Q);
@@ -21,8 +21,10 @@ public:
     int kd_vec(rowvec A, rowvec B);
     int kd(int A, int B);
 
+
     double dL;
     double dL3; //L*L*L
+    double dL2; //L*L
     double dr_s;
     int iN;
     int iNbstates;
@@ -31,6 +33,8 @@ public:
     vec vEnergy;
     double dPrefactor1;
     double dPrefactor2;
+    double mu;
+    int iNparticles;
 
     double pi = 4*atan(1);
 };
