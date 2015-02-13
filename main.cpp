@@ -22,7 +22,7 @@ int main()
         cout << i << " " << fgas.h(i,i) << endl;
     }
     fgas.mu = 7.695;
-    fgas.mu = 2.5*3.1415;
+    fgas.mu = 0; //2.5*3.1415;
     cout << endl;
     cout << "Energy per particle:" << fgas.eref(14)/14.0 << " (a.u)"  << endl;
     cout << "Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;

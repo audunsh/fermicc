@@ -172,7 +172,7 @@ double electrongas::v(int P, int Q, int R, int S){
 
         //value *= (term1 - term2);
         //return 4.0*pi*(1.0/term1 - 1.0/term2)/dL3; //dPrefactor1*
-        return 4.0*pi*value/dL3; //dPrefactor1*
+        return 2.0*pi*value/dL3; //dPrefactor1*
     }
 }
 
@@ -200,16 +200,26 @@ double electrongas::f(int P, int Q){
 
 double electrongas::eref(int nParticles){
     //returns the reference energy in the current basis
+    double sp_energy =0.0;
+    double in_energy = 0.0;
     double reference_energy = 0.0;
     for(int i =0; i <nParticles; i++){
+        sp_energy += h(i,i);
         reference_energy += h(i,i);
         for(int j=0; j<nParticles; j++){
             if(i!=j){
-               reference_energy += .5*v(i,j, i,j);
+
+                if(v(i,j,i,j) != 0){
+                    cout << i << " " << j << " " << v(i,j,i,j) << endl;
+                }
+                reference_energy += .5*v(i,j, i,j);
+                in_energy += .5*v(i,j,i,j);
 
             }
         }
     }
+    cout << "Single particle energy:" << sp_energy << endl;
+    cout << "Interaction energy:" << in_energy << endl;
     return reference_energy;
 }
 
