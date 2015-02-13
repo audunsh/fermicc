@@ -26,6 +26,15 @@ int main()
     cout << "Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;
     cout << "Energy per particle (analytic):" << 2*fgas.analytic_energy(14)/14.0 << " (rydberg)"  << endl;
 
+
+    rowvec A;
+    A.set_size(3);
+    A(0) = 1;
+    rowvec B;
+    B.set_size(3);
+    B(0) = 1.5;
+    cout << fgas.absdiff2(A,B) << endl;
+
     //cout << fgas.v(0,2,0,2) << endl;
     //double ref_e = fgas.eref(65);
     //cout << "Energy:" << ref_e/65.0 << endl;

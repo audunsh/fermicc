@@ -152,22 +152,27 @@ double electrongas::v(int P, int Q, int R, int S){
         return 0;
     }
     else{
+        value = 0;
         //term1 = kd(spinP, spinQ)*kd(spinR,spinS);
         term1 = kd(spinP, spinR)*kd(spinQ,spinS);
         kd1 = kd_vec(kp, kr);
         if(kd1!= 1.0){
             //term1 = term1 / (mu*mu + 4*pi*pi*absdiff2(kr, kp));
-            term1 = dL2 / (mu*mu + 4*pi*pi*absdiff2(kr, kp));
+            cout << "Direct" << endl;
+            term1 = (mu*mu + 4*pi*pi*absdiff2(kr, kp))/dL2;
+            value += 1.0/term1;
         }
 
         term2 = kd(spinP, spinS)*kd(spinQ,spinR);
         kd2 = kd_vec(kp, ks);
         if(kd2!= 1.0){
-            term2 = dL2 / (mu*mu + 4*pi*pi*absdiff2(ks, kp));
+            term2 = (mu*mu + 4*pi*pi*absdiff2(ks, kp))/dL2;
+            value -= 1.0/term2;
         }
 
         //value *= (term1 - term2);
-        return 4.0*pi*(term1 - term2)/dL3; //dPrefactor1*
+        //return 4.0*pi*(1.0/term1 - 1.0/term2)/dL3; //dPrefactor1*
+        return 4.0*pi*value/dL3; //dPrefactor1*
     }
 }
 
@@ -200,7 +205,10 @@ double electrongas::eref(int nParticles){
         reference_energy += h(i,i);
         for(int j=0; j<nParticles; j++){
             if(i!=j){
-                reference_energy += .5*v(i,j, i,j);
+                if(v(i,j,i,j)!= 0){
+                    cout << i << " " << j << " " << v(i,j,i,j) << endl;
+                    reference_energy += .5*v(i,j, i,j);
+                }
             }
         }
     }
