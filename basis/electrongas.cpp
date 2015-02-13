@@ -158,7 +158,7 @@ double electrongas::v(int P, int Q, int R, int S){
         kd1 = kd_vec(kp, kr);
         if(kd1!= 1.0){
             //term1 = term1 / (mu*mu + 4*pi*pi*absdiff2(kr, kp));
-            cout << "Direct" << endl;
+            //cout << "Direct" << endl;
             term1 = (mu*mu + 4*pi*pi*absdiff2(kr, kp))/dL2;
             value += 1.0/term1;
         }
@@ -205,10 +205,8 @@ double electrongas::eref(int nParticles){
         reference_energy += h(i,i);
         for(int j=0; j<nParticles; j++){
             if(i!=j){
-                if(v(i,j,i,j)!= 0){
-                    cout << i << " " << j << " " << v(i,j,i,j) << endl;
-                    reference_energy += .5*v(i,j, i,j);
-                }
+               reference_energy += .5*v(i,j, i,j);
+
             }
         }
     }

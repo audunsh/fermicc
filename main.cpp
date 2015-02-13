@@ -21,19 +21,14 @@ int main()
     for(int i = 0; i<14; i++){
         cout << i << " " << fgas.h(i,i) << endl;
     }
+    fgas.mu = 7.695;
+    fgas.mu = 2.5*3.1415;
     cout << endl;
     cout << "Energy per particle:" << fgas.eref(14)/14.0 << " (a.u)"  << endl;
     cout << "Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;
     cout << "Energy per particle (analytic):" << 2*fgas.analytic_energy(14)/14.0 << " (rydberg)"  << endl;
+    cout << "Compared to:" << 1.9434 << endl;
 
-
-    rowvec A;
-    A.set_size(3);
-    A(0) = 1;
-    rowvec B;
-    B.set_size(3);
-    B(0) = 1.5;
-    cout << fgas.absdiff2(A,B) << endl;
 
     //cout << fgas.v(0,2,0,2) << endl;
     //double ref_e = fgas.eref(65);
