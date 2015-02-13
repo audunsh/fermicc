@@ -33,9 +33,9 @@ int main()
     //cout << fgas.v(0,2,0,2) << endl;
     //double ref_e = fgas.eref(65);
     //cout << "Energy:" << ref_e/65.0 << endl;
-    //ccsolve solver(fgas);
+    ccsolve solver(fgas);
     //solver.scan_amplitudes();
-    //double e_corr = solver.CCSD_SG(14);
+    double e_corr = solver.CCSD_SG(14);
     return 0;
 
 }

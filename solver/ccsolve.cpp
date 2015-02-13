@@ -43,17 +43,18 @@ void ccsolve::initialize_t3amplitudes(){
 double ccsolve::CCSD_SG(int iNparticles){
     iNp = iNparticles;
     int a,b,i,j;
+    cout << "Initializing intermediates ...";
     initialize_SGIntermediates();
+    cout << "OK." << endl;
     //update_SGIntermediates();
 
     //test routines
-    cout << CCSD_SG_dt1(0,0) << endl;
-    cout << CCSD_SG_dt2(0,0,0,0) << endl;
-    cout << CCSD_SG_energy() << endl;
+    cout << "Correlation energy prior to amplitude initialization:" << CCSD_SG_energy() << endl;
 
     //Initial guess for amplitudes
     //SpMat<double> t2a;
     //SpMat<double> t3a;
+    cout << "Initializing amplitudes ...";
     for(i = 0; i<iNp; i++){
         for(a = iNp; a<iNs; a++){
             t1a(a,i) = h(a,i)/(h(i,i) - h(a,a));
@@ -66,11 +67,17 @@ double ccsolve::CCSD_SG(int iNparticles){
             }
         }
     }
-    cout << CCSD_SG_energy() << endl;
-    for(j = 0; j<15; j++){
-        update_SGIntermediates();
+    cout << "OK." << endl;
+    cout << "Correlation energy after amplitude initialization (1.order perturbation:):" << CCSD_SG_energy() << endl;
+    cout << "Beginning iterations." << endl;
+    for(int t = 0; t<15; t++){
+        cout << "Updating intermediates ... " << endl;
+        update_SGIntermediates_optimized();
+        cout << "Done updating intermediates."<< endl;
+        cout << "Advancing solution one step...";
         CCSD_SG_advance();
-        cout << CCSD_SG_energy() << endl;
+        //cout << CCSD_SG_energy() << endl;
+        cout << "OK" << endl;
     }
     return CCSD_SG_energy();
 }
@@ -80,11 +87,14 @@ void ccsolve::CCSD_SG_advance(){
     for(a=iNp; a<iNs; a++){
         for(i = 0; i<iNp; i++){
             t1a_new(a,i) = CCSD_SG_dt1(a,i)/(h(i,i) - h(a,a));
+            //cout << a << " " << i << endl;
+
             for(b=iNp; b<iNs; b++){
                 for(j = 0; j<iNp; j++){
                     t2a_new(a+b*iNs,i+j*iNs) = CCSD_SG_dt2(a,b,i,j)/(h(i,i) + h(j,j) - h(a,a) - h(b,b));
                 }
             }
+
         }
     }
 
@@ -96,9 +106,9 @@ void ccsolve::CCSD_SG_advance(){
 
 double ccsolve::CCSD_SG_energy(){
     //return correlation energy
-    double val1, val2;
+    double val1, val2, val3, v_ijab;
     int a,b,i,j;
-
+    /*
     val1 = 0.0;
     for(a=iNp; a<iNs; a++){
         for(i = 0; i<iNp; i++){
@@ -111,25 +121,29 @@ double ccsolve::CCSD_SG_energy(){
         for(i = 0; i<iNp; i++){
             for(b = iNp; b<iNs; b++){
                 for(j = 0; j<iNp; j++){
-                    val2 += v(i,j,a,b)*t2(a,b,i,j);
-                }
-            }
-        }
-    }
-    val1 += .25*val2;
-
-    val2 = 0.0;
-    for(a=iNp; a<iNs; a++){
-        for(i = 0; i<iNp; i++){
-            for(b = iNp; b<iNs; b++){
-                for(j = 0; j<iNp; j++){
                     val2 += v(i,j,a,b)*t1(a,i)*t1(b,j);
                 }
             }
         }
     }
     val1 += .5*val2;
-
+    */
+    val1 = 0.0;
+    val2 = 0.0;
+    val3 = 0.0;
+    for(a=iNp; a<iNs; a++){
+        for(i = 0; i<iNp; i++){
+            val1 += h(a,i)*t1(a,i);
+            for(b = iNp; b<iNs; b++){
+                for(j = 0; j<iNp; j++){
+                    v_ijab = v(i,j,a,b);
+                    val2 += v_ijab*t2(a,b,i,j);
+                    val3 += v_ijab*t1(a,i)*t1(b,j);
+                }
+            }
+        }
+    }
+    val1 += .25*val2 +.5*val3;
     return val1;
 }
 
@@ -440,6 +454,169 @@ void ccsolve::update_SGIntermediates(){
             }
         }
     }
+}
+
+void ccsolve::update_SGIntermediates_optimized(){
+    //Update Stanton-Gauss intermediates
+    int a,b,c,d,i,j,k,l;
+    double val1, val2;
+
+    cout << "Updating f1a..." ;
+
+    //update f1a
+    for(c = iNp; c<iNs; c++){
+        for(k = 0; k<iNp; k++){
+            val1 = h(k,c);
+            for(d = iNp; d<iNs; d++){
+                for(l = 0; l < iNp; l++){
+                    val1 += v(c,d,l,k)*t1a(d,l);
+                }
+            }
+            f1a(c,k) = val1;
+        }
+    }
+    cout << "OK" << endl;
+
+    //update f2a
+    cout << "Updating f2a..." ;
+    for(k = 0; k<iNp; k++){
+        for(i = 0; i<iNp; i++){
+            val1 = 0.0;
+            if(k!=i){
+                val1 += h(k,i); //this will be 0 anyways
+            }
+            for(c = iNp; c<iNs; c++){
+                val1 += f1a(c,k)*t1a(c,i);
+                for(l = 0; l < iNp; l++){
+                    val1 += v(i,c,k,l)*t1(c,l);
+                    val2 = 0.0;
+                    for(d = iNp; d<iNs; d++){
+                        val2 += v(c,d,k,l)*t2(c,d,i,l);
+                    }
+                    val1 += .5*val2;
+                }
+            }
+            f2a(k,i) = val1;
+        }
+    }
+    cout << "OK" << endl;
+
+    //update f3a
+    cout << "Updating f3a";
+    for(a = iNp; a<iNs; a++){
+        for(c = iNp; c<iNs; c++){
+            val1 = 0.0;
+            if(a!=c){
+                val1 += h(a,c);
+            }
+            for(k = 0; k<iNp; k++){
+                val1 += f1a(c,k)*t1(a,k);
+                for(d = iNp; d<iNs; d++){
+                    val1 += v(c,d,k,a)*t1(d,k);
+                    val2 = 0.0;
+                    for(l = 0; l<iNp; l++){
+                        val2 += v(c,d,k,l)*t2(a,d,k,l);
+                    }
+                    val1 += .5*val2;
+                }
+            }
+            f3a(a,c) = val1;
+        }
+    }
+    cout << "OK" << endl;
+
+    //udpate w1a
+    cout << "Updating w1a...";
+    for(k = 0; k<iNp; k++){
+        for(l = 0; l<iNp; l++){
+            for(i = 0; i<iNp; i++){
+                for(j = 0; j<iNp; j++){
+                    val1 = v(i,j,k,l);
+                    //w1a = v(i,j,k,l);
+                    for(c = iNp; c<iNs; c++){
+                        val1 += v(c,j,k,l)*t1(c,i) - v(c,i,k,l)*t1(c,j);
+                        val2 = 0;
+                        for(d = iNp; d<iNs; d++){
+                            val2 += v(c,d,k,l)*(t1(c,i)*t1(d,j) - t1(c,j)*t1(d,i) + t2(c,d,i,j));
+                        }
+                        val1 += .5*val2;
+                    }
+                    w1a(k,l)(i,j) = val1;
+                }
+            }
+        }
+    }
+    cout << "OK" << endl;
+
+    //update w2a
+    cout << "Updating w2a...";
+    for(a = iNp; a<iNs; a++){
+        for(k = 0; k < iNp; k++){
+            for(i = 0; i<iNp; i++){
+                for(j = 0; j<iNp; j++){
+                    val1 = v(i,j,a,k);
+                    for(c = iNp; c<iNs; c++){
+                        val1 += v(i,c,a,k)*t1(c,j) - v(j,c,a,k)*t1(c,i);
+                        val2 = 0.0;
+                        for(d = iNp; d<iNs; d++){
+                            val2 += v(c,d,a,k)*(t2(c,d,i,j) + t1(c,i)*t1(d,j) - t1(c,j)*t1(d,i));
+
+                        }
+                        val1 += .5*val2;
+                    }
+                    w2a(a,k)(i,j) = val1;
+                }
+            }
+        }
+    }
+    cout << "OK" << endl;
+
+    //update w3a
+    cout << "Updating w3a...";
+    for(k = 0; k<iNp; k++){
+        for(l= 0; l<iNp; l++){
+            for(c = iNp; c<iNs; c++){
+                for(i = 0; i<iNp; i++){
+                    val1 = v(c,i,k,l);
+                    for(d = iNp; d<iNs; d++){
+                        val1 += v(c,d,k,l)*t1(c,i);
+                    }
+                    w3a(k,l)(c,i) = val1;
+                }
+            }
+        }
+    }
+    cout << "OK" << endl;
+
+
+    //update w4a
+    cout << "Updating w4a...";
+    for(a = iNp; a< iNs; a++){
+        for(k=0; k<iNp; k++){
+            for(i = 0; i<iNp; i++){
+                for(c = iNp; c<iNs; c++){
+                    val1 = v(i,c,a,k);
+                    for(d = iNp; d<iNs; d++){
+                        val1 += v(d,c,a,k)*t1(d,i);
+                    }
+
+                    for(l = 0; l<iNp; l++){
+                        val1 += w3a(k,l)(c,i)*t1(a,l);
+                    }
+
+                    val2 = 0.0;
+                    for(l = 0; l<iNp; l++){
+                        for(d = iNp; d<iNs; d++){
+                            val2 += v(c,d,k,l)*t2(a,d,i,l);
+                        }
+                    }
+                    val1 += .5*val2;
+                    w4a(a,k)(i,c) = val1;
+                }
+            }
+        }
+    }
+    cout << "OK" << endl;
 }
 
 void ccsolve::update_intermediates(){}

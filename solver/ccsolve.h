@@ -34,6 +34,7 @@ public:
     double CCSD_SG_energy();
 
     void update_SGIntermediates();
+    void update_SGIntermediates_optimized();
     void initialize_SGIntermediates();
     field<mat> w1a; //4D-tensors
     field<mat> w2a;
@@ -49,11 +50,13 @@ public:
     double t3(int a, int b, int c, int i, int j, int k);
 
     mat t1a;
-    SpMat<double> t2a;
+    //SpMat<double> t2a;
     SpMat<double> t3a;
+    mat t2a;
 
     mat t1a_new;
-    SpMat<double> t2a_new;
+    //SpMat<double> t2a_new;
+    mat  t2a_new;
     SpMat<double> t3a_new;
 
     //parameters
