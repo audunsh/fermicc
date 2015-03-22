@@ -8,7 +8,7 @@
 #include "basis/electrongas.h"
 #include "solver/ccsolve.h"
 #include "solver/initializer.h"
-
+#include "solver/flexmat.h"
 
 
 using namespace std;
@@ -32,9 +32,13 @@ int main()
     cout << "Initializing basis" << endl;
     initializer init(fgas);
     init.sVpppp();
-    //init.sVhhhh();
-    //init.sVhhpp();
+    init.sVhhhh();
+    init.sVhhpp();
     init.sVhpph();
+    cout << "Done initializing basis." << endl;
+
+    flexmat Vpppp(init.Vpppp, init.iNp, init.iNh);
+    Vpppp.ai_bj();
 
 
 

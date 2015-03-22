@@ -150,7 +150,7 @@ vec initializer::appendvec(vec V1, vec V2){
 }
 
 void initializer::sVpppp(){
-    cout << "Hello from initializer!" << endl;
+    //cout << "Hello from initializer!" << endl;
     Vpppp.set_size(iNp2, iNp2);
 
     vec AB = linspace(0,iNp2-1,iNp2);
@@ -199,8 +199,10 @@ void initializer::sVpppp(){
     locations.col(0) = T0;
     locations.col(1) = T1;
     Vpppp = sp_mat(locations.t(), values, iNp2, iNp2);
-    double val = 0;
 
+
+    /*
+    double val = 0;
     for(int a = 0; a<iNp; a++){for(int b = 0; b<iNp; b++){for(int c = 0; c<iNp; c++){for(int d = 0; d<iNp; d++){
                     val = bs.v2(a+iNh,b+iNh,c+iNh,d+iNh);
                     if(abs(val - Vpppp(a +b*iNp, c+d*iNp))>0.00000001){
@@ -209,6 +211,7 @@ void initializer::sVpppp(){
                 }}}}
 
 
+    */
 
     //Vpppp.print();
 
@@ -337,6 +340,8 @@ void initializer::sVhhpp(){
 
     //vec K_unique = unique(appendvec(KAB_unique, KIJ_unique));
     //KAB.print();
+
+    /*
     cout << "actual indexes" << I(13+12*iNh) << " " << J(13+12*iNh) << " " << A(32+28*iNp) << " " << B(32+28*iNp) << " " << endl;
     cout << "actual values:" << KIJ(181) << " " << KAB(1152) << endl;
     cout << 13+12*iNh << " " << 32+28*iNp << endl;
@@ -351,6 +356,7 @@ void initializer::sVhhpp(){
     cout << endl;
     cout << bs.vKx(13)+bs.vKx(12) + iNmax*(bs.vKy(13) + bs.vKy(12)) + iNmax2*(bs.vKz(13) + bs.vKz(12)) << endl;
     cout << bs.vKx(32+iNh)+bs.vKx(28+iNh) + iNmax*(bs.vKy(32+iNh) + bs.vKy(28+iNh)) + iNmax2*(bs.vKz(32+iNh) + bs.vKz(28+iNh)) << endl;
+    */
 
 
 
@@ -397,7 +403,7 @@ void initializer::sVhhpp(){
     //cout << Vhhpp(181, 1152) << endl;
 
 
-
+    /*
     double val = 0;
     for(int i = 0; i<iNh; i++){
         for(int j = 0; j<iNh; j++){
@@ -416,6 +422,7 @@ void initializer::sVhhpp(){
             }
         }
     }
+    */
 }
 
 void initializer::sVpphh(){}
@@ -521,6 +528,7 @@ void initializer::sVhpph(){
     //cout << Vhhpp(181, 1152) << endl;
 
 
+    /*
     double val = 0;
     for(int i = 0; i<iNh; i++){
         for(int j = 0; j<iNh; j++){
@@ -539,6 +547,7 @@ void initializer::sVhpph(){
             }
         }
     }
+    */
 
 }
 
