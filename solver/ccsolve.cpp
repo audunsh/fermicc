@@ -502,7 +502,7 @@ void ccsolve::update_SGIntermediates_optimized(){
     cout << "OK" << endl;
 
     //update f3a
-    cout << "Updating f3a";
+    cout << "Updating f3a...";
     for(a = iNp; a<iNs; a++){
         for(c = iNp; c<iNs; c++){
             val1 = 0.0;

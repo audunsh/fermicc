@@ -68,7 +68,7 @@ void electrongas::generate_state_list(int Ne, double rs, int Np){
                     k_combinations(index_count, 1) = x;
                     k_combinations(index_count, 2) = y;
                     k_combinations(index_count, 3) = z;
-                    k_combinations(index_count, 4) = 0;
+                    k_combinations(index_count, 4) = 1; //Changed this 21.3.15
                     index_count += 1;
 
                     k_combinations(index_count, 0) = e2; //energy*prefactor2*(53.63609*pi*pi/L3);
@@ -87,11 +87,21 @@ void electrongas::generate_state_list(int Ne, double rs, int Np){
     vEnergy.zeros(index_count);
     iNbstates = index_count;
     uvec sorted_vector = sort_index(temp_vec);
+    vKx.set_size(index_count);
+    vKy.set_size(index_count);
+    vKz.set_size(index_count);
+    vMs.set_size(index_count);
+
 
     for(int i = 0; i< index_count; i++){
         for(int j = 0; j< 4; j++){
             mSortedEnergy(i,j) = k_combinations(sorted_vector(i), j+1);
         }
+        vKx(i) = k_combinations(sorted_vector(i), 1);
+        vKy(i) = k_combinations(sorted_vector(i), 2);
+        vKz(i) = k_combinations(sorted_vector(i), 3);
+        vMs(i) = k_combinations(sorted_vector(i), 4);
+
         vEnergy(i) = k_combinations(sorted_vector(i), 0);
     }
     //sorted_energy.print();
@@ -123,6 +133,64 @@ double electrongas::h(int P, int Q){
     return vEnergy(P)*(P==Q);
 }
 
+double electrongas::v2(int p, int q, int r, int s){
+    //alternate implementation, written for pedagogical reasons
+    double kpx = vKx(p);
+    double kpy = vKy(p);
+    double kpz = vKz(p);
+
+    double kqx = vKx(q);
+    double kqy = vKy(q);
+    double kqz = vKz(q);
+
+    double krx = vKx(r);
+    double kry = vKy(r);
+    double krz = vKz(r);
+
+    double ksx = vKx(s);
+    double ksy = vKy(s);
+    double ksz = vKz(s);
+
+    double val = 0;
+    double term1 = 0.0;
+    double term2 = 0.0;
+
+    if(kpx+kqx==krx+ksx && kpy+kqy==kry+ksy && kpz+kqz==krz+ksz){
+
+        val = 4*pi/dL3;
+
+        double mps = vMs(p);
+        double mqs = vMs(q);
+        double mrs = vMs(r);
+        double mss = vMs(s);
+
+        double kdiff1, kdiff2, kdiff3;
+
+        if(mps==mrs && mqs==mss){
+
+            if(kpx != krx || kpy != kry || kpz != krz){
+
+                kdiff1 = krx-kpx;
+                kdiff2 = kry-kpy;
+                kdiff3 = krz-kpz;
+                term1 = dL2/((kdiff1*kdiff1 + kdiff2*kdiff2 + kdiff3*kdiff3)*4*pi*pi);
+            }
+        }
+
+        if(mps==mss && mqs==mrs){
+
+            if(kpx != ksx || kpy != ksy || kpz != ksz){
+
+                kdiff1 = ksx-kpx;
+                kdiff2 = ksy-kpy;
+                kdiff3 = ksz-kpz;
+                term2 = dL2/((kdiff1*kdiff1 + kdiff2*kdiff2 + kdiff3*kdiff3)*4*pi*pi);
+            }
+        }
+    }
+    return val*(term1 - term2);
+}
+
 double electrongas::v(int P, int Q, int R, int S){
     //Two body interaction
     rowvec KP = mSortedEnergy.row(P);
@@ -147,6 +215,8 @@ double electrongas::v(int P, int Q, int R, int S){
 
     value = kd_vec((kp+kq), (kr+ks));
 
+    double spin1, spin2;
+
 
     if(value ==0 ){
         return 0;
@@ -154,13 +224,13 @@ double electrongas::v(int P, int Q, int R, int S){
     else{
         value = 0;
         //term1 = kd(spinP, spinQ)*kd(spinR,spinS);
-        term1 = kd(spinP, spinR)*kd(spinQ,spinS);
+        spin1 = kd(spinP, spinR)*kd(spinQ,spinS);
         kd1 = kd_vec(kp, kr);
         if(kd1!= 1.0){
             //term1 = term1 / (mu*mu + 4*pi*pi*absdiff2(kr, kp));
             //cout << "Direct" << endl;
             term1 = (mu*mu + 4*pi*pi*absdiff2(kr, kp))/dL2;
-            value += 1.0/term1;
+            value += spin1/term1;
         }
 
         term2 = kd(spinP, spinS)*kd(spinQ,spinR);
@@ -172,7 +242,7 @@ double electrongas::v(int P, int Q, int R, int S){
 
         //value *= (term1 - term2);
         //return 4.0*pi*(1.0/term1 - 1.0/term2)/dL3; //dPrefactor1*
-        return 2.0*pi*value/dL3; //dPrefactor1*
+        return 2.0*pi*value/dL3; //dPrefactor1* //HAD TO CORRECT THE FACTOR 4 (previously 2()
     }
 }
 
@@ -209,11 +279,11 @@ double electrongas::eref(int nParticles){
         for(int j=0; j<nParticles; j++){
             if(i!=j){
 
-                if(v(i,j,i,j) != 0){
-                    cout << i << " " << j << " " << v(i,j,i,j) << endl;
-                }
-                reference_energy += .5*v(i,j, i,j);
-                in_energy += .5*v(i,j,i,j);
+                //if(v(i,j,i,j) != 0){
+                //    cout << i << " " << j << " " << v(i,j,i,j) << endl;
+                //}
+                reference_energy += .5*v2(i,j, i,j);
+                in_energy += .5*v2(i,j,i,j);
 
             }
         }

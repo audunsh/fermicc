@@ -5,14 +5,18 @@ CONFIG -= qt
 
 SOURCES += main.cpp \
     basis/electrongas.cpp \
-    solver/ccsolve.cpp
+    solver/ccsolve.cpp \
+    solver/ccd.cpp \
+    solver/initializer.cpp
 
 include(deployment.pri)
 qtcAddDeployment()
 
 HEADERS += \
     basis/electrongas.h \
-    solver/ccsolve.h
+    solver/ccsolve.h \
+    solver/ccd.h \
+    solver/initializer.h
 
 LIBS += -larmadillo -lblas -llapack
 

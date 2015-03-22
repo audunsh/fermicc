@@ -14,6 +14,9 @@ public:
     void generate_state_list(int Ne, double rs, int Np);
     double absdiff2(rowvec A, rowvec B);
     double v(int P, int Q, int R, int S);
+    double v2(int p, int q, int r, int s);
+
+
     double f(int P, int Q);
     double h(int P, int Q);
     double eref(int nParticles);
@@ -37,6 +40,10 @@ public:
     int iNparticles;
 
     double pi = 4*atan(1);
+
+    //added vectorized functionality, 21.03.2015
+    vec vKx,vKy,vKz, vMs;
+
 };
 
 #endif // ELECTRONGAS_H
