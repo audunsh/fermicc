@@ -32,6 +32,9 @@ int main()
     cout << "Initializing basis" << endl;
     initializer init(fgas);
     init.sVpppp();
+    //init.sVhhhh();
+    //init.sVhhpp();
+    init.sVhpph();
 
 
 
