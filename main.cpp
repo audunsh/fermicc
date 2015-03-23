@@ -17,7 +17,7 @@ using namespace arma;
 int main()
 {
     electrongas fgas;
-    fgas.generate_state_list(3.0,1.0, 14);
+    fgas.generate_state_list(2.0,1.0, 14);
     //for(int i = 0; i<14; i++){
     //    cout << i << " " << fgas.h(i,i) << endl;
     //}
@@ -29,16 +29,16 @@ int main()
     cout << "Energy per particle (analytic):" << 2*fgas.analytic_energy(14)/14.0 << " (rydberg)"  << endl;
     cout << "Compared to:" << 1.9434 << endl;
 
-    cout << "Initializing basis" << endl;
-    initializer init(fgas);
-    init.sVpppp();
-    init.sVhhhh();
-    init.sVhhpp();
-    init.sVhpph();
-    cout << "Done initializing basis." << endl;
+    //cout << "Initializing basis" << endl;
+    //initializer init(fgas);
+    //init.sVpppp();
+    //init.sVhhhh();
+    //init.sVhhpp();
+    //init.sVhpph();
+    //cout << "Done initializing basis." << endl;
 
-    flexmat Vpppp(init.Vpppp, init.iNp, init.iNh);
-    Vpppp.ai_bj();
+    //flexmat Vpppp(init.Vpppp, init.iNp, init.iNh);
+    //Vpppp.ai_bj();
 
 
 

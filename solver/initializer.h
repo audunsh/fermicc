@@ -3,6 +3,7 @@
 #define ARMA_64BIT_WORD
 #include <armadillo>
 #include <iomanip>
+#include "solver/flexmat.h"
 #include "basis/electrongas.h"
 
 using namespace std;
@@ -32,8 +33,39 @@ public:
     SpMat<double> Vpppp;
     SpMat<double> Vhhpp;
     SpMat<double> Vpphh;
+    //flexmat fmVpphh;
     SpMat<double> Vhhhh;
     SpMat<double> Vhpph;
+
+    uvec aVpppp;
+    uvec bVpppp;
+    uvec cVpppp;
+    uvec dVpppp;
+    vec vValsVpppp;
+
+    uvec iVhhhh;
+    uvec jVhhhh;
+    uvec kVhhhh;
+    uvec lVhhhh;
+    vec vValsVhhhh;
+
+    uvec aVpphh;
+    uvec bVpphh;
+    uvec iVpphh;
+    uvec jVpphh;
+    vec vValsVpphh;
+
+    uvec iVhhpp;
+    uvec jVhhpp;
+    uvec aVhhpp;
+    uvec bVhhpp;
+    vec vValsVhhpp;
+
+    uvec iVhpph;
+    uvec aVhpph;
+    uvec bVhpph;
+    uvec jVhpph;
+    vec vValsVhpph;
 
     int iNp;
     int iNh;

@@ -1,5 +1,8 @@
 #include "initializer.h"
 #include "basis/electrongas.h"
+#include "solver/flexmat.h"
+#include <time.h>
+
 #define ARMA_64BIT_WORD
 #include <armadillo>
 
@@ -151,27 +154,33 @@ vec initializer::appendvec(vec V1, vec V2){
 
 void initializer::sVpppp(){
     //cout << "Hello from initializer!" << endl;
+    //clock_t t;
+
     Vpppp.set_size(iNp2, iNp2);
+    //t = clock();
 
     vec AB = linspace(0,iNp2-1,iNp2);
 
     uvec B = conv_to<uvec>::from(floor(AB/iNp)); //convert to unsigned integer indexing vector
     uvec A = conv_to<uvec>::from(AB) - B*iNp;
 
-    vec KAx = bs.vKx.elem(A+iNh);
-    vec KAy = bs.vKy.elem(A+iNh);
-    vec KAz = bs.vKz.elem(A+iNh);
+    //vec KAx = bs.vKx.elem(A+iNh);
+    //vec KAy = bs.vKy.elem(A+iNh);
+    //vec KAz = bs.vKz.elem(A+iNh);
 
-    vec KBx = bs.vKx.elem(B+iNh);
-    vec KBy = bs.vKy.elem(B+iNh);
-    vec KBz = bs.vKz.elem(B+iNh);
+    //vec KBx = bs.vKx.elem(B+iNh);
+    //vec KBy = bs.vKy.elem(B+iNh);
+    //vec KBz = bs.vKz.elem(B+iNh);
 
     vec KABx = bs.vKx.elem(A+iNh)+bs.vKx.elem(B+iNh);
     vec KABy = iNmax*(bs.vKy.elem(A+iNh)+bs.vKy.elem(B+iNh));
     vec KABz = iNmax2*(bs.vKz.elem(A+iNh)+bs.vKz.elem(B+iNh));
+    vec KABms = iNmax*iNmax2*(bs.vMs(A+iNh) + bs.vMs(B + iNh));
 
-    vec KAB = KABx+KABy+KABz;
+    vec KAB = KABx+KABy+KABz + KABms;
     vec KAB_unique = unique(KAB);
+    //cout << "Stage 1:" << clock() - t << endl;
+    //t = clock();
 
     uvec T0;// = conv_to<uvec>::from(zeros(0));
     uvec T1;// = conv_to<uvec>::from(zeros(0));
@@ -179,27 +188,89 @@ void initializer::sVpppp(){
     T1.set_size(0);
 
     //int iN;
+    field<uvec> TT;
+    TT.set_size(KAB_unique.size(), 2);
+    int iN = 0;
+
     for(int i = 0; i < KAB_unique.size(); i++){
-        vec T = AB.elem(find(KAB==KAB_unique(i)));
+        //this is the most time-consuming process in initialization
+        //vec T = AB.elem(find(KAB==KAB_unique(i)));
+        vec T = conv_to<vec>::from(find(KAB==KAB_unique(i)));
         vec O = ones(T.size());
         uvec t0 = conv_to<uvec>::from(kron(T, O));
         uvec t1 = conv_to<uvec>::from(kron(O, T));
-        T0 = append(T0,t0);
-        T1 = append(T1,t1);
+        TT(i, 0) = t0;
+        TT(i, 1) = t1;
+        iN += t0.size();
+        //T0 = append(T0,t0); //this caused a severe bottleneck
+        //T1 = append(T1,t1);
     }
 
-    uvec b = conv_to<uvec>::from(floor(T0/iNp)); //convert to unsigned integer indexing vector
-    uvec a = conv_to<uvec>::from(T0) - b*iNp ;
-    uvec d = conv_to<uvec>::from(floor(T1/iNp)) ; //convert to unsigned integer indexing vector
-    uvec c = conv_to<uvec>::from(T1) - d*iNp;
+    T0.set_size(iN);
+    T1.set_size(iN);
+    iN = 0;
+    for(int i = 0; i < KAB_unique.size(); i++){
+        //this is the most time-consuming process in initialization
+        T0(span(iN, iN+TT(i,0).size()-1)) = TT(i,0);
+        T1(span(iN, iN+TT(i,1).size()-1)) = TT(i,1);
+        iN += TT(i,0).size();
+    }
 
-    vec values = V(a+iNh,b+iNh,c+iNh,d+iNh);
+
+
+
+    /*
+    int n= 0;
+    int N = iNp2;
+    T0.set_size(N);
+    T1.set_size(N);
+    for(int p = 0; p<iNp2; p++){
+        for(int q= 0; q<iNp2; q++){
+            if(KAB(p)==KAB(q)){
+                n+=1;
+                if(n<N){
+                    T0(n-1) = p;
+                    T1(n-1) = q;
+                }
+                else{
+                    N += iNp2;
+                    T0.resize(N);
+                    T1.resize(N);
+                    T0(n-1) = p;
+                    T1(n-1) = q;
+                }
+
+
+                //T0 = append(T0, ones(1)*p);
+                //T1 = append(T1, ones(1)*q);
+            }
+        }
+    }
+    T0.resize(n);
+    T1.resize(n);
+    */
+
+
+
+
+    //cout << "Stage2 :" << clock() - t << endl;
+    //t = clock();
+
+    bVpppp = conv_to<uvec>::from(floor(T0/iNp)); //convert to unsigned integer indexing vector
+    aVpppp = conv_to<uvec>::from(T0) - bVpppp*iNp ;
+    dVpppp = conv_to<uvec>::from(floor(T1/iNp)) ; //convert to unsigned integer indexing vector
+    cVpppp = conv_to<uvec>::from(T1) - dVpppp*iNp;
+
+    vValsVpppp = V(aVpppp+iNh,bVpppp+iNh,cVpppp+iNh,dVpppp+iNh);
+    vec vNonzero = vValsVpppp.elem(find(vValsVpppp != 0));
+    cout << vNonzero.size() << " " << vValsVpppp.size() << endl;
     umat locations;
     locations.set_size(T0.size(),2);
     locations.col(0) = T0;
     locations.col(1) = T1;
-    Vpppp = sp_mat(locations.t(), values, iNp2, iNp2);
-
+    Vpppp = sp_mat(locations.t(), vValsVpppp, iNp2, iNp2);
+    //cout << "Stage 3:" << (clock() - t)/CLOCKS_PER_SEC << endl;
+    //t = clock();
 
     /*
     double val = 0;
@@ -209,24 +280,6 @@ void initializer::sVpppp(){
                         cout << Vpppp(a +b*iNp, c+d*iNp) << " " << val << endl;
                     }
                 }}}}
-
-
-    */
-
-    //Vpppp.print();
-
-    /*
-    double bsv = 0.0;
-    for(int i = 0; i<T0.size(); i++){
-        int b = floor(T0(i)/iNp);
-        int a = T0(i) - b*iNp;
-        int d = floor(T1(i)/iNp);
-        int c = T1(i) - d*iNp;
-        bsv = bs.v2(a+iNh,b+iNh,c+iNh,d+iNh);
-        if(abs(Vpppp(a + b*iNp, c + d*iNp) - bsv)>0.000000001){
-            cout << a << " " << b << " " << c << " " << d << "       " << values(i) << "     " << Vpppp(a + b*iNp, c + d*iNp) << "           " << bsv << endl;
-        }
-    }
     */
 }
 
@@ -259,27 +312,44 @@ void initializer::sVhhhh(){
     T0.set_size(0);
     T1.set_size(0);
 
+    field<uvec> TT;
+    TT.set_size(KIJ_unique.size(), 2);
+    int iN = 0;
     //int iN;
     for(int i = 0; i < KIJ_unique.size(); i++){
         vec T = IJ.elem(find(KIJ==KIJ_unique(i)));
         vec O = ones(T.size());
         uvec t0 = conv_to<uvec>::from(kron(T, O));
         uvec t1 = conv_to<uvec>::from(kron(O, T));
-        T0 = append(T0,t0);
-        T1 = append(T1,t1);
+        //T0 = append(T0,t0);
+        //T1 = append(T1,t1);
+        TT(i, 0) = t0;
+        TT(i, 1) = t1;
+        iN += t0.size();
     }
 
-    uvec j = conv_to<uvec>::from(floor(T0/iNh)); //convert to unsigned integer indexing vector
-    uvec i = conv_to<uvec>::from(T0) - j*iNh ;
-    uvec l = conv_to<uvec>::from(floor(T1/iNh)) ; //convert to unsigned integer indexing vector
-    uvec k = conv_to<uvec>::from(T1) - l*iNh;
 
-    vec values = V(i,j,k,l);
+    T0.set_size(iN);
+    T1.set_size(iN);
+    iN = 0;
+    for(int i = 0; i < KIJ_unique.size(); i++){
+        //this is the most time-consuming process in initialization
+        T0(span(iN, iN+TT(i,0).size()-1)) = TT(i,0);
+        T1(span(iN, iN+TT(i,1).size()-1)) = TT(i,1);
+        iN += TT(i,0).size();
+    }
+
+    jVhhhh = conv_to<uvec>::from(floor(T0/iNh)); //convert to unsigned integer indexing vector
+    iVhhhh = conv_to<uvec>::from(T0) - jVhhhh*iNh ;
+    lVhhhh = conv_to<uvec>::from(floor(T1/iNh)) ; //convert to unsigned integer indexing vector
+    kVhhhh = conv_to<uvec>::from(T1) - lVhhhh*iNh;
+
+    vValsVhhhh = V(iVhhhh,jVhhhh,kVhhhh,lVhhhh);
     umat locations;
     locations.set_size(T0.size(),2);
     locations.col(0) = T0;
     locations.col(1) = T1;
-    Vhhhh = sp_mat(locations.t(), values, iNh2, iNh2);
+    Vhhhh = sp_mat(locations.t(), vValsVhhhh, iNh2, iNh2);
 }
 
 void initializer::sVhhpp(){
@@ -365,6 +435,10 @@ void initializer::sVhhpp(){
     T0.set_size(0);
     T1.set_size(0);
 
+    field<uvec> TT;
+    TT.set_size(K_unique.size(), 2);
+    int iN = 0;
+
     //int iN;
     for(int i = 0; i < K_unique.size(); i++){
         vec Tij = IJ.elem(find(KIJ==K_unique(i)));
@@ -382,22 +456,39 @@ void initializer::sVhhpp(){
         if(Tij.size() != 0 && Tab.size() != 0){
             uvec t0 = conv_to<uvec>::from(kron(Tij, ONp));
             uvec t1 = conv_to<uvec>::from(kron(ONh, Tab));
-            T0 = append(T0,t0);
-            T1 = append(T1,t1);
+            //T0 = append(T0,t0);
+            //T1 = append(T1,t1);
+            TT(i, 0) = t0;
+            TT(i, 1) = t1;
+            iN += t0.size();
         }
     }
 
-    uvec j = conv_to<uvec>::from(floor(T0/iNh)); //convert to unsigned integer indexing vector
-    uvec i = conv_to<uvec>::from(T0) - j*iNh ;
-    uvec b = conv_to<uvec>::from(floor(T1/iNp)) ; //convert to unsigned integer indexing vector
-    uvec a = conv_to<uvec>::from(T1) - b*iNp;
+    T0.set_size(iN);
+    T1.set_size(iN);
+    iN = 0;
+    for(int i = 0; i < K_unique.size(); i++){
+        //this is the most time-consuming process in initialization
+        if(TT(i,0).size() != 0){
+            T0(span(iN, iN+TT(i,0).size()-1)) = TT(i,0);
+            T1(span(iN, iN+TT(i,1).size()-1)) = TT(i,1);
+            iN += TT(i,0).size();}
+    }
 
-    vec values = V(i,j,a+iNh,b+iNh);
+    jVhhpp = conv_to<uvec>::from(floor(T0/iNh)); //convert to unsigned integer indexing vector
+    iVhhpp = conv_to<uvec>::from(T0) - jVhhpp*iNh ;
+    bVhhpp = conv_to<uvec>::from(floor(T1/iNp)) ; //convert to unsigned integer indexing vector
+    aVhhpp = conv_to<uvec>::from(T1) - bVhhpp*iNp;
+
+    vValsVhhpp = V(iVhhpp,jVhhpp,aVhhpp+iNh,bVhhpp+iNh);
     umat locations;
     locations.set_size(T0.size(),2);
     locations.col(0) = T0;
     locations.col(1) = T1;
-    Vhhpp = sp_mat(locations.t(), values, iNh2, iNp2);
+    Vhhpp = sp_mat(locations.t(), vValsVhhpp, iNh2, iNp2);
+    locations.col(0) = T1;
+    locations.col(1) = T0;
+    //fmVpphh = flexmat(a,b,i,j,iNp,iNh);
 
     //cout << V(conv_to<uvec>::from(ones(2)*13),conv_to<uvec>::from(ones(2)*12),conv_to<uvec>::from(ones(2)*46),conv_to<uvec>::from(ones(2)*42)) << endl; //this element is not inlcuded in the testing above!!!
     //cout << Vhhpp(181, 1152) << endl;
@@ -409,7 +500,7 @@ void initializer::sVhhpp(){
         for(int j = 0; j<iNh; j++){
             for(int a = 0; a<iNp; a++){
                 for(int b = 0; b<iNp; b++){
-                    val = bs.v2(i,j,a+iNh,b+iNh);
+                    val = bs.v2(a+iNh,b+iNh,i,j);
                     //cout << Vhhpp(i + j*iNh, a + b*iNp) << "       " << val << endl;
                     //cout << Vhhpp(i + j*iNh, a + b*iNp) << endl;
                     //cout << i + j*iNh << " " << a + b*iNp << endl;
@@ -423,6 +514,7 @@ void initializer::sVhhpp(){
         }
     }
     */
+
 }
 
 void initializer::sVpphh(){}
@@ -490,6 +582,10 @@ void initializer::sVhpph(){
     T0.set_size(0);
     T1.set_size(0);
 
+
+    field<uvec> TT;
+    TT.set_size(K_unique.size(), 2);
+    int iN = 0;
     //int iN;
     for(int i = 0; i < K_unique.size(); i++){
         vec Tia = IA.elem(find(KIA==K_unique(i)));
@@ -507,22 +603,37 @@ void initializer::sVhpph(){
         if(Tia.size() != 0 && Tbj.size() != 0){
             uvec t0 = conv_to<uvec>::from(kron(Tia, ONp));
             uvec t1 = conv_to<uvec>::from(kron(ONh, Tbj));
-            T0 = append(T0,t0);
-            T1 = append(T1,t1);
+            //T0 = append(T0,t0);
+            //T1 = append(T1,t1);
+            TT(i, 0) = t0;
+            TT(i, 1) = t1;
+            iN += t0.size();
         }
     }
 
-    uvec a = conv_to<uvec>::from(floor(T0/iNh)); //convert to unsigned integer indexing vector
-    uvec i = conv_to<uvec>::from(T0) - a*iNh ;
-    uvec j = conv_to<uvec>::from(floor(T1/iNp)) ; //convert to unsigned integer indexing vector
-    uvec b = conv_to<uvec>::from(T1) - j*iNp;
+    T0.set_size(iN);
+    T1.set_size(iN);
+    iN = 0;
+    for(int i = 0; i < K_unique.size(); i++){
+        //this is the most time-consuming process in initialization
+        if(TT(i,0).size() != 0){
+            T0(span(iN, iN+TT(i,0).size()-1)) = TT(i,0);
+            T1(span(iN, iN+TT(i,1).size()-1)) = TT(i,1);
+            iN += TT(i,0).size();}
+    }
 
-    vec values = V(i,a+iNh,b+iNh,j);
+
+    aVhpph = conv_to<uvec>::from(floor(T0/iNh)); //convert to unsigned integer indexing vector
+    iVhpph = conv_to<uvec>::from(T0) - aVhpph*iNh ;
+    jVhpph = conv_to<uvec>::from(floor(T1/iNp)) ; //convert to unsigned integer indexing vector
+    bVhpph = conv_to<uvec>::from(T1) - jVhpph*iNp;
+
+    vValsVhpph = V(iVhpph,aVhpph+iNh,bVhpph+iNh,jVhpph);
     umat locations;
     locations.set_size(T0.size(),2);
     locations.col(0) = T0;
     locations.col(1) = T1;
-    Vhpph = sp_mat(locations.t(), values, iNhp, iNhp);
+    Vhpph = sp_mat(locations.t(), vValsVhpph, iNhp, iNhp);
 
     //cout << V(conv_to<uvec>::from(ones(2)*13),conv_to<uvec>::from(ones(2)*12),conv_to<uvec>::from(ones(2)*46),conv_to<uvec>::from(ones(2)*42)) << endl; //this element is not inlcuded in the testing above!!!
     //cout << Vhhpp(181, 1152) << endl;

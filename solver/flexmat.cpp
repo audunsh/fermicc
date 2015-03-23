@@ -1,14 +1,42 @@
 #include "flexmat.h"
+#define ARMA_64BIT_WORD
+#include <armadillo>
 
-flexmat::flexmat(sp_mat mV, int Np, int Nh)
+using namespace std;
+using namespace arma;
+
+
+flexmat::flexmat(vec values, uvec a, uvec b, uvec i, uvec j, int Np, int Nh)
 {
     iNp = Np;
     iNh = Nh;
-    smV = mV;
+    iNp2 = Np*Np;
+    iNh2 = Nh*Nh;
+    iNhp = Nh*Np;
+
+    vValues = values;
+    va = a;
+    vb = b;
+    vi = i;
+    vj = j;
+
 }
 
 sp_mat flexmat::ab_ij(){
-    return smV;
+    if(Nab_ij == 0){
+        locations.set_size(va.size(),2);
+        locations.col(0) = va + vb*iNp;
+        locations.col(1) = vi + vj*iNh;
+        Vab_ij = sp_mat(locations.t(), vValues, iNp2, iNh2);
+
+        //Vpppp = sp_mat(locations.t(), values, iNp2, iNp2);
+
+        Nab_ij = 1;
+        return Vab_ij;
+    }
+    else{
+        return Vab_ij;
+    }
 }
 
 sp_mat flexmat::ai_bj(){
