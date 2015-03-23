@@ -17,6 +17,9 @@ public:
     int iNh;
     int iNh2;
     int iNhp;
+    int iNh2p;
+    int iNp2h;
+
 
     vec vValues;
     uvec va;

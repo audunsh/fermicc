@@ -9,6 +9,8 @@
 using namespace std;
 using namespace arma;
 
+initializer::initializer(){}
+
 initializer::initializer(electrongas Bs)
 {
     bs = Bs;
@@ -480,7 +482,14 @@ void initializer::sVhhpp(){
     bVhhpp = conv_to<uvec>::from(floor(T1/iNp)) ; //convert to unsigned integer indexing vector
     aVhhpp = conv_to<uvec>::from(T1) - bVhhpp*iNp;
 
+    iVpphh = iVhhpp;
+    jVpphh = jVhhpp;
+    aVpphh = aVhhpp;
+    bVpphh = bVhhpp;
+
     vValsVhhpp = V(iVhhpp,jVhhpp,aVhhpp+iNh,bVhhpp+iNh);
+    vValsVpphh = V(aVhhpp+iNh,bVhhpp+iNh,iVhhpp,jVhhpp);
+
     umat locations;
     locations.set_size(T0.size(),2);
     locations.col(0) = T0;

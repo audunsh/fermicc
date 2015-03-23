@@ -12,6 +12,7 @@ using namespace arma;
 class initializer
 {
 public:
+    initializer();
     initializer(electrongas Bs);
 
     vec V(uvec p, uvec q, uvec r, uvec s); //vectorized interactions

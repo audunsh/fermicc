@@ -7,6 +7,7 @@
 #include <string>
 #include "basis/electrongas.h"
 #include "solver/ccsolve.h"
+#include "solver/ccd.h"
 #include "solver/initializer.h"
 #include "solver/flexmat.h"
 
@@ -28,6 +29,9 @@ int main()
     cout << "Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;
     cout << "Energy per particle (analytic):" << 2*fgas.analytic_energy(14)/14.0 << " (rydberg)"  << endl;
     cout << "Compared to:" << 1.9434 << endl;
+
+    ccd solver(fgas);
+
 
     //cout << "Initializing basis" << endl;
     //initializer init(fgas);
