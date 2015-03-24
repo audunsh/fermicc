@@ -15,8 +15,8 @@ ccd::ccd(electrongas bs){
     iSetup.sVpppp();
     iSetup.sVhpph();
     iSetup.sVhhpp();
-    flexmat T(iSetup.vValsVpphh, iSetup.aVpphh, iSetup.bVpphh, iSetup.iVpphh, iSetup.jVpphh, iSetup.iNp, iSetup.iNh);
-    T.ab_ij().print();
-    T.ba_ij().print();
+    flexmat T(iSetup.vValsVpphh, iSetup.aVpphh, iSetup.bVpphh, iSetup.iVpphh, iSetup.jVpphh, iSetup.iNp, iSetup.iNp, iSetup.iNh, iSetup.iNh);
+    T.pq_rs().print();
+    //T.qp_rs().print();
 }
 
