@@ -20,6 +20,20 @@ public:
 
     electrongas ebs;
     initializer iSetup;
+
+    flexmat Vhh();
+    flexmat vhh;
+    //flexmat Vpppp();
+    //flexmat Vhhpp();
+
+    //flexmat Vpphh();
+    //flexmat Vhpph();
+    //flexmat T();
+
+    void energy();
+
+    //sp_mat spE;
+
 };
 
 #endif // CCD_H

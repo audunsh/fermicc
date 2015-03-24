@@ -11,6 +11,7 @@ class flexmat
 {
 public:
     //A class for flexible pphh-matrix manipulations
+    flexmat();
     flexmat(vec values, uvec p, uvec q, uvec r, uvec s, int Np, int Nq, int Nr, int Ns);
     int iNp;
     int iNq;
@@ -24,7 +25,13 @@ public:
     int iNh2p;
     int iNp2h;
 
+    void init(vec values, uvec p, uvec q, uvec r, uvec s, int Np, int Nq, int Nr, int Ns);
+
+    void set_amplitudes(vec Energy);
     void update();
+    vec vEnergy;
+
+    //electrongas eBs;
 
 
     vec vValues;

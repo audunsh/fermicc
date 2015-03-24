@@ -2,9 +2,12 @@
 #define ARMA_64BIT_WORD
 #include <armadillo>
 
+
 using namespace std;
 using namespace arma;
 
+
+flexmat::flexmat(){}
 
 flexmat::flexmat(vec values, uvec p, uvec q, uvec r, uvec s, int Np, int Nq, int Nr, int Ns)
 {
@@ -24,6 +27,38 @@ flexmat::flexmat(vec values, uvec p, uvec q, uvec r, uvec s, int Np, int Nq, int
     vq = q;
     vr = r;
     vs = s;
+
+}
+
+void flexmat::init(vec values, uvec p, uvec q, uvec r, uvec s, int Np, int Nq, int Nr, int Ns)
+{
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    /*iNp2 = Np*Np;
+    iNh2 = Nh*Nh;
+    iNhp = Nh*Np;
+    iNp2h = iNp2*iNh;
+    iNh2p = iNh2*iNp;
+
+    */
+    vValues = values;
+    vp = p;
+    vq = q;
+    vr = r;
+    vs = s;
+
+}
+
+void flexmat::set_amplitudes(vec Energy){
+    //Divide all values by corresponding energy to initialize amplitudes
+   vEnergy = Energy;
+   vec vEa = vEnergy.elem(vp + iNr);
+   vec vEb = vEnergy.elem(vq + iNr);
+   vec vEi = vEnergy.elem(vr);
+   vec vEj = vEnergy.elem(vs);
+   vValues = vValues/(vEi + vEj - vEa - vEb);
 
 }
 
