@@ -6,7 +6,7 @@
 #include "basis/electrongas.h"
 #include "solver/flexmat.h"
 #include "solver/initializer.h"
-
+#include "solver/unpack_sp_mat.h"
 
 using namespace std;
 using namespace arma;

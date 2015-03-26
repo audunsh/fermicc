@@ -4,6 +4,7 @@
 #include "solver/flexmat.h"
 #include "basis/electrongas.h"
 #include "solver/initializer.h"
+#include "solver/unpack_sp_mat.h"
 
 using namespace std;
 using namespace arma;
@@ -27,7 +28,7 @@ ccd::ccd(electrongas bs){
     vhhpp.init(iSetup.vValsVhhpp, iSetup.iVhhpp, iSetup.jVhhpp, iSetup.aVhhpp, iSetup.bVhhpp, iSetup.iNh, iSetup.iNh, iSetup.iNp, iSetup.iNp);
     T.init(iSetup.vValsVpphh, iSetup.aVpphh, iSetup.bVpphh, iSetup.iVpphh, iSetup.jVpphh, iSetup.iNp, iSetup.iNp, iSetup.iNh, iSetup.iNh);
     T.set_amplitudes(bs.vEnergy);
-
+    unpack_sp_mat H(T.pr_qs());
     //Vhh.pq_rs().print();
     //Vhh.p_qrs().print();
 
