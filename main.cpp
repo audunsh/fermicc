@@ -18,7 +18,7 @@ using namespace arma;
 int main()
 {
     electrongas fgas;
-    fgas.generate_state_list(2.0,1.0, 14);
+    fgas.generate_state_list(3.0,1.0, 14);
     //for(int i = 0; i<14; i++){
     //    cout << i << " " << fgas.h(i,i) << endl;
     //}

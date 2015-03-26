@@ -12,7 +12,7 @@ class flexmat
 public:
     //A class for flexible pphh-matrix manipulations
     flexmat();
-    flexmat(vec values, uvec p, uvec q, uvec r, uvec s, int Np, int Nq, int Nr, int Ns);
+    //flexmat(vec values, uvec p, uvec q, uvec r, uvec s, int Np, int Nq, int Nr, int Ns);
     int iNp;
     int iNq;
     int iNr;

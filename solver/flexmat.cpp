@@ -8,20 +8,13 @@ using namespace arma;
 
 
 flexmat::flexmat(){}
-
+/*
 flexmat::flexmat(vec values, uvec p, uvec q, uvec r, uvec s, int Np, int Nq, int Nr, int Ns)
 {
     iNp = Np;
     iNq = Nq;
     iNr = Nr;
     iNs = Ns;
-    /*iNp2 = Np*Np;
-    iNh2 = Nh*Nh;
-    iNhp = Nh*Np;
-    iNp2h = iNp2*iNh;
-    iNh2p = iNh2*iNp;
-
-    */
     vValues = values;
     vp = p;
     vq = q;
@@ -29,7 +22,7 @@ flexmat::flexmat(vec values, uvec p, uvec q, uvec r, uvec s, int Np, int Nq, int
     vs = s;
 
 }
-
+*/
 void flexmat::init(vec values, uvec p, uvec q, uvec r, uvec s, int Np, int Nq, int Nr, int Ns)
 {
     iNp = Np;

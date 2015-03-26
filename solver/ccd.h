@@ -21,8 +21,13 @@ public:
     electrongas ebs;
     initializer iSetup;
 
-    flexmat Vhh();
-    flexmat vhh;
+    //flexmat Vhh();
+    flexmat vhhhh;
+    flexmat vpppp;
+    flexmat vhhpp;
+    flexmat vpphh;
+    flexmat vhpph;
+    flexmat T;
     //flexmat Vpppp();
     //flexmat Vhhpp();
 
