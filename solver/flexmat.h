@@ -11,9 +11,9 @@ using namespace arma;
 class flexmat
 {
 public:
-    //A class for flexible pphh-matrix manipulations
+    //A class for flexible matrix manipulations
     flexmat();
-    //flexmat(vec values, uvec p, uvec q, uvec r, uvec s, int Np, int Nq, int Nr, int Ns);
+
     int iNp;
     int iNq;
     int iNr;
@@ -29,7 +29,7 @@ public:
     void init(vec values, uvec p, uvec q, uvec r, uvec s, int Np, int Nq, int Nr, int Ns);
 
     void set_amplitudes(vec Energy);
-    void update(sp_mat spC);
+    void update(sp_mat spC, int Np, int Nq, int Nr, int Ns);
     vec vEnergy;
 
     //electrongas eBs;

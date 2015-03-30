@@ -34,10 +34,12 @@ public:
     //flexmat Vpphh();
     //flexmat Vhpph();
     //flexmat T();
-
+    void advance();
     void energy();
 
-    //sp_mat spE;
+    //The diagrams contributing to the CCD energy
+    sp_mat L1, L2, L3, Q1, Q2, Q3, Q4;
+
 
 };
 

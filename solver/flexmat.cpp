@@ -8,34 +8,21 @@ using namespace arma;
 
 
 flexmat::flexmat(){}
-/*
-flexmat::flexmat(vec values, uvec p, uvec q, uvec r, uvec s, int Np, int Nq, int Nr, int Ns)
-{
-    iNp = Np;
-    iNq = Nq;
-    iNr = Nr;
-    iNs = Ns;
-    vValues = values;
-    vp = p;
-    vq = q;
-    vr = r;
-    vs = s;
 
-}
-*/
 void flexmat::init(vec values, uvec p, uvec q, uvec r, uvec s, int Np, int Nq, int Nr, int Ns)
 {
+    /*
+     * A flexible class for sparse matrix representations of rank-4 tensors
+     * Allows for smooth reordering of matrix elements through index manipulations.
+     * Simplifies the calculations of coupled cluster diagrams.
+     *
+     */
+
     iNp = Np;
     iNq = Nq;
     iNr = Nr;
     iNs = Ns;
-    /*iNp2 = Np*Np;
-    iNh2 = Nh*Nh;
-    iNhp = Nh*Np;
-    iNp2h = iNp2*iNh;
-    iNh2p = iNh2*iNp;
 
-    */
     vValues = values;
     vp = p;
     vq = q;
@@ -45,7 +32,7 @@ void flexmat::init(vec values, uvec p, uvec q, uvec r, uvec s, int Np, int Nq, i
 }
 
 void flexmat::set_amplitudes(vec Energy){
-    //Divide all values by corresponding energy to initialize amplitudes
+    //Divide all values by corresponding energy (used only on amplitudes)
    vEnergy = Energy;
    vec vEa = vEnergy.elem(vp + iNr);
    vec vEb = vEnergy.elem(vq + iNr);
@@ -55,22 +42,25 @@ void flexmat::set_amplitudes(vec Energy){
 
 }
 
-void flexmat::update(sp_mat spC){
-    //update object with a new sparse matrix(with same dimensionality)
+void flexmat::update(sp_mat spC, int Np, int Nq, int Nr, int Ns){
+    //update (or initialize) object with a new sparse matrix. Note: needs unpacking of indices and compressed column format
+
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+
     unpack_sp_mat H(spC);
     vq = conv_to<uvec>::from(floor(H.vT0/iNp));
     vp = conv_to<uvec>::from(H.vT0) - vq*iNp;
 
-    //uvec B = conv_to<uvec>::from(floor(AB/iNp)); //convert to unsigned integer indexing vector
-    //uvec A = conv_to<uvec>::from(AB) - B*iNp;
 
     vs = conv_to<uvec>::from(floor(H.vT1/iNr));
     vr = conv_to<uvec>::from(H.vT1) - vs*iNr;
 
     vValues = H.vVals;
 
-    //cout << vValues.size() << " " << vr.size() << " " << vq.size() << endl;
-
+    //Make all sp_mat representations reinitialize when called
     Npq_rs = 0;
     Npq_sr = 0;
     Npr_qs = 0;
