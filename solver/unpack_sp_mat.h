@@ -11,9 +11,10 @@ class unpack_sp_mat
 {
 public:
     unpack_sp_mat(sp_mat c);
-    vec vT0;
-    vec vT1;
+    uvec vT0;
+    uvec vT1;
     vec vVals;
+    mat mLocations;
 
 };
 

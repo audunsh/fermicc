@@ -3,6 +3,7 @@
 #define ARMA_64BIT_WORD
 #include <armadillo>
 #include <iomanip>
+#include "solver/unpack_sp_mat.h"
 
 using namespace std;
 using namespace arma;
@@ -28,7 +29,7 @@ public:
     void init(vec values, uvec p, uvec q, uvec r, uvec s, int Np, int Nq, int Nr, int Ns);
 
     void set_amplitudes(vec Energy);
-    void update();
+    void update(sp_mat spC);
     vec vEnergy;
 
     //electrongas eBs;

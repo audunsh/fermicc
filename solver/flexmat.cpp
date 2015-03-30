@@ -1,7 +1,7 @@
 #include "flexmat.h"
 #define ARMA_64BIT_WORD
 #include <armadillo>
-
+#include "solver/unpack_sp_mat.h"
 
 using namespace std;
 using namespace arma;
@@ -55,8 +55,95 @@ void flexmat::set_amplitudes(vec Energy){
 
 }
 
-void flexmat::update(){
-    //update object with a new sparse matrix
+void flexmat::update(sp_mat spC){
+    //update object with a new sparse matrix(with same dimensionality)
+    unpack_sp_mat H(spC);
+    vq = conv_to<uvec>::from(floor(H.vT0/iNp));
+    vp = conv_to<uvec>::from(H.vT0) - vq*iNp;
+
+    //uvec B = conv_to<uvec>::from(floor(AB/iNp)); //convert to unsigned integer indexing vector
+    //uvec A = conv_to<uvec>::from(AB) - B*iNp;
+
+    vs = conv_to<uvec>::from(floor(H.vT1/iNr));
+    vr = conv_to<uvec>::from(H.vT1) - vs*iNr;
+
+    vValues = H.vVals;
+
+    //cout << vValues.size() << " " << vr.size() << " " << vq.size() << endl;
+
+    Npq_rs = 0;
+    Npq_sr = 0;
+    Npr_qs = 0;
+    Npr_sq = 0;
+    Nps_qr = 0;
+    Nps_rq = 0;
+    Nqp_rs = 0;
+    Nqp_sr = 0;
+    Nqr_ps = 0;
+    Nqr_sp = 0;
+    Nqs_pr = 0;
+    Nqs_rp = 0;
+    Nrp_qs = 0;
+    Nrp_sq = 0;
+    Nrq_ps = 0;
+    Nrq_sp = 0;
+    Nrs_pq = 0;
+    Nrs_qp = 0;
+    Nsp_qr = 0;
+    Nsp_rq = 0;
+    Nsq_pr = 0;
+    Nsq_rp = 0;
+    Nsr_pq = 0;
+    Nsr_qp = 0;
+    Np_qrs = 0;
+    Np_qsr = 0;
+    Np_rqs = 0;
+    Np_rsq = 0;
+    Np_sqr = 0;
+    Np_srq = 0;
+    Nq_prs = 0;
+    Nq_psr = 0;
+    Nq_rps = 0;
+    Nq_rsp = 0;
+    Nq_spr = 0;
+    Nq_srp = 0;
+    Nr_pqs = 0;
+    Nr_psq = 0;
+    Nr_qps = 0;
+    Nr_qsp = 0;
+    Nr_spq = 0;
+    Nr_sqp = 0;
+    Ns_pqr = 0;
+    Ns_prq = 0;
+    Ns_qpr = 0;
+    Ns_qrp = 0;
+    Ns_rpq = 0;
+    Ns_rqp = 0;
+    Npqr_s = 0;
+    Npqs_r = 0;
+    Nprq_s = 0;
+    Nprs_q = 0;
+    Npsq_r = 0;
+    Npsr_q = 0;
+    Nqpr_s = 0;
+    Nqps_r = 0;
+    Nqrp_s = 0;
+    Nqrs_p = 0;
+    Nqsp_r = 0;
+    Nqsr_p = 0;
+    Nrpq_s = 0;
+    Nrps_q = 0;
+    Nrqp_s = 0;
+    Nrqs_p = 0;
+    Nrsp_q = 0;
+    Nrsq_p = 0;
+    Nspq_r = 0;
+    Nspr_q = 0;
+    Nsqp_r = 0;
+    Nsqr_p = 0;
+    Nsrp_q = 0;
+    Nsrq_p = 0;
+
 }
 
 

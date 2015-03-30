@@ -28,7 +28,44 @@ ccd::ccd(electrongas bs){
     vhhpp.init(iSetup.vValsVhhpp, iSetup.iVhhpp, iSetup.jVhhpp, iSetup.aVhhpp, iSetup.bVhhpp, iSetup.iNh, iSetup.iNh, iSetup.iNp, iSetup.iNp);
     T.init(iSetup.vValsVpphh, iSetup.aVpphh, iSetup.bVpphh, iSetup.iVpphh, iSetup.jVpphh, iSetup.iNp, iSetup.iNp, iSetup.iNh, iSetup.iNh);
     T.set_amplitudes(bs.vEnergy);
-    unpack_sp_mat H(T.pr_qs());
+    //unpack_sp_mat H(T.pr_qs());
+
+    cout << "Testing unpacker integrity" << endl;
+    flexmat V1;
+    V1.init(iSetup.vValsVhhhh, iSetup.iVhhhh, iSetup.jVhhhh, iSetup.kVhhhh, iSetup.lVhhhh, iSetup.iNh, iSetup.iNh, iSetup.iNh, iSetup.iNh);
+    V1.update(vhhhh.pq_rs());
+
+
+    for(int i = 0; i<iSetup.iNh; i++){
+        for(int j = 0; j<iSetup.iNh; j++){
+            for(int k = 0; k<iSetup.iNh; k++){
+                for(int l = 0; l<iSetup.iNh; l++){
+                    if(V1.pq_rs()(i + j*iSetup.iNh, k+l*iSetup.iNh) != vhhhh.pq_rs()(i + j*iSetup.iNh, k+l*iSetup.iNh)){
+                        cout << "Inconsistencies found:" << i << " " << j << " " << k << " " << l << "     " << V1.pq_rs()(i + j*iSetup.iNh, k+l*iSetup.iNh) << "     " << vhhhh.pq_rs()(i + j*iSetup.iNh, k+l*iSetup.iNh) << endl;
+                    }
+                }
+            }
+        }
+    }
+
+    /*
+    for(int i = 0; i < V1.vValues.size(); i++){
+        cout << V1.pq_rs().row_indices[i] << "        " << vhhhh.pq_rs().row_indices[i] << endl;
+    }
+
+    for(int i = 0; i < V1.pq_rs().n_cols; i++){
+        cout << V1.pq_rs().col_ptrs[i] << "        " << vhhhh.pq_rs().col_ptrs[i] << endl;
+    }
+    */
+
+
+    //cout << V1.pq_rs().n_nonzero << endl;
+    //cout << vhhhh.pq_rs().n_nonzero << endl;
+    cout << V1.vValues.size() << " " << vhhhh.vValues.size() << endl;
+
+
+
+
     //Vhh.pq_rs().print();
     //Vhh.p_qrs().print();
 
@@ -71,6 +108,7 @@ ccd::ccd(electrongas bs){
 }
 
 void ccd::energy(){
+    //Calculate the ground state energy
     sp_mat cv = vhhpp.pq_rs() * T.pq_rs();
     mat Cv(cv);
     double C_ = 0;
