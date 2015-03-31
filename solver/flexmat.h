@@ -45,6 +45,80 @@ public:
 
     umat locations;
 
+    void deinit();
+    //update script, not for human maintenance
+    void update_as_p_qrs(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+    void update_as_qrs_p(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+
+    void update_as_p_qsr(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+    void update_as_qsr_p(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+
+    void update_as_p_rqs(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+    void update_as_rqs_p(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+
+    void update_as_p_rsq(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+    void update_as_rsq_p(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+
+    void update_as_p_sqr(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+    void update_as_sqr_p(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+
+    void update_as_p_srq(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+    void update_as_srq_p(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+
+    void update_as_q_prs(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+    void update_as_prs_q(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+
+    void update_as_q_psr(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+    void update_as_psr_q(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+
+    void update_as_q_rps(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+    void update_as_rps_q(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+
+    void update_as_q_rsp(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+    void update_as_rsp_q(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+
+    void update_as_q_spr(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+    void update_as_spr_q(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+
+    void update_as_q_srp(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+    void update_as_srp_q(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+
+    void update_as_r_pqs(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+    void update_as_pqs_r(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+
+    void update_as_r_psq(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+    void update_as_psq_r(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+
+    void update_as_r_qps(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+    void update_as_qps_r(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+
+    void update_as_r_qsp(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+    void update_as_qsp_r(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+
+    void update_as_r_spq(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+    void update_as_spq_r(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+
+    void update_as_r_sqp(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+    void update_as_sqp_r(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+
+    void update_as_s_pqr(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+    void update_as_pqr_s(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+
+    void update_as_s_prq(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+    void update_as_prq_s(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+
+    void update_as_s_qpr(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+    void update_as_qpr_s(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+
+    void update_as_s_qrp(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+    void update_as_qrp_s(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+
+    void update_as_s_rpq(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+    void update_as_rpq_s(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+
+    void update_as_s_rqp(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+    void update_as_rqp_s(sp_mat spC, int Np, int Nq, int Nr, int Ns);
+
     //initialization budget (generated in separate script - not for human maintenance)
     int Npq_rs;
     sp_mat Vpq_rs;

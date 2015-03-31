@@ -37,24 +37,36 @@ ccd::ccd(electrongas bs){
 
 
     energy();
+    advance();
+    energy();
 }
 
 void ccd::advance(){
     //advance the solution one step
+    int Np = iSetup.iNp;
+    int Nq = iSetup.iNp;
+    int Nr = iSetup.iNh;
+    int Ns = iSetup.iNh;
+
     L1 = vpppp.pq_rs()*T.pq_rs();
     L2 = T.pq_rs()*vhhhh.pq_rs();
-    L3 = vhpph.sq_rp()*T.qs_pr(); //needs realignment and permutations
+
+    fmL3.update(vhpph.sq_rp()*T.qs_pr(), Np, Nq, Nr, Ns);
+    L3 = fmL3.sq_pr()-fmL3.sp_qr()-fmL3.rq_ps()+fmL3.rp_qs(); //permuting elements
+
     Q1 = T.pq_rs()*vhhpp.pq_rs()*T.pq_rs();
-    Q2 = T.pr_sq()*vhhpp.pr_qs()*T.rq_ps(); //needs realignment and permutations
-    Q3 = T.pqs_r()*vhhpp.q_prs()*T.sqp_r(); //needs realignment and permutations
-    Q4 = T.p_srq()*vhhpp.pqr_s()*T.p_qrs(); //needs realignment and permutations
 
+    fmQ2.update(T.pr_sq()*vhhpp.pr_qs()*T.rq_ps(), Np, Nq, Nr, Ns); //needs realignment and permutations
+    Q2 = fmQ2.pr_qs()-fmQ2.ps_qr(); //permuting elements
 
-    //Q2
-    //Q3
-    //Q4
-    T.update(.5*L1 + .5*L2 + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4, iSetup.iNp, iSetup.iNp, iSetup.iNh, iSetup.iNh);
-    T.set_amplitudes(ebs.vEnergy);
+    fmQ3.update_as_pqs_r(T.pqs_r()*vhhpp.q_prs()*T.sqp_r(), Np, Nq, Nr, Ns); //needs realignment and permutations
+    Q3 = fmQ3.pq_rs() - fmQ3.pq_sr(); //permuting elements
+
+    fmQ4.update_as_p_qrs(T.p_srq()*vhhpp.pqr_s()*T.p_qrs(), Np, Nq, Nr, Ns); //needs realignment and permutations
+    Q4 = fmQ4.pq_rs() - fmQ4.qp_rs(); //permuting elements
+
+    T.update(.5*L1 + .5*L2 + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4, Np, Nq, Nr, Ns);
+    T.set_amplitudes(ebs.vEnergy); //divide updated amplitides by energy denominator
 }
 
 void ccd::energy(){
