@@ -43,8 +43,13 @@ void ccd::advance(){
     //advance the solution one step
     L1 = vpppp.pq_rs()*T.pq_rs();
     L2 = T.pq_rs()*vhhhh.pq_rs();
-    L3 = vhpph.ps_qr()*T.pq_rs();
+    L3 = vhpph.sq_rp()*T.qs_pr(); //needs realignment and permutations
     Q1 = T.pq_rs()*vhhpp.pq_rs()*T.pq_rs();
+    Q2 = T.pr_sq()*vhhpp.pr_qs()*T.rq_ps(); //needs realignment and permutations
+    Q3 = T.pqs_r()*vhhpp.q_prs()*T.sqp_r(); //needs realignment and permutations
+    Q4 = T.p_srq()*vhhpp.pqr_s()*T.p_qrs(); //needs realignment and permutations
+
+
     //Q2
     //Q3
     //Q4
