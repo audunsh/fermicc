@@ -193,6 +193,11 @@ void flexmat::update_as_pqs_r(sp_mat spC, int Np, int Nq, int Nr, int Ns){
     vq = conv_to<uvec>::from(floor((H.vT0 - vs*iNp*iNq)/iNp));
     vp = conv_to<uvec>::from(H.vT0 - vs*iNp*iNq - vq*iNp);
     vr = conv_to<uvec>::from(H.vT1);
+    //vs.print();
+    //vq.print();
+    //vp.print();
+    vr.print();
+
     vValues = H.vVals;
     deinit();
 }
