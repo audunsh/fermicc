@@ -18,7 +18,7 @@ using namespace arma;
 int main()
 {
     electrongas fgas;
-    fgas.generate_state_list(3.0,1.0, 14);
+    fgas.generate_state_list(6.0,1.0, 14);
 
     fgas.mu = 7.695;
     fgas.mu = 0; //2.5*3.1415;

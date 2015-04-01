@@ -25,6 +25,7 @@ ccd::ccd(electrongas bs){
     vpppp.init(iSetup.vValsVpppp, iSetup.aVpppp, iSetup.bVpppp, iSetup.cVpppp, iSetup.dVpppp, iSetup.iNp, iSetup.iNp, iSetup.iNp, iSetup.iNp);
     vhpph.init(iSetup.vValsVhpph, iSetup.iVhpph, iSetup.aVhpph, iSetup.bVhpph, iSetup.jVhpph, iSetup.iNh, iSetup.iNp, iSetup.iNp, iSetup.iNh);
     vhhpp.init(iSetup.vValsVhhpp, iSetup.iVhhpp, iSetup.jVhhpp, iSetup.aVhhpp, iSetup.bVhhpp, iSetup.iNh, iSetup.iNh, iSetup.iNp, iSetup.iNp);
+    vpphh.init(iSetup.vValsVpphh, iSetup.aVpphh, iSetup.bVpphh, iSetup.iVpphh, iSetup.jVpphh, iSetup.iNp, iSetup.iNp, iSetup.iNh, iSetup.iNh);
 
     //set up first T2-amplitudes
     T.init(iSetup.vValsVpphh, iSetup.aVpphh, iSetup.bVpphh, iSetup.iVpphh, iSetup.jVpphh, iSetup.iNp, iSetup.iNp, iSetup.iNh, iSetup.iNh);
@@ -37,7 +38,9 @@ ccd::ccd(electrongas bs){
 
 
     energy();
-    advance();
+    for(int i = 0; i < 20; i++){
+        advance();
+    }
     energy();
 }
 
@@ -53,22 +56,24 @@ void ccd::advance(){
 
     fmL3.update(vhpph.sq_rp()*T.qs_pr(), Ns, Nq, Np, Nr);
     L3 = fmL3.rq_sp() - fmL3.qr_sp() - fmL3.rq_ps() + fmL3.qr_ps();
+    //L3 *= 0;
 
     //L3 = fmL3.sq_pr()-fmL3.sp_qr()-fmL3.rq_ps()+fmL3.rp_qs(); //permuting elements
 
     Q1 = T.pq_rs()*vhhpp.pq_rs()*T.pq_rs();
 
-    fmQ2.update(T.pr_sq()*vhhpp.pr_qs()*T.rq_ps(), Np, Nr, Nq, Ns); //needs realignment and permutations
+    fmQ2.update(T.pr_qs()*vhhpp.rp_qs()*T.sq_pr(), Np, Nr, Nq, Ns); //needs realignment and permutations
     Q2 = fmQ2.pr_qs()-fmQ2.pr_sq(); //permuting elements
 
     fmQ3.update_as_pqs_r(T.pqs_r()*vhhpp.q_prs()*T.sqp_r(), Np, Nq, Nr, Ns); //needs realignment and permutations
-    Q3 = fmQ3.pr_qs(); //- fmQ3.pr_sq(); //permuting elements
+    Q3 = fmQ3.pq_rs() - fmQ3.pq_sr(); //permuting elements
 
     fmQ4.update_as_p_qrs(T.p_srq()*vhhpp.pqr_s()*T.p_qrs(), Np, Nq, Nr, Ns); //needs realignment and permutations
-    //Q4 = fmQ4.pq_rs() - fmQ4.qp_rs(); //permuting elements
+    Q4 = fmQ4.pq_rs() - fmQ4.qp_rs(); //permuting elements
 
-    //T.update(.5*L1 + .5*L2 + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4, Np, Nq, Nr, Ns);
-    //T.set_amplitudes(ebs.vEnergy); //divide updated amplitides by energy denominator
+    T.update(vpphh.pq_rs() + .5*(L1 + L2) + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4, Np, Nq, Nr, Ns);
+    T.set_amplitudes(ebs.vEnergy); //divide updated amplitides by energy denominator
+    energy();
 }
 
 void ccd::energy(){

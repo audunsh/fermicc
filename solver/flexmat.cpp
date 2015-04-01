@@ -196,7 +196,7 @@ void flexmat::update_as_pqs_r(sp_mat spC, int Np, int Nq, int Nr, int Ns){
     //vs.print();
     //vq.print();
     //vp.print();
-    vr.print();
+    //vr.print();
 
     vValues = H.vVals;
     deinit();
