@@ -43,6 +43,19 @@ void flexmat::set_amplitudes(vec Energy){
 }
 
 
+void flexmat::shed_zeros(){
+    //remove zeros from arrays
+    uvec nnz = find(vValues!=0);
+    cout << nnz.size() << " " << vValues.size() << endl;
+    vp = vp.elem(nnz);
+    vq = vq.elem(nnz);
+    vr = vr.elem(nnz);
+    vs = vs.elem(nnz);
+    vValues = vValues.elem(nnz);
+
+    //vValsVpppp.elem(find(vValsVpppp != 0))
+}
+
 void flexmat::update(sp_mat spC, int Np, int Nq, int Nr, int Ns){
     //update (or initialize) object with a new sparse matrix. Note: needs unpacking of indices and compressed column format
 

@@ -5,6 +5,7 @@
 #include "basis/electrongas.h"
 #include "solver/initializer.h"
 #include "solver/unpack_sp_mat.h"
+#include <time.h>
 
 using namespace std;
 using namespace arma;
@@ -22,10 +23,15 @@ ccd::ccd(electrongas bs){
 
     //convert interaction data to flexmat objects
     vhhhh.init(iSetup.vValsVhhhh, iSetup.iVhhhh, iSetup.jVhhhh, iSetup.kVhhhh, iSetup.lVhhhh, iSetup.iNh, iSetup.iNh, iSetup.iNh, iSetup.iNh);
+    vhhhh.shed_zeros();
     vpppp.init(iSetup.vValsVpppp, iSetup.aVpppp, iSetup.bVpppp, iSetup.cVpppp, iSetup.dVpppp, iSetup.iNp, iSetup.iNp, iSetup.iNp, iSetup.iNp);
+    vpppp.shed_zeros();
     vhpph.init(iSetup.vValsVhpph, iSetup.iVhpph, iSetup.aVhpph, iSetup.bVhpph, iSetup.jVhpph, iSetup.iNh, iSetup.iNp, iSetup.iNp, iSetup.iNh);
+    vhpph.shed_zeros();
     vhhpp.init(iSetup.vValsVhhpp, iSetup.iVhhpp, iSetup.jVhhpp, iSetup.aVhhpp, iSetup.bVhhpp, iSetup.iNh, iSetup.iNh, iSetup.iNp, iSetup.iNp);
+    vhhpp.shed_zeros();
     vpphh.init(iSetup.vValsVpphh, iSetup.aVpphh, iSetup.bVpphh, iSetup.iVpphh, iSetup.jVpphh, iSetup.iNp, iSetup.iNp, iSetup.iNh, iSetup.iNh);
+    vpphh.shed_zeros();
 
     //set up first T2-amplitudes
     T.init(iSetup.vValsVpphh, iSetup.aVpphh, iSetup.bVpphh, iSetup.iVpphh, iSetup.jVpphh, iSetup.iNp, iSetup.iNp, iSetup.iNh, iSetup.iNh);
@@ -35,6 +41,15 @@ ccd::ccd(electrongas bs){
     // HOW TO SET UP FLEXMAT OBJECTS FROM CSC-MATRICES
     // flexmat V1;
     // V1.update(vhhhh.pq_rs(),vhhhh.iNp, vhhhh.iNq, vhhhh.iNr, vhhhh.iNs); //update (or initialize) with an sp_mat object (requires unpacking)
+
+    //clock_t t;
+    //sp_mat H;
+    //H = vpppp.pq_rs();
+    //t = clock();
+    //H = H*H;
+    //cout << "Spent " << ((float)t)/CLOCKS_PER_SEC << " seconds on multiplication."<< endl;
+
+
 
 
     energy();
