@@ -156,10 +156,10 @@ vec initializer::appendvec(vec V1, vec V2){
 
 void initializer::sVpppp(){
     //cout << "Hello from initializer!" << endl;
-    //clock_t t;
+    clock_t t;
 
     Vpppp.set_size(iNp2, iNp2);
-    //t = clock();
+    t = clock();
 
     vec AB = linspace(0,iNp2-1,iNp2);
 
@@ -181,8 +181,8 @@ void initializer::sVpppp(){
 
     vec KAB = KABx+KABy+KABz + KABms;
     vec KAB_unique = unique(KAB);
-    //cout << "Stage 1:" << clock() - t << endl;
-    //t = clock();
+    cout << "    Stage 1:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
+    t = clock();
 
     uvec T0;// = conv_to<uvec>::from(zeros(0));
     uvec T1;// = conv_to<uvec>::from(zeros(0));
@@ -193,11 +193,14 @@ void initializer::sVpppp(){
     field<uvec> TT;
     TT.set_size(KAB_unique.size(), 2);
     int iN = 0;
+    cout << "    Stage 2:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
+    t = clock();
+
 
     for(int i = 0; i < KAB_unique.size(); i++){
         //this is the most time-consuming process in initialization
         //vec T = AB.elem(find(KAB==KAB_unique(i)));
-        vec T = conv_to<vec>::from(find(KAB==KAB_unique(i)));
+        vec T = conv_to<vec>::from(find(KAB==KAB_unique(i))); //Is it possible to exploit that this vector should "shrink" ?
         vec O = ones(T.size());
         uvec t0 = conv_to<uvec>::from(kron(T, O));
         uvec t1 = conv_to<uvec>::from(kron(O, T));
@@ -208,17 +211,21 @@ void initializer::sVpppp(){
         //T1 = append(T1,t1);
     }
 
+    cout << "    Stage 3:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
+    t = clock();
     T0.set_size(iN);
     T1.set_size(iN);
     iN = 0;
+    cout << "    Stage 4:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
+    t = clock();
     for(int i = 0; i < KAB_unique.size(); i++){
-        //this is the most time-consuming process in initialization
         T0(span(iN, iN+TT(i,0).size()-1)) = TT(i,0);
         T1(span(iN, iN+TT(i,1).size()-1)) = TT(i,1);
         iN += TT(i,0).size();
     }
 
-
+    cout << "    Stage 5:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
+    t = clock();
 
 
     /*
@@ -262,15 +269,19 @@ void initializer::sVpppp(){
     aVpppp = conv_to<uvec>::from(T0) - bVpppp*iNp ;
     dVpppp = conv_to<uvec>::from(floor(T1/iNp)) ; //convert to unsigned integer indexing vector
     cVpppp = conv_to<uvec>::from(T1) - dVpppp*iNp;
+    cout << "    Stage 6:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
+    t = clock();
 
     vValsVpppp = V(aVpppp+iNh,bVpppp+iNh,cVpppp+iNh,dVpppp+iNh);
-    vec vNonzero = vValsVpppp.elem(find(vValsVpppp != 0));
-    cout << vNonzero.size() << " " << vValsVpppp.size() << endl;
-    umat locations;
-    locations.set_size(T0.size(),2);
-    locations.col(0) = T0;
-    locations.col(1) = T1;
-    Vpppp = sp_mat(locations.t(), vValsVpppp, iNp2, iNp2);
+    //vec vNonzero = vValsVpppp.elem(find(vValsVpppp != 0));
+    //cout << vNonzero.size() << " " << vValsVpppp.size() << endl;
+    //umat locations;
+    //locations.set_size(T0.size(),2);
+    //locations.col(0) = T0;
+    //locations.col(1) = T1;
+    cout << "    Stage 7:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
+    t = clock();
+    //Vpppp = sp_mat(locations.t(), vValsVpppp, iNp2, iNp2);
     //cout << "Stage 3:" << (clock() - t)/CLOCKS_PER_SEC << endl;
     //t = clock();
 
@@ -283,6 +294,8 @@ void initializer::sVpppp(){
                     }
                 }}}}
     */
+    cout << "    Stage 8:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
+    t = clock();
 }
 
 void initializer::sVhhhh(){

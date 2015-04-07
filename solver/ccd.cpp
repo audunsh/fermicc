@@ -101,7 +101,7 @@ ccd::ccd(electrongas bs){
 
     cout << CLOCKS_PER_SEC << endl;
 
-    //energy();
+    energy();
     //for(int i = 0; i < 20; i++){
     //    advance();
     //}
@@ -148,6 +148,9 @@ void ccd::energy(){
     for(int i = 0; i<Cv.n_cols; i++){
         C_+= Cv(i,i);
     }
-    cout << .25*C_ << endl;
+    cout << "E1:" << .25*C_ << endl;
+
+    double dC = accu(vhhpp.pq_rs()*T.pq_rs());
+    cout << "E2:" << .25*dC << endl;
 
 }
