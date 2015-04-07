@@ -7,6 +7,9 @@
 #include "solver/unpack_sp_mat.h"
 #include <time.h>
 
+#include <eigen/Eigen/Dense>
+#include <eigen/Eigen/Sparse>
+
 using namespace std;
 using namespace arma;
 
@@ -49,14 +52,60 @@ ccd::ccd(electrongas bs){
     //H = H*H;
     //cout << "Spent " << ((float)t)/CLOCKS_PER_SEC << " seconds on multiplication."<< endl;
 
+    //testing the sparselibrary in Eigen
+    typedef Eigen::Triplet<double> Tr;
+    typedef Eigen::SparseMatrix<double> SparseMat;
 
+    clock_t t1, t0, t2;
+    t0 = clock();
 
-
-    energy();
-    for(int i = 0; i < 20; i++){
-        advance();
+    std::vector<Tr> tripletList;
+    tripletList.reserve(vpppp.vValues.size());
+    for(int i= 0; i<vpppp.vValues.size(); i++){
+        tripletList.push_back(Tr(vpppp.vp(i)+vpppp.vq(i)*vpppp.iNp, vpppp.vr(i)+vpppp.vs(i)*vpppp.iNr, vpppp.vValues(i)));
     }
-    energy();
+    SparseMat Vp1(vpppp.iNp*vpppp.iNq, vpppp.iNr*vpppp.iNs);
+    Vp1.setFromTriplets(tripletList.begin(), tripletList.end());
+
+    std::vector<Tr> tripletList2;
+    tripletList2.reserve(vpphh.vValues.size());
+    for(int i= 0; i<vpphh.vValues.size(); i++){
+        tripletList2.push_back(Tr(vpphh.vp(i)+vpphh.vq(i)*vpphh.iNp, vpphh.vr(i)+vpphh.vs(i)*vpphh.iNr, vpphh.vValues(i)));
+    }
+    SparseMat Tp1(vpphh.iNp*vpphh.iNq, vpphh.iNr*vpphh.iNs);
+    Tp1.setFromTriplets(tripletList2.begin(), tripletList2.end());
+    t1 = clock();
+
+
+    SparseMat Sp3 = Vp1*Tp1;
+    t2 = clock();
+    cout << "Eigen (Setup)         :" << t1-t0 << endl;
+    cout << "Eigen (multiplication):" << t2-t1 << endl;
+    cout << "Eigen (total)         :" << t2-t0 << endl;
+
+    t0 = clock();
+    sp_mat vp12 = vpppp.pq_rs();
+    vp12 = vpphh.pq_rs();
+
+    t1 = clock();
+    vp12 = vpppp.pq_rs()*vpphh.pq_rs();
+    t2 = clock();
+
+    cout << "Armadillo (Setup)         :" << t1-t0 << endl;
+    cout << "Armadillo (multiplication):" << t2-t1 << endl;
+    cout << "Armadillo (total)         :" << t2-t0 << endl;
+
+
+
+
+
+    cout << CLOCKS_PER_SEC << endl;
+
+    //energy();
+    //for(int i = 0; i < 20; i++){
+    //    advance();
+    //}
+    //energy();
 }
 
 void ccd::advance(){

@@ -3,6 +3,12 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 
+release {
+    DEFINES += ARMA_NO_DEBUG
+    #QMAKE_CXXFLAGS_RELEASE -= -O2
+    #QMAKE_CXXFLAGS_RELEASE += -O3
+}
+
 SOURCES += main.cpp \
     basis/electrongas.cpp \
     solver/ccsolve.cpp \
