@@ -17,6 +17,7 @@ public:
 
     vec V(uvec p, uvec q, uvec r, uvec s); //vectorized interactions
     vec V2(uvec t0, uvec t1); //vectorized interactions
+    vec V3(uvec p, uvec q, uvec r, uvec s); //semivectorized interactions
 
     void sVpppp();
     void sVhhhh();

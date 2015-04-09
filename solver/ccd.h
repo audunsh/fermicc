@@ -41,6 +41,8 @@ public:
     sp_mat L1, L2, L3, Q1, Q2, Q3, Q4;
     flexmat fmL3, fmQ2, fmQ3, fmQ4;
 
+    double CCSD_SG_energy();
+
 
 };
 

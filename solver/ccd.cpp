@@ -52,6 +52,7 @@ ccd::ccd(electrongas bs){
     //H = H*H;
     //cout << "Spent " << ((float)t)/CLOCKS_PER_SEC << " seconds on multiplication."<< endl;
 
+    /*
     //testing the sparselibrary in Eigen
     typedef Eigen::Triplet<double> Tr;
     typedef Eigen::SparseMatrix<double> SparseMat;
@@ -95,16 +96,19 @@ ccd::ccd(electrongas bs){
     cout << "Armadillo (multiplication):" << t2-t1 << endl;
     cout << "Armadillo (total)         :" << t2-t0 << endl;
 
+    */
 
 
 
 
-    cout << CLOCKS_PER_SEC << endl;
 
+    //cout << CLOCKS_PER_SEC << endl;
+    //cout << "Energy prior to amplitude initialization:" << endl;
     energy();
-    //for(int i = 0; i < 20; i++){
-    //    advance();
-    //}
+    //cout << CCSD_SG_energy() << endl;
+    for(int i = 0; i < 20; i++){
+        advance();
+    }
     //energy();
 }
 
@@ -138,7 +142,35 @@ void ccd::advance(){
     T.update(vpphh.pq_rs() + .5*(L1 + L2) + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4, Np, Nq, Nr, Ns);
     T.set_amplitudes(ebs.vEnergy); //divide updated amplitides by energy denominator
     energy();
+
 }
+
+
+double ccd::CCSD_SG_energy(){
+    //return correlation energy
+    int Np = iSetup.iNp;
+    int Nh = iSetup.iNh;
+    double val1, val2, val3, v_ijab;
+    int a,b,i,j;
+    val1 = 0.0;
+    val2 = 0.0;
+    val3 = 0.0;
+    for(a=0; a<Np; a++){
+        for(i = 0; i<Nh; i++){
+            //val1 += h(a,i)*t1(a,i);
+            for(b = 0; b<Np; b++){
+                for(j = 0; j<Nh; j++){
+                    v_ijab = vhhpp.pq_rs()(i+j*Nh,a+b*Np);
+                    val2 += v_ijab*T.pq_rs()(a+b*Np,i+j*Nh);
+                    //val3 += v_ijab*t1(a,i)*t1(b,j);
+                }
+            }
+        }
+    }
+    val1 += .25*val2 +.5*val3;
+    return val1;
+}
+
 
 void ccd::energy(){
     //Calculate the ground state energy
@@ -148,9 +180,9 @@ void ccd::energy(){
     for(int i = 0; i<Cv.n_cols; i++){
         C_+= Cv(i,i);
     }
-    cout << "E1:" << .25*C_ << endl;
+    cout << "(CCD)Energy:" << .25*C_ << endl;
 
-    double dC = accu(vhhpp.pq_rs()*T.pq_rs());
-    cout << "E2:" << .25*dC << endl;
+    //double dC = accu(vhhpp.pq_rs()*T.pq_rs());
+    //cout << "E2:" << .25*dC << endl;
 
 }

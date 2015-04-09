@@ -23,6 +23,8 @@ initializer::initializer(electrongas Bs)
     iNmax2 = iNmax*iNmax;
 }
 
+
+
 vec initializer::V(uvec p, uvec q, uvec r, uvec s){
     //delta function of summation of momentum quantum numbers is assumed to have passed before entering here
     vec ret = zeros(p.size());
@@ -57,7 +59,7 @@ vec initializer::V(uvec p, uvec q, uvec r, uvec s){
     vec diff_da = absdiff2(Kdx, Kdy, Kdz, Kax, Kay, Kaz);
 
     vec term1 = zeros(p.size()); //term 1
-    term1.elem(conv_to<uvec>::from(find(Msa==Msc && Msb==Msd))) += 4*pi/bs.dL3;
+    term1.elem(conv_to<uvec>::from(find(Msa==Msc && Msb==Msd))) += 4*pi/bs.dL3; //By changing this i get comparable results
     term1.elem(conv_to<uvec>::from(find(Kax==Kcx && Kay==Kcy && Kaz==Kcz))) *= 0;
     term1.elem(find(term1!=0)) /= 4*pi*pi*diff_ca.elem(find(term1!=0))/bs.dL2;
 
@@ -68,6 +70,15 @@ vec initializer::V(uvec p, uvec q, uvec r, uvec s){
 
     return KDplus%(term1 - term2);
 
+}
+
+vec initializer::V3(uvec p, uvec q, uvec r, uvec s){
+    //Inefficient interaction calculation, not really vectorized but returns a vector
+    vec vVals = zeros(p.size());
+    for(int n = 0; n< p.size(); n++){
+        vVals(n) = bs.v(p(n), q(n), r(n), s(n));
+    }
+    return vVals;
 }
 
 vec initializer::V2(uvec t0, uvec t1){
@@ -181,8 +192,8 @@ void initializer::sVpppp(){
 
     vec KAB = KABx+KABy+KABz + KABms;
     vec KAB_unique = unique(KAB);
-    cout << "    Stage 1:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
-    t = clock();
+    //cout << "    Stage 1:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
+    //t = clock();
 
     uvec T0;// = conv_to<uvec>::from(zeros(0));
     uvec T1;// = conv_to<uvec>::from(zeros(0));
@@ -193,8 +204,8 @@ void initializer::sVpppp(){
     field<uvec> TT;
     TT.set_size(KAB_unique.size(), 2);
     int iN = 0;
-    cout << "    Stage 2:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
-    t = clock();
+    //cout << "    Stage 2:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
+    //t = clock();
 
 
     for(int i = 0; i < KAB_unique.size(); i++){
@@ -211,21 +222,21 @@ void initializer::sVpppp(){
         //T1 = append(T1,t1);
     }
 
-    cout << "    Stage 3:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
-    t = clock();
+    //cout << "    Stage 3:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
+    //t = clock();
     T0.set_size(iN);
     T1.set_size(iN);
     iN = 0;
-    cout << "    Stage 4:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
-    t = clock();
+    //cout << "    Stage 4:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
+    //t = clock();
     for(int i = 0; i < KAB_unique.size(); i++){
         T0(span(iN, iN+TT(i,0).size()-1)) = TT(i,0);
         T1(span(iN, iN+TT(i,1).size()-1)) = TT(i,1);
         iN += TT(i,0).size();
     }
 
-    cout << "    Stage 5:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
-    t = clock();
+    //cout << "    Stage 5:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
+    //t = clock();
 
 
     /*
@@ -269,18 +280,18 @@ void initializer::sVpppp(){
     aVpppp = conv_to<uvec>::from(T0) - bVpppp*iNp ;
     dVpppp = conv_to<uvec>::from(floor(T1/iNp)) ; //convert to unsigned integer indexing vector
     cVpppp = conv_to<uvec>::from(T1) - dVpppp*iNp;
-    cout << "    Stage 6:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
-    t = clock();
+    //cout << "    Stage 6:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
+    //t = clock();
 
-    vValsVpppp = V(aVpppp+iNh,bVpppp+iNh,cVpppp+iNh,dVpppp+iNh);
+    vValsVpppp = V3(aVpppp+iNh,bVpppp+iNh,cVpppp+iNh,dVpppp+iNh);
     //vec vNonzero = vValsVpppp.elem(find(vValsVpppp != 0));
     //cout << vNonzero.size() << " " << vValsVpppp.size() << endl;
     //umat locations;
     //locations.set_size(T0.size(),2);
     //locations.col(0) = T0;
     //locations.col(1) = T1;
-    cout << "    Stage 7:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
-    t = clock();
+    //cout << "    Stage 7:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
+    //t = clock();
     //Vpppp = sp_mat(locations.t(), vValsVpppp, iNp2, iNp2);
     //cout << "Stage 3:" << (clock() - t)/CLOCKS_PER_SEC << endl;
     //t = clock();
@@ -294,8 +305,8 @@ void initializer::sVpppp(){
                     }
                 }}}}
     */
-    cout << "    Stage 8:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
-    t = clock();
+    //cout << "    Stage 8:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
+    //t = clock();
 }
 
 void initializer::sVhhhh(){
@@ -315,8 +326,8 @@ void initializer::sVhhhh(){
     vec KJy = bs.vKy.elem(J);
     vec KJz = bs.vKz.elem(J);
 
-    vec KIJx = bs.vKx.elem(I)+bs.vKx.elem(J);
-    vec KIJy = iNmax*(bs.vKy.elem(I)+bs.vKy.elem(J));
+    vec KIJx =         bs.vKx.elem(I)+bs.vKx.elem(J);
+    vec KIJy = iNmax* (bs.vKy.elem(I)+bs.vKy.elem(J));
     vec KIJz = iNmax2*(bs.vKz.elem(I)+bs.vKz.elem(J));
 
     vec KIJ = KIJx+KIJy+KIJz;
@@ -330,7 +341,7 @@ void initializer::sVhhhh(){
     field<uvec> TT;
     TT.set_size(KIJ_unique.size(), 2);
     int iN = 0;
-    //int iN;
+
     for(int i = 0; i < KIJ_unique.size(); i++){
         vec T = IJ.elem(find(KIJ==KIJ_unique(i)));
         vec O = ones(T.size());
@@ -347,11 +358,18 @@ void initializer::sVhhhh(){
     T0.set_size(iN);
     T1.set_size(iN);
     iN = 0;
+    int j;
     for(int i = 0; i < KIJ_unique.size(); i++){
         //this is the most time-consuming process in initialization
-        T0(span(iN, iN+TT(i,0).size()-1)) = TT(i,0);
-        T1(span(iN, iN+TT(i,1).size()-1)) = TT(i,1);
-        iN += TT(i,0).size();
+        //T0(span(iN, iN+TT(i,0).size()-1)) = TT(i,0);
+        //T1(span(iN, iN+TT(i,1).size()-1)) = TT(i,1);
+        //iN += TT(i,0).size();
+
+        for(j = 0; j < TT(i,0).size(); j++){
+            T0(iN) = TT(i,0)(j);
+            T1(iN) = TT(i,1)(j);
+            iN += 1;
+        }
     }
 
     jVhhhh = conv_to<uvec>::from(floor(T0/iNh)); //convert to unsigned integer indexing vector
@@ -359,12 +377,42 @@ void initializer::sVhhhh(){
     lVhhhh = conv_to<uvec>::from(floor(T1/iNh)) ; //convert to unsigned integer indexing vector
     kVhhhh = conv_to<uvec>::from(T1) - lVhhhh*iNh;
 
-    vValsVhhhh = V(iVhhhh,jVhhhh,kVhhhh,lVhhhh);
+    vValsVhhhh = V3(iVhhhh,jVhhhh,kVhhhh,lVhhhh);
+
+
+
     umat locations;
     locations.set_size(T0.size(),2);
     locations.col(0) = T0;
     locations.col(1) = T1;
     Vhhhh = sp_mat(locations.t(), vValsVhhhh, iNh2, iNh2);
+
+    //test for consistency
+    for(int n= 0; n<vValsVhhhh.size();n++){
+        if(vValsVhhhh(n) !=  bs.v(iVhhhh(n), jVhhhh(n), kVhhhh(n), lVhhhh(n))){
+            cout << "Discrepancy found" << endl;
+            cout << iVhhhh(n) << " " << jVhhhh(n)<< " " << kVhhhh(n)<< " " << lVhhhh(n)<< " " << vValsVhhhh(n)<< " " <<bs.v(iVhhhh(n), jVhhhh(n), kVhhhh(n), lVhhhh(n)) << endl;
+        }
+    }
+
+    double d1,d2;
+    int discs = 0;
+    for(int i = 0; i< iNh; i++){
+        for(int j = 0; j< iNh; j++){
+            for(int k = 0; k< iNh; k++){
+                for(int l = 0; l < iNh; l++){
+                    d1 = Vhhhh(i + j*iNh, k + l*iNh);
+                    d2 = bs.v(i,j,k,l);
+                    if(d1 != d2){
+                        cout << d1 << " " << d2 << endl;
+                        discs += 1;
+
+                    }
+                }
+            }
+        }
+    }
+    cout << "Discrepancy found. (" << discs << ")" << endl;
 }
 
 void initializer::sVhhpp(){
@@ -500,8 +548,8 @@ void initializer::sVhhpp(){
     aVpphh = aVhhpp;
     bVpphh = bVhhpp;
 
-    vValsVhhpp = V(iVhhpp,jVhhpp,aVhhpp+iNh,bVhhpp+iNh);
-    vValsVpphh = V(aVhhpp+iNh,bVhhpp+iNh,iVhhpp,jVhhpp);
+    vValsVhhpp = V3(iVhhpp,jVhhpp,aVhhpp+iNh,bVhhpp+iNh);
+    vValsVpphh = V3(aVhhpp+iNh,bVhhpp+iNh,iVhhpp,jVhhpp);
 
     umat locations;
     locations.set_size(T0.size(),2);
@@ -650,7 +698,7 @@ void initializer::sVhpph(){
     jVhpph = conv_to<uvec>::from(floor(T1/iNp)) ; //convert to unsigned integer indexing vector
     bVhpph = conv_to<uvec>::from(T1) - jVhpph*iNp;
 
-    vValsVhpph = V(iVhpph,aVhpph+iNh,bVhpph+iNh,jVhpph);
+    vValsVhpph = V3(iVhpph,aVhpph+iNh,bVhpph+iNh,jVhpph);
     umat locations;
     locations.set_size(T0.size(),2);
     locations.col(0) = T0;

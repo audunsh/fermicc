@@ -106,7 +106,7 @@ void electrongas::generate_state_list(int Ne, double rs, int Np){
     }
     //sorted_energy.print();
     //Energy.print();
-    cout << "Initialized " << nStates << " states." << endl;
+    cout << "#Electrongas: number of states:" << nStates << endl;
 }
 
 double electrongas::absdiff2(rowvec A, rowvec B){
@@ -288,8 +288,8 @@ double electrongas::eref(int nParticles){
             }
         }
     }
-    cout << "Single particle energy:" << sp_energy << endl;
-    cout << "Interaction energy:" << in_energy << endl;
+    //cout << "Single particle energy:" << sp_energy << endl;
+    //cout << "Interaction energy:" << in_energy << endl;
     return reference_energy;
 }
 

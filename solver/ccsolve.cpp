@@ -43,18 +43,18 @@ void ccsolve::initialize_t3amplitudes(){
 double ccsolve::CCSD_SG(int iNparticles){
     iNp = iNparticles;
     int a,b,i,j;
-    cout << "Initializing intermediates ...";
+    //cout << "Initializing intermediates ...";
     initialize_SGIntermediates();
-    cout << "OK." << endl;
+    //cout << "OK." << endl;
     //update_SGIntermediates();
 
     //test routines
-    cout << "Correlation energy prior to amplitude initialization:" << CCSD_SG_energy() << endl;
+    //cout << "Correlation energy prior to amplitude initialization:" << CCSD_SG_energy() << endl;
 
     //Initial guess for amplitudes
     //SpMat<double> t2a;
     //SpMat<double> t3a;
-    cout << "Initializing amplitudes ...";
+    //cout << "Initializing amplitudes ...";
     for(i = 0; i<iNp; i++){
         for(a = iNp; a<iNs; a++){
             t1a(a,i) = h(a,i)/(h(i,i) - h(a,a));
@@ -67,17 +67,19 @@ double ccsolve::CCSD_SG(int iNparticles){
             }
         }
     }
-    cout << "OK." << endl;
-    cout << "Correlation energy after amplitude initialization (1.order perturbation:):" << CCSD_SG_energy() << endl;
-    cout << "Beginning iterations." << endl;
-    for(int t = 0; t<15; t++){
-        cout << "Updating intermediates ... " << endl;
+    //cout << "OK." << endl;
+    cout << "Correlation energy after amplitude initialization (2.order PT:):" << CCSD_SG_energy() << endl;
+    //cout << "Beginning iterations." << endl;
+    for(int t = 0; t<1; t++){
+        //cout << "Updating intermediates ... " << endl;
         update_SGIntermediates_optimized();
-        cout << "Done updating intermediates."<< endl;
-        cout << "Advancing solution one step...";
-        CCSD_SG_advance();
-        //cout << CCSD_SG_energy() << endl;
-        cout << "OK" << endl;
+        //cout << "Done updating intermediates."<< endl;
+        //cout << "Advancing solution one step...";
+
+        //CCSD_SG_advance();
+
+        cout << "(ccsolve)Energy:" << CCSD_SG_energy() << endl;
+        //cout << "OK" << endl;
     }
     return CCSD_SG_energy();
 }
@@ -133,12 +135,12 @@ double ccsolve::CCSD_SG_energy(){
     val3 = 0.0;
     for(a=iNp; a<iNs; a++){
         for(i = 0; i<iNp; i++){
-            val1 += h(a,i)*t1(a,i);
+            //val1 += h(a,i)*t1(a,i);
             for(b = iNp; b<iNs; b++){
                 for(j = 0; j<iNp; j++){
                     v_ijab = v(i,j,a,b);
                     val2 += v_ijab*t2(a,b,i,j);
-                    val3 += v_ijab*t1(a,i)*t1(b,j);
+                    //val3 += v_ijab*t1(a,i)*t1(b,j);
                 }
             }
         }
@@ -461,7 +463,7 @@ void ccsolve::update_SGIntermediates_optimized(){
     int a,b,c,d,i,j,k,l;
     double val1, val2;
 
-    cout << "Updating f1a..." ;
+    //cout << "Updating f1a..." ;
 
     //update f1a
     for(c = iNp; c<iNs; c++){
@@ -475,10 +477,10 @@ void ccsolve::update_SGIntermediates_optimized(){
             f1a(c,k) = val1;
         }
     }
-    cout << "OK" << endl;
+    //cout << "OK" << endl;
 
     //update f2a
-    cout << "Updating f2a..." ;
+    //cout << "Updating f2a..." ;
     for(k = 0; k<iNp; k++){
         for(i = 0; i<iNp; i++){
             val1 = 0.0;
@@ -499,10 +501,10 @@ void ccsolve::update_SGIntermediates_optimized(){
             f2a(k,i) = val1;
         }
     }
-    cout << "OK" << endl;
+    //cout << "OK" << endl;
 
     //update f3a
-    cout << "Updating f3a...";
+    //cout << "Updating f3a...";
     for(a = iNp; a<iNs; a++){
         for(c = iNp; c<iNs; c++){
             val1 = 0.0;
@@ -523,10 +525,10 @@ void ccsolve::update_SGIntermediates_optimized(){
             f3a(a,c) = val1;
         }
     }
-    cout << "OK" << endl;
+    //cout << "OK" << endl;
 
     //udpate w1a
-    cout << "Updating w1a...";
+    //cout << "Updating w1a...";
     for(k = 0; k<iNp; k++){
         for(l = 0; l<iNp; l++){
             for(i = 0; i<iNp; i++){
@@ -546,10 +548,10 @@ void ccsolve::update_SGIntermediates_optimized(){
             }
         }
     }
-    cout << "OK" << endl;
+    //cout << "OK" << endl;
 
     //update w2a
-    cout << "Updating w2a...";
+    //cout << "Updating w2a...";
     for(a = iNp; a<iNs; a++){
         for(k = 0; k < iNp; k++){
             for(i = 0; i<iNp; i++){
@@ -569,10 +571,10 @@ void ccsolve::update_SGIntermediates_optimized(){
             }
         }
     }
-    cout << "OK" << endl;
+    //cout << "OK" << endl;
 
     //update w3a
-    cout << "Updating w3a...";
+    //cout << "Updating w3a...";
     for(k = 0; k<iNp; k++){
         for(l= 0; l<iNp; l++){
             for(c = iNp; c<iNs; c++){
@@ -586,11 +588,11 @@ void ccsolve::update_SGIntermediates_optimized(){
             }
         }
     }
-    cout << "OK" << endl;
+    //cout << "OK" << endl;
 
 
     //update w4a
-    cout << "Updating w4a...";
+    //cout << "Updating w4a...";
     for(a = iNp; a< iNs; a++){
         for(k=0; k<iNp; k++){
             for(i = 0; i<iNp; i++){
@@ -616,7 +618,7 @@ void ccsolve::update_SGIntermediates_optimized(){
             }
         }
     }
-    cout << "OK" << endl;
+    //cout << "OK" << endl;
 }
 
 void ccsolve::update_intermediates(){}
