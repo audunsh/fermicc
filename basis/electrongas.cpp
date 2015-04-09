@@ -240,9 +240,7 @@ double electrongas::v(int P, int Q, int R, int S){
             value -= 1.0/term2;
         }
 
-        //value *= (term1 - term2);
-        //return 4.0*pi*(1.0/term1 - 1.0/term2)/dL3; //dPrefactor1*
-        return 2.0*pi*value/dL3; //dPrefactor1* //HAD TO CORRECT THE FACTOR 4 (previously 2()
+        return 2.0*pi*value/dL3; //dPrefactor1*
     }
 }
 

@@ -39,7 +39,7 @@ public:
     double mu;
     int iNparticles;
 
-    double pi = 4*atan(1);
+    double pi = datum::pi; //4*atan(1);
 
     //added vectorized functionality, 21.03.2015
     vec vKx,vKy,vKz, vMs;
