@@ -241,9 +241,10 @@ void initializer::sVpppp(){
     //cout << "    Stage 6:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
     //t = clock();
 
-    vValsVpppp = V3(aVpppp+iNh,bVpppp+iNh,cVpppp+iNh,dVpppp+iNh);
+    vValsVpppp = V(aVpppp+iNh,bVpppp+iNh,cVpppp+iNh,dVpppp+iNh); //this works, tested agains bs.v2, 9.8.2015
 
     double val = 0;
+    double val2 = 0;
     int disccount = 0;
     int an,bn,cn,dn;
     for(int n =0; n< vValsVpppp.size(); n++){
@@ -253,14 +254,15 @@ void initializer::sVpppp(){
         dn = dVpppp(n) + iNh;
 
         val = bs.v2(an,bn,cn,dn);
-        if((val - 2*vValsVpppp(n))>0.00001){
-            cout << val << " " << 2*vValsVpppp(n) << endl;
 
+        if((abs(val - vValsVpppp(n)))>0.00001){
+            cout << val << " " << val2 << " " << vValsVpppp(n) << endl;
             disccount += 1;
         }
     }
 
     cout << "Discrepancies in Vpppp:" << disccount << endl;
+    cout << "Size of Vpppp         :" << vValsVpppp.size() << endl;
 }
 
 void initializer::sVhhhh(){
@@ -330,7 +332,7 @@ void initializer::sVhhhh(){
     lVhhhh = conv_to<uvec>::from(floor(T1/iNh)) ; //convert to unsigned integer indexing vector
     kVhhhh = conv_to<uvec>::from(T1) - lVhhhh*iNh;
 
-    vValsVhhhh = V3(iVhhhh,jVhhhh,kVhhhh,lVhhhh);
+    vValsVhhhh = V(iVhhhh,jVhhhh,kVhhhh,lVhhhh);
 
 
 
@@ -342,13 +344,14 @@ void initializer::sVhhhh(){
 
     //test for consistency
 
-
+    //int disccount = 0;
     for(int n= 0; n<vValsVhhhh.size();n++){
-        if(vValsVhhhh(n) !=  bs.v(iVhhhh(n), jVhhhh(n), kVhhhh(n), lVhhhh(n))){
-            cout << "Discrepancy found" << endl;
+        if(vValsVhhhh(n) !=  bs.v2(iVhhhh(n), jVhhhh(n), kVhhhh(n), lVhhhh(n))){
+            //disccount += 1;
             cout << iVhhhh(n) << " " << jVhhhh(n)<< " " << kVhhhh(n)<< " " << lVhhhh(n)<< " " << vValsVhhhh(n)<< " " <<bs.v(iVhhhh(n), jVhhhh(n), kVhhhh(n), lVhhhh(n)) << endl;
         }
     }
+    //cout << "Number of discrepancies in Vhhhh:" <<  disccount << endl;
 
     double d1,d2;
     int discs = 0;
@@ -357,7 +360,7 @@ void initializer::sVhhhh(){
             for(int k = j; k< iNh; k++){
                 for(int l = k; l < iNh; l++){
                     d1 = Vhhhh(i + j*iNh, k + l*iNh);
-                    d2 = bs.v(i,j,k,l);
+                    d2 = bs.v2(i,j,k,l);
                     if(d1 != d2){
                         //cout << d1 << " " << d2 << endl;
                         discs += 1;
@@ -368,7 +371,7 @@ void initializer::sVhhhh(){
         }
     }
 
-    cout << "Discrepancy found. (" << discs << ")" << endl;
+    cout << "Discrepancy found in Vhhhh:" << discs << endl;
 
 }
 
@@ -456,32 +459,40 @@ void initializer::sVhhpp(){
             TT(i, 0) = t0;
             TT(i, 1) = t1;
             iN += t0.size();
+
         }
     }
 
     T0.set_size(iN);
     T1.set_size(iN);
     iN = 0;
+    int j;
     for(int i = 0; i < K_unique.size(); i++){
-        //this is the most time-consuming process in initialization
+        //this is the most time-consuming process in initialization of Vhhpp
         if(TT(i,0).size() != 0){
             T0(span(iN, iN+TT(i,0).size()-1)) = TT(i,0);
             T1(span(iN, iN+TT(i,1).size()-1)) = TT(i,1);
             iN += TT(i,0).size();}
+        //for(j = 0; j < TT(i,0).size(); j++){
+        //    T0(iN) = TT(i,0)(j);
+        //    T1(iN) = TT(i,1)(j);
+        //    iN += 1;
+        //}
     }
 
     jVhhpp = conv_to<uvec>::from(floor(T0/iNh)); //convert to unsigned integer indexing vector
     iVhhpp = conv_to<uvec>::from(T0) - jVhhpp*iNh ;
     bVhhpp = conv_to<uvec>::from(floor(T1/iNp)) ; //convert to unsigned integer indexing vector
     aVhhpp = conv_to<uvec>::from(T1) - bVhhpp*iNp;
+    //cout << "Maximum a:" << aVhhpp.max() << endl;
 
     iVpphh = iVhhpp;
     jVpphh = jVhhpp;
     aVpphh = aVhhpp;
     bVpphh = bVhhpp;
 
-    vValsVhhpp = V3(iVhhpp,jVhhpp,aVhhpp+iNh,bVhhpp+iNh);
-    vValsVpphh = V3(aVhhpp+iNh,bVhhpp+iNh,iVhhpp,jVhhpp);
+    vValsVhhpp = V(iVhhpp,jVhhpp,aVhhpp+iNh,bVhhpp+iNh);
+    vValsVpphh = V(aVhhpp+iNh,bVhhpp+iNh,iVhhpp,jVhhpp); //Symmetric? Do a test
 
     umat locations;
     locations.set_size(T0.size(),2);
@@ -496,9 +507,31 @@ void initializer::sVhhpp(){
     //cout << V(conv_to<uvec>::from(ones(2)*13),conv_to<uvec>::from(ones(2)*12),conv_to<uvec>::from(ones(2)*46),conv_to<uvec>::from(ones(2)*42)) << endl; //this element is not inlcuded in the testing above!!!
     //cout << Vhhpp(181, 1152) << endl;
 
-
     /*
     double val = 0;
+    double val2 = 0;
+    int disccount = 0;
+    int an,bn,in,jn;
+
+    for(int n =0; n< vValsVhhpp.size(); n++){
+        //cout << aVhhpp(n) + iNh << endl;
+        an = aVhhpp(n) + iNh;
+        bn = bVhhpp(n) + iNh;
+        in = iVhhpp(n);
+        jn = jVhhpp(n);
+        //cout << an << endl;
+
+        val = bs.v2(an,bn,in,jn);
+
+        if((abs(val - vValsVpphh(n)))>0.00001){
+            cout << val << " " << vValsVpphh(n) << endl;
+            disccount += 1;
+        }
+    }
+    cout << "Discrepancies in Vpphh:" << disccount << endl;
+
+
+    val = 0;
     for(int i = 0; i<iNh; i++){
         for(int j = 0; j<iNh; j++){
             for(int a = 0; a<iNp; a++){
@@ -507,16 +540,17 @@ void initializer::sVhhpp(){
                     //cout << Vhhpp(i + j*iNh, a + b*iNp) << "       " << val << endl;
                     //cout << Vhhpp(i + j*iNh, a + b*iNp) << endl;
                     //cout << i + j*iNh << " " << a + b*iNp << endl;
-                    if(Vhhpp(i + j*iNh, a + b*iNp) != val){
+                    if(abs(Vhhpp(i + j*iNh, a + b*iNp) - val)>0.00000001){
                         //cout << i + j*iNh << " " << a + b*iNp << endl;
                         cout << i << " " << j << " " << a  << " " << b  << endl;
-                        cout << Vhhpp(i + j*iNh, a + b*iNp) << " " << val << endl;
+                        cout << Vhhpp(i + j*iNh, a + b*iNp) - val << endl;
                     }
                 }
             }
         }
     }
     */
+
 
 }
 
@@ -642,7 +676,7 @@ void initializer::sVhpph(){
     //cout << Vhhpp(181, 1152) << endl;
 
 
-    /*
+
     double val = 0;
     for(int i = 0; i<iNh; i++){
         for(int j = 0; j<iNh; j++){
@@ -652,7 +686,7 @@ void initializer::sVhpph(){
                     //cout << Vhhpp(i + j*iNh, a + b*iNp) << "       " << val << endl;
                     //cout << Vhhpp(i + j*iNh, a + b*iNp) << endl;
                     //cout << i + j*iNh << " " << a + b*iNp << endl;
-                    if(Vhpph(i + a*iNh, b + j*iNp) != val){
+                    if(abs(Vhpph(i + a*iNh, b + j*iNp) - val)>0.000001){
                         //cout << i + j*iNh << " " << a + b*iNp << endl;
                         cout << i << " " << a << " " << b  << " " << j  << endl;
                         cout << Vhpph(i + a*iNh, b + j*iNp) << " " << val << endl;
@@ -661,7 +695,7 @@ void initializer::sVhpph(){
             }
         }
     }
-    */
+
 
 }
 

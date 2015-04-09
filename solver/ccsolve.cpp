@@ -62,7 +62,7 @@ double ccsolve::CCSD_SG(int iNparticles){
             //cout << h(i,i) << endl;
             for(j = 0; j<iNp; j++){
                 for(b = iNp; b<iNs; b++){
-                    t2a(a+b*iNs,i+j*iNs) = v(a,b,i,j)/(h(i,i) + h(j,j) - h(a,a) - h(b,b));
+                    t2a(a+b*iNs,i+j*iNs) = v2(a,b,i,j)/(h(i,i) + h(j,j) - h(a,a) - h(b,b));
                 }
             }
         }
