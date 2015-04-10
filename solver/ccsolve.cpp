@@ -20,7 +20,7 @@ ccsolve::ccsolve(electrongas f)
 }
 
 double ccsolve::v(int a, int b, int i, int j){
-    return eBasis.v(a,b,i,j);
+    return eBasis.v2(a,b,i,j);
 }
 
 double ccsolve::h(int a, int i){
@@ -62,7 +62,7 @@ double ccsolve::CCSD_SG(int iNparticles){
             //cout << h(i,i) << endl;
             for(j = 0; j<iNp; j++){
                 for(b = iNp; b<iNs; b++){
-                    t2a(a+b*iNs,i+j*iNs) = v2(a,b,i,j)/(h(i,i) + h(j,j) - h(a,a) - h(b,b));
+                    t2a(a+b*iNs,i+j*iNs) = v(a,b,i,j)/(h(i,i) + h(j,j) - h(a,a) - h(b,b));
                 }
             }
         }
@@ -70,13 +70,13 @@ double ccsolve::CCSD_SG(int iNparticles){
     //cout << "OK." << endl;
     cout << "Correlation energy after amplitude initialization (2.order PT:):" << CCSD_SG_energy() << endl;
     //cout << "Beginning iterations." << endl;
-    for(int t = 0; t<1; t++){
+    for(int t = 0; t<5; t++){
         //cout << "Updating intermediates ... " << endl;
         update_SGIntermediates_optimized();
         //cout << "Done updating intermediates."<< endl;
         //cout << "Advancing solution one step...";
 
-        //CCSD_SG_advance();
+        CCSD_SG_advance();
 
         cout << "(ccsolve)Energy:" << CCSD_SG_energy() << endl;
         //cout << "OK" << endl;

@@ -21,7 +21,7 @@ using namespace arma;
 int main()
 {
     electrongas fgas;
-    fgas.generate_state_list(4.0,1.0, 14);
+    fgas.generate_state_list(1.0,1.0, 2);
 
     //cout << "Energy per particle:" << fgas.eref(14)/14.0 << " (a.u)"  << endl;
     cout << "# Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;
@@ -31,7 +31,7 @@ int main()
     ccd solver(fgas);
 
 
-    /*
+
     ccsolve solver2(fgas);
     solver2.CCSD_SG(2);
 
@@ -55,7 +55,6 @@ int main()
             }
         }
     }
-    */
 
     return 0;
 
