@@ -20,6 +20,8 @@ public:
     vec V3(uvec p, uvec q, uvec r, uvec s); //semivectorized interactions
 
     void sVpppp();
+    void sVppppO();
+
     void sVhhhh();
     void sVpphh();
     void sVhhpp();

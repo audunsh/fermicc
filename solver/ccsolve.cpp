@@ -70,7 +70,7 @@ double ccsolve::CCSD_SG(int iNparticles){
     //cout << "OK." << endl;
     cout << "Correlation energy after amplitude initialization (2.order PT:):" << CCSD_SG_energy() << endl;
     //cout << "Beginning iterations." << endl;
-    for(int t = 0; t<5; t++){
+    for(int t = 0; t<3; t++){
         //cout << "Updating intermediates ... " << endl;
         update_SGIntermediates_optimized();
         //cout << "Done updating intermediates."<< endl;

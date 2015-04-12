@@ -18,11 +18,30 @@ ccd::ccd(electrongas bs){
     iSetup = initializer(bs);
 
     //setup all interaction matrices
+    clock_t t;
+    t =  clock();
     iSetup.sVhhhh();
-    iSetup.sVpppp();
+    cout << "Vhhhh init time:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+    t = clock();
+
+    iSetup.sVppppO();
+    cout << "Vpppp init time:" <<  (float)(clock()- t)/CLOCKS_PER_SEC << endl;
+    t = clock();
+
     iSetup.sVhhpp();
-    iSetup.sVpphh();
+    cout << "Vhhpp init time:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+    t = clock();
+
+    //iSetup.sVpphh();
+    cout << "Vpphh init time:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+    t = clock();
+
     iSetup.sVhpph();
+    cout << "Vhpph init time:" <<  (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+    t = clock();
+
+
+
 
     //convert interaction data to flexmat objects
     vhhhh.init(iSetup.vValsVhhhh, iSetup.iVhhhh, iSetup.jVhhhh, iSetup.kVhhhh, iSetup.lVhhhh, iSetup.iNh, iSetup.iNh, iSetup.iNh, iSetup.iNh);
@@ -100,7 +119,7 @@ ccd::ccd(electrongas bs){
 
     energy();
 
-    for(int i = 0; i < 5; i++){
+    for(int i = 0; i < 30; i++){
         advance();
     }
 }

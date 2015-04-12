@@ -165,6 +165,150 @@ vec initializer::appendvec(vec V1, vec V2){
     return V3;
 }
 
+void initializer::sVppppO(){
+    //optimized interaction for the ladder matrix
+    clock_t t;
+
+    Vpppp.set_size(iNp2, iNp2);
+
+    vec AB = linspace(0,iNp2-1,iNp2);
+
+    //uvec B = conv_to<uvec>::from(floor(AB/iNp)); //convert to unsigned integer indexing vector
+    //uvec A = conv_to<uvec>::from(AB) - B*iNp;
+
+
+    //using symmetries, only consider a>b>c>d:
+    uvec A, B; // = conv_to<uvec>::from(zeros(iNp*((iNp+1.0)/2.0))); //convert to unsigned integer indexing vector
+    //uvec A = conv_to<uvec>::from(zeros(iNp*((iNp+1.0)/2.0)));
+    B.set_size(iNp*((iNp+1.0)/2.0));
+    A.set_size(iNp*((iNp+1.0)/2.0));
+
+
+    uint n = 0;
+    for(uint a = 0; a<iNp; ++a){
+        for(uint b = a; b<iNp; ++b){
+            A(n) = a;
+            B(n) = b;
+            n += 1;
+        }
+    }
+
+
+    vec KABx = bs.vKx.elem(A+iNh)+bs.vKx.elem(B+iNh);
+    vec KABy = iNmax*(bs.vKy.elem(A+iNh)+bs.vKy.elem(B+iNh));
+    vec KABz = iNmax2*(bs.vKz.elem(A+iNh)+bs.vKz.elem(B+iNh));
+    vec KABms = iNmax*iNmax2*(bs.vMs(A+iNh) + bs.vMs(B + iNh));
+
+    vec KAB = KABx+KABy+KABz + KABms;
+    vec KAB_unique = unique(KAB);
+
+    field<uvec> TT;
+    TT.set_size(KAB_unique.size(), 2);
+    int iN = 0;
+    vec T, O;
+    uvec t0, t1;
+
+
+    for(uint i = 0; i < KAB_unique.size(); ++i){
+        //this is the most time-consuming process in initialization
+        T = conv_to<vec>::from(find(KAB==KAB_unique(i))); //Is it possible to exploit to make this vector should "shrink" ?
+        O = ones(T.size());
+        t0 = conv_to<uvec>::from(kron(T, O));
+        t1 = conv_to<uvec>::from(kron(O, T));
+        TT(i, 0) = t0;
+        TT(i, 1) = t1;
+        iN += t0.size();
+    }
+
+    uvec aVppp, bVppp, cVppp, dVppp;
+    aVppp.set_size(iN);
+    bVppp.set_size(iN);
+    cVppp.set_size(iN);
+    dVppp.set_size(iN);
+
+
+    iN = 0;
+    for(uint i = 0; i < KAB_unique.size(); ++i){
+        aVppp(span(iN, iN+TT(i,0).size()-1)) = A.elem(TT(i,0));
+        bVppp(span(iN, iN+TT(i,0).size()-1)) = B.elem(TT(i,0));
+        cVppp(span(iN, iN+TT(i,0).size()-1)) = A.elem(TT(i,1));
+        dVppp(span(iN, iN+TT(i,0).size()-1)) = B.elem(TT(i,1));
+        iN += TT(i,0).size();
+    }
+
+
+    vec vValsVppp = V(aVppp+iNh,bVppp+iNh,cVppp+iNh,dVppp+iNh); //this works, tested agains bs.v2, 9.4.2015
+    iN = vValsVppp.size();
+
+    //use symmetries to fill in remaining interactions
+    aVpppp.set_size(4*iN);
+    bVpppp.set_size(4*iN);
+    cVpppp.set_size(4*iN);
+    dVpppp.set_size(4*iN);
+
+    aVpppp(span(0,iN-1)) = aVppp;
+    aVpppp(span(iN,2*iN-1)) = bVppp;
+    aVpppp(span(2*iN,3*iN-1)) = cVppp;
+    aVpppp(span(3*iN,4*iN-1)) = dVppp;
+
+    bVpppp(span(0,iN-1)) = bVppp;
+    bVpppp(span(iN,2*iN-1)) = aVppp;
+    bVpppp(span(2*iN,3*iN-1)) = dVppp;
+    bVpppp(span(3*iN,4*iN-1)) = cVppp;
+
+    cVpppp(span(0,iN-1)) = cVppp;
+    cVpppp(span(iN,2*iN-1)) = dVppp;
+    cVpppp(span(2*iN,3*iN-1)) = bVppp;
+    cVpppp(span(3*iN,4*iN-1)) = aVppp;
+
+    dVpppp(span(0,iN-1)) = dVppp;
+    dVpppp(span(iN,2*iN-1)) = cVppp;
+    dVpppp(span(2*iN,3*iN-1)) = aVppp;
+    dVpppp(span(3*iN,4*iN-1)) = bVppp;
+
+    vValsVpppp.set_size(4*iN);
+    vValsVpppp(span(0,iN-1)) = vValsVppp;
+    vValsVpppp(span(iN,2*iN-1)) = vValsVppp;
+    vValsVpppp(span(2*iN,3*iN-1)) = -vValsVppp;
+    vValsVpppp(span(3*iN,4*iN-1)) = -vValsVppp;
+
+
+
+
+
+    //aVpppp = join_cols<umat>(join_cols<umat>(aVppp, bVppp),join_cols<umat>(cVppp, dVppp));
+    //bVpppp = join_cols<mat>(join_cols<mat>(bVppp, aVppp),join_cols<mat>(dVppp, cVppp));
+    //cVpppp = join_cols<mat>(join_cols<mat>(cVppp, dVppp),join_cols<mat>(bVppp, aVppp));
+    //dVpppp = join_cols<mat>(join_cols<mat>(dVppp, cVppp),join_cols<mat>(aVppp, bVppp));
+    //vValsVpppp = join_cols<mat>(join_cols<mat>(vValsVppp,vValsVppp),join_cols<mat>(-vValsVppp,-vValsVppp));
+
+
+    /*
+    //Testing that the full interaction is correct
+    double val = 0;
+    double val2 = 0;
+    int disccount = 0;
+    int an,bn,cn,dn;
+    for(int n =0; n< vValsVpppp.size(); n++){
+        an = aVpppp(n) + iNh;
+        bn = bVpppp(n) + iNh;
+        cn = cVpppp(n) + iNh;
+        dn = dVpppp(n) + iNh;
+
+        val = bs.v2(an,bn,cn,dn);
+
+        if((abs(val - vValsVpppp(n)))>0.00001){
+            cout << val << " " << val2 << " " << vValsVpppp(n) << endl;
+            disccount += 1;
+        }
+    }
+
+    cout << "Discrepancies in Vpppp:" << disccount << endl;
+    cout << "Size of Vpppp         :" << vValsVpppp.size() << endl;
+
+    */
+}
+
 void initializer::sVpppp(){
     //cout << "Hello from initializer!" << endl;
     clock_t t;
@@ -243,6 +387,8 @@ void initializer::sVpppp(){
 
     vValsVpppp = V(aVpppp+iNh,bVpppp+iNh,cVpppp+iNh,dVpppp+iNh); //this works, tested agains bs.v2, 9.8.2015
 
+
+    /*
     double val = 0;
     double val2 = 0;
     int disccount = 0;
@@ -263,6 +409,7 @@ void initializer::sVpppp(){
 
     cout << "Discrepancies in Vpppp:" << disccount << endl;
     cout << "Size of Vpppp         :" << vValsVpppp.size() << endl;
+    */
 }
 
 void initializer::sVhhhh(){
@@ -344,6 +491,7 @@ void initializer::sVhhhh(){
 
     //test for consistency
 
+    /*
     //int disccount = 0;
     for(int n= 0; n<vValsVhhhh.size();n++){
         if(vValsVhhhh(n) !=  bs.v2(iVhhhh(n), jVhhhh(n), kVhhhh(n), lVhhhh(n))){
@@ -370,8 +518,9 @@ void initializer::sVhhhh(){
             }
         }
     }
+    */
 
-    cout << "Discrepancy found in Vhhhh:" << discs << endl;
+    //cout << "Discrepancy found in Vhhhh:" << discs << endl;
 
 }
 
@@ -554,7 +703,8 @@ void initializer::sVhhpp(){
 
 }
 
-void initializer::sVpphh(){}
+void initializer::sVpphh(){
+}
 
 void initializer::sVhpph(){
     Vhpph.set_size(iNhp, iNhp);
@@ -675,6 +825,7 @@ void initializer::sVhpph(){
     //cout << V(conv_to<uvec>::from(ones(2)*13),conv_to<uvec>::from(ones(2)*12),conv_to<uvec>::from(ones(2)*46),conv_to<uvec>::from(ones(2)*42)) << endl; //this element is not inlcuded in the testing above!!!
     //cout << Vhhpp(181, 1152) << endl;
 
+    /*
 
 
     double val = 0;
@@ -695,6 +846,7 @@ void initializer::sVhpph(){
             }
         }
     }
+    */
 
 
 }
