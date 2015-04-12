@@ -166,23 +166,12 @@ vec initializer::appendvec(vec V1, vec V2){
 }
 
 void initializer::sVppppO(){
-    //optimized interaction for the ladder matrix
-    clock_t t;
+    //optimized interaction for Vpppp
 
-    Vpppp.set_size(iNp2, iNp2);
-
-    vec AB = linspace(0,iNp2-1,iNp2);
-
-    //uvec B = conv_to<uvec>::from(floor(AB/iNp)); //convert to unsigned integer indexing vector
-    //uvec A = conv_to<uvec>::from(AB) - B*iNp;
-
-
-    //using symmetries, only consider a>b>c>d:
-    uvec A, B; // = conv_to<uvec>::from(zeros(iNp*((iNp+1.0)/2.0))); //convert to unsigned integer indexing vector
-    //uvec A = conv_to<uvec>::from(zeros(iNp*((iNp+1.0)/2.0)));
+    //using symmetries, only consider a>b>:
+    uvec A, B; //vectors containing indices (row and column)
     B.set_size(iNp*((iNp+1.0)/2.0));
     A.set_size(iNp*((iNp+1.0)/2.0));
-
 
     uint n = 0;
     for(uint a = 0; a<iNp; ++a){
@@ -194,6 +183,7 @@ void initializer::sVppppO(){
     }
 
 
+    //Setting up a vector containint a unique integer identifier for K + M_s
     vec KABx = bs.vKx.elem(A+iNh)+bs.vKx.elem(B+iNh);
     vec KABy = iNmax*(bs.vKy.elem(A+iNh)+bs.vKy.elem(B+iNh));
     vec KABz = iNmax2*(bs.vKz.elem(A+iNh)+bs.vKz.elem(B+iNh));
@@ -210,8 +200,9 @@ void initializer::sVppppO(){
 
 
     for(uint i = 0; i < KAB_unique.size(); ++i){
-        //this is the most time-consuming process in initialization
-        T = conv_to<vec>::from(find(KAB==KAB_unique(i))); //Is it possible to exploit to make this vector should "shrink" ?
+        //locating non-zero regions where K_a + K_b = K_c + K_d
+        //it is possible to exploit spin symmetry further inside this loop
+        T = conv_to<vec>::from(find(KAB==KAB_unique(i))); //Is it possible to make this vector "shrink" as more indices is identified?
         O = ones(T.size());
         t0 = conv_to<uvec>::from(kron(T, O));
         t1 = conv_to<uvec>::from(kron(O, T));
@@ -352,7 +343,7 @@ void initializer::sVpppp(){
     //t = clock();
 
 
-    for(int i = 0; i < KAB_unique.size(); i++){
+    for(int i = 0; i < KAB_unique.size(); ++i){
         //this is the most time-consuming process in initialization
         //vec T = AB.elem(find(KAB==KAB_unique(i)));
         vec T = conv_to<vec>::from(find(KAB==KAB_unique(i))); //Is it possible to exploit to make this vector should "shrink" ?
@@ -371,7 +362,7 @@ void initializer::sVpppp(){
     iN = 0;
     //cout << "    Stage 4:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
     //t = clock();
-    for(int i = 0; i < KAB_unique.size(); i++){
+    for(int i = 0; i < KAB_unique.size(); ++i){
         T0(span(iN, iN+TT(i,0).size()-1)) = TT(i,0);
         T1(span(iN, iN+TT(i,1).size()-1)) = TT(i,1);
         iN += TT(i,0).size();
@@ -412,6 +403,109 @@ void initializer::sVpppp(){
     */
 }
 
+void initializer::sVhhhhO(){
+    //optimized interaction for Vpppp
+
+    //using symmetries, only consider a>b>:
+    uvec I, J; //vectors containing indices (row and column)
+    I.set_size(iNh*((iNh+1.0)/2.0));
+    J.set_size(iNh*((iNh+1.0)/2.0));
+
+    uint n = 0;
+    for(uint i = 0; i<iNh; ++i){
+        for(uint j = i; j<iNh; ++j){
+            I(n) = i;
+            J(n) = j;
+            n += 1;
+        }
+    }
+
+
+    //Setting up a vector containint a unique integer identifier for K + M_s
+    vec KIJx = bs.vKx.elem(I)+bs.vKx.elem(J);
+    vec KIJy = iNmax*(bs.vKy.elem(I)+bs.vKy.elem(J));
+    vec KIJz = iNmax2*(bs.vKz.elem(I)+bs.vKz.elem(J));
+    vec KIJms = iNmax*iNmax2*(bs.vMs(I) + bs.vMs(J));
+
+    vec KIJ = KIJx+KIJy+KIJz + KIJms;
+    vec KIJ_unique = unique(KIJ);
+
+    field<uvec> TT;
+    TT.set_size(KIJ_unique.size(), 2);
+    int iN = 0;
+    vec T, O;
+    uvec t0, t1;
+
+
+    for(uint i = 0; i < KIJ_unique.size(); ++i){
+        //locating non-zero regions where K_a + K_b = K_c + K_d
+        //it is possible to exploit spin symmetry further inside this loop
+        T = conv_to<vec>::from(find(KIJ==KIJ_unique(i))); //Is it possible to make this vector "shrink" as more indices is identified?
+        O = ones(T.size());
+        t0 = conv_to<uvec>::from(kron(T, O));
+        t1 = conv_to<uvec>::from(kron(O, T));
+        TT(i, 0) = t0;
+        TT(i, 1) = t1;
+        iN += t0.size();
+    }
+
+    uvec iVhhh, jVhhh, kVhhh, lVhhh;
+    iVhhh.set_size(iN);
+    jVhhh.set_size(iN);
+    kVhhh.set_size(iN);
+    lVhhh.set_size(iN);
+
+
+    iN = 0;
+    for(uint i = 0; i < KIJ_unique.size(); ++i){
+        iVhhh(span(iN, iN+TT(i,0).size()-1)) = I.elem(TT(i,0));
+        jVhhh(span(iN, iN+TT(i,0).size()-1)) = J.elem(TT(i,0));
+        kVhhh(span(iN, iN+TT(i,0).size()-1)) = I.elem(TT(i,1));
+        lVhhh(span(iN, iN+TT(i,0).size()-1)) = J.elem(TT(i,1));
+        iN += TT(i,0).size();
+    }
+
+
+    vec vValsVhhh = V(iVhhh,jVhhh,kVhhh,lVhhh); //this works, tested agains bs.v2, 9.4.2015
+    iN = vValsVhhh.size();
+
+    //use symmetries to fill in remaining interactions
+    iVhhhh.set_size(4*iN);
+    jVhhhh.set_size(4*iN);
+    kVhhhh.set_size(4*iN);
+    lVhhhh.set_size(4*iN);
+
+    iVhhhh(span(0,iN-1)) = iVhhh;
+    iVhhhh(span(iN,2*iN-1)) = jVhhh;
+    iVhhhh(span(2*iN,3*iN-1)) = kVhhh;
+    iVhhhh(span(3*iN,4*iN-1)) = lVhhh;
+
+    jVhhhh(span(0,iN-1)) = jVhhh;
+    jVhhhh(span(iN,2*iN-1)) = iVhhh;
+    jVhhhh(span(2*iN,3*iN-1)) = lVhhh;
+    jVhhhh(span(3*iN,4*iN-1)) = kVhhh;
+
+    kVhhhh(span(0,iN-1)) = kVhhh;
+    kVhhhh(span(iN,2*iN-1)) = lVhhh;
+    kVhhhh(span(2*iN,3*iN-1)) = jVhhh;
+    kVhhhh(span(3*iN,4*iN-1)) = iVhhh;
+
+    lVhhhh(span(0,iN-1)) = lVhhh;
+    lVhhhh(span(iN,2*iN-1)) = kVhhh;
+    lVhhhh(span(2*iN,3*iN-1)) = iVhhh;
+    lVhhhh(span(3*iN,4*iN-1)) = jVhhh;
+
+    vValsVhhhh.set_size(4*iN);
+    vValsVhhhh(span(0,iN-1)) = vValsVhhh;
+    vValsVhhhh(span(iN,2*iN-1)) = vValsVhhh;
+    vValsVhhhh(span(2*iN,3*iN-1)) = -vValsVhhh;
+    vValsVhhhh(span(3*iN,4*iN-1)) = -vValsVhhh;
+
+
+}
+
+
+
 void initializer::sVhhhh(){
 
     Vhhhh.set_size(iNh2, iNh2);
@@ -445,7 +539,7 @@ void initializer::sVhhhh(){
     TT.set_size(KIJ_unique.size(), 2);
     int iN = 0;
 
-    for(int i = 0; i < KIJ_unique.size(); i++){
+    for(int i = 0; i < KIJ_unique.size(); ++i){
         vec T = IJ.elem(find(KIJ==KIJ_unique(i)));
         vec O = ones(T.size());
         uvec t0 = conv_to<uvec>::from(kron(T, O));
@@ -467,7 +561,7 @@ void initializer::sVhhhh(){
         //T1(span(iN, iN+TT(i,1).size()-1)) = TT(i,1);
         //iN += TT(i,0).size();
 
-        for(j = 0; j < TT(i,0).size(); j++){
+        for(j = 0; j < TT(i,0).size(); ++j){
             T0(iN) = TT(i,0)(j);
             T1(iN) = TT(i,1)(j);
             iN += 1;
@@ -483,11 +577,11 @@ void initializer::sVhhhh(){
 
 
 
-    umat locations;
-    locations.set_size(T0.size(),2);
-    locations.col(0) = T0;
-    locations.col(1) = T1;
-    Vhhhh = sp_mat(locations.t(), vValsVhhhh, iNh2, iNh2);
+    //umat locations;
+    //locations.set_size(T0.size(),2);
+    //locations.col(0) = T0;
+    //locations.col(1) = T1;
+    //Vhhhh = sp_mat(locations.t(), vValsVhhhh, iNh2, iNh2);
 
     //test for consistency
 
@@ -592,7 +686,7 @@ void initializer::sVhhpp(){
     TT.set_size(K_unique.size(), 2);
     int iN = 0;
 
-    for(int i = 0; i < K_unique.size(); i++){
+    for(int i = 0; i < K_unique.size(); ++i){
         vec Tij = IJ.elem(find(KIJ==K_unique(i)));
         vec ONh = ones(Tij.size());
 
@@ -616,7 +710,7 @@ void initializer::sVhhpp(){
     T1.set_size(iN);
     iN = 0;
     int j;
-    for(int i = 0; i < K_unique.size(); i++){
+    for(int i = 0; i < K_unique.size(); ++i){
         //this is the most time-consuming process in initialization of Vhhpp
         if(TT(i,0).size() != 0){
             T0(span(iN, iN+TT(i,0).size()-1)) = TT(i,0);
@@ -643,11 +737,11 @@ void initializer::sVhhpp(){
     vValsVhhpp = V(iVhhpp,jVhhpp,aVhhpp+iNh,bVhhpp+iNh);
     vValsVpphh = V(aVhhpp+iNh,bVhhpp+iNh,iVhhpp,jVhhpp); //Symmetric? Do a test
 
-    umat locations;
-    locations.set_size(T0.size(),2);
-    locations.col(0) = T0;
-    locations.col(1) = T1;
-    Vhhpp = sp_mat(locations.t(), vValsVhhpp, iNh2, iNp2);
+    //umat locations;
+    //locations.set_size(T0.size(),2);
+    //locations.col(0) = T0;
+    //locations.col(1) = T1;
+    //Vhhpp = sp_mat(locations.t(), vValsVhhpp, iNh2, iNp2);
 
     //locations.col(0) = T1;
     //locations.col(1) = T0;
@@ -774,7 +868,7 @@ void initializer::sVhpph(){
     TT.set_size(K_unique.size(), 2);
     int iN = 0;
     //int iN;
-    for(int i = 0; i < K_unique.size(); i++){
+    for(int i = 0; i < K_unique.size(); ++i){
         vec Tia = IA.elem(find(KIA==K_unique(i)));
         vec ONh = ones(Tia.size());
 
@@ -801,7 +895,7 @@ void initializer::sVhpph(){
     T0.set_size(iN);
     T1.set_size(iN);
     iN = 0;
-    for(int i = 0; i < K_unique.size(); i++){
+    for(int i = 0; i < K_unique.size(); ++i){
         //this is the most time-consuming process in initialization
         if(TT(i,0).size() != 0){
             T0(span(iN, iN+TT(i,0).size()-1)) = TT(i,0);
@@ -816,11 +910,11 @@ void initializer::sVhpph(){
     bVhpph = conv_to<uvec>::from(T1) - jVhpph*iNp;
 
     vValsVhpph = V(iVhpph,aVhpph+iNh,bVhpph+iNh,jVhpph);
-    umat locations;
-    locations.set_size(T0.size(),2);
-    locations.col(0) = T0;
-    locations.col(1) = T1;
-    Vhpph = sp_mat(locations.t(), vValsVhpph, iNhp, iNhp);
+    //umat locations;
+    //locations.set_size(T0.size(),2);
+    //locations.col(0) = T0;
+    //locations.col(1) = T1;
+    //Vhpph = sp_mat(locations.t(), vValsVhpph, iNhp, iNhp);
 
     //cout << V(conv_to<uvec>::from(ones(2)*13),conv_to<uvec>::from(ones(2)*12),conv_to<uvec>::from(ones(2)*46),conv_to<uvec>::from(ones(2)*42)) << endl; //this element is not inlcuded in the testing above!!!
     //cout << Vhhpp(181, 1152) << endl;

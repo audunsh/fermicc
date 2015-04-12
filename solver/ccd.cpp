@@ -20,7 +20,7 @@ ccd::ccd(electrongas bs){
     //setup all interaction matrices
     clock_t t;
     t =  clock();
-    iSetup.sVhhhh();
+    iSetup.sVhhhhO();
     cout << "Vhhhh init time:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
     t = clock();
 

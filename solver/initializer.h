@@ -23,6 +23,8 @@ public:
     void sVppppO();
 
     void sVhhhh();
+    void sVhhhhO();
+
     void sVpphh();
     void sVhhpp();
     void sVhpph();
