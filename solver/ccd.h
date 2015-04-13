@@ -35,11 +35,14 @@ public:
     //flexmat Vhpph();
     //flexmat T();
     void advance();
+    void advance_intermediates(); //advance using intermediates
     void energy();
 
     //The diagrams contributing to the CCD energy
     sp_mat L1, L2, L3, Q1, Q2, Q3, Q4;
     flexmat fmL3, fmQ1, fmQ2, fmQ3, fmQ4;
+
+    flexmat fmI1, fmI2, fmI3, fmI4, fmI2temp, fmI3temp; //intermediates for CCD terms
 
     double CCSD_SG_energy();
 

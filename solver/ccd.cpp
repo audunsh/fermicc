@@ -66,10 +66,27 @@ ccd::ccd(electrongas bs){
 
     //clock_t t;
     //sp_mat H;
-    //H = vpppp.pq_rs();
-    //t = clock();
-    //H = H*H;
-    //cout << "Spent " << ((float)t)/CLOCKS_PER_SEC << " seconds on multiplication."<< endl;
+
+    /*
+    sp_mat H = vpppp.pq_rs();
+    sp_mat Ht = vpppp.rs_pq();
+    t = clock();
+    H = H*H;
+    cout << "Spent " << (float)(clock()-t)/CLOCKS_PER_SEC << " seconds on multiplication."<< endl;
+
+    t = clock();
+    H = H*Ht;
+    cout << "Spent " << (float)(clock()-t)/CLOCKS_PER_SEC << " seconds on multiplication."<< endl;
+
+    t = clock();
+    H = Ht*H;
+    cout << "Spent " << (float)(clock()-t)/CLOCKS_PER_SEC << " seconds on multiplication."<< endl;
+
+    t = clock();
+    H = Ht*Ht;
+    cout << "Spent " << (float)(clock()-t)/CLOCKS_PER_SEC << " seconds on multiplication."<< endl;
+    */
+
 
     /*
     //testing the sparselibrary in Eigen
@@ -117,11 +134,48 @@ ccd::ccd(electrongas bs){
 
     */
 
+
+
     energy();
 
-    for(int i = 0; i < 30; i++){
+    for(int i = 0; i < 20; i++){
+        //advance_intermediates();
         advance();
     }
+}
+
+void ccd::advance_intermediates(){
+    int Np = iSetup.iNp;
+    int Nq = iSetup.iNp;
+    int Nr = iSetup.iNh;
+    int Ns = iSetup.iNh;
+
+    //fmI1.update(vhhhh.pq_rs() + .5*vhhpp.pq_rs()*T.pq_rs(), Np, Nq, Nr, Ns);
+
+    sp_mat spI1 = vhhhh.pq_rs() + .5*vhhpp.pq_rs()*T.pq_rs();
+    fmI2temp.update(.5*vhhpp.pr_qs()*T.rp_qs(), Np, Nr, Nq, Ns);
+    fmI2.update(vhpph.pq_rs() + fmI2temp.pq_rs(), Nr, Np, Nq, Ns);
+
+    sp_mat I3temp = vhhpp.p_rsq()*T.pqs_r();
+    sp_mat I4temp = T.p_rsq()*vhhpp.pqs_r();
+
+
+    L1 = .5*vpppp.pq_rs()*T.pq_rs();
+    L2 = .5*T.pq_rs()*spI1;
+    fmL3.update(T.pr_qs()*fmI2.rp_qs(), Np, Nr, Nq, Ns);
+    L3 = fmL3.pr_qs()-fmL3.pr_sq()-fmL3.rp_qs()+fmL3.rp_sq();
+
+    fmQ2.update_as_pqr_s(.5*T.pqr_s()*I3temp, Np, Nq, Nr, Ns);
+    Q2 = fmQ2.pq_rs()-fmQ2.pq_sr();
+
+    fmQ3.update_as_q_prs(.5*I4temp*T.q_prs(), Np, Nq, Nr, Ns);
+    Q3 = fmQ3.pq_rs()-fmQ3.qp_rs();
+
+    T.update(vpphh.pq_rs() + L1+L2+L3-Q2-Q3, Np, Nq, Nr, Ns);
+    T.set_amplitudes(ebs.vEnergy); //divide updated amplitides by energy denominator
+    energy();
+
+
 }
 
 void ccd::advance(){
@@ -180,10 +234,25 @@ void ccd::advance(){
     t = clock();
     */
 
+    //t = clock();
+    //sp_mat Q31 = T.r_sqp()*vhhpp.prs_q();
+    //cout << "Time spent on Q31:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
+    //t = clock();
 
+    //sp_mat Q32 = Q32*T.r_pqs();
+    //cout << "Time spent on Q32:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
+    //t = clock();
 
-    fmQ3.update_as_pqs_r((T.r_sqp()*vhhpp.prs_q()*T.r_pqs()).t(), Np, Nq, Ns, Nr); //needs realignment and permutations
+    //fmQ3.update_as_pqs_r(Q32.t(), Np, Nq, Ns, Nr);
+    //cout << "Time spent on Q32_update:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
+    //t = clock();
+
+    //fmQ3.update_as_pqs_r(((T.r_sqp()*vhhpp.prs_q())*T.r_pqs()).t(), Np, Nq, Ns, Nr); //needs realignment and permutations
+    fmQ3.update_as_r_pqs((T.r_sqp()*vhhpp.prs_q())*T.r_pqs(), Np, Nq, Nr, Ns); //needs realignment and permutations
     Q3 = fmQ3.pq_rs() - fmQ3.pq_sr(); //permuting elements
+    //cout << "Time spent on Q3_perm:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
+    //t = clock();
+
     if(timing){
         cout << "Time spent on Q3:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
         t = clock();}

@@ -676,7 +676,6 @@ void initializer::sVhhpp(){
 
 
 
-
     uvec T0;// = conv_to<uvec>::from(zeros(0));
     uvec T1;// = conv_to<uvec>::from(zeros(0));
     T0.set_size(0);

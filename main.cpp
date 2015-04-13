@@ -30,35 +30,8 @@ int main()
 
     ccd solver(fgas);
 
-
-
     //ccsolve solver2(fgas);
-
-
     //solver2.CCSD_SG(14);
-
-    /*
-    //compare amplitudes
-    int Np = solver.iSetup.iNp;
-    int Nh = solver.iSetup.iNh;
-    int Ns = Np+Nh;
-    int a,b,i,j;
-    double d1, d2;
-    for(a = 0; a<Np; a++){
-        for(b = 0; b<Np; b++){
-            for(i = 0; i<Nh; i++){
-                for(j=0;j<Nh;j++){
-                    d1 = solver.vhpph.pq_rs()(i+a*Nh, b+j*Np);
-                    d2 = solver2.v(i,a+Nh,b+Nh,j);
-                    //cout << a << " " << b << " " <<i << " " << j << " " << d1 << " " << d2 << endl;
-                    if(d1!=d2){
-                        cout << a << " " << b << " " <<i << " " << j << " " << d1 << " " << d2 << endl;
-                    }
-                }
-            }
-        }
-    }
-    */
 
 
     return 0;
