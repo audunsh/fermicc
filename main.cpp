@@ -1,4 +1,4 @@
-#define ARMA_64BIT_WORD
+//#define ARMA_64BIT_WORD
 #include <armadillo>
 
 #include <fstream>
@@ -30,13 +30,17 @@ int main()
 
     ccd solver(fgas);
 
-    /*
-    vec vVppp = zeros(600000000);
-    cout << vVppp.size() << endl;
-    int e = 0;
-    for(int i = 0; i<2400000; ++i){
-        e += 1;
-    }*/
+
+    //arma::u32 sz = 6000000000;
+    //double * aux_mem = new double[sz];
+    //vec vVppp(aux_mem, sz, false, true);
+    //cout << vVppp.size() << endl;
+    //int e = 0;
+    //for(int i = 0; i<240000000; ++i){
+    //    e += 1;
+    //}
+    //delete aux_mem;
+
 
     //cout << e << endl;
 

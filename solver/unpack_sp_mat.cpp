@@ -1,6 +1,6 @@
 #include "unpack_sp_mat.h"
 
-#define ARMA_64BIT_WORD
+//#define ARMA_64BIT_WORD
 #include <armadillo>
 
 using namespace std;
@@ -9,8 +9,8 @@ using namespace arma;
 unpack_sp_mat::unpack_sp_mat(sp_mat c)
 {
     int i,e;
-    vT0.zeros(c.n_nonzero);
-    vT1.zeros(c.n_nonzero);
+    vT0.set_size(c.n_nonzero); //zeros(c.n_nonzero);
+    vT1.set_size(c.n_nonzero);
     //vT0.set_size(c.n_nonzero);
     //vT1.set_size(c.n_nonzero);
     vVals.set_size(c.n_nonzero);

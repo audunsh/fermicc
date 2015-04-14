@@ -1,6 +1,6 @@
 #ifndef FLEXMAT_H
 #define FLEXMAT_H
-#define ARMA_64BIT_WORD
+//#define ARMA_64BIT_WORD
 #include <armadillo>
 #include <iomanip>
 #include "solver/unpack_sp_mat.h"

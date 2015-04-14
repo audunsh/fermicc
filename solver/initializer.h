@@ -1,6 +1,6 @@
 #ifndef INITIALIZER_H
 #define INITIALIZER_H
-#define ARMA_64BIT_WORD
+//#define ARMA_64BIT_WORD
 #include <armadillo>
 #include <iomanip>
 #include "solver/flexmat.h"
@@ -18,6 +18,7 @@ public:
     vec V(uvec p, uvec q, uvec r, uvec s); //vectorized interactions
     vec V2(uvec t0, uvec t1); //vectorized interactions
     vec V3(uvec p, uvec q, uvec r, uvec s); //semivectorized interactions
+    vec V4(Col<u32> p, Col<u32> q, Col<u32> r, Col<u32> s); //semivectorized interactions
 
     void sVpppp();
     void sVppppO();
@@ -43,11 +44,17 @@ public:
     SpMat<double> Vhhhh;
     SpMat<double> Vhpph;
 
-    uvec aVpppp;
-    uvec bVpppp;
-    uvec cVpppp;
-    uvec dVpppp;
+    //uvec aVpppp;
+    //uvec bVpppp;
+    //uvec cVpppp;
+    //uvec dVpppp;
     vec vValsVpppp;
+
+    Col<uword> aVpppp;
+    Col<uword> bVpppp;
+    Col<uword> cVpppp;
+    Col<uword> dVpppp;
+
 
     uvec iVhhhh;
     uvec jVhhhh;

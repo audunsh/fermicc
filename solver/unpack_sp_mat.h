@@ -1,6 +1,6 @@
 #ifndef UNPACK_SP_MAT_H
 #define UNPACK_SP_MAT_H
-#define ARMA_64BIT_WORD
+//#define ARMA_64BIT_WORD
 #include <armadillo>
 #include <iomanip>
 

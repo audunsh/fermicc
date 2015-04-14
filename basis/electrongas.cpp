@@ -1,4 +1,4 @@
-#define ARMA_64BIT_WORD
+//#define ARMA_64BIT_WORD
 #include <armadillo>
 
 #include "solver/ccsolve.h"
@@ -53,8 +53,9 @@ void electrongas::generate_state_list(int Ne, double rs, int Np){
     dPrefactor1 = 2*pi/dL2;
     mu =0;
     //Setting up all all states
-    mat k_combinations = zeros(nStates, 5);
-    mSortedEnergy.zeros(nStates, 4);
+    mat k_combinations; // = zeros(nStates, 5);
+    k_combinations.set_size(nStates, 5);
+    mSortedEnergy.set_size(nStates, 4);
     int index_count = 0;
     double e2;
 
@@ -84,7 +85,7 @@ void electrongas::generate_state_list(int Ne, double rs, int Np){
     //k_combinations.print();
 
     vec temp_vec = k_combinations.col(0);
-    vEnergy.zeros(index_count);
+    vEnergy.set_size(index_count);
     iNbstates = index_count;
     uvec sorted_vector = sort_index(temp_vec);
     vKx.set_size(index_count);

@@ -1,5 +1,5 @@
 #include "ccd.h"
-#define ARMA_64BIT_WORD
+//#define ARMA_64BIT_WORD
 #include <armadillo>
 #include "solver/flexmat.h"
 #include "basis/electrongas.h"
@@ -28,6 +28,8 @@ ccd::ccd(electrongas bs){
     cout << "Vpppp init time:" <<  (float)(clock()- t)/CLOCKS_PER_SEC << endl;
     t = clock();
 
+    /*
+
     iSetup.sVhhpp();
     cout << "Vhhpp init time:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
     t = clock();
@@ -39,6 +41,7 @@ ccd::ccd(electrongas bs){
     iSetup.sVhpph();
     cout << "Vhpph init time:" <<  (float)(clock()-t)/CLOCKS_PER_SEC << endl;
     t = clock();
+
 
 
 
@@ -59,6 +62,8 @@ ccd::ccd(electrongas bs){
     T.init(iSetup.vValsVpphh, iSetup.aVpphh, iSetup.bVpphh, iSetup.iVpphh, iSetup.jVpphh, iSetup.iNp, iSetup.iNp, iSetup.iNh, iSetup.iNh);
     T.set_amplitudes(bs.vEnergy);
 
+
+    */
 
     // HOW TO SET UP FLEXMAT OBJECTS FROM CSC-MATRICES
     // flexmat V1;
@@ -134,6 +139,7 @@ ccd::ccd(electrongas bs){
 
     */
 
+    /*
 
 
     energy();
@@ -141,7 +147,8 @@ ccd::ccd(electrongas bs){
     for(int i = 0; i < 5; i++){
         //advance_intermediates();
         advance();
-    }
+    }*/
+
 }
 
 void ccd::advance_intermediates(){

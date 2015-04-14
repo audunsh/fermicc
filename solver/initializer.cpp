@@ -3,7 +3,7 @@
 #include "solver/flexmat.h"
 #include <time.h>
 
-#define ARMA_64BIT_WORD
+//#define ARMA_64BIT_WORD
 #include <armadillo>
 
 using namespace std;
@@ -27,7 +27,8 @@ initializer::initializer(electrongas Bs)
 
 vec initializer::V(uvec p, uvec q, uvec r, uvec s){
     //delta function of summation of momentum quantum numbers is assumed to have passed before entering here
-    vec ret = zeros(p.size());
+    vec ret; // = zeros(p.size());
+    ret.set_size(p.size());
 
     //retrieve relevant quantum numbers (in vectors)
     ivec Msa = bs.vMs.elem(p);
@@ -59,11 +60,13 @@ vec initializer::V(uvec p, uvec q, uvec r, uvec s){
     ivec diff_da = absdiff2(Kdx, Kdy, Kdz, Kax, Kay, Kaz);
 
     vec term1 = zeros(p.size()); //term 1
+    //term1.set_size(p.size());
     term1.elem(conv_to<uvec>::from(find(Msa==Msc && Msb==Msd))) += 4*pi/bs.dL3; //By changing this i get comparable results
     term1.elem(conv_to<uvec>::from(find(Kax==Kcx && Kay==Kcy && Kaz==Kcz))) *= 0;
     term1.elem(find(term1!=0)) /= 4*pi*pi*conv_to<vec>::from(diff_ca.elem(find(term1!=0)))/bs.dL2;
 
     vec term2 = zeros(p.size()); //term 2
+    //term2.set_size(p.size());
     term2.elem(conv_to<uvec>::from(find(Msa==Msd && Msb==Msc))) += 4*pi/bs.dL3;
     term2.elem(conv_to<uvec>::from(find(Kax==Kdx && Kay==Kdy && Kaz==Kdz))) *= 0;
     term2.elem(find(term2!=0)) /= 4*pi*pi*conv_to<vec>::from(diff_da.elem(find(term2!=0)))/bs.dL2;
@@ -74,12 +77,35 @@ vec initializer::V(uvec p, uvec q, uvec r, uvec s){
 
 vec initializer::V3(uvec p, uvec q, uvec r, uvec s){
     //Inefficient interaction calculation, not really vectorized but returns a vector
-    vec vVals = zeros(p.size());
+
+    arma::u32 nnz = p.size();
+    double * aux_mem = new double[nnz];
+    vec vVals(aux_mem, nnz, false, true);
+
+    //vec vVals; // = zeros(p.size());
+    //vVals.set_size(p.size());
     for(int n = 0; n< p.size(); n++){
         vVals(n) = bs.v2(p(n), q(n), r(n), s(n));
     }
     return vVals;
 }
+
+vec initializer::V4(Col<u32> p, Col<u32> q, Col<u32> r, Col<u32> s){
+    //Inefficient interaction calculation, not really vectorized but returns a vector
+    //Trying to make V3 compatible with calculations on the heap memory
+
+    arma::u32 nnz = p.size();
+    double * aux_mem = new double[nnz];
+    vec vVals(aux_mem, nnz, false, true);
+
+    //vec vVals; // = zeros(p.size());
+    //vVals.set_size(p.size());
+    for(int n = 0; n< p.size(); n++){
+        vVals(n) = bs.v2(p(n), q(n), r(n), s(n));
+    }
+    return vVals;
+}
+
 
 vec initializer::V2(uvec t0, uvec t1){
     //delta function of summation of momentum quantum numbers is assumed to have passed before entering here
@@ -200,7 +226,7 @@ void initializer::sVppppO(){
 
     field<uvec> TT;
     TT.set_size(KAB_unique.size(), 2);
-    int iN = 0;
+    u32 iN = 0;
     vec T, O;
     uvec t0, t1;
 
@@ -221,33 +247,73 @@ void initializer::sVppppO(){
     }
 
 
+
+
     cout << "Good so far... (4)"  << (double)(clock() - t)/CLOCKS_PER_SEC<< endl;
     t = clock();
-    uvec aVppp, bVppp, cVppp, dVppp;
-    aVppp.set_size(iN);
-    bVppp.set_size(iN);
-    cVppp.set_size(iN);
-    dVppp.set_size(iN);
+    //uvec aVppp, bVppp, cVppp, dVppp;
+
+
+
+    u32 * aux_mem_a = new u32[iN];
+    u32 * aux_mem_b = new u32[iN];
+    u32 * aux_mem_c = new u32[iN];
+    u32 * aux_mem_d = new u32[iN];
+
+    Col<u32> aVppp(aux_mem_a, iN, false, true);
+    Col<u32> bVppp(aux_mem_b, iN, false, true);
+    Col<u32> cVppp(aux_mem_c, iN, false, true);
+    Col<u32> dVppp(aux_mem_d, iN, false, true);
+
+    //aVppp.set_size(iN);
+    //bVppp.set_size(iN);
+    //cVppp.set_size(iN);
+    //dVppp.set_size(iN);
 
     cout << "Good so far... (5)"  << (double)(clock() - t)/CLOCKS_PER_SEC<< endl;
     t = clock();
 
     iN = 0;
+    int iNt = 0;
     for(uint i = 0; i < KAB_unique.size(); ++i){
-        aVppp(span(iN, iN+TT(i,0).size()-1)) = A.elem(TT(i,0));
-        bVppp(span(iN, iN+TT(i,0).size()-1)) = B.elem(TT(i,0));
-        cVppp(span(iN, iN+TT(i,0).size()-1)) = A.elem(TT(i,1));
-        dVppp(span(iN, iN+TT(i,0).size()-1)) = B.elem(TT(i,1));
-        iN += TT(i,0).size();
+        //aVppp.elem(span(iN, iN+TT(i,0).size()-1)) = A.elem(TT(i,0));
+        //bVppp(span(iN, iN+TT(i,0).size()-1)) = B.elem(TT(i,0));
+        //cVppp(span(iN, iN+TT(i,0).size()-1)) = A.elem(TT(i,1));
+        //dVppp(span(iN, iN+TT(i,0).size()-1)) = B.elem(TT(i,1));
+        //iN += TT(i,0).size();
+        iNt = TT(i,0).size();
+        for(uint j = 0; j < iNt; ++j){
+            aVppp(iN) = A(TT(i,0)(j));
+            bVppp(iN) = B(TT(i,0)(j));
+            cVppp(iN) = A(TT(i,1)(j));
+            dVppp(iN) = B(TT(i,1)(j));
+            iN += 1;
+        }
+
     }
 
 
     cout << "Good so far... (6)"  << (double)(clock() - t)/CLOCKS_PER_SEC<< endl;
     t = clock();
-    vec vValsVppp = V3(aVppp+iNh,bVppp+iNh,cVppp+iNh,dVppp+iNh); //this works, tested agains bs.v2, 9.4.2015
+
+
+
+
+
+    u32 iNhh = iNh;
+    aVppp += iNhh;
+    bVppp += iNhh;
+    cVppp += iNhh;
+    dVppp += iNhh;
+
+
+    vec vValsVppp = V4(aVppp,bVppp,cVppp,dVppp); //this works, tested agains bs.v2, 9.4.2015
     iN = vValsVppp.size();
 
-
+    aVppp -= iNhh;
+    bVppp -= iNhh;
+    cVppp -= iNhh;
+    dVppp -= iNhh;
 
 
     cout << "Good so far... (7)"  << (double)(clock() - t)/CLOCKS_PER_SEC<< endl;
@@ -257,30 +323,47 @@ void initializer::sVppppO(){
 
     t = clock();
     //use symmetries to fill in remaining interactions
-    aVpppp.set_size(4*iN);
-    bVpppp.set_size(4*iN);
-    cVpppp.set_size(4*iN);
-    dVpppp.set_size(4*iN);
+    iN *= 4;
+    uword * aux_mem_A = new uword[iN];
+    uword * aux_mem_B = new uword[iN];
+    uword * aux_mem_C = new uword[iN];
+    uword * aux_mem_D = new uword[iN];
 
-    aVpppp(span(0,iN-1)) = aVppp;
-    aVpppp(span(iN,2*iN-1)) = bVppp;
-    aVpppp(span(2*iN,3*iN-1)) = cVppp;
-    aVpppp(span(3*iN,4*iN-1)) = dVppp;
+    Col<uword> aVpppp(aux_mem_A, iN, false, true);
+    Col<uword> bVpppp(aux_mem_B, iN, false, true);
+    Col<uword> cVpppp(aux_mem_C, iN, false, true);
+    Col<uword> dVpppp(aux_mem_D, iN, false, true);
 
-    bVpppp(span(0,iN-1)) = bVppp;
-    bVpppp(span(iN,2*iN-1)) = aVppp;
-    bVpppp(span(2*iN,3*iN-1)) = dVppp;
-    bVpppp(span(3*iN,4*iN-1)) = cVppp;
+    //aVpppp.set_size(4*iN);
+    //bVpppp.set_size(4*iN);
+    //cVpppp.set_size(4*iN);
+    //dVpppp.set_size(4*iN);
+    iN/=4;
+    for(uint i = 0; i < iN; i++){
+        aVpppp(i) = aVppp(i);
+        aVpppp(i+iN) = bVppp(i);
+        aVpppp(i+2*iN) = cVppp(i);
+        aVpppp(i+3*iN) = dVppp(i);
 
-    cVpppp(span(0,iN-1)) = cVppp;
-    cVpppp(span(iN,2*iN-1)) = dVppp;
-    cVpppp(span(2*iN,3*iN-1)) = bVppp;
-    cVpppp(span(3*iN,4*iN-1)) = aVppp;
+        bVpppp(i) = bVppp(i);
+        bVpppp(i+iN) = aVppp(i);
+        bVpppp(i+2*iN) = dVppp(i);
+        bVpppp(i+3*iN) = cVppp(i);
 
-    dVpppp(span(0,iN-1)) = dVppp;
-    dVpppp(span(iN,2*iN-1)) = cVppp;
-    dVpppp(span(2*iN,3*iN-1)) = aVppp;
-    dVpppp(span(3*iN,4*iN-1)) = bVppp;
+        cVpppp(i) = cVppp(i);
+        cVpppp(i+iN) = dVppp(i);
+        cVpppp(i+2*iN) = bVppp(i);
+        cVpppp(i+3*iN) = aVppp(i);
+
+        dVpppp(i) = dVppp(i);
+        dVpppp(i+iN) = cVppp(i);
+        dVpppp(i+2*iN) = aVppp(i);
+        dVpppp(i+3*iN) = bVppp(i);
+    }
+
+    cout << "Good so far... (8)"  << (double)(clock() - t)/CLOCKS_PER_SEC<< endl;
+    t = clock();
+
 
     vValsVpppp.set_size(4*iN);
     vValsVpppp(span(0,iN-1)) = vValsVppp;
@@ -289,8 +372,8 @@ void initializer::sVppppO(){
     vValsVpppp(span(3*iN,4*iN-1)) = -vValsVppp;
 
 
-    cout << "Good so far... (8)"  << (double)(clock() - t)/CLOCKS_PER_SEC<< endl;
-    t = clock();
+
+
 
 
     //aVpppp = join_cols<umat>(join_cols<umat>(aVppp, bVppp),join_cols<umat>(cVppp, dVppp));
@@ -402,7 +485,7 @@ void initializer::sVpppp(){
     //cout << "    Stage 6:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
     //t = clock();
 
-    vValsVpppp = V(aVpppp+iNh,bVpppp+iNh,cVpppp+iNh,dVpppp+iNh); //this works, tested agains bs.v2, 9.8.2015
+    vValsVpppp = V3(aVpppp+iNh,bVpppp+iNh,cVpppp+iNh,dVpppp+iNh); //this works, tested agains bs.v2, 9.8.2015
 
 
     /*
@@ -492,7 +575,7 @@ void initializer::sVhhhhO(){
     }
 
 
-    vec vValsVhhh = V(iVhhh,jVhhh,kVhhh,lVhhh); //this works, tested agains bs.v2, 9.4.2015
+    vec vValsVhhh = V3(iVhhh,jVhhh,kVhhh,lVhhh); //this works, tested agains bs.v2, 9.4.2015
     iN = vValsVhhh.size();
 
     //use symmetries to fill in remaining interactions
@@ -599,7 +682,7 @@ void initializer::sVhhhh(){
     lVhhhh = conv_to<uvec>::from(floor(T1/iNh)) ; //convert to unsigned integer indexing vector
     kVhhhh = conv_to<uvec>::from(T1) - lVhhhh*iNh;
 
-    vValsVhhhh = V(iVhhhh,jVhhhh,kVhhhh,lVhhhh);
+    vValsVhhhh = V3(iVhhhh,jVhhhh,kVhhhh,lVhhhh);
 
 
 
@@ -759,8 +842,8 @@ void initializer::sVhhpp(){
     aVpphh = aVhhpp;
     bVpphh = bVhhpp;
 
-    vValsVhhpp = V(iVhhpp,jVhhpp,aVhhpp+iNh,bVhhpp+iNh);
-    vValsVpphh = V(aVhhpp+iNh,bVhhpp+iNh,iVhhpp,jVhhpp); //Symmetric? Do a test
+    vValsVhhpp = V3(iVhhpp,jVhhpp,aVhhpp+iNh,bVhhpp+iNh);
+    vValsVpphh = V3(aVhhpp+iNh,bVhhpp+iNh,iVhhpp,jVhhpp); //Symmetric? Do a test
 
     //umat locations;
     //locations.set_size(T0.size(),2);
@@ -934,7 +1017,7 @@ void initializer::sVhpph(){
     jVhpph = conv_to<uvec>::from(floor(T1/iNp)) ; //convert to unsigned integer indexing vector
     bVhpph = conv_to<uvec>::from(T1) - jVhpph*iNp;
 
-    vValsVhpph = V(iVhpph,aVhpph+iNh,bVhpph+iNh,jVhpph);
+    vValsVhpph = V3(iVhpph,aVhpph+iNh,bVhpph+iNh,jVhpph);
     //umat locations;
     //locations.set_size(T0.size(),2);
     //locations.col(0) = T0;

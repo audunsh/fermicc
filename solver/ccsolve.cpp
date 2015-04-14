@@ -1,5 +1,5 @@
 #include <iomanip>
-#define ARMA_64BIT_WORD
+//#define ARMA_64BIT_WORD
 #include <armadillo>
 #include "basis/electrongas.h"
 #include "solver/ccsolve.h"
