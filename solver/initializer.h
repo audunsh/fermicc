@@ -32,7 +32,7 @@ public:
     //support functions
     uvec append(uvec V1, uvec V2);
     vec appendvec(vec V1, vec V2);
-    vec absdiff2(vec kpx, vec kpy, vec kpz, vec kqx,vec kqy, vec kqz);
+    ivec absdiff2(ivec kpx, ivec kpy, ivec kpz, ivec kqx, ivec kqy, ivec kqz);
 
     electrongas bs;
 

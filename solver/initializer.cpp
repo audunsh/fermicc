@@ -30,43 +30,43 @@ vec initializer::V(uvec p, uvec q, uvec r, uvec s){
     vec ret = zeros(p.size());
 
     //retrieve relevant quantum numbers (in vectors)
-    vec Msa = bs.vMs.elem(p);
-    vec Msb = bs.vMs.elem(q);
-    vec Msc = bs.vMs.elem(r);
-    vec Msd = bs.vMs.elem(s);
+    ivec Msa = bs.vMs.elem(p);
+    ivec Msb = bs.vMs.elem(q);
+    ivec Msc = bs.vMs.elem(r);
+    ivec Msd = bs.vMs.elem(s);
 
-    vec Kax = bs.vKx.elem(p);
-    vec Kay = bs.vKy.elem(p);
-    vec Kaz = bs.vKz.elem(p);
+    ivec Kax = bs.vKx.elem(p);
+    ivec Kay = bs.vKy.elem(p);
+    ivec Kaz = bs.vKz.elem(p);
 
-    vec Kbx = bs.vKx.elem(q);
-    vec Kby = bs.vKy.elem(q);
-    vec Kbz = bs.vKz.elem(q);
+    ivec Kbx = bs.vKx.elem(q);
+    ivec Kby = bs.vKy.elem(q);
+    ivec Kbz = bs.vKz.elem(q);
 
-    vec Kcx = bs.vKx.elem(r);
-    vec Kcy = bs.vKy.elem(r);
-    vec Kcz = bs.vKz.elem(r);
+    ivec Kcx = bs.vKx.elem(r);
+    ivec Kcy = bs.vKy.elem(r);
+    ivec Kcz = bs.vKz.elem(r);
 
-    vec Kdx = bs.vKx.elem(s);
-    vec Kdy = bs.vKy.elem(s);
-    vec Kdz = bs.vKz.elem(s);
+    ivec Kdx = bs.vKx.elem(s);
+    ivec Kdy = bs.vKy.elem(s);
+    ivec Kdz = bs.vKz.elem(s);
 
     //set up interaction
-    vec KDplus = ones(p.size()); //*4*pi/bs.dL3;
+    ivec KDplus = conv_to<ivec>::from(ones(p.size())); //*4*pi/bs.dL3;
     KDplus = KDplus%(Kax+Kbx==Kcx+Kdx)%(Kay+Kby==Kcy+Kdy)%(Kaz+Kbz==Kcz+Kdz);
 
-    vec diff_ca = absdiff2(Kcx, Kcy, Kcz, Kax, Kay, Kaz);
-    vec diff_da = absdiff2(Kdx, Kdy, Kdz, Kax, Kay, Kaz);
+    ivec diff_ca = absdiff2(Kcx, Kcy, Kcz, Kax, Kay, Kaz);
+    ivec diff_da = absdiff2(Kdx, Kdy, Kdz, Kax, Kay, Kaz);
 
     vec term1 = zeros(p.size()); //term 1
     term1.elem(conv_to<uvec>::from(find(Msa==Msc && Msb==Msd))) += 4*pi/bs.dL3; //By changing this i get comparable results
     term1.elem(conv_to<uvec>::from(find(Kax==Kcx && Kay==Kcy && Kaz==Kcz))) *= 0;
-    term1.elem(find(term1!=0)) /= 4*pi*pi*diff_ca.elem(find(term1!=0))/bs.dL2;
+    term1.elem(find(term1!=0)) /= 4*pi*pi*conv_to<vec>::from(diff_ca.elem(find(term1!=0)))/bs.dL2;
 
     vec term2 = zeros(p.size()); //term 2
     term2.elem(conv_to<uvec>::from(find(Msa==Msd && Msb==Msc))) += 4*pi/bs.dL3;
     term2.elem(conv_to<uvec>::from(find(Kax==Kdx && Kay==Kdy && Kaz==Kdz))) *= 0;
-    term2.elem(find(term2!=0)) /= 4*pi*pi*diff_da.elem(find(term2!=0))/bs.dL2;
+    term2.elem(find(term2!=0)) /= 4*pi*pi*conv_to<vec>::from(diff_da.elem(find(term2!=0)))/bs.dL2;
 
     return KDplus%(term1 - term2);
 
@@ -90,53 +90,53 @@ vec initializer::V2(uvec t0, uvec t1){
 
     vec ret = zeros(t0.size());
 
-    vec Msa = bs.vMs.elem(a+iNh);
-    vec Msb = bs.vMs.elem(b+iNh);
-    vec Msc = bs.vMs.elem(c+iNh);
-    vec Msd = bs.vMs.elem(d+iNh);
+    ivec Msa = bs.vMs.elem(a+iNh);
+    ivec Msb = bs.vMs.elem(b+iNh);
+    ivec Msc = bs.vMs.elem(c+iNh);
+    ivec Msd = bs.vMs.elem(d+iNh);
 
-    vec Kax = bs.vKx.elem(a+iNh);
-    vec Kay = bs.vKy.elem(a+iNh);
-    vec Kaz = bs.vKz.elem(a+iNh);
+    ivec Kax = bs.vKx.elem(a+iNh);
+    ivec Kay = bs.vKy.elem(a+iNh);
+    ivec Kaz = bs.vKz.elem(a+iNh);
 
-    vec Kbx = bs.vKx.elem(b+iNh);
-    vec Kby = bs.vKy.elem(b+iNh);
-    vec Kbz = bs.vKz.elem(b+iNh);
+    ivec Kbx = bs.vKx.elem(b+iNh);
+    ivec Kby = bs.vKy.elem(b+iNh);
+    ivec Kbz = bs.vKz.elem(b+iNh);
 
-    vec Kcx = bs.vKx.elem(c+iNh);
-    vec Kcy = bs.vKy.elem(c+iNh);
-    vec Kcz = bs.vKz.elem(c+iNh);
+    ivec Kcx = bs.vKx.elem(c+iNh);
+    ivec Kcy = bs.vKy.elem(c+iNh);
+    ivec Kcz = bs.vKz.elem(c+iNh);
 
-    vec Kdx = bs.vKx.elem(d+iNh);
-    vec Kdy = bs.vKy.elem(d+iNh);
-    vec Kdz = bs.vKz.elem(d+iNh);
+    ivec Kdx = bs.vKx.elem(d+iNh);
+    ivec Kdy = bs.vKy.elem(d+iNh);
+    ivec Kdz = bs.vKz.elem(d+iNh);
 
 
-    vec KDplus = ones(t0.size()); //*4*pi/bs.dL3;
+    ivec KDplus = conv_to<ivec>::from(ones(t0.size())); //*4*pi/bs.dL3;
     KDplus = KDplus%(Kax+Kbx==Kcx+Kdx)%(Kay+Kby==Kcy+Kdy)%(Kaz+Kbz==Kcz+Kdz);
 
-    vec diff_ca = absdiff2(Kcx, Kcy, Kcz, Kax, Kay, Kaz);
-    vec diff_da = absdiff2(Kdx, Kdy, Kdz, Kax, Kay, Kaz);
+    ivec diff_ca = absdiff2(Kcx, Kcy, Kcz, Kax, Kay, Kaz);
+    ivec diff_da = absdiff2(Kdx, Kdy, Kdz, Kax, Kay, Kaz);
 
     vec term1 = zeros(t0.size()); //term 1
-    term1.elem(conv_to<uvec>::from(find(Msa==Msc && Msb==Msd))) += 4*pi/bs.dL3;
-    term1.elem(conv_to<uvec>::from(find(Kax==Kcx && Kay==Kcy && Kaz==Kcz))) *= 0;
-    term1.elem(find(term1!=0)) /= 4*pi*pi*diff_ca.elem(find(term1!=0))/bs.dL2;
+    //term1.elem(conv_to<uvec>::from(find(Msa==Msc && Msb==Msd))) += 4*pi/bs.dL3;
+    //term1.elem(conv_to<uvec>::from(find(Kax==Kcx && Kay==Kcy && Kaz==Kcz))) *= 0;
+    //term1.elem(find(term1!=0)) /= 4*pi*pi*diff_ca.elem(find(term1!=0))/bs.dL2;
 
     vec term2 = zeros(t0.size()); //term 2
-    term2.elem(conv_to<uvec>::from(find(Msa==Msd && Msb==Msc))) += 4*pi/bs.dL3;
-    term2.elem(conv_to<uvec>::from(find(Kax==Kdx && Kay==Kdy && Kaz==Kdz))) *= 0;
-    term2.elem(find(term2!=0)) /= 4*pi*pi*diff_da.elem(find(term2!=0))/bs.dL2;
+    //term2.elem(conv_to<uvec>::from(find(Msa==Msd && Msb==Msc))) += 4*pi/bs.dL3;
+    //term2.elem(conv_to<uvec>::from(find(Kax==Kdx && Kay==Kdy && Kaz==Kdz))) *= 0;
+    //term2.elem(find(term2!=0)) /= 4*pi*pi*diff_da.elem(find(term2!=0))/bs.dL2;
 
     return KDplus%(term1 - term2);
 
 }
 
-vec initializer::absdiff2(vec kpx, vec kpy, vec kpz, vec kqx,vec kqy, vec kqz){
+ivec initializer::absdiff2(ivec kpx, ivec kpy, ivec kpz, ivec kqx,ivec kqy, ivec kqz){
     //vectorized absdiff2 |kp - kq|^2
-    vec ret1 = kpx-kqx;
-    vec ret2 = kpy-kqy;
-    vec ret3 = kpz-kqz;
+    ivec ret1 = kpx-kqx;
+    ivec ret2 = kpy-kqy;
+    ivec ret3 = kpz-kqz;
     return ret1%ret1 + ret2%ret2 + ret3%ret3;
 
 }
@@ -190,13 +190,13 @@ void initializer::sVppppO(){
     t = clock();
 
     //Setting up a vector containint a unique integer identifier for K + M_s
-    vec KABx = bs.vKx.elem(A+iNh)+bs.vKx.elem(B+iNh);
-    vec KABy = iNmax*(bs.vKy.elem(A+iNh)+bs.vKy.elem(B+iNh));
-    vec KABz = iNmax2*(bs.vKz.elem(A+iNh)+bs.vKz.elem(B+iNh));
-    vec KABms = iNmax*iNmax2*(bs.vMs(A+iNh) + bs.vMs(B + iNh));
+    ivec KABx = bs.vKx.elem(A+iNh)+bs.vKx.elem(B+iNh);
+    ivec KABy = iNmax*(bs.vKy.elem(A+iNh)+bs.vKy.elem(B+iNh));
+    ivec KABz = iNmax2*(bs.vKz.elem(A+iNh)+bs.vKz.elem(B+iNh));
+    ivec KABms = iNmax*iNmax2*(bs.vMs(A+iNh) + bs.vMs(B + iNh));
 
-    vec KAB = KABx+KABy+KABz + KABms;
-    vec KAB_unique = unique(KAB);
+    ivec KAB = KABx+KABy+KABz + KABms;
+    ivec KAB_unique = unique(KAB);
 
     field<uvec> TT;
     TT.set_size(KAB_unique.size(), 2);
@@ -346,13 +346,13 @@ void initializer::sVpppp(){
     //vec KBy = bs.vKy.elem(B+iNh);
     //vec KBz = bs.vKz.elem(B+iNh);
 
-    vec KABx = bs.vKx.elem(A+iNh)+bs.vKx.elem(B+iNh);
-    vec KABy = iNmax*(bs.vKy.elem(A+iNh)+bs.vKy.elem(B+iNh));
-    vec KABz = iNmax2*(bs.vKz.elem(A+iNh)+bs.vKz.elem(B+iNh));
-    vec KABms = iNmax*iNmax2*(bs.vMs(A+iNh) + bs.vMs(B + iNh));
+    ivec KABx = bs.vKx.elem(A+iNh)+bs.vKx.elem(B+iNh);
+    ivec KABy = iNmax*(bs.vKy.elem(A+iNh)+bs.vKy.elem(B+iNh));
+    ivec KABz = iNmax2*(bs.vKz.elem(A+iNh)+bs.vKz.elem(B+iNh));
+    ivec KABms = iNmax*iNmax2*(bs.vMs(A+iNh) + bs.vMs(B + iNh));
 
-    vec KAB = KABx+KABy+KABz + KABms;
-    vec KAB_unique = unique(KAB);
+    ivec KAB = KABx+KABy+KABz + KABms;
+    ivec KAB_unique = unique(KAB);
     //cout << "    Stage 1:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
     //t = clock();
 
@@ -448,13 +448,13 @@ void initializer::sVhhhhO(){
 
 
     //Setting up a vector containint a unique integer identifier for K + M_s
-    vec KIJx = bs.vKx.elem(I)+bs.vKx.elem(J);
-    vec KIJy = iNmax*(bs.vKy.elem(I)+bs.vKy.elem(J));
-    vec KIJz = iNmax2*(bs.vKz.elem(I)+bs.vKz.elem(J));
-    vec KIJms = iNmax*iNmax2*(bs.vMs(I) + bs.vMs(J));
+    ivec KIJx = bs.vKx.elem(I)+bs.vKx.elem(J);
+    ivec KIJy = iNmax*(bs.vKy.elem(I)+bs.vKy.elem(J));
+    ivec KIJz = iNmax2*(bs.vKz.elem(I)+bs.vKz.elem(J));
+    ivec KIJms = iNmax*iNmax2*(bs.vMs(I) + bs.vMs(J));
 
-    vec KIJ = KIJx+KIJy+KIJz + KIJms;
-    vec KIJ_unique = unique(KIJ);
+    ivec KIJ = KIJx+KIJy+KIJz + KIJms;
+    ivec KIJ_unique = unique(KIJ);
 
     field<uvec> TT;
     TT.set_size(KIJ_unique.size(), 2);
@@ -541,20 +541,20 @@ void initializer::sVhhhh(){
     uvec J = conv_to<uvec>::from(floor(IJ/iNh)); //convert to unsigned integer indexing vector
     uvec I = conv_to<uvec>::from(IJ) - J*iNh;
 
-    vec KIx = bs.vKx.elem(I);
-    vec KIy = bs.vKy.elem(I);
-    vec KIz = bs.vKz.elem(I);
+    ivec KIx = bs.vKx.elem(I);
+    ivec KIy = bs.vKy.elem(I);
+    ivec KIz = bs.vKz.elem(I);
 
-    vec KJx = bs.vKx.elem(J);
-    vec KJy = bs.vKy.elem(J);
-    vec KJz = bs.vKz.elem(J);
+    ivec KJx = bs.vKx.elem(J);
+    ivec KJy = bs.vKy.elem(J);
+    ivec KJz = bs.vKz.elem(J);
 
-    vec KIJx =         bs.vKx.elem(I)+bs.vKx.elem(J);
-    vec KIJy = iNmax* (bs.vKy.elem(I)+bs.vKy.elem(J));
-    vec KIJz = iNmax2*(bs.vKz.elem(I)+bs.vKz.elem(J));
+    ivec KIJx =         bs.vKx.elem(I)+bs.vKx.elem(J);
+    ivec KIJy = iNmax* (bs.vKy.elem(I)+bs.vKy.elem(J));
+    ivec KIJz = iNmax2*(bs.vKz.elem(I)+bs.vKz.elem(J));
 
-    vec KIJ = KIJx+KIJy+KIJz;
-    vec KIJ_unique = unique(KIJ);
+    ivec KIJ = KIJx+KIJy+KIJz;
+    ivec KIJ_unique = unique(KIJ);
 
     uvec T0;// = conv_to<uvec>::from(zeros(0));
     uvec T1;// = conv_to<uvec>::from(zeros(0));
@@ -654,20 +654,20 @@ void initializer::sVhhpp(){
     uvec J = conv_to<uvec>::from(floor(IJ/iNh)); //convert to unsigned integer indexing vector
     uvec I = conv_to<uvec>::from(IJ) - J*iNh;
 
-    vec KIx = bs.vKx.elem(I);
-    vec KIy = bs.vKy.elem(I);
-    vec KIz = bs.vKz.elem(I);
+    ivec KIx = bs.vKx.elem(I);
+    ivec KIy = bs.vKy.elem(I);
+    ivec KIz = bs.vKz.elem(I);
 
-    vec KJx = bs.vKx.elem(J);
-    vec KJy = bs.vKy.elem(J);
-    vec KJz = bs.vKz.elem(J);
+    ivec KJx = bs.vKx.elem(J);
+    ivec KJy = bs.vKy.elem(J);
+    ivec KJz = bs.vKz.elem(J);
 
-    vec KIJx = bs.vKx.elem(I)+bs.vKx.elem(J);
-    vec KIJy = iNmax*(bs.vKy.elem(I)+bs.vKy.elem(J));
-    vec KIJz = iNmax2*(bs.vKz.elem(I)+bs.vKz.elem(J));
+    ivec KIJx = bs.vKx.elem(I)+bs.vKx.elem(J);
+    ivec KIJy = iNmax*(bs.vKy.elem(I)+bs.vKy.elem(J));
+    ivec KIJz = iNmax2*(bs.vKz.elem(I)+bs.vKz.elem(J));
 
-    vec KIJ = KIJx+KIJy+KIJz;
-    vec KIJ_unique = unique(KIJ);
+    ivec KIJ = KIJx+KIJy+KIJz;
+    ivec KIJ_unique = unique(KIJ);
 
     //indexing columns
 
@@ -676,29 +676,29 @@ void initializer::sVhhpp(){
     uvec B = conv_to<uvec>::from(floor(AB/iNp)); //convert to unsigned integer indexing vector
     uvec A = conv_to<uvec>::from(AB) - B*iNp;
 
-    vec KAx = bs.vKx.elem(A+iNh);
-    vec KAy = bs.vKy.elem(A+iNh);
-    vec KAz = bs.vKz.elem(A+iNh);
+    ivec KAx = bs.vKx.elem(A+iNh);
+    ivec KAy = bs.vKy.elem(A+iNh);
+    ivec KAz = bs.vKz.elem(A+iNh);
 
-    vec KBx = bs.vKx.elem(B+iNh);
-    vec KBy = bs.vKy.elem(B+iNh);
-    vec KBz = bs.vKz.elem(B+iNh);
+    ivec KBx = bs.vKx.elem(B+iNh);
+    ivec KBy = bs.vKy.elem(B+iNh);
+    ivec KBz = bs.vKz.elem(B+iNh);
 
-    vec KABx = bs.vKx.elem(A+iNh)+bs.vKx.elem(B+iNh);
-    vec KABy = iNmax*(bs.vKy.elem(A+iNh)+bs.vKy.elem(B+iNh));
-    vec KABz = iNmax2*(bs.vKz.elem(A+iNh)+bs.vKz.elem(B+iNh));
+    ivec KABx = bs.vKx.elem(A+iNh)+bs.vKx.elem(B+iNh);
+    ivec KABy = iNmax*(bs.vKy.elem(A+iNh)+bs.vKy.elem(B+iNh));
+    ivec KABz = iNmax2*(bs.vKz.elem(A+iNh)+bs.vKz.elem(B+iNh));
 
-    vec KAB = KABx+KABy+KABz;
-    vec KAB_unique = unique(KAB);
+    ivec KAB = KABx+KABy+KABz;
+    ivec KAB_unique = unique(KAB);
 
     //consolidating rows and columns
 
-    vec K_joined = join_cols<mat>(KIJ_unique, KAB_unique);
+    ivec K_joined = join_cols<imat>(KIJ_unique, KAB_unique);
     //K_joined.set_size(KAB_unique.size() + KIJ_unique.size());
     //K_joined(span(0,KAB_unique.size()-1)) = KAB_unique;
     //K_joined(span(KAB_unique.size(),KIJ_unique.size())) = KIJ_unique;
 
-    vec K_unique = unique(K_joined);
+    ivec K_unique = unique(K_joined);
 
 
 
@@ -835,20 +835,20 @@ void initializer::sVhpph(){
     uvec A = conv_to<uvec>::from(floor(IA/iNh)); //convert to unsigned integer indexing vector
     uvec I = conv_to<uvec>::from(IA) - A*iNh;
 
-    vec KIx = bs.vKx.elem(I);
-    vec KIy = bs.vKy.elem(I);
-    vec KIz = bs.vKz.elem(I);
+    ivec KIx = bs.vKx.elem(I);
+    ivec KIy = bs.vKy.elem(I);
+    ivec KIz = bs.vKz.elem(I);
 
-    vec KAx = bs.vKx.elem(A+iNh);
-    vec KAy = bs.vKy.elem(A+iNh);
-    vec KAz = bs.vKz.elem(A+iNh);
+    ivec KAx = bs.vKx.elem(A+iNh);
+    ivec KAy = bs.vKy.elem(A+iNh);
+    ivec KAz = bs.vKz.elem(A+iNh);
 
-    vec KIAx = bs.vKx.elem(I)+bs.vKx.elem(A+iNh);
-    vec KIAy = iNmax*(bs.vKy.elem(I)+bs.vKy.elem(A+iNh));
-    vec KIAz = iNmax2*(bs.vKz.elem(I)+bs.vKz.elem(A+iNh));
+    ivec KIAx = bs.vKx.elem(I)+bs.vKx.elem(A+iNh);
+    ivec KIAy = iNmax*(bs.vKy.elem(I)+bs.vKy.elem(A+iNh));
+    ivec KIAz = iNmax2*(bs.vKz.elem(I)+bs.vKz.elem(A+iNh));
 
-    vec KIA = KIAx+KIAy+KIAz;
-    vec KIA_unique = unique(KIA);
+    ivec KIA = KIAx+KIAy+KIAz;
+    ivec KIA_unique = unique(KIA);
 
     //indexing columns
 
@@ -857,29 +857,29 @@ void initializer::sVhpph(){
     uvec J = conv_to<uvec>::from(floor(BJ/iNp)); //convert to unsigned integer indexing vector
     uvec B = conv_to<uvec>::from(BJ) - J*iNp;
 
-    vec KJx = bs.vKx.elem(J);
-    vec KJy = bs.vKy.elem(J);
-    vec KJz = bs.vKz.elem(J);
+    ivec KJx = bs.vKx.elem(J);
+    ivec KJy = bs.vKy.elem(J);
+    ivec KJz = bs.vKz.elem(J);
 
-    vec KBx = bs.vKx.elem(B+iNh);
-    vec KBy = bs.vKy.elem(B+iNh);
-    vec KBz = bs.vKz.elem(B+iNh);
+    ivec KBx = bs.vKx.elem(B+iNh);
+    ivec KBy = bs.vKy.elem(B+iNh);
+    ivec KBz = bs.vKz.elem(B+iNh);
 
-    vec KBJx = bs.vKx.elem(B+iNh)+bs.vKx.elem(J);
-    vec KBJy = iNmax*(bs.vKy.elem(B+iNh)+bs.vKy.elem(J));
-    vec KBJz = iNmax2*(bs.vKz.elem(B+iNh)+bs.vKz.elem(J));
+    ivec KBJx = bs.vKx.elem(B+iNh)+bs.vKx.elem(J);
+    ivec KBJy = iNmax*(bs.vKy.elem(B+iNh)+bs.vKy.elem(J));
+    ivec KBJz = iNmax2*(bs.vKz.elem(B+iNh)+bs.vKz.elem(J));
 
-    vec KBJ = KBJx+KBJy+KBJz;
-    vec KBJ_unique = unique(KBJ);
+    ivec KBJ = KBJx+KBJy+KBJz;
+    ivec KBJ_unique = unique(KBJ);
 
     //consolidating rows and columns
 
-    vec K_joined = join_cols<mat>(KIA_unique, KBJ_unique);
+    ivec K_joined = join_cols<imat>(KIA_unique, KBJ_unique);
     //K_joined.set_size(KAB_unique.size() + KIJ_unique.size());
     //K_joined(span(0,KAB_unique.size()-1)) = KAB_unique;
     //K_joined(span(KAB_unique.size(),KIJ_unique.size())) = KIJ_unique;
 
-    vec K_unique = unique(K_joined);
+    ivec K_unique = unique(K_joined);
 
 
 

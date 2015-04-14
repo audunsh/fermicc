@@ -138,10 +138,10 @@ ccd::ccd(electrongas bs){
 
     energy();
 
-    /*for(int i = 0; i < 1; i++){
+    for(int i = 0; i < 5; i++){
         //advance_intermediates();
         advance();
-    }*/
+    }
 }
 
 void ccd::advance_intermediates(){
