@@ -45,8 +45,8 @@ void flexmat::set_amplitudes(vec Energy){
 
 void flexmat::shed_zeros(){
     //remove zeros from arrays
-    uvec nnz = find(vValues!=0);
-    //cout << nnz.size() << " " << vValues.size() << endl;
+    uvec nnz = find(vValues!= 0);
+    cout << nnz.size() << " " << vValues.size() << endl;
     vp = vp.elem(nnz);
     vq = vq.elem(nnz);
     vr = vr.elem(nnz);

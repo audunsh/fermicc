@@ -167,11 +167,14 @@ vec initializer::appendvec(vec V1, vec V2){
 
 void initializer::sVppppO(){
     //optimized interaction for Vpppp
-
+    clock_t  t;
+    t = clock();
     //using symmetries, only consider a>b>:
     uvec A, B; //vectors containing indices (row and column)
     B.set_size(iNp*((iNp+1.0)/2.0));
     A.set_size(iNp*((iNp+1.0)/2.0));
+
+    cout << "Good so far... (1)"  << endl;
 
     uint n = 0;
     for(uint a = 0; a<iNp; ++a){
@@ -182,6 +185,9 @@ void initializer::sVppppO(){
         }
     }
 
+
+    cout << "Good so far... (2)"  << (double)(clock() - t)/CLOCKS_PER_SEC<< endl;
+    t = clock();
 
     //Setting up a vector containint a unique integer identifier for K + M_s
     vec KABx = bs.vKx.elem(A+iNh)+bs.vKx.elem(B+iNh);
@@ -199,6 +205,9 @@ void initializer::sVppppO(){
     uvec t0, t1;
 
 
+
+    cout << "Good so far... (3)"  << (double)(clock() - t)/CLOCKS_PER_SEC<< endl;
+    t = clock();
     for(uint i = 0; i < KAB_unique.size(); ++i){
         //locating non-zero regions where K_a + K_b = K_c + K_d
         //it is possible to exploit spin symmetry further inside this loop
@@ -211,12 +220,17 @@ void initializer::sVppppO(){
         iN += t0.size();
     }
 
+
+    cout << "Good so far... (4)"  << (double)(clock() - t)/CLOCKS_PER_SEC<< endl;
+    t = clock();
     uvec aVppp, bVppp, cVppp, dVppp;
     aVppp.set_size(iN);
     bVppp.set_size(iN);
     cVppp.set_size(iN);
     dVppp.set_size(iN);
 
+    cout << "Good so far... (5)"  << (double)(clock() - t)/CLOCKS_PER_SEC<< endl;
+    t = clock();
 
     iN = 0;
     for(uint i = 0; i < KAB_unique.size(); ++i){
@@ -228,9 +242,20 @@ void initializer::sVppppO(){
     }
 
 
-    vec vValsVppp = V(aVppp+iNh,bVppp+iNh,cVppp+iNh,dVppp+iNh); //this works, tested agains bs.v2, 9.4.2015
+    cout << "Good so far... (6)"  << (double)(clock() - t)/CLOCKS_PER_SEC<< endl;
+    t = clock();
+    vec vValsVppp = V3(aVppp+iNh,bVppp+iNh,cVppp+iNh,dVppp+iNh); //this works, tested agains bs.v2, 9.4.2015
     iN = vValsVppp.size();
 
+
+
+
+    cout << "Good so far... (7)"  << (double)(clock() - t)/CLOCKS_PER_SEC<< endl;
+    //cout << "Number of nonzeros:" << vValsVppp(find(vValsVppp==0.0)).size() << endl;
+    //cout << "Number of nonzeros:" << find(vValsVppp).size() << endl;
+
+
+    t = clock();
     //use symmetries to fill in remaining interactions
     aVpppp.set_size(4*iN);
     bVpppp.set_size(4*iN);
@@ -264,7 +289,8 @@ void initializer::sVppppO(){
     vValsVpppp(span(3*iN,4*iN-1)) = -vValsVppp;
 
 
-
+    cout << "Good so far... (8)"  << (double)(clock() - t)/CLOCKS_PER_SEC<< endl;
+    t = clock();
 
 
     //aVpppp = join_cols<umat>(join_cols<umat>(aVppp, bVppp),join_cols<umat>(cVppp, dVppp));

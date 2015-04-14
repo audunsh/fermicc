@@ -42,7 +42,7 @@ public:
     double pi = datum::pi; //4*atan(1);
 
     //added vectorized functionality, 21.03.2015
-    vec vKx,vKy,vKz, vMs;
+    ivec vKx,vKy,vKz, vMs;
 
 };
 
