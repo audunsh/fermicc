@@ -10,8 +10,10 @@ unpack_sp_mat::unpack_sp_mat(sp_mat c)
 {
     //Uncompress sparse matrices
     int i,e;
-    vT0.set_size(c.n_nonzero); //zeros(c.n_nonzero);
-    vT1.set_size(c.n_nonzero);
+    //vT0.set_size(c.n_nonzero); //zeros(c.n_nonzero);
+    //vT1.set_size(c.n_nonzero);
+    vT0.zeros(c.n_nonzero); //zeros(c.n_nonzero);
+    vT1.zeros(c.n_nonzero);
 
     vVals.set_size(c.n_nonzero);
 
