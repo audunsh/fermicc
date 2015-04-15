@@ -28,6 +28,12 @@ public:
 
     void init(vec values, uvec p, uvec q, uvec r, uvec s, int Np, int Nq, int Nr, int Ns);
 
+    void map_indices();
+    field<uvec> row_indices;
+    field<uvec> col_indices;
+    uvec row_lengths;
+    uvec col_lengths;
+
     void shed_zeros();
 
     void set_amplitudes(vec Energy);

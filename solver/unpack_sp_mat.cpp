@@ -8,11 +8,11 @@ using namespace arma;
 
 unpack_sp_mat::unpack_sp_mat(sp_mat c)
 {
+    //Uncompress sparse matrices
     int i,e;
     vT0.set_size(c.n_nonzero); //zeros(c.n_nonzero);
     vT1.set_size(c.n_nonzero);
-    //vT0.set_size(c.n_nonzero);
-    //vT1.set_size(c.n_nonzero);
+
     vVals.set_size(c.n_nonzero);
 
     for(i = 0; i<c.n_nonzero; i++){

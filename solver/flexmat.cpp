@@ -39,6 +39,56 @@ void flexmat::init(vec values, uvec p, uvec q, uvec r, uvec s, int Np, int Nq, i
 
 }
 
+void flexmat::map_indices(){
+    //map out which indices correspond to which rows
+    uvec cols = conv_to<uvec>::from(vr + vs*iNr);
+    uvec rows = conv_to<uvec>::from(vp + vq*iNp);
+
+    row_lengths = conv_to<uvec>::from(zeros(iNp*iNq));
+    row_indices.set_size(iNp*iNq);
+    col_lengths = conv_to<uvec>::from(zeros(iNr*iNs));
+    col_indices.set_size(iNr*iNs);
+    uint i_max = vValues.size();
+
+    for(uint i = 0; i<i_max;++i){
+        row_lengths(rows(i)) += 1;
+        col_lengths(cols(i)) += 1;
+    }
+    i_max = iNp*iNq; //number of rows
+    uint j, j_max;
+    for(uint i = 0; i < i_max; ++i){
+        //j_max = row_lengths(i);
+        row_indices(i).set_size(row_lengths(i));
+    }
+    i_max = iNr*iNs; //number of cols
+    for(uint i = 0; i < i_max; ++i){
+        //j_max = row_lengths(i);
+        col_indices(i).set_size(col_lengths(i));
+    }
+
+
+    uvec row_count = conv_to<uvec>::from(zeros(iNp*iNq));
+    uvec col_count = conv_to<uvec>::from(zeros(iNr*iNs));
+
+    i_max = vValues.size();
+    uint ri, ci; //row i and col i
+    for(uint i = 0; i<i_max;++i){
+        ri = rows(i);
+        ci = cols(i);
+
+        row_indices(ri)(row_count(ri)) = i;
+        col_indices(ci)(col_count(ci)) = i;
+        row_count(ri) += 1;
+        col_count(ci) += 1;
+
+    }
+
+    //it should now be possible to get a vector of all elements in a given row or column i by calling
+    //   row_indices(i)
+    //   col_indices(i)
+
+}
+
 void flexmat::set_amplitudes(vec Energy){
     //Divide all values by corresponding energy (used only on amplitudes)
    vEnergy = Energy;

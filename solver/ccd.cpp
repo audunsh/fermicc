@@ -34,7 +34,7 @@ ccd::ccd(electrongas bs){
     cout << "Vhhpp init time:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
     t = clock();
 
-    iSetup.sVpphh();
+    //iSetup.sVpphh();
     cout << "Vpphh init time:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
     t = clock();
 
@@ -198,6 +198,10 @@ void ccd::advance(){
     if(timing){
         cout << "Time spent on L1:" << (clock() - (float)t)/CLOCKS_PER_SEC << endl;
         t = clock();}
+
+    //make a little section here and insert block diagonal replacement
+
+
 
     L2 = T.pq_rs()*vhhhh.pq_rs();
     if(timing){

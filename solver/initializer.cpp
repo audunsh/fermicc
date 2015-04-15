@@ -84,8 +84,8 @@ vec initializer::V3(uvec p, uvec q, uvec r, uvec s){
     //double * aux_mem = new double[nnz];
     //vec vVals(aux_mem, nnz, false, true);
 
-    vec vVals; // = zeros(p.size());
-    vVals.set_size(p.size());
+    vec vVals = zeros(p.size());
+    //vVals.set_size(p.size());
     for(int n = 0; n< p.size(); n++){
         vVals(n) = bs.v2(p(n), q(n), r(n), s(n));
     }
@@ -236,7 +236,7 @@ void initializer::sVppppO(){
     uvec t0, t1;
 
 
-    bmVpppp.set_size(KAB_unique.size());
+    //bmVpppp.set_size(KAB_unique.size(), iNp, iNp, iNp, iNp);
 
     cout << "Good so far... (3)"  << (double)(clock() - t)/CLOCKS_PER_SEC<< endl;
     t = clock();
@@ -249,7 +249,7 @@ void initializer::sVppppO(){
         T = conv_to<vec>::from(find(KAB==KAB_unique(i))); //Is it possible to make this vector "shrink" as more indices is identified?
 
         tT = find(KAB==KAB_unique(i));
-        bmVpppp.set_block(i, A(tT)+iNh, B(tT)+iNh,A(tT)+iNh, B(tT)+iNh);
+        //bmVpppp.set_block(i, A.elem(tT), B.elem(tT),A.elem(tT), B.elem(tT));
 
         O = ones(T.size());
         t0 = conv_to<uvec>::from(kron(T, O));
@@ -294,11 +294,12 @@ void initializer::sVppppO(){
     iN = 0;
     int iNt = 0;
     for(uint i = 0; i < KAB_unique.size(); ++i){
-        //aVppp.elem(span(iN, iN+TT(i,0).size()-1)) = A.elem(TT(i,0));
-        //bVppp(span(iN, iN+TT(i,0).size()-1)) = B.elem(TT(i,0));
-        //cVppp(span(iN, iN+TT(i,0).size()-1)) = A.elem(TT(i,1));
-        //dVppp(span(iN, iN+TT(i,0).size()-1)) = B.elem(TT(i,1));
+        aVppp(span(iN, iN+TT(i,0).size()-1)) = A.elem(TT(i,0));
+        bVppp(span(iN, iN+TT(i,0).size()-1)) = B.elem(TT(i,0));
+        cVppp(span(iN, iN+TT(i,0).size()-1)) = A.elem(TT(i,1));
+        dVppp(span(iN, iN+TT(i,0).size()-1)) = B.elem(TT(i,1));
         //iN += TT(i,0).size();
+        /*
         iNt = TT(i,0).size();
         for(uint j = 0; j < iNt; ++j){
             aVppp(iN) = A(TT(i,0)(j));
@@ -306,7 +307,7 @@ void initializer::sVppppO(){
             cVppp(iN) = A(TT(i,1)(j));
             dVppp(iN) = B(TT(i,1)(j));
             iN += 1;
-        }
+        }*/
 
     }
 
@@ -341,7 +342,7 @@ void initializer::sVppppO(){
 
     t = clock();
     //use symmetries to fill in remaining interactions
-    iN *= 4;
+    //iN *= 4;
 
     /*
     uword * aux_mem_A = new uword[iN];
@@ -359,7 +360,30 @@ void initializer::sVppppO(){
     bVpppp.set_size(4*iN);
     cVpppp.set_size(4*iN);
     dVpppp.set_size(4*iN);
-    iN/=4;
+    //iN/=4;
+    aVpppp(span(0,iN-1)) = aVppp;
+    aVpppp(span(iN,2*iN-1)) = bVppp;
+    aVpppp(span(2*iN,3*iN-1)) = cVppp;
+    aVpppp(span(3*iN,4*iN-1)) = dVppp;
+
+    bVpppp(span(0,iN-1)) = bVppp;
+    bVpppp(span(iN,2*iN-1)) = aVppp;
+    bVpppp(span(2*iN,3*iN-1)) = dVppp;
+    bVpppp(span(3*iN,4*iN-1)) = cVppp;
+
+    cVpppp(span(0,iN-1)) = cVppp;
+    cVpppp(span(iN,2*iN-1)) = dVppp;
+    cVpppp(span(2*iN,3*iN-1)) = bVppp;
+    cVpppp(span(3*iN,4*iN-1)) = aVppp;
+
+    dVpppp(span(0,iN-1)) = dVppp;
+    dVpppp(span(iN,2*iN-1)) = cVppp;
+    dVpppp(span(2*iN,3*iN-1)) = aVppp;
+    dVpppp(span(3*iN,4*iN-1)) = bVppp;
+
+
+
+    /*
     for(uint i = 0; i < iN; i++){
         aVpppp(i) = aVppp(i);
         aVpppp(i+iN) = bVppp(i);
@@ -380,7 +404,7 @@ void initializer::sVppppO(){
         dVpppp(i+iN) = cVppp(i);
         dVpppp(i+2*iN) = aVppp(i);
         dVpppp(i+3*iN) = bVppp(i);
-    }
+    }*/
 
     cout << "Good so far... (8)"  << (double)(clock() - t)/CLOCKS_PER_SEC<< endl;
     t = clock();
