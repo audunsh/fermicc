@@ -2,6 +2,8 @@
 #include "basis/electrongas.h"
 #include "solver/flexmat.h"
 #include <time.h>
+#include <solver/blockmat.h>
+
 
 //#define ARMA_64BIT_WORD
 #include <armadillo>
@@ -78,12 +80,12 @@ vec initializer::V(uvec p, uvec q, uvec r, uvec s){
 vec initializer::V3(uvec p, uvec q, uvec r, uvec s){
     //Inefficient interaction calculation, not really vectorized but returns a vector
 
-    arma::u32 nnz = p.size();
-    double * aux_mem = new double[nnz];
-    vec vVals(aux_mem, nnz, false, true);
+    //arma::u32 nnz = p.size();
+    //double * aux_mem = new double[nnz];
+    //vec vVals(aux_mem, nnz, false, true);
 
-    //vec vVals; // = zeros(p.size());
-    //vVals.set_size(p.size());
+    vec vVals; // = zeros(p.size());
+    vVals.set_size(p.size());
     for(int n = 0; n< p.size(); n++){
         vVals(n) = bs.v2(p(n), q(n), r(n), s(n));
     }
@@ -200,6 +202,8 @@ void initializer::sVppppO(){
     B.set_size(iNp*((iNp+1.0)/2.0));
     A.set_size(iNp*((iNp+1.0)/2.0));
 
+
+
     cout << "Good so far... (1)"  << endl;
 
     uint n = 0;
@@ -228,16 +232,25 @@ void initializer::sVppppO(){
     TT.set_size(KAB_unique.size(), 2);
     u32 iN = 0;
     vec T, O;
+    uvec tT;
     uvec t0, t1;
 
 
+    bmVpppp.set_size(KAB_unique.size());
 
     cout << "Good so far... (3)"  << (double)(clock() - t)/CLOCKS_PER_SEC<< endl;
     t = clock();
+
+
+
     for(uint i = 0; i < KAB_unique.size(); ++i){
         //locating non-zero regions where K_a + K_b = K_c + K_d
         //it is possible to exploit spin symmetry further inside this loop
         T = conv_to<vec>::from(find(KAB==KAB_unique(i))); //Is it possible to make this vector "shrink" as more indices is identified?
+
+        tT = find(KAB==KAB_unique(i));
+        bmVpppp.set_block(i, A(tT)+iNh, B(tT)+iNh,A(tT)+iNh, B(tT)+iNh);
+
         O = ones(T.size());
         t0 = conv_to<uvec>::from(kron(T, O));
         t1 = conv_to<uvec>::from(kron(O, T));
@@ -254,7 +267,7 @@ void initializer::sVppppO(){
     //uvec aVppp, bVppp, cVppp, dVppp;
 
 
-
+    /*
     u32 * aux_mem_a = new u32[iN];
     u32 * aux_mem_b = new u32[iN];
     u32 * aux_mem_c = new u32[iN];
@@ -264,6 +277,11 @@ void initializer::sVppppO(){
     Col<u32> bVppp(aux_mem_b, iN, false, true);
     Col<u32> cVppp(aux_mem_c, iN, false, true);
     Col<u32> dVppp(aux_mem_d, iN, false, true);
+    */
+    uvec aVppp(iN);
+    uvec bVppp(iN);
+    uvec cVppp(iN);
+    uvec dVppp(iN);
 
     //aVppp.set_size(iN);
     //bVppp.set_size(iN);
@@ -300,20 +318,20 @@ void initializer::sVppppO(){
 
 
 
-    u32 iNhh = iNh;
-    aVppp += iNhh;
-    bVppp += iNhh;
-    cVppp += iNhh;
-    dVppp += iNhh;
+    //u32 iNhh = iNh;
+    //aVppp += iNhh;
+    //bVppp += iNhh;
+    //cVppp += iNhh;
+    //dVppp += iNhh;
 
 
-    vec vValsVppp = V4(aVppp,bVppp,cVppp,dVppp); //this works, tested agains bs.v2, 9.4.2015
+    vec vValsVppp = V3(aVppp+iNh,bVppp+iNh,cVppp+iNh,dVppp+iNh); //this works, tested agains bs.v2, 9.4.2015
     iN = vValsVppp.size();
 
-    aVppp -= iNhh;
-    bVppp -= iNhh;
-    cVppp -= iNhh;
-    dVppp -= iNhh;
+    //aVppp -= iNhh;
+    //bVppp -= iNhh;
+    //cVppp -= iNhh;
+    //dVppp -= iNhh;
 
 
     cout << "Good so far... (7)"  << (double)(clock() - t)/CLOCKS_PER_SEC<< endl;
@@ -324,6 +342,8 @@ void initializer::sVppppO(){
     t = clock();
     //use symmetries to fill in remaining interactions
     iN *= 4;
+
+    /*
     uword * aux_mem_A = new uword[iN];
     uword * aux_mem_B = new uword[iN];
     uword * aux_mem_C = new uword[iN];
@@ -333,11 +353,12 @@ void initializer::sVppppO(){
     Col<uword> bVpppp(aux_mem_B, iN, false, true);
     Col<uword> cVpppp(aux_mem_C, iN, false, true);
     Col<uword> dVpppp(aux_mem_D, iN, false, true);
+    */
 
-    //aVpppp.set_size(4*iN);
-    //bVpppp.set_size(4*iN);
-    //cVpppp.set_size(4*iN);
-    //dVpppp.set_size(4*iN);
+    aVpppp.set_size(4*iN);
+    bVpppp.set_size(4*iN);
+    cVpppp.set_size(4*iN);
+    dVpppp.set_size(4*iN);
     iN/=4;
     for(uint i = 0; i < iN; i++){
         aVpppp(i) = aVppp(i);

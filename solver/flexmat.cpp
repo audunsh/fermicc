@@ -23,6 +23,14 @@ void flexmat::init(vec values, uvec p, uvec q, uvec r, uvec s, int Np, int Nq, i
     iNr = Nr;
     iNs = Ns;
 
+    //arma::u32 nnz = values.size();
+    //double * aux_mem = new double[nnz];
+    //vValues(aux_mem, nnz, false, true);
+
+    //delete aux_mem;
+
+    //vec vValues(nnz);
+
     vValues = values;
     vp = p;
     vq = q;

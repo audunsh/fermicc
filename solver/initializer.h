@@ -5,6 +5,8 @@
 #include <iomanip>
 #include "solver/flexmat.h"
 #include "basis/electrongas.h"
+#include <solver/blockmat.h>
+
 
 using namespace std;
 using namespace arma;
@@ -44,17 +46,22 @@ public:
     SpMat<double> Vhhhh;
     SpMat<double> Vhpph;
 
-    //uvec aVpppp;
-    //uvec bVpppp;
-    //uvec cVpppp;
-    //uvec dVpppp;
+    uvec aVpppp;
+    uvec bVpppp;
+    uvec cVpppp;
+    uvec dVpppp;
     vec vValsVpppp;
 
-    Col<uword> aVpppp;
-    Col<uword> bVpppp;
-    Col<uword> cVpppp;
-    Col<uword> dVpppp;
+    //uvec aVpppp;
+    //Col<uword> bVpppp;
+    //Col<uword> cVpppp;
+    //Col<uword> dVpppp;
 
+    blockmat bmVpppp;
+    blockmat bmVhhhh;
+    blockmat bmVpphh;
+    blockmat bmVhhpp;
+    blockmat bmVhpph;
 
     uvec iVhhhh;
     uvec jVhhhh;
