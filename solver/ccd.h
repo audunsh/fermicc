@@ -1,6 +1,6 @@
 #ifndef CCD_H
 #define CCD_H
-//#define ARMA_64BIT_WORD
+#define ARMA_64BIT_WORD
 #include <armadillo>
 #include <iomanip>
 #include "basis/electrongas.h"

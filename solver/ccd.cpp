@@ -1,5 +1,5 @@
 #include "ccd.h"
-//#define ARMA_64BIT_WORD
+#define ARMA_64BIT_WORD
 #include <armadillo>
 #include "solver/flexmat.h"
 #include "basis/electrongas.h"
@@ -323,6 +323,7 @@ void ccd::energy(){
     for(int i = 0; i<Cv.n_cols; i++){
         C_+= Cv(i,i);
     }
+    cout << "Nonzeros:" << cv.n_nonzero<< endl;
     cout << "(CCD)Energy:" << .25*C_ << endl;
 
     //double dC = accu(vhhpp.pq_rs()*T.pq_rs());

@@ -1,6 +1,6 @@
 #include "unpack_sp_mat.h"
 
-//#define ARMA_64BIT_WORD
+#define ARMA_64BIT_WORD
 #include <armadillo>
 
 using namespace std;

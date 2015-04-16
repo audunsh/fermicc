@@ -1,5 +1,5 @@
 #include "flexmat.h"
-//#define ARMA_64BIT_WORD
+#define ARMA_64BIT_WORD
 #include <armadillo>
 #include "solver/unpack_sp_mat.h"
 

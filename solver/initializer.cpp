@@ -5,7 +5,7 @@
 #include <solver/blockmat.h>
 
 
-//#define ARMA_64BIT_WORD
+#define ARMA_64BIT_WORD
 #include <armadillo>
 
 using namespace std;
@@ -193,6 +193,163 @@ vec initializer::appendvec(vec V1, vec V2){
     return V3;
 }
 
+void initializer::sVppppO2(){
+    //optimized interaction for Vpppp
+    clock_t  t;
+    t = clock();
+    //using symmetries, only consider a>b>:
+    uvec A, B; //vectors containing indices (row and column)
+    B.set_size(iNp*((iNp+1.0)/2.0));
+    A.set_size(iNp*((iNp+1.0)/2.0));
+
+    cout << "Good so far... (1)"  << endl;
+
+    uint n = 0;
+    for(uint a = 0; a<iNp; ++a){
+        for(uint b = a; b<iNp; ++b){
+            A(n) = a;
+            B(n) = b;
+            n += 1;
+        }
+    }
+
+
+    cout << "Good so far... (2)"  << (double)(clock() - t)/CLOCKS_PER_SEC<< endl;
+    t = clock();
+
+    //Setting up a vector containint a unique integer identifier for K + M_s
+    ivec KABx = bs.vKx.elem(A+iNh)+bs.vKx.elem(B+iNh);
+    ivec KABy = iNmax*(bs.vKy.elem(A+iNh)+bs.vKy.elem(B+iNh));
+    ivec KABz = iNmax2*(bs.vKz.elem(A+iNh)+bs.vKz.elem(B+iNh));
+    ivec KABms = iNmax*iNmax2*(bs.vMs(A+iNh) + bs.vMs(B + iNh));
+
+    ivec KAB = KABx+KABy+KABz + KABms;
+    ivec KAB_unique = unique(KAB);
+
+    field<uvec> TT;
+    TT.set_size(KAB_unique.size(), 2);
+    int iN = 0;
+    vec T, O;
+    uvec t0, t1;
+
+
+
+    cout << "Good so far... (3)"  << (double)(clock() - t)/CLOCKS_PER_SEC<< endl;
+    t = clock();
+    for(uint i = 0; i < KAB_unique.size(); ++i){
+        //locating non-zero regions where K_a + K_b = K_c + K_d
+        //it is possible to exploit spin symmetry further inside this loop
+        T = conv_to<vec>::from(find(KAB==KAB_unique(i))); //Is it possible to make this vector "shrink" as more indices is identified?
+        O = ones(T.size());
+        t0 = conv_to<uvec>::from(kron(T, O));
+        t1 = conv_to<uvec>::from(kron(O, T));
+        TT(i, 0) = t0;
+        TT(i, 1) = t1;
+        iN += t0.size();
+    }
+
+
+    cout << "Good so far... (4)"  << (double)(clock() - t)/CLOCKS_PER_SEC<< endl;
+    t = clock();
+    uvec aVppp, bVppp, cVppp, dVppp;
+    aVppp.set_size(iN);
+    bVppp.set_size(iN);
+    cVppp.set_size(iN);
+    dVppp.set_size(iN);
+
+    cout << "Good so far... (5)"  << (double)(clock() - t)/CLOCKS_PER_SEC<< endl;
+    t = clock();
+
+    iN = 0;
+    for(uint i = 0; i < KAB_unique.size(); ++i){
+        aVppp(span(iN, iN+TT(i,0).size()-1)) = A.elem(TT(i,0));
+        bVppp(span(iN, iN+TT(i,0).size()-1)) = B.elem(TT(i,0));
+        cVppp(span(iN, iN+TT(i,0).size()-1)) = A.elem(TT(i,1));
+        dVppp(span(iN, iN+TT(i,0).size()-1)) = B.elem(TT(i,1));
+        iN += TT(i,0).size();
+    }
+
+
+    cout << "Good so far... (6)"  << (double)(clock() - t)/CLOCKS_PER_SEC<< endl;
+    t = clock();
+    vec vValsVppp = V3(aVppp+iNh,bVppp+iNh,cVppp+iNh,dVppp+iNh); //this works, tested agains bs.v2, 9.4.2015
+    iN = vValsVppp.size();
+
+
+
+
+    cout << "Good so far... (7)"  << (double)(clock() - t)/CLOCKS_PER_SEC<< endl;
+    //cout << "Number of nonzeros:" << vValsVppp(find(vValsVppp==0.0)).size() << endl;
+    //cout << "Number of nonzeros:" << find(vValsVppp).size() << endl;
+
+
+    t = clock();
+    //use symmetries to fill in remaining interactions
+    aVpppp.set_size(4*iN);
+    bVpppp.set_size(4*iN);
+    cVpppp.set_size(4*iN);
+    dVpppp.set_size(4*iN);
+
+    aVpppp(span(0,iN-1)) = aVppp;
+    aVpppp(span(iN,2*iN-1)) = bVppp;
+    aVpppp(span(2*iN,3*iN-1)) = cVppp;
+    aVpppp(span(3*iN,4*iN-1)) = dVppp;
+
+    bVpppp(span(0,iN-1)) = bVppp;
+    bVpppp(span(iN,2*iN-1)) = aVppp;
+    bVpppp(span(2*iN,3*iN-1)) = dVppp;
+    bVpppp(span(3*iN,4*iN-1)) = cVppp;
+
+    cVpppp(span(0,iN-1)) = cVppp;
+    cVpppp(span(iN,2*iN-1)) = dVppp;
+    cVpppp(span(2*iN,3*iN-1)) = bVppp;
+    cVpppp(span(3*iN,4*iN-1)) = aVppp;
+
+    dVpppp(span(0,iN-1)) = dVppp;
+    dVpppp(span(iN,2*iN-1)) = cVppp;
+    dVpppp(span(2*iN,3*iN-1)) = aVppp;
+    dVpppp(span(3*iN,4*iN-1)) = bVppp;
+
+    vValsVpppp.set_size(4*iN);
+    vValsVpppp(span(0,iN-1)) = vValsVppp;
+    vValsVpppp(span(iN,2*iN-1)) = vValsVppp;
+    vValsVpppp(span(2*iN,3*iN-1)) = -vValsVppp;
+    vValsVpppp(span(3*iN,4*iN-1)) = -vValsVppp;
+
+
+    cout << "Good so far... (8)"  << (double)(clock() - t)/CLOCKS_PER_SEC<< endl;
+    t = clock();
+
+
+    //aVpppp = join_cols<umat>(join_cols<umat>(aVppp, bVppp),join_cols<umat>(cVppp, dVppp));
+    //bVpppp = join_cols<mat>(join_cols<mat>(bVppp, aVppp),join_cols<mat>(dVppp, cVppp));
+    //cVpppp = join_cols<mat>(join_cols<mat>(cVppp, dVppp),join_cols<mat>(bVppp, aVppp));
+    //dVpppp = join_cols<mat>(join_cols<mat>(dVppp, cVppp),join_cols<mat>(aVppp, bVppp));
+    //vValsVpppp = join_cols<mat>(join_cols<mat>(vValsVppp,vValsVppp),join_cols<mat>(-vValsVppp,-vValsVppp));
+
+
+    /*
+    //Testing that the full interaction is correct
+    double val = 0;
+    double val2 = 0;
+    int disccount = 0;
+    int an,bn,cn,dn;
+    for(int n =0; n< vValsVpppp.size(); n++){
+        an = aVpppp(n) + iNh;
+        bn = bVpppp(n) + iNh;
+        cn = cVpppp(n) + iNh;
+        dn = dVpppp(n) + iNh;
+        val = bs.v2(an,bn,cn,dn);
+        if((abs(val - vValsVpppp(n)))>0.00001){
+            cout << val << " " << val2 << " " << vValsVpppp(n) << endl;
+            disccount += 1;
+        }
+    }
+    cout << "Discrepancies in Vpppp:" << disccount << endl;
+    cout << "Size of Vpppp         :" << vValsVpppp.size() << endl;
+    */
+}
+
 void initializer::sVppppO(){
     //optimized interaction for Vpppp
     clock_t  t;
@@ -294,12 +451,12 @@ void initializer::sVppppO(){
     iN = 0;
     int iNt = 0;
     for(uint i = 0; i < KAB_unique.size(); ++i){
-        aVppp(span(iN, iN+TT(i,0).size()-1)) = A.elem(TT(i,0));
-        bVppp(span(iN, iN+TT(i,0).size()-1)) = B.elem(TT(i,0));
-        cVppp(span(iN, iN+TT(i,0).size()-1)) = A.elem(TT(i,1));
-        dVppp(span(iN, iN+TT(i,0).size()-1)) = B.elem(TT(i,1));
+        //aVppp(span(iN, iN+TT(i,0).size()-1)) = A.elem(TT(i,0));
+        //bVppp(span(iN, iN+TT(i,0).size()-1)) = B.elem(TT(i,0));
+        //cVppp(span(iN, iN+TT(i,0).size()-1)) = A.elem(TT(i,1));
+        //dVppp(span(iN, iN+TT(i,0).size()-1)) = B.elem(TT(i,1));
         //iN += TT(i,0).size();
-        /*
+
         iNt = TT(i,0).size();
         for(uint j = 0; j < iNt; ++j){
             aVppp(iN) = A(TT(i,0)(j));
@@ -307,7 +464,7 @@ void initializer::sVppppO(){
             cVppp(iN) = A(TT(i,1)(j));
             dVppp(iN) = B(TT(i,1)(j));
             iN += 1;
-        }*/
+        }
 
     }
 
@@ -428,8 +585,9 @@ void initializer::sVppppO(){
     //vValsVpppp = join_cols<mat>(join_cols<mat>(vValsVppp,vValsVppp),join_cols<mat>(-vValsVppp,-vValsVppp));
 
 
-    /*
+
     //Testing that the full interaction is correct
+    /*
     double val = 0;
     double val2 = 0;
     int disccount = 0;
@@ -447,11 +605,12 @@ void initializer::sVppppO(){
             disccount += 1;
         }
     }
-
-    cout << "Discrepancies in Vpppp:" << disccount << endl;
-    cout << "Size of Vpppp         :" << vValsVpppp.size() << endl;
-
     */
+
+
+    //cout << "Discrepancies in Vpppp:" << disccount << endl;
+    //cout << "Size of Vpppp         :" << vValsVpppp.size() << endl;
+
 }
 
 void initializer::sVpppp(){

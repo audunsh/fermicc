@@ -1,6 +1,6 @@
 #ifndef CCSOLVE_H
 #define CCSOLVE_H
-//#define ARMA_64BIT_WORD
+#define ARMA_64BIT_WORD
 #include <armadillo>
 #include <iomanip>
 #include "basis/electrongas.h"
