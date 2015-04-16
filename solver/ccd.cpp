@@ -61,6 +61,7 @@ ccd::ccd(electrongas bs){
     // flexmat V1;
     // V1.update(vhhhh.pq_rs(),vhhhh.iNp, vhhhh.iNq, vhhhh.iNr, vhhhh.iNs); //update (or initialize) with an sp_mat object (requires unpacking)
 
+
     /*
     //testing the sparselibrary in Eigen
     typedef Eigen::Triplet<double> Tr;
@@ -118,6 +119,30 @@ ccd::ccd(electrongas bs){
     }
 }
 
+void ccd::L1_block_multiplication(){
+    //perform Vpppp.pq_rs()*T.pq_Rs() using the block scheme
+    uint N = iSetup.bmVpppp.uN;
+    int Np = iSetup.iNp;
+    int Np2 = Np*Np;
+    //L1.clear();
+    L1 *= 0;
+    field<uvec> stream;
+    uvec nx, ny;
+    vec values;
+    umat locations;
+    for(uint i = 0; i < N; i++){
+        stream = iSetup.bmVpppp.get_block(i);
+        values = iSetup.V3(stream(0), stream(1), stream(2), stream(3));
+        locations.set_size(values.size(), 2);
+        locations.col(0) = stream(0) + Np*stream(1);
+        locations.col(1) = stream(2) + Np*stream(3);
+        L1 += sp_mat(locations.t(), values, Np2,Np2)*T.pq_rs();
+    }
+    L1 *= .5;
+
+}
+
+
 void ccd::advance_intermediates(){
     int Np = iSetup.iNp;
     int Nq = iSetup.iNp;
@@ -163,6 +188,7 @@ void ccd::advance(){
 
     if(timing){t = clock();}
     L1 = vpppp.pq_rs()*T.pq_rs();
+    //L1_block_multiplication();
     if(timing){
         cout << "Time spent on L1:" << (clock() - (float)t)/CLOCKS_PER_SEC << endl;
         t = clock();}
