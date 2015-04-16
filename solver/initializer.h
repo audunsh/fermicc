@@ -24,7 +24,6 @@ public:
 
     void sVpppp();
     void sVppppO();
-    void sVppppO2();
 
     void sVhhhh();
     void sVhhhhO();
@@ -58,11 +57,11 @@ public:
     //Col<uword> cVpppp;
     //Col<uword> dVpppp;
 
-    //blockmat bmVpppp;
-    //blockmat bmVhhhh;
-    //blockmat bmVpphh;
-    //blockmat bmVhhpp;
-    //blockmat bmVhpph;
+    blockmat bmVpppp;
+    blockmat bmVhhhh;
+    blockmat bmVpphh;
+    blockmat bmVhhpp;
+    blockmat bmVhpph;
 
     uvec iVhhhh;
     uvec jVhhhh;

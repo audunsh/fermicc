@@ -28,8 +28,6 @@ ccd::ccd(electrongas bs){
     cout << "Vpppp init time:" <<  (float)(clock()- t)/CLOCKS_PER_SEC << endl;
     t = clock();
 
-
-
     iSetup.sVhhpp();
     cout << "Vhhpp init time:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
     t = clock();
@@ -41,10 +39,6 @@ ccd::ccd(electrongas bs){
     iSetup.sVhpph();
     cout << "Vhpph init time:" <<  (float)(clock()-t)/CLOCKS_PER_SEC << endl;
     t = clock();
-
-
-
-
 
     //convert interaction data to flexmat objects
     vhhhh.init(iSetup.vValsVhhhh, iSetup.iVhhhh, iSetup.jVhhhh, iSetup.kVhhhh, iSetup.lVhhhh, iSetup.iNh, iSetup.iNh, iSetup.iNh, iSetup.iNh);
@@ -62,36 +56,10 @@ ccd::ccd(electrongas bs){
     T.init(iSetup.vValsVpphh, iSetup.aVpphh, iSetup.bVpphh, iSetup.iVpphh, iSetup.jVpphh, iSetup.iNp, iSetup.iNp, iSetup.iNh, iSetup.iNh);
     T.set_amplitudes(bs.vEnergy);
 
-    //cout << vpppp.vValues << endl;
-
 
     // HOW TO SET UP FLEXMAT OBJECTS FROM CSC-MATRICES
     // flexmat V1;
     // V1.update(vhhhh.pq_rs(),vhhhh.iNp, vhhhh.iNq, vhhhh.iNr, vhhhh.iNs); //update (or initialize) with an sp_mat object (requires unpacking)
-
-    //clock_t t;
-    //sp_mat H;
-
-    /*
-    sp_mat H = vpppp.pq_rs();
-    sp_mat Ht = vpppp.rs_pq();
-    t = clock();
-    H = H*H;
-    cout << "Spent " << (float)(clock()-t)/CLOCKS_PER_SEC << " seconds on multiplication."<< endl;
-
-    t = clock();
-    H = H*Ht;
-    cout << "Spent " << (float)(clock()-t)/CLOCKS_PER_SEC << " seconds on multiplication."<< endl;
-
-    t = clock();
-    H = Ht*H;
-    cout << "Spent " << (float)(clock()-t)/CLOCKS_PER_SEC << " seconds on multiplication."<< endl;
-
-    t = clock();
-    H = Ht*Ht;
-    cout << "Spent " << (float)(clock()-t)/CLOCKS_PER_SEC << " seconds on multiplication."<< endl;
-    */
-
 
     /*
     //testing the sparselibrary in Eigen
@@ -202,7 +170,6 @@ void ccd::advance(){
     //make a little section here and insert block diagonal replacement
 
 
-
     L2 = T.pq_rs()*vhhhh.pq_rs();
     if(timing){
         cout << "Time spent on L2:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
@@ -214,17 +181,11 @@ void ccd::advance(){
         cout << "Time spent on L3:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
         t = clock();}
 
-
-    //Q1 = T.pq_rs()*vhhpp.pq_rs()*T.pq_rs();
-    //cout << "Time spent on Q1:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
-    //t = clock();
-
     fmQ1.update(T.rs_pq()*vhhpp.rs_pq()*T.rs_pq(), Nr, Ns, Np,Nq);
     Q1 = fmQ1.rs_pq();
     if(timing){
         cout << "Time spent on Q1:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
         t = clock();}
-
 
     fmQ2.update(T.pr_qs()*vhhpp.rp_qs()*T.sq_pr(), Np, Nr, Nq, Ns); //needs realignment and permutations
     Q2 = fmQ2.pr_qs()-fmQ2.pr_sq(); //permuting elements
@@ -232,43 +193,11 @@ void ccd::advance(){
         cout << "Time spent on Q2:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
         t = clock();}
 
-    /*
-    sp_mat tempQ3 = T.pqs_r()*vhhpp.q_prs()*T.sqp_r();
-    cout << "Time spent on Q3 (multiplication):" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
-    t = clock();
-    fmQ3.update_as_pqs_r(tempQ3, Np, Nq, Ns, Nr); //needs realignment and permutations
-    cout << "Time spent on Q3 (update):" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
-    t = clock();
-    Q3 = fmQ3.pq_rs() - fmQ3.pq_sr(); //permuting elements
-    cout << "Time spent on Q3 (permutation):" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
-    t = clock();
-    */
-
-    //t = clock();
-    //sp_mat Q31 = T.r_sqp()*vhhpp.prs_q();
-    //cout << "Time spent on Q31:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
-    //t = clock();
-
-    //sp_mat Q32 = Q32*T.r_pqs();
-    //cout << "Time spent on Q32:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
-    //t = clock();
-
-    //fmQ3.update_as_pqs_r(Q32.t(), Np, Nq, Ns, Nr);
-    //cout << "Time spent on Q32_update:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
-    //t = clock();
-
-    //fmQ3.update_as_pqs_r(((T.r_sqp()*vhhpp.prs_q())*T.r_pqs()).t(), Np, Nq, Ns, Nr); //needs realignment and permutations
     fmQ3.update_as_r_pqs((T.r_sqp()*vhhpp.prs_q())*T.r_pqs(), Np, Nq, Nr, Ns); //needs realignment and permutations
     Q3 = fmQ3.pq_rs() - fmQ3.pq_sr(); //permuting elements
-    //cout << "Time spent on Q3_perm:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
-    //t = clock();
-
     if(timing){
         cout << "Time spent on Q3:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
         t = clock();}
-
-
-
 
     fmQ4.update_as_p_qrs(T.p_srq()*vhhpp.pqr_s()*T.p_qrs(), Np, Nq, Nr, Ns); //needs realignment and permutations
     Q4 = fmQ4.pq_rs() - fmQ4.qp_rs(); //permuting elements
@@ -281,6 +210,7 @@ void ccd::advance(){
     if(timing){
         cout << "Time spent on T:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
         t = clock();}
+
     energy();
     if(timing){
         cout << "Time spent on e:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
@@ -290,7 +220,9 @@ void ccd::advance(){
 
 
 double ccd::CCSD_SG_energy(){
-    //return correlation energy
+    //Return correlation energy
+    //Optional implementation for comparison
+    //Inefficiency warning; performs lookup in sparse matrix
     int Np = iSetup.iNp;
     int Nh = iSetup.iNh;
     double val1, val2, val3, v_ijab;
@@ -323,10 +255,5 @@ void ccd::energy(){
     for(int i = 0; i<Cv.n_cols; i++){
         C_+= Cv(i,i);
     }
-    cout << "Nonzeros:" << cv.n_nonzero<< endl;
     cout << "(CCD)Energy:" << .25*C_ << endl;
-
-    //double dC = accu(vhhpp.pq_rs()*T.pq_rs());
-    //cout << "E2:" << .25*dC << endl;
-
 }

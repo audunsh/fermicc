@@ -31,7 +31,6 @@ int main()
     //cout << "Energy per particle (analytic):" << 2*fgas.analytic_energy(14)/14.0 << " (rydberg)"  << endl;
     cout << "# G.Baardsens results:" << 1.9434 << endl;
 
-    cout << "Hello from solver." << endl;
     ccd solver(fgas);
     //arma::u32 sz = 600000000;
     //Eigen::VectorXcd vVppp(600000000);

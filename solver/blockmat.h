@@ -1,5 +1,6 @@
 #ifndef BLOCKMAT_H
 #define BLOCKMAT_H
+#define ARMA_64BIT_WORD
 #include <armadillo>
 
 using namespace std;
@@ -14,7 +15,7 @@ public:
     blockmat();
     void set_size(uint N, uint Np, uint Nq, uint Nr, uint Ns);
     void set_block(uint n, uvec pb, uvec qb, uvec rb, uvec sb);
-    mat get_block(uint n);
+    field<uvec> get_block(uint n);
 
 
     field<uvec> p;
