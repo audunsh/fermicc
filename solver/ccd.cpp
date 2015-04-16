@@ -52,10 +52,13 @@ ccd::ccd(electrongas bs){
     vpphh.init(iSetup.vValsVpphh, iSetup.aVpphh, iSetup.bVpphh, iSetup.iVpphh, iSetup.jVpphh, iSetup.iNp, iSetup.iNp, iSetup.iNh, iSetup.iNh);
     vpphh.shed_zeros();
 
+
     //set up first T2-amplitudes
     T.init(iSetup.vValsVpphh, iSetup.aVpphh, iSetup.bVpphh, iSetup.iVpphh, iSetup.jVpphh, iSetup.iNp, iSetup.iNp, iSetup.iNh, iSetup.iNh);
     T.set_amplitudes(bs.vEnergy);
-
+    t = clock();
+    T.map_indices();
+    cout << "Amplitude mapping time:" <<  (float)(clock()-t)/CLOCKS_PER_SEC << endl;
 
     // HOW TO SET UP FLEXMAT OBJECTS FROM CSC-MATRICES
     // flexmat V1;
@@ -113,7 +116,7 @@ ccd::ccd(electrongas bs){
 
     energy();
 
-    for(int i = 0; i < 5; i++){
+    for(int i = 0; i < 25; i++){
         //advance_intermediates();
         advance();
     }
@@ -123,22 +126,80 @@ void ccd::L1_block_multiplication(){
     //perform Vpppp.pq_rs()*T.pq_Rs() using the block scheme
     uint N = iSetup.bmVpppp.uN;
     int Np = iSetup.iNp;
+    int Nh = iSetup.iNh;
     int Np2 = Np*Np;
-    //L1.clear();
-    L1 *= 0;
+    L1.clear();
+    L1.set_size(Np2,Np2);
+    //L1 *= 0;
     field<uvec> stream;
     uvec nx, ny;
     vec values;
     umat locations;
-    for(uint i = 0; i < N; i++){
+    uint a,b,c,d;
+    uvec ab,ba,bc,cb, Na, row, col;
+    sp_mat L1part(Np2, Np2);
+    double val;
+    for(uint i = 0; i < N; ++i){
+        L1part.clear();
+        L1part.set_size(Np2,Np2);
+
         stream = iSetup.bmVpppp.get_block(i);
-        values = iSetup.V3(stream(0), stream(1), stream(2), stream(3));
-        locations.set_size(values.size(), 2);
-        locations.col(0) = stream(0) + Np*stream(1);
-        locations.col(1) = stream(2) + Np*stream(3);
-        L1 += sp_mat(locations.t(), values, Np2,Np2)*T.pq_rs();
+        row = stream(0) + Np*stream(1);
+        col = stream(2) + Np*stream(3);
+        uint Na = stream(0).size();
+        for(int p = 0; p<Na; ++p){
+            for(int q = 0; q<Na; ++q){
+                for(int r = 0; r<Na; ++r){
+                    for(int s = 0; s<Na; ++s){
+                        a = stream(0)(p);
+                        b = stream(1)(q);
+                        c = stream(2)(r);
+                        d = stream(3)(s);
+                        val = iSetup.bs.v2(a+Nh,b+Nh,c+Nh,d+Nh);
+
+                        /*
+                        L1part(a+b*Np, c+d*Np) = val;
+                        L1part(b+a*Np, c+d*Np) = -val;
+                        L1part(a+b*Np, d+c*Np) = -val;
+                        L1part(b+a*Np, d+c*Np) = val;
+
+                        L1part(c+d*Np, a+b*Np) = val;
+                        L1part(c+d*Np, b+a*Np) = -val;
+                        L1part(d+c*Np, a+b*Np) = -val;
+                        L1part(d+c*Np, b+a*Np) = val;
+                        */
+
+                        L1part(a+b*Np, c+d*Np) = iSetup.bs.v2(a+Nh,b+Nh,c+Nh,d+Nh);
+
+                        /*
+                        L1part(b+a*Np, c+d*Np) = iSetup.bs.v2(b+Nh,a+Nh,c+Nh,d+Nh);
+                        L1part(a+b*Np, d+c*Np) = iSetup.bs.v2(a+Nh,b+Nh,d+Nh,c+Nh);
+                        L1part(b+a*Np, d+c*Np) = iSetup.bs.v2(b+Nh,a+Nh,d+Nh,c+Nh);
+
+                        L1part(c+d*Np, a+b*Np) = iSetup.bs.v2(c+Nh,d+Nh,a+Nh,b+Nh);
+                        L1part(c+d*Np, b+a*Np) = iSetup.bs.v2(c+Nh,d+Nh,b+Nh,a+Nh);
+                        L1part(d+c*Np, a+b*Np) = iSetup.bs.v2(d+Nh,c+Nh,a+Nh,b+Nh);
+                        L1part(d+c*Np, b+a*Np) = iSetup.bs.v2(d+Nh,c+Nh,b+Nh,a+Nh);
+                        */
+
+
+                    }
+                }
+            }
+        }
+
+        //O = ones(Na);
+        //a = convert_to<uvec>::from(kron(O, stream(0)));
+        //values = iSetup.V3(stream(0), stream(1), stream(2), stream(3));
+        //unfold vectors and symmetries
+        //locations.set_size(values.size(), 2);
+        //locations.col(0) = stream(0) + Np*stream(1);
+        //locations.col(1) = stream(2) + Np*stream(3);
+        //L1 += sp_mat(locations.t(), values, Np2,Np2)*T.pq_rs();
+        L1 += .5*L1part*T.pq_rs();
+
     }
-    L1 *= .5;
+    //L1 *= .5;
 
 }
 

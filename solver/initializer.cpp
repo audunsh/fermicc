@@ -195,10 +195,6 @@ void initializer::sVppppO(){
     B.set_size(iNp*((iNp+1.0)/2.0));
     A.set_size(iNp*((iNp+1.0)/2.0));
 
-
-
-    cout << "Good so far... (1)"  << endl;
-
     uint n = 0;
     for(uint a = 0; a<iNp; ++a){
         for(uint b = a; b<iNp; ++b){
@@ -207,6 +203,19 @@ void initializer::sVppppO(){
             n += 1;
         }
     }
+
+
+
+
+    //careful here
+    //vec AB = linspace(0,iNp2-1,iNp2);
+    //uvec B = conv_to<uvec>::from(floor(AB/iNp)); //convert to unsigned integer indexing vector
+    //uvec A = conv_to<uvec>::from(AB) - B*iNp;
+
+
+    cout << "Good so far... (1)"  << endl;
+
+
 
 
     cout << "Good so far... (2)"  << (double)(clock() - t)/CLOCKS_PER_SEC<< endl;
