@@ -138,6 +138,20 @@ void flexmat::update(sp_mat spC, int Np, int Nq, int Nr, int Ns){
 }
 
 
+sp_mat flexmat::rows(uvec urows){
+    sp_mat M(iNp*iNq,iNr*iNs);
+    uint n,current_row;
+    for(uint i = 0; i<urows.size(); ++i){
+        current_row = urows(i);
+        for(uint j = 0; j< row_lengths(current_row); ++j){
+            n = row_indices(current_row)(j); //index of element in COO array
+            M(current_row,vr(n)+vs(n)*iNr) = vValues(n);
+        }
+    }
+    return M; //sp_mat(locations.t(), vValues, iNp*iNq, iNr*iNs);
+}
+
+
 void flexmat::deinit(){
     Npq_rs = 0;
     Npq_sr = 0;
@@ -844,6 +858,8 @@ void flexmat::update_as_srq_p(sp_mat spC, int Np, int Nq, int Nr, int Ns){
     vValues = H.vVals;
     deinit();
 }
+
+
 
 
 sp_mat flexmat::pq_rs(){

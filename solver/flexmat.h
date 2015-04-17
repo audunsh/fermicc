@@ -50,6 +50,7 @@ public:
     uvec vs;
 
     sp_mat smV;
+    sp_mat rows(uvec urows); //returns a identically sized sp_mat with only urows set to non-zero
 
     umat locations;
 

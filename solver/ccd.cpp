@@ -24,7 +24,7 @@ ccd::ccd(electrongas bs){
     cout << "Vhhhh init time:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
     t = clock();
 
-    iSetup.sVppppO();
+    iSetup.sVppppBlock();
     cout << "Vpppp init time:" <<  (float)(clock()- t)/CLOCKS_PER_SEC << endl;
     t = clock();
 
@@ -155,7 +155,7 @@ void ccd::L1_block_multiplication(){
                         b = stream(1)(q);
                         c = stream(2)(r);
                         d = stream(3)(s);
-                        val = iSetup.bs.v2(a+Nh,b+Nh,c+Nh,d+Nh);
+                        //val = iSetup.bs.v2(a+Nh,b+Nh,c+Nh,d+Nh);
 
                         /*
                         L1part(a+b*Np, c+d*Np) = val;
@@ -196,7 +196,7 @@ void ccd::L1_block_multiplication(){
         //locations.col(0) = stream(0) + Np*stream(1);
         //locations.col(1) = stream(2) + Np*stream(3);
         //L1 += sp_mat(locations.t(), values, Np2,Np2)*T.pq_rs();
-        L1 += .5*L1part*T.pq_rs();
+        L1 += .5*L1part*T.rows(stream(4));
 
     }
     //L1 *= .5;
@@ -233,6 +233,7 @@ void ccd::advance_intermediates(){
 
     T.update(vpphh.pq_rs() + L1+L2+L3-Q2-Q3, Np, Nq, Nr, Ns);
     T.set_amplitudes(ebs.vEnergy); //divide updated amplitides by energy denominator
+
     energy();
 
 
@@ -248,8 +249,8 @@ void ccd::advance(){
     clock_t t;
 
     if(timing){t = clock();}
-    L1 = vpppp.pq_rs()*T.pq_rs();
-    //L1_block_multiplication();
+    //L1 = vpppp.pq_rs()*T.pq_rs();
+    L1_block_multiplication();
     if(timing){
         cout << "Time spent on L1:" << (clock() - (float)t)/CLOCKS_PER_SEC << endl;
         t = clock();}
@@ -302,7 +303,7 @@ void ccd::advance(){
     if(timing){
         cout << "Time spent on e:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
         t = clock();}
-
+    T.map_indices();
 }
 
 
