@@ -25,6 +25,8 @@ ccd::ccd(electrongas bs){
     t = clock();
 
     iSetup.sVppppBlock();
+
+    //iSetup.sVppppO();
     cout << "Vpppp init time:" <<  (float)(clock()- t)/CLOCKS_PER_SEC << endl;
     t = clock();
 
@@ -43,8 +45,8 @@ ccd::ccd(electrongas bs){
     //convert interaction data to flexmat objects
     vhhhh.init(iSetup.vValsVhhhh, iSetup.iVhhhh, iSetup.jVhhhh, iSetup.kVhhhh, iSetup.lVhhhh, iSetup.iNh, iSetup.iNh, iSetup.iNh, iSetup.iNh);
     vhhhh.shed_zeros();
-    vpppp.init(iSetup.vValsVpppp, iSetup.aVpppp, iSetup.bVpppp, iSetup.cVpppp, iSetup.dVpppp, iSetup.iNp, iSetup.iNp, iSetup.iNp, iSetup.iNp);
-    vpppp.shed_zeros();
+    //vpppp.init(iSetup.vValsVpppp, iSetup.aVpppp, iSetup.bVpppp, iSetup.cVpppp, iSetup.dVpppp, iSetup.iNp, iSetup.iNp, iSetup.iNp, iSetup.iNp);
+    //vpppp.shed_zeros();
     vhpph.init(iSetup.vValsVhpph, iSetup.iVhpph, iSetup.aVhpph, iSetup.bVhpph, iSetup.jVhpph, iSetup.iNh, iSetup.iNp, iSetup.iNp, iSetup.iNh);
     vhpph.shed_zeros();
     vhhpp.init(iSetup.vValsVhhpp, iSetup.iVhhpp, iSetup.jVhhpp, iSetup.aVhhpp, iSetup.bVhhpp, iSetup.iNh, iSetup.iNh, iSetup.iNp, iSetup.iNp);
@@ -65,51 +67,44 @@ ccd::ccd(electrongas bs){
     // V1.update(vhhhh.pq_rs(),vhhhh.iNp, vhhhh.iNq, vhhhh.iNr, vhhhh.iNs); //update (or initialize) with an sp_mat object (requires unpacking)
 
 
+    //compare matrix multiplication schemes (block vs. sparse)
+    t = clock();
+    L2 =  vpppp.pq_rs()*T.pq_rs();
+    cout << "Sparse mult time:" <<  (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+
+    t = clock();
+    L1_block_multiplication();
+    cout << "Blocked/sparse mult time:" <<  (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+
+    //compare L1, L2
+
     /*
-    //testing the sparselibrary in Eigen
-    typedef Eigen::Triplet<double> Tr;
-    typedef Eigen::SparseMatrix<double> SparseMat;
-
-    clock_t t1, t0, t2;
-    t0 = clock();
-
-    std::vector<Tr> tripletList;
-    tripletList.reserve(vpppp.vValues.size());
-    for(int i= 0; i<vpppp.vValues.size(); i++){
-        tripletList.push_back(Tr(vpppp.vp(i)+vpppp.vq(i)*vpppp.iNp, vpppp.vr(i)+vpppp.vs(i)*vpppp.iNr, vpppp.vValues(i)));
+    for(int a = 0; a < iSetup.iNp; a++){
+        for(int b = 0; b < iSetup.iNp; b++){
+            for(int c = 0; c < iSetup.iNh; c++){
+                for(int d = 0; d < iSetup.iNh; d++){
+                    if(L2(a + b*iSetup.iNp, c + d*iSetup.iNh) != L1(a + b*iSetup.iNp, c + d*iSetup.iNh)){
+                        cout << L2(a + b*iSetup.iNp, c + d*iSetup.iNh) << " " << L1(a + b*iSetup.iNp, c + d*iSetup.iNh) << endl;
+                    }
+                }
+            }
+        }
     }
-    SparseMat Vp1(vpppp.iNp*vpppp.iNq, vpppp.iNr*vpppp.iNs);
-    Vp1.setFromTriplets(tripletList.begin(), tripletList.end());
-
-    std::vector<Tr> tripletList2;
-    tripletList2.reserve(vpphh.vValues.size());
-    for(int i= 0; i<vpphh.vValues.size(); i++){
-        tripletList2.push_back(Tr(vpphh.vp(i)+vpphh.vq(i)*vpphh.iNp, vpphh.vr(i)+vpphh.vs(i)*vpphh.iNr, vpphh.vValues(i)));
-    }
-    SparseMat Tp1(vpphh.iNp*vpphh.iNq, vpphh.iNr*vpphh.iNs);
-    Tp1.setFromTriplets(tripletList2.begin(), tripletList2.end());
-    t1 = clock();
-
-
-    SparseMat Sp3 = Vp1*Tp1;
-    t2 = clock();
-    cout << "Eigen (Setup)         :" << t1-t0 << endl;
-    cout << "Eigen (multiplication):" << t2-t1 << endl;
-    cout << "Eigen (total)         :" << t2-t0 << endl;
-
-    t0 = clock();
-    sp_mat vp12 = vpppp.pq_rs();
-    vp12 = vpphh.pq_rs();
-
-    t1 = clock();
-    vp12 = vpppp.pq_rs()*vpphh.pq_rs();
-    t2 = clock();
-
-    cout << "Armadillo (Setup)         :" << t1-t0 << endl;
-    cout << "Armadillo (multiplication):" << t2-t1 << endl;
-    cout << "Armadillo (total)         :" << t2-t0 << endl;
-
     */
+
+
+    /*
+    cout << L2.n_nonzero << " " << L1.n_nonzero << endl;
+
+    for(int i= 0; i<L2.n_nonzero; ++i){
+        if(L2.values[i] != L1.values[i]){
+            cout << L2.values[i]<< " " << L1.values[i] << endl;
+        }
+    }
+    */
+
+
+
 
 
 
@@ -120,10 +115,14 @@ ccd::ccd(electrongas bs){
         //advance_intermediates();
         advance();
     }
+
+
 }
 
 void ccd::L1_block_multiplication(){
     //perform Vpppp.pq_rs()*T.pq_Rs() using the block scheme
+    clock_t t0, ti,tm,ts;
+
     uint N = iSetup.bmVpppp.uN;
     int Np = iSetup.iNp;
     int Nh = iSetup.iNh;
@@ -132,59 +131,83 @@ void ccd::L1_block_multiplication(){
     L1.set_size(Np2,Np2);
     //L1 *= 0;
     field<uvec> stream;
-    uvec nx, ny;
-    vec values;
-    umat locations;
-    uint a,b,c,d;
-    uvec ab,ba,bc,cb, Na, row, col;
+    //uvec nx, ny;
+    vec vals;
+    umat coo;
+    uint a,b,c,d, Na, mm,ab,cd;
+    //uvec ab,ba,bc,cb, Na, row, col;
     sp_mat L1part(Np2, Np2);
+    sp_mat Ttemp(Np2, Nh*Nh);
     double val;
+    ti = 0;
+    tm = 0;
     for(uint i = 0; i < N; ++i){
+        t0 = clock();
+        coo.clear();
+        vals.clear();
+
         L1part.clear();
         L1part.set_size(Np2,Np2);
 
         stream = iSetup.bmVpppp.get_block(i);
-        row = stream(0) + Np*stream(1);
-        col = stream(2) + Np*stream(3);
+        //row = stream(0) + Np*stream(1);
+        //col = stream(2) + Np*stream(3);
         uint Na = stream(0).size();
+        coo.set_size(Na*Na,2);
+        vals.set_size(Na*Na);
+        mm = 0;
         for(int p = 0; p<Na; ++p){
-            for(int q = 0; q<Na; ++q){
-                for(int r = 0; r<Na; ++r){
-                    for(int s = 0; s<Na; ++s){
-                        a = stream(0)(p);
-                        b = stream(1)(q);
-                        c = stream(2)(r);
-                        d = stream(3)(s);
-                        //val = iSetup.bs.v2(a+Nh,b+Nh,c+Nh,d+Nh);
-
-                        /*
-                        L1part(a+b*Np, c+d*Np) = val;
-                        L1part(b+a*Np, c+d*Np) = -val;
-                        L1part(a+b*Np, d+c*Np) = -val;
-                        L1part(b+a*Np, d+c*Np) = val;
-
-                        L1part(c+d*Np, a+b*Np) = val;
-                        L1part(c+d*Np, b+a*Np) = -val;
-                        L1part(d+c*Np, a+b*Np) = -val;
-                        L1part(d+c*Np, b+a*Np) = val;
-                        */
-
-                        L1part(a+b*Np, c+d*Np) = iSetup.bs.v2(a+Nh,b+Nh,c+Nh,d+Nh);
-
-                        /*
-                        L1part(b+a*Np, c+d*Np) = iSetup.bs.v2(b+Nh,a+Nh,c+Nh,d+Nh);
-                        L1part(a+b*Np, d+c*Np) = iSetup.bs.v2(a+Nh,b+Nh,d+Nh,c+Nh);
-                        L1part(b+a*Np, d+c*Np) = iSetup.bs.v2(b+Nh,a+Nh,d+Nh,c+Nh);
-
-                        L1part(c+d*Np, a+b*Np) = iSetup.bs.v2(c+Nh,d+Nh,a+Nh,b+Nh);
-                        L1part(c+d*Np, b+a*Np) = iSetup.bs.v2(c+Nh,d+Nh,b+Nh,a+Nh);
-                        L1part(d+c*Np, a+b*Np) = iSetup.bs.v2(d+Nh,c+Nh,a+Nh,b+Nh);
-                        L1part(d+c*Np, b+a*Np) = iSetup.bs.v2(d+Nh,c+Nh,b+Nh,a+Nh);
-                        */
+            a = stream(0)(p);
+            b = stream(1)(p);
+            ab = a + b*Np;
+            val = iSetup.bs.v2(a+Nh,b+Nh,a+Nh,b+Nh);
+            //L1part(ab,ab) = val;
 
 
-                    }
-                }
+            coo.col(0)(mm) = ab;
+            coo.col(1)(mm) = ab;
+            vals(mm) = val;
+            mm+=1;
+
+
+            for(int q = p+1; q<Na; ++q){
+                //more symmetries to utilize here
+
+                c = stream(2)(q);
+                d = stream(3)(q);
+                val = iSetup.bs.v2(a+Nh,b+Nh,c+Nh,d+Nh);
+
+                cd = c + d* Np;
+                //L1part(ab,cd) = val;  //this is inefficient, as we need to perform lookups in the compressed sp_mat object
+                //L1part(cd,ab) = val;
+
+
+
+                coo.col(0)(mm) = ab;
+                coo.col(1)(mm) = cd;
+                vals(mm) = val;
+                mm+=1;
+
+                coo.col(0)(mm) = cd;
+                coo.col(1)(mm) = ab;
+                vals(mm) = val;
+                mm+=1;
+
+
+                /*
+                L1part(a+b*Np,d+c*Np) = -val;
+                L1part(d+c*Np,a+b*Np) = -val;
+
+                L1part(b+a*Np,c+d*Np) = -val;
+                L1part(c+d*Np,b+a*Np) = -val;
+
+                L1part(b+a*Np,d+c*Np) = val;
+                L1part(d+c*Np,b+a*Np) = val;
+                */
+
+
+
+
             }
         }
 
@@ -195,10 +218,19 @@ void ccd::L1_block_multiplication(){
         //locations.set_size(values.size(), 2);
         //locations.col(0) = stream(0) + Np*stream(1);
         //locations.col(1) = stream(2) + Np*stream(3);
-        //L1 += sp_mat(locations.t(), values, Np2,Np2)*T.pq_rs();
-        L1 += .5*L1part*T.rows(stream(4));
+        L1part = sp_mat(coo.t(), vals, Np2,Np2);
+        ts += (clock()-t0);
+        t0 = clock();
+        Ttemp = T.rows(stream(4));
+        ti += (clock()-t0);
+        t0 = clock();
+        L1 += L1part*Ttemp;
+        tm += (clock()-t0);
 
     }
+    cout << "Setup time:" <<  (float)(ti)/CLOCKS_PER_SEC << endl;
+    cout << "Init  time:" <<  (float)(ti)/CLOCKS_PER_SEC << endl;
+    cout << "Mult  time:" <<  (float)(tm)/CLOCKS_PER_SEC << endl;
     //L1 *= .5;
 
 }
@@ -245,7 +277,7 @@ void ccd::advance(){
     int Nq = iSetup.iNp;
     int Nr = iSetup.iNh;
     int Ns = iSetup.iNh;
-    bool timing = false; //time each contribution calculation and print to screen (each iteration)
+    bool timing = true; //time each contribution calculation and print to screen (each iteration)
     clock_t t;
 
     if(timing){t = clock();}

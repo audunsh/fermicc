@@ -239,7 +239,7 @@ void initializer::sVppppO(){
 
     cout << KAB_unique.size() << endl;
 
-    bmVpppp.set_size(KAB_unique.size(), iNp, iNp, iNp, iNp);
+    //bmVpppp.set_size(KAB_unique.size(), iNp, iNp, iNp, iNp);
 
     cout << "Good so far... (3)"  << (double)(clock() - t)/CLOCKS_PER_SEC<< endl;
     t = clock();
@@ -252,7 +252,7 @@ void initializer::sVppppO(){
         T = conv_to<vec>::from(find(KAB==KAB_unique(i))); //Is it possible to make this vector "shrink" as more indices is identified?
 
         tT = find(KAB==KAB_unique(i));
-        bmVpppp.set_block(i, A.elem(tT), B.elem(tT),A.elem(tT), B.elem(tT));
+        //bmVpppp.set_block(i, A.elem(tT), B.elem(tT),A.elem(tT), B.elem(tT));
 
         O = ones(T.size());
         t0 = conv_to<uvec>::from(kron(T, O));
@@ -372,6 +372,24 @@ void initializer::sVppppO(){
 
 void initializer::sVppppBlock(){
     //Block interaction (store only blocks)
+
+
+
+    /*
+    uvec A, B; //vectors containing indices (row and column)
+    B.set_size(iNp*((iNp+1.0)/2.0));
+    A.set_size(iNp*((iNp+1.0)/2.0));
+
+    uint n = 0;
+    for(uint a = 0; a<iNp; ++a){
+        for(uint b = a; b<iNp; ++b){
+            A(n) = a;
+            B(n) = b;
+            n += 1;
+        }
+    }
+    */
+
 
     vec AB = linspace(0,iNp2-1,iNp2);
     uvec B = conv_to<uvec>::from(floor(AB/iNp)); //convert to unsigned integer indexing vector
