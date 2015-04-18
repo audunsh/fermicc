@@ -38,7 +38,8 @@ field<uvec> blockmat::get_block(uint n){
     //returns 4xN matrix (N = number of elements) with pqrs indices
     uint nx = p(n).size();
     uint ny = r(n).size();
-    field<uvec> indices(5);
+    indices.clear();
+    indices.set_size(5);
     indices(0) = p(n);
     indices(1) = q(n);
     indices(2) = r(n);

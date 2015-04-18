@@ -22,6 +22,7 @@ public:
     field<uvec> q;
     field<uvec> r;
     field<uvec> s;
+    field<uvec> indices;
     field<uvec> requests;
     u32 uN;
     uint uNp, uNq, uNr, uNs;

@@ -31,6 +31,28 @@ int main()
     cout << "# G.Baardsens results:" << 1.9434 << endl;
 
     ccd solver(fgas);
+
+
+    //testing sp_mat initialization time
+    /*
+    clock_t t0;
+    sp_mat M;
+    uint N = 10000000;
+    uint Np = 2000*2000;
+    umat coo(2,N);
+    vec vals(N);
+    //coo.set_size(2,N);
+    //vals.set_size(N);
+    for(uint i = 0; i < N; ++i){
+        coo(0,i) = Np-i;
+        coo(1,i) = 30;
+        vals(i) = .01;
+    }
+    t0 = clock();
+    M = sp_mat(coo, vals, Np,Np);
+    cout << "a time:" <<  (float)(clock() - t0)/CLOCKS_PER_SEC << endl;
+    */
+
     //arma::u32 sz = 600000000;
     //Eigen::VectorXcd vVppp(600000000);
     //vec vVppp = zeros(sz);

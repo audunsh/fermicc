@@ -68,13 +68,13 @@ ccd::ccd(electrongas bs){
 
 
     //compare matrix multiplication schemes (block vs. sparse)
-    t = clock();
-    L2 =  vpppp.pq_rs()*T.pq_rs();
-    cout << "Sparse mult time:" <<  (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+    //t = clock();
+    //L2 =  vpppp.pq_rs()*T.pq_rs();
+    //cout << "Sparse mult time:" <<  (float)(clock()-t)/CLOCKS_PER_SEC << endl;
 
-    t = clock();
-    L1_block_multiplication();
-    cout << "Blocked/sparse mult time:" <<  (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+    //t = clock();
+    //L1_block_multiplication();
+    //cout << "Blocked/sparse mult time:" <<  (float)(clock()-t)/CLOCKS_PER_SEC << endl;
 
     //compare L1, L2
 
@@ -141,8 +141,21 @@ void ccd::L1_block_multiplication(){
     double val;
     ti = 0;
     tm = 0;
+    ts = 0;
+
+    clock_t tt0, t_a, t_b, t_c,t_d, t_d0;
+    t_a = 0;
+    t_b = 0;
+    t_c = 0;
+    t_d = 0;
+    t_d0 = 0;
+
+
+    t0 = clock();
     for(uint i = 0; i < N; ++i){
-        t0 = clock();
+        tt0 = clock();
+        t_d0 = clock();
+
         coo.clear();
         vals.clear();
 
@@ -150,66 +163,55 @@ void ccd::L1_block_multiplication(){
         L1part.set_size(Np2,Np2);
 
         stream = iSetup.bmVpppp.get_block(i);
-        //row = stream(0) + Np*stream(1);
-        //col = stream(2) + Np*stream(3);
         uint Na = stream(0).size();
-        coo.set_size(Na*Na,2);
+        coo.set_size(2,Na*Na);
         vals.set_size(Na*Na);
         mm = 0;
-        for(int p = 0; p<Na; ++p){
+
+        t_d += (clock()-t_d0);
+        for(uint p = 0; p<Na; ++p){
+            tt0 = clock();
             a = stream(0)(p);
             b = stream(1)(p);
             ab = a + b*Np;
             val = iSetup.bs.v2(a+Nh,b+Nh,a+Nh,b+Nh);
             //L1part(ab,ab) = val;
-
-
-            coo.col(0)(mm) = ab;
-            coo.col(1)(mm) = ab;
-            vals(mm) = val;
+            coo(0,mm) = ab;
+            coo(1,mm) = ab;
+            vals(mm) = val; //iSetup.bs.v2(a+Nh,b+Nh,a+Nh,b+Nh);
             mm+=1;
+            t_a += (clock()-tt0);
 
+            //NOTE: Actually going through the kroenecker deltas here, possible to skip many tests in the interaction p==r, q==s
 
-            for(int q = p+1; q<Na; ++q){
-                //more symmetries to utilize here
-
+            for(uint q = p+1; q<Na; ++q){
+                //more symmetries to utilize here (spin)
+                tt0 = clock(); //this is the current bottleneck
                 c = stream(2)(q);
                 d = stream(3)(q);
                 val = iSetup.bs.v2(a+Nh,b+Nh,c+Nh,d+Nh);
+                t_b += (clock()-tt0);
 
+
+
+                tt0 = clock();
                 cd = c + d* Np;
-                //L1part(ab,cd) = val;  //this is inefficient, as we need to perform lookups in the compressed sp_mat object
-                //L1part(cd,ab) = val;
-
-
-
-                coo.col(0)(mm) = ab;
-                coo.col(1)(mm) = cd;
+                //coo.row(0)(mm) = ab;
+                //coo.row(1)(mm) = cd;
+                coo(0,mm) = ab;
+                coo(1,mm) = cd;
                 vals(mm) = val;
                 mm+=1;
-
-                coo.col(0)(mm) = cd;
-                coo.col(1)(mm) = ab;
+                coo(0,mm) = cd;
+                coo(1,mm) = ab;
                 vals(mm) = val;
                 mm+=1;
-
-
-                /*
-                L1part(a+b*Np,d+c*Np) = -val;
-                L1part(d+c*Np,a+b*Np) = -val;
-
-                L1part(b+a*Np,c+d*Np) = -val;
-                L1part(c+d*Np,b+a*Np) = -val;
-
-                L1part(b+a*Np,d+c*Np) = val;
-                L1part(d+c*Np,b+a*Np) = val;
-                */
-
-
-
-
+                t_c += (clock()-tt0);
             }
+
         }
+
+
 
         //O = ones(Na);
         //a = convert_to<uvec>::from(kron(O, stream(0)));
@@ -218,7 +220,10 @@ void ccd::L1_block_multiplication(){
         //locations.set_size(values.size(), 2);
         //locations.col(0) = stream(0) + Np*stream(1);
         //locations.col(1) = stream(2) + Np*stream(3);
-        L1part = sp_mat(coo.t(), vals, Np2,Np2);
+        t0 = clock();
+
+        L1part = sp_mat(coo, vals, Np2,Np2); //this is what slows down the calculation: is it possible to rearrange the elements somehow? (in column increasing order?)
+        //L1part = sp_mat(Np2,Np2); //this is what slows down the calculation: is it possible to rearrange the elements somehow? (in column increasing order?)
         ts += (clock()-t0);
         t0 = clock();
         Ttemp = T.rows(stream(4));
@@ -228,7 +233,11 @@ void ccd::L1_block_multiplication(){
         tm += (clock()-t0);
 
     }
-    cout << "Setup time:" <<  (float)(ti)/CLOCKS_PER_SEC << endl;
+    cout << "d  time:" <<  (float)(t_d)/CLOCKS_PER_SEC << endl;
+    cout << "a  time:" <<  (float)(t_a)/CLOCKS_PER_SEC << endl;
+    cout << "b  time:" <<  (float)(t_b)/CLOCKS_PER_SEC << endl;
+    cout << "c  time:" <<  (float)(t_c)/CLOCKS_PER_SEC << endl;
+    cout << "Setup time:" <<  (float)(ts)/CLOCKS_PER_SEC << endl;
     cout << "Init  time:" <<  (float)(ti)/CLOCKS_PER_SEC << endl;
     cout << "Mult  time:" <<  (float)(tm)/CLOCKS_PER_SEC << endl;
     //L1 *= .5;
