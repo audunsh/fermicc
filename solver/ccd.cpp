@@ -189,10 +189,8 @@ void ccd::L1_block_multiplication(){
                 tt0 = clock(); //this is the current bottleneck
                 c = stream(2)(q);
                 d = stream(3)(q);
-                val = iSetup.bs.v2(a+Nh,b+Nh,c+Nh,d+Nh);
+                val = 0; //iSetup.bs.v2(a+Nh,b+Nh,c+Nh,d+Nh);
                 t_b += (clock()-tt0);
-
-
 
                 tt0 = clock();
                 cd = c + d* Np;
