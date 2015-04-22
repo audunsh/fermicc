@@ -174,6 +174,7 @@ void ccd::L1_block_multiplication(){
             a = stream(0)(p);
             b = stream(1)(p);
             ab = a + b*Np;
+            //Interaction below has already passed d(k_p+k_q, k_r + k_s) && m_p==m_r && m_q == m_s
             val = iSetup.bs.v2(a+Nh,b+Nh,a+Nh,b+Nh);
             //L1part(ab,ab) = val;
             coo(0,mm) = ab;
@@ -183,13 +184,14 @@ void ccd::L1_block_multiplication(){
             t_a += (clock()-tt0);
 
             //NOTE: Actually going through the kroenecker deltas here, possible to skip many tests in the interaction p==r, q==s
+            //Interaction below has already passed d(k_p+k_q, k_r + k_s)
 
             for(uint q = p+1; q<Na; ++q){
                 //more symmetries to utilize here (spin)
                 tt0 = clock(); //this is the current bottleneck
                 c = stream(2)(q);
                 d = stream(3)(q);
-                val = 0; //iSetup.bs.v2(a+Nh,b+Nh,c+Nh,d+Nh);
+                val = iSetup.bs.v2(a+Nh,b+Nh,c+Nh,d+Nh); //create separate function here
                 t_b += (clock()-tt0);
 
                 tt0 = clock();
