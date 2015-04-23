@@ -40,7 +40,6 @@ ccd::ccd(electrongas bs){
 
     iSetup.sVhpph();
     cout << "Vhpph init time:" <<  (float)(clock()-t)/CLOCKS_PER_SEC << endl;
-    t = clock();
 
     //convert interaction data to flexmat objects
     vhhhh.init(iSetup.vValsVhhhh, iSetup.iVhhhh, iSetup.jVhhhh, iSetup.kVhhhh, iSetup.lVhhhh, iSetup.iNh, iSetup.iNh, iSetup.iNh, iSetup.iNh);
@@ -119,6 +118,63 @@ ccd::ccd(electrongas bs){
 
 }
 
+void ccd::L1_dense_multiplication(){
+
+    uint N = iSetup.bmVpppp.uN; //number of blocks
+    int Np = iSetup.iNp;
+    int Nh = iSetup.iNh;
+    int Np2 = Np*Np;
+
+    field<uvec> stream;
+
+    vec vals;
+    umat coo;
+    uint a,b,c,d, Na, mm,ab,cd;
+
+    //sp_mat L1part(Np2, Np2);
+    //sp_mat Ttemp(Np2, Nh*Nh);
+    mat tempStorage, Ttemp;
+    double val;
+
+
+    mat V;
+    for(uint i = 0; i < N; ++i){
+
+        V.clear();
+
+
+        stream = iSetup.bmVpppp.get_block(i); //get current block
+        uint Na = stream(0).size(); //is the usage of uint acceptable for these sized matrices? //dimension of matrix
+        V.set_size(Na, Na);
+        for(uint p = 0; p<Na; ++p){
+            //tt0 = clock();
+            a = stream(0)(p);
+            b = stream(1)(p);
+            ab = a + b*Np;
+            //Interaction below has already passed d(k_p+k_q, k_r + k_s) && m_p==m_r && m_q == m_s
+            val = iSetup.bs.v2(a+Nh,b+Nh,a+Nh,b+Nh);
+
+            V(p,p) = val;
+
+            //NOTE: Actually going through the kroenecker deltas here, possible to skip many tests in the interaction p==r, q==s
+            //Interaction below has already passed d(k_p+k_q, k_r + k_s)
+
+            for(uint q = p+1; q<Na; ++q){
+                c = stream(2)(q);
+                d = stream(3)(q);
+                val = iSetup.bs.v2(a+Nh,b+Nh,c+Nh,d+Nh); //create separate function here
+                V(p,q) = val;
+                V(q,p) = val;
+                //t_b += (clock()-tt0);
+            }
+
+        }
+        Ttemp = T.rows_dense(stream(4)); //load only elements in row
+        tempStorage = V*Ttemp;
+
+    }
+}
+
 void ccd::L1_block_multiplication(){
     //perform Vpppp.pq_rs()*T.pq_Rs() using the block scheme
     clock_t t0, ti,tm,ts;
@@ -163,7 +219,8 @@ void ccd::L1_block_multiplication(){
         L1part.set_size(Np2,Np2);
 
         stream = iSetup.bmVpppp.get_block(i);
-        uint Na = stream(0).size();
+
+        uint Na = stream(0).size(); //is the usage of uint acceptable for these sized matrices?
         coo.set_size(2,Na*Na);
         vals.set_size(Na*Na);
         mm = 0;
@@ -226,7 +283,7 @@ void ccd::L1_block_multiplication(){
         //L1part = sp_mat(Np2,Np2); //this is what slows down the calculation: is it possible to rearrange the elements somehow? (in column increasing order?)
         ts += (clock()-t0);
         t0 = clock();
-        Ttemp = T.rows(stream(4));
+        Ttemp = T.rows(stream(4)); //load only elements in row 
         ti += (clock()-t0);
         t0 = clock();
         L1 += L1part*Ttemp;
@@ -292,6 +349,7 @@ void ccd::advance(){
     if(timing){t = clock();}
     //L1 = vpppp.pq_rs()*T.pq_rs();
     L1_block_multiplication();
+    //L1_dense_multiplication();
     if(timing){
         cout << "Time spent on L1:" << (clock() - (float)t)/CLOCKS_PER_SEC << endl;
         t = clock();}
@@ -334,7 +392,7 @@ void ccd::advance(){
         cout << "Time spent on Q4:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
         t = clock();}
 
-    T.update(vpphh.pq_rs() + .5*(L1 + L2) + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4, Np, Nq, Nr, Ns);
+    T.update(vpphh.pq_rs() + .5*(0*L1 + L2) + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4, Np, Nq, Nr, Ns);
     T.set_amplitudes(ebs.vEnergy); //divide updated amplitides by energy denominator
     if(timing){
         cout << "Time spent on T:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;

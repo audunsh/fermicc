@@ -47,6 +47,8 @@ public:
     SpMat<double> Vhhhh;
     SpMat<double> Vhpph;
 
+    field<uvec> blocksVpphh;
+
     uvec aVpppp;
     uvec bVpppp;
     uvec cVpppp;

@@ -31,12 +31,21 @@ public:
     void map_indices();
     field<uvec> row_indices;
     field<uvec> col_indices;
+    field<uvec> col_uniques;
     uvec row_lengths;
     uvec col_lengths;
+    uvec cols_i;
+    uvec rows_i;
+    ivec col_ptrs;
+    ivec MCols; //mapping for the columns of the dense block
+
 
     void shed_zeros();
 
     void set_amplitudes(vec Energy);
+
+    void partition(field<vec> fBlocks);
+
     void update(sp_mat spC, int Np, int Nq, int Nr, int Ns);
     vec vEnergy;
 
@@ -51,6 +60,7 @@ public:
 
     sp_mat smV;
     sp_mat rows(uvec urows); //returns a identically sized sp_mat with only urows set to non-zero
+    mat rows_dense(uvec urows); //returns a identically sized sp_mat with only urows set to non-zero
 
     umat locations;
 

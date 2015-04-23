@@ -806,6 +806,7 @@ void initializer::sVhhpp(){
 
     field<uvec> TT;
     TT.set_size(K_unique.size(), 2);
+    //blocksVpphh.set_size(2*K_unique.size());
     int iN = 0;
 
     for(int i = 0; i < K_unique.size(); ++i){
@@ -814,6 +815,10 @@ void initializer::sVhhpp(){
 
         vec Tab = AB.elem(find(KAB==K_unique(i)));
         vec ONp = ones(Tab.size());
+
+        //Storing the blocks for Vpphh (amplitude tensor)
+        //blocksVpphh(2*i) = Tab;
+        //blocksVpphh(2*i+1) = Tij;
 
 
         if(Tij.size() != 0 && Tab.size() != 0){
