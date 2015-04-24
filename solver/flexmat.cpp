@@ -126,8 +126,11 @@ mat flexmat::rows_dense(uvec urows){
 
 
     //2. set up M(rows.size()+1, longest row)
+    MCols.clear();
+    MCols.set_size(blocksize);
 
-    ivec MCols(blocksize);
+
+    //ivec MCols(blocksize);
     for(uint i = 0; i < blocksize; ++i){
         MCols(i) = -1;
     }

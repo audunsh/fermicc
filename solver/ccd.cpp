@@ -120,6 +120,7 @@ ccd::ccd(electrongas bs){
 }
 
 void ccd::L1_dense_multiplication(){
+    L1.clear();
 
     uint N = iSetup.bmVpppp.uN; //number of blocks
     int Np = iSetup.iNp;
@@ -131,6 +132,7 @@ void ccd::L1_dense_multiplication(){
     vec vals;
     umat coo;
     uint a,b,c,d, Na, mm,ab,cd;
+    uint total_elements = 0; //total number of elements calulcated;
 
     //sp_mat L1part(Np2, Np2);
     //sp_mat Ttemp(Np2, Nh*Nh);
@@ -138,8 +140,8 @@ void ccd::L1_dense_multiplication(){
     double val;
 
 
-    field<mat> fmLocations;
-    field<vec> fvValues;
+    field<umat> fmLocations(N);
+    field<vec> fvValues(N);
 
     mat V;
     for(uint i = 0; i < N; ++i){
@@ -174,16 +176,69 @@ void ccd::L1_dense_multiplication(){
 
         }
 
-        uvec rows_in_block = stream(4);
+        //uvec rows_in_block = stream(4);
         //cout << rows_in_block.size() << endl;
         //T.row_lengths.save("row_inspection.txt", raw_ascii);
 
         //perform multiplication and cast to sparse matrix L1;
-        Ttemp = T.rows_dense(rows_in_block); //load only elements in row
+        Ttemp = T.rows_dense(stream(4)); //load only elements in row
+
+        //T.MCols; //order of columns to cast back
+        //st ream(4); //order of rows to cast back
+
+        tempStorage = V*Ttemp;
+
+        int N_elems = T.MCols.size()*stream(4).size();
+        umat locations(2, N_elems);
+        vec values(N_elems);
+
+
+
+        uint count = 0;
+        for(uint p = 0; p<stream(4).size(); ++p ){
+            for(uint q = 0; q<T.MCols.size(); ++q ){
+                locations(0, count) = stream(4)(p);
+                locations(1, count) = T.MCols(q);
+                values(count) = tempStorage(p,q);
+                count += 1;
+            }
+        }
+
+
+        fmLocations(i) = locations;
+        fvValues(i) = values;
+
+        //Final step: insert these locations onto a sparse matrix L1;
+
+        //1. count number of nonzeros
+
+        //2. fill locations
+        //3. populate L1
+
+
+
+
+
         //T.rows_dense(stream(4));
-        //tempStorage = V*Ttemp;
+        total_elements += count;
+
 
     }
+    //create sparse L1'
+    cout << total_elements << endl;
+    umat mCOO(2, total_elements);
+    vec vData(total_elements);
+    int iCount=0;
+    for(uint i = 0; i < N; ++i){
+        for(uint j = 0; j < fvValues(i).size(); ++j){
+            mCOO(0, iCount) = fmLocations(i)(0,j);
+            mCOO(1, iCount) = fmLocations(i)(1,j);
+            vData(iCount) = fvValues(i)(j);
+            iCount += 1;
+        }
+    }
+    cout << vData.size() << endl;
+    L1 = sp_mat(mCOO, vData, iSetup.iNp*iSetup.iNp,iSetup.iNh*iSetup.iNh);
 }
 
 void ccd::L1_block_multiplication(){
@@ -403,7 +458,7 @@ void ccd::advance(){
         cout << "Time spent on Q4:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
         t = clock();}
 
-    T.update(vpphh.pq_rs() + .5*(0*L1 + L2) + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4, Np, Nq, Nr, Ns);
+    T.update(vpphh.pq_rs() + .5*(L1 + L2) + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4, Np, Nq, Nr, Ns);
     T.set_amplitudes(ebs.vEnergy); //divide updated amplitides by energy denominator
     if(timing){
         cout << "Time spent on T:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
