@@ -56,6 +56,7 @@ ccd::ccd(electrongas bs){
 
     //set up first T2-amplitudes
     T.init(iSetup.vValsVpphh, iSetup.aVpphh, iSetup.bVpphh, iSetup.iVpphh, iSetup.jVpphh, iSetup.iNp, iSetup.iNp, iSetup.iNh, iSetup.iNh);
+    T.shed_zeros();
     T.set_amplitudes(bs.vEnergy);
     t = clock();
     T.map_indices();
@@ -137,6 +138,9 @@ void ccd::L1_dense_multiplication(){
     double val;
 
 
+    field<mat> fmLocations;
+    field<vec> fvValues;
+
     mat V;
     for(uint i = 0; i < N; ++i){
 
@@ -169,8 +173,15 @@ void ccd::L1_dense_multiplication(){
             }
 
         }
-        Ttemp = T.rows_dense(stream(4)); //load only elements in row
-        tempStorage = V*Ttemp;
+
+        uvec rows_in_block = stream(4);
+        //cout << rows_in_block.size() << endl;
+        //T.row_lengths.save("row_inspection.txt", raw_ascii);
+
+        //perform multiplication and cast to sparse matrix L1;
+        Ttemp = T.rows_dense(rows_in_block); //load only elements in row
+        //T.rows_dense(stream(4));
+        //tempStorage = V*Ttemp;
 
     }
 }
@@ -348,8 +359,8 @@ void ccd::advance(){
 
     if(timing){t = clock();}
     //L1 = vpppp.pq_rs()*T.pq_rs();
-    L1_block_multiplication();
-    //L1_dense_multiplication();
+    //L1_block_multiplication();
+    L1_dense_multiplication();
     if(timing){
         cout << "Time spent on L1:" << (clock() - (float)t)/CLOCKS_PER_SEC << endl;
         t = clock();}
@@ -402,6 +413,7 @@ void ccd::advance(){
     if(timing){
         cout << "Time spent on e:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
         t = clock();}
+    T.shed_zeros();
     T.map_indices();
 }
 

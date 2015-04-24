@@ -116,8 +116,10 @@ mat flexmat::rows_dense(uvec urows){
     uint n_cols = 0; //total number of column indices
     for(uint i = 0; i<urows.size(); ++i){
         n_cols += row_lengths(urows(i));
-        if(row_lengths(urows(i))<blocksize){
-                blocksize = row_lengths(urows(i));
+        //cout << "Updating blocksize:" << row_lengths(urows(i)) << endl;
+        if(row_lengths(urows(i))>blocksize){
+
+            blocksize = row_lengths(urows(i));
         }
     }
 
@@ -131,11 +133,14 @@ mat flexmat::rows_dense(uvec urows){
     }
 
     //find all unique column indices
-    ivec all_columns(n_cols);
+    all_columns.clear();
+    all_columns.set_size(n_cols);
     uint c = 0; //counter
+    //uint elements_in_current_row;
     uint current_col, current_row, current_ind;
     for(uint i = 0; i < urows.size(); ++i){
         current_row = urows(i);
+        //element_in_row = row_lengths(current_row);
         for(uint j = 0; j< row_lengths(current_row); ++j){
             current_ind = row_indices(current_row)(j); //index to element in COO rep.
             all_columns(c) = cols_i(current_ind);
@@ -157,74 +162,31 @@ mat flexmat::rows_dense(uvec urows){
 
     //Cast all elements to a dense matrix
     mat M(urows.size(), blocksize);
+    //mat M;
+    //M.randn(urows.size(), blocksize);
+    //cout << urows.size() << " " << blocksize << " " << n_cols << endl;
+
+
     uint found = 0;
 
-    for(int i = 0; i < urows.size(); ++i){
+    for(uint i = 0; i < urows.size(); ++i){
         current_row = urows(i);
         for(uint j = 0; j< row_lengths(current_row); ++j){
             current_ind = row_indices(current_row)(j); //index to element in COO rep.
             current_col = cols_i(current_ind);
             M(i, col_ptrs(current_col)) = vValues(current_ind);
+            //M(i,  0) = 0; //vValues(current_ind); //Why does this line cause a segmentation fault?!
         }
     }
+
 
     //reset col_ptrs for next block
     for(uint i = 0; i < MCols.size(); ++i){
         col_ptrs(MCols(i)) = -1;
     }
 
+
     return M;
-
-
-    //4. begin assigning M(1, ...)
-    //5. return M
-
-
-    /*
-
-
-
-
-
-    //1. count total number of elements
-    int blocksize = 0; //number of columns in block
-    for(uint i = 0; i<urows.size(); ++i){
-        blocksize += row_lengths(urows(i));
-    }
-    ivec icols(blocksize); //a vector containing all non zero columns
-
-    uint n = 0;
-    uint current_row;
-    //2. insert all column indices
-    for(uint i = 0; i<urows.size(); ++i){
-        current_row = urows(i);
-        for(uint j = 0; j< row_lengths(current_row); ++j){
-            icols(n) = col_indices(current_row)(j);
-            n += 1;
-        }
-    }
-
-    ivec iunique_cols = unique(icols);
-
-    mat M(urows.size()+1, iunique_cols.size());
-
-    //3. create a unique mapping between the columns and
-    for(uint i = 0; i<iunique_cols.size(); ++i){
-        M(0, i) = iunique_cols(i);
-        col_ptrs(iunique_cols(i)) = i;
-    }
-
-    //set remaining elements in matrix
-    for(uint i = 0; i<urows.size(); ++i){
-        current_row = urows(i);
-        for(uint j = 0; j< row_lengths(current_row); ++j){
-            n = row_indices(current_row)(j); //index of element in COO array
-            M(i+1,col_ptrs(cols_i(n))) = vValues(n);
-        }
-    }
-    return M;
-    */
-
 }
 
 void flexmat::set_amplitudes(vec Energy){
@@ -250,6 +212,15 @@ void flexmat::shed_zeros(){
     vValues = vValues.elem(nnz);
 
     //vValsVpppp.elem(find(vValsVpppp != 0))
+
+    cols_i = conv_to<uvec>::from(vr + vs*iNr);
+    rows_i = conv_to<uvec>::from(vp + vq*iNp);
+
+    int sz = iNr*iNs;
+    col_ptrs.set_size(sz); //used in mapping the values, probably inefficient
+    for(uint i = 0; i<sz; ++i){
+        col_ptrs(i) = -1;
+    }
 }
 
 void flexmat::update(sp_mat spC, int Np, int Nq, int Nr, int Ns){

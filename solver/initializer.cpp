@@ -372,25 +372,6 @@ void initializer::sVppppO(){
 
 void initializer::sVppppBlock(){
     //Block interaction (store only blocks)
-
-
-
-    /*
-    uvec A, B; //vectors containing indices (row and column)
-    B.set_size(iNp*((iNp+1.0)/2.0));
-    A.set_size(iNp*((iNp+1.0)/2.0));
-
-    uint n = 0;
-    for(uint a = 0; a<iNp; ++a){
-        for(uint b = a; b<iNp; ++b){
-            A(n) = a;
-            B(n) = b;
-            n += 1;
-        }
-    }
-    */
-
-
     vec AB = linspace(0,iNp2-1,iNp2);
     uvec B = conv_to<uvec>::from(floor(AB/iNp)); //convert to unsigned integer indexing vector
     uvec A = conv_to<uvec>::from(AB) - B*iNp;

@@ -38,6 +38,7 @@ public:
     uvec rows_i;
     ivec col_ptrs;
     ivec MCols; //mapping for the columns of the dense block
+    ivec all_columns;
 
 
     void shed_zeros();
