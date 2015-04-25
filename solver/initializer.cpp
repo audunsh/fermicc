@@ -21,7 +21,7 @@ initializer::initializer(electrongas Bs)
     iNp2 = iNp*iNp;
     iNh2 = iNh*iNh;
     iNhp = iNh*iNp;
-    iNmax = 2*bs.vKx.max()+2;
+    iNmax =2*bs.vKx.max()+3;
     iNmax2 = iNmax*iNmax;
 }
 

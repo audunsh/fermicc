@@ -45,12 +45,13 @@ void electrongas::generate_state_list(int Ne, double rs, int Np){
     //cout << "Up to energy level " << N << " there will be " << nStates << " states." << endl;
 
 
-    dPrefactor1 = 3.0/(iNparticles*dr_s*dr_s*dr_s); //this is correct
+    //dPrefactor1 = 3.0/(iNparticles*dr_s*dr_s*dr_s); //this is correct
 
     //dL3 = nStates*4.0*pi*dr_s*dr_s*dr_s/3.0;
     dL3 = iNparticles*4.0*pi*dr_s*dr_s*dr_s/3.0;
+    //dL2 = iNparticles*pi*dr_s*dr_s;
     dL2 = pow(dL3, 2.0/3.0);
-    dPrefactor1 = 2*pi/dL2;
+    //dPrefactor1 = 2*pi/dL2;
     mu =0;
     //Setting up all all states
     mat k_combinations; // = zeros(nStates, 5);
@@ -134,8 +135,98 @@ double electrongas::h(int P, int Q){
     return vEnergy(P)*(P==Q);
 }
 
+double electrongas::v4(int p, int q){
+    //Dropped first kroenecker test to speed up calculations
+    //In the case <ab||ab>
+    double kax = vKx(p);
+    double kay = vKy(p);
+    double kaz = vKz(p);
+
+    double kbx = vKx(q);
+    double kby = vKy(q);
+    double kbz = vKz(q);
+
+    double val = 0;
+    double term2 = 0.0;
+
+    val = 4*pi/dL3;
+
+    double mas = vMs(p);
+    double mbs = vMs(q);
+
+    double kdiff1, kdiff2, kdiff3;
+
+    if(mas==mbs){
+        if(kax != kbx || kay != kby || kaz != kbz){
+
+            kdiff1 = kbx-kax;
+            kdiff2 = kby-kay;
+            kdiff3 = kbz-kaz;
+            term2 = dL2/((kdiff1*kdiff1 + kdiff2*kdiff2 + kdiff3*kdiff3)*4*pi*pi);
+        }
+
+    }
+    return -val*term2;
+}
+
+
+double electrongas::v3(int p, int q, int r, int s){
+    //Dropped first kroenecker test to speed up calculations
+    double kpx = vKx(p);
+    double kpy = vKy(p);
+    double kpz = vKz(p);
+
+    //No need for Kq here
+
+    double krx = vKx(r);
+    double kry = vKy(r);
+    double krz = vKz(r);
+
+    double ksx = vKx(s);
+    double ksy = vKy(s);
+    double ksz = vKz(s);
+
+    double val = 0;
+    double term1 = 0.0;
+    double term2 = 0.0;
+
+    val = 4*pi/dL3;
+
+    double mps = vMs(p);
+    double mqs = vMs(q);
+    double mrs = vMs(r);
+    double mss = vMs(s);
+
+    double kdiff1, kdiff2, kdiff3;
+
+    if(mps==mrs && mqs==mss){
+
+        if(kpx != krx || kpy != kry || kpz != krz){
+
+            kdiff1 = krx-kpx;
+            kdiff2 = kry-kpy;
+            kdiff3 = krz-kpz;
+            term1 = dL2/((kdiff1*kdiff1 + kdiff2*kdiff2 + kdiff3*kdiff3)*4*pi*pi);
+        }
+    }
+
+    if(mps==mss && mqs==mrs){
+
+        if(kpx != ksx || kpy != ksy || kpz != ksz){
+
+            kdiff1 = ksx-kpx;
+            kdiff2 = ksy-kpy;
+            kdiff3 = ksz-kpz;
+            term2 = dL2/((kdiff1*kdiff1 + kdiff2*kdiff2 + kdiff3*kdiff3)*4*pi*pi);
+        }
+
+    }
+    return val*(term1 - term2);
+}
+
+
 double electrongas::v2(int p, int q, int r, int s){
-    //alternate implementation, written for pedagogical reasons
+    //alternate implementation
     double kpx = vKx(p);
     double kpy = vKy(p);
     double kpz = vKz(p);
@@ -155,10 +246,11 @@ double electrongas::v2(int p, int q, int r, int s){
     double val = 0;
     double term1 = 0.0;
     double term2 = 0.0;
+    //double interaction = 0;
 
     if(kpx+kqx==krx+ksx && kpy+kqy==kry+ksy && kpz+kqz==krz+ksz){
 
-        val = 4*pi/dL3;
+        val = 1.0/dL3;
 
         double mps = vMs(p);
         double mqs = vMs(q);
@@ -167,6 +259,8 @@ double electrongas::v2(int p, int q, int r, int s){
 
         double kdiff1, kdiff2, kdiff3;
 
+
+
         if(mps==mrs && mqs==mss){
 
             if(kpx != krx || kpy != kry || kpz != krz){
@@ -174,7 +268,9 @@ double electrongas::v2(int p, int q, int r, int s){
                 kdiff1 = krx-kpx;
                 kdiff2 = kry-kpy;
                 kdiff3 = krz-kpz;
-                term1 = dL2/((kdiff1*kdiff1 + kdiff2*kdiff2 + kdiff3*kdiff3)*4*pi*pi);
+                term1 = dL2/((kdiff1*kdiff1 + kdiff2*kdiff2 + kdiff3*kdiff3)*pi);
+                //term1 = mu*mu + 4*pi*pi*(kdiff1*kdiff1 + kdiff2*kdiff2 + kdiff3*kdiff3)/dL2;
+                //interaction += 1.0/term1;
             }
         }
 
@@ -185,11 +281,14 @@ double electrongas::v2(int p, int q, int r, int s){
                 kdiff1 = ksx-kpx;
                 kdiff2 = ksy-kpy;
                 kdiff3 = ksz-kpz;
-                term2 = dL2/((kdiff1*kdiff1 + kdiff2*kdiff2 + kdiff3*kdiff3)*4*pi*pi);
+                term2 = dL2/((kdiff1*kdiff1 + kdiff2*kdiff2 + kdiff3*kdiff3)*pi);
+                //term2 = mu*mu + 4*pi*pi*(kdiff1*kdiff1 + kdiff2*kdiff2 + kdiff3*kdiff3)/dL2;
+                //interaction -= 1.0/term2;
             }
         }
     }
     return val*(term1 - term2);
+    //return 4*pi*interaction/dL3;
 }
 
 double electrongas::v(int P, int Q, int R, int S){

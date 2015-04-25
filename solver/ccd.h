@@ -48,6 +48,7 @@ public:
     flexmat fmI1, fmI2, fmI3, fmI4, fmI2temp, fmI3temp; //intermediates for CCD terms
 
     double CCSD_SG_energy();
+    double correlation_energy;
 
 
 };

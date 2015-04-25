@@ -26,7 +26,14 @@ ccd::ccd(electrongas bs){
 
     iSetup.sVppppBlock();
 
-    //iSetup.sVppppO();
+
+
+
+    //iSetup.sVppppO();  //DISABLE THIS ONE
+
+
+
+
     cout << "Vpppp init time:" <<  (float)(clock()- t)/CLOCKS_PER_SEC << endl;
     t = clock();
 
@@ -44,8 +51,12 @@ ccd::ccd(electrongas bs){
     //convert interaction data to flexmat objects
     vhhhh.init(iSetup.vValsVhhhh, iSetup.iVhhhh, iSetup.jVhhhh, iSetup.kVhhhh, iSetup.lVhhhh, iSetup.iNh, iSetup.iNh, iSetup.iNh, iSetup.iNh);
     vhhhh.shed_zeros();
+
+
     //vpppp.init(iSetup.vValsVpppp, iSetup.aVpppp, iSetup.bVpppp, iSetup.cVpppp, iSetup.dVpppp, iSetup.iNp, iSetup.iNp, iSetup.iNp, iSetup.iNp);
     //vpppp.shed_zeros();
+
+
     vhpph.init(iSetup.vValsVhpph, iSetup.iVhpph, iSetup.aVhpph, iSetup.bVhpph, iSetup.jVhpph, iSetup.iNh, iSetup.iNp, iSetup.iNp, iSetup.iNh);
     vhpph.shed_zeros();
     vhhpp.init(iSetup.vValsVhhpp, iSetup.iVhhpp, iSetup.jVhhpp, iSetup.aVhhpp, iSetup.bVhhpp, iSetup.iNh, iSetup.iNh, iSetup.iNp, iSetup.iNp);
@@ -76,21 +87,24 @@ ccd::ccd(electrongas bs){
     //L1_block_multiplication();
     //cout << "Blocked/sparse mult time:" <<  (float)(clock()-t)/CLOCKS_PER_SEC << endl;
 
-    //compare L1, L2
+    //compare Vpppp
+
 
     /*
-    for(int a = 0; a < iSetup.iNp; a++){
-        for(int b = 0; b < iSetup.iNp; b++){
+    for(int a = 0; a < iSetup.iNh; a++){
+        for(int b = 0; b < iSetup.iNh; b++){
             for(int c = 0; c < iSetup.iNh; c++){
                 for(int d = 0; d < iSetup.iNh; d++){
-                    if(L2(a + b*iSetup.iNp, c + d*iSetup.iNh) != L1(a + b*iSetup.iNp, c + d*iSetup.iNh)){
-                        cout << L2(a + b*iSetup.iNp, c + d*iSetup.iNh) << " " << L1(a + b*iSetup.iNp, c + d*iSetup.iNh) << endl;
+
+                    if(vhhhh.pq_rs()(a + b*iSetup.iNh, c + d*iSetup.iNh) != bs.v2(a , b, c,d)){
+                        cout << "Found discrepancy" << endl;
                     }
                 }
             }
         }
     }
     */
+
 
 
     /*
@@ -113,8 +127,12 @@ ccd::ccd(electrongas bs){
 
     for(int i = 0; i < 25; i++){
         //advance_intermediates();
+        cout << i+1 << " ";
         advance();
+
     }
+    //cout << CCSD_SG_energy() << endl;
+    cout << "Energy per electron:" << correlation_energy/iSetup.iNh << endl;
 
 
 }
@@ -122,20 +140,18 @@ ccd::ccd(electrongas bs){
 void ccd::L1_dense_multiplication(){
     L1.clear();
 
+
     uint N = iSetup.bmVpppp.uN; //number of blocks
-    int Np = iSetup.iNp;
     int Nh = iSetup.iNh;
-    int Np2 = Np*Np;
+
 
     field<uvec> stream;
 
     vec vals;
     umat coo;
-    uint a,b,c,d, Na, mm,ab,cd;
-    uint total_elements = 0; //total number of elements calulcated;
+    uint a,b,c,d, Na;
+    uint total_elements = 0; //total number of elements calculated;
 
-    //sp_mat L1part(Np2, Np2);
-    //sp_mat Ttemp(Np2, Nh*Nh);
     mat tempStorage, Ttemp;
     double val;
 
@@ -144,48 +160,38 @@ void ccd::L1_dense_multiplication(){
     field<vec> fvValues(N);
 
     mat V;
+
     for(uint i = 0; i < N; ++i){
-
         V.clear();
-
-
         stream = iSetup.bmVpppp.get_block(i); //get current block
-        uint Na = stream(0).size(); //is the usage of uint acceptable for these sized matrices? //dimension of matrix
+        Na = stream(0).size();
         V.set_size(Na, Na);
         for(uint p = 0; p<Na; ++p){
-            //tt0 = clock();
             a = stream(0)(p);
             b = stream(1)(p);
-            ab = a + b*Np;
+            //NOTE: Actually going through the kroenecker deltas here, possible to skip many tests in the interaction p==r, q==s
             //Interaction below has already passed d(k_p+k_q, k_r + k_s) && m_p==m_r && m_q == m_s
+            //val = iSetup.bs.v2(a+Nh,b+Nh);
             val = iSetup.bs.v2(a+Nh,b+Nh,a+Nh,b+Nh);
+
 
             V(p,p) = val;
 
-            //NOTE: Actually going through the kroenecker deltas here, possible to skip many tests in the interaction p==r, q==s
-            //Interaction below has already passed d(k_p+k_q, k_r + k_s)
 
+            //Interaction below has already passed d(k_p+k_q, k_r + k_s)
             for(uint q = p+1; q<Na; ++q){
                 c = stream(2)(q);
                 d = stream(3)(q);
+
                 val = iSetup.bs.v2(a+Nh,b+Nh,c+Nh,d+Nh); //create separate function here
+
                 V(p,q) = val;
                 V(q,p) = val;
-                //t_b += (clock()-tt0);
             }
-
         }
-
-        //uvec rows_in_block = stream(4);
-        //cout << rows_in_block.size() << endl;
-        //T.row_lengths.save("row_inspection.txt", raw_ascii);
 
         //perform multiplication and cast to sparse matrix L1;
         Ttemp = T.rows_dense(stream(4)); //load only elements in row
-
-        //T.MCols; //order of columns to cast back
-        //st ream(4); //order of rows to cast back
-
         tempStorage = V*Ttemp;
 
         int N_elems = T.MCols.size()*stream(4).size();
@@ -207,25 +213,9 @@ void ccd::L1_dense_multiplication(){
 
         fmLocations(i) = locations;
         fvValues(i) = values;
-
-        //Final step: insert these locations onto a sparse matrix L1;
-
-        //1. count number of nonzeros
-
-        //2. fill locations
-        //3. populate L1
-
-
-
-
-
-        //T.rows_dense(stream(4));
         total_elements += count;
-
-
     }
-    //create sparse L1'
-    cout << total_elements << endl;
+    //create sparse L1 from each block
     umat mCOO(2, total_elements);
     vec vData(total_elements);
     int iCount=0;
@@ -237,7 +227,6 @@ void ccd::L1_dense_multiplication(){
             iCount += 1;
         }
     }
-    cout << vData.size() << endl;
     L1 = sp_mat(mCOO, vData, iSetup.iNp*iSetup.iNp,iSetup.iNh*iSetup.iNh);
 }
 
@@ -409,7 +398,7 @@ void ccd::advance(){
     int Nq = iSetup.iNp;
     int Nr = iSetup.iNh;
     int Ns = iSetup.iNh;
-    bool timing = true; //time each contribution calculation and print to screen (each iteration)
+    bool timing = false; //time each contribution calculation and print to screen (each iteration)
     clock_t t;
 
     if(timing){t = clock();}
@@ -509,5 +498,8 @@ void ccd::energy(){
     for(int i = 0; i<Cv.n_cols; i++){
         C_+= Cv(i,i);
     }
+
+
+    correlation_energy = .25*C_;
     cout << "(CCD)Energy:" << .25*C_ << endl;
 }

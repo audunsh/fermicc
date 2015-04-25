@@ -15,6 +15,8 @@ public:
     double absdiff2(rowvec A, rowvec B);
     double v(int P, int Q, int R, int S);
     double v2(int p, int q, int r, int s);
+    double v3(int p, int q, int r, int s); //skip momentum kroenecker k_p + k_q == k_r + k_s
+    double v4(int p, int q); //for the case <pq||pq>
 
 
     double f(int P, int Q);
@@ -39,7 +41,7 @@ public:
     double mu;
     int iNparticles;
 
-    double pi = datum::pi; //4*atan(1);
+    double pi = 4*atan(1);
 
     //added vectorized functionality, 21.03.2015
     ivec vKx,vKy,vKz, vMs;

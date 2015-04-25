@@ -24,13 +24,37 @@ using namespace arma;
 int main()
 {
     electrongas fgas;
-    fgas.generate_state_list(35.0,1.0, 14);
+    fgas.generate_state_list(3.0,1.0, 14);
 
     //cout << "Energy per particle:" << fgas.eref(14)/14.0 << " (a.u)"  << endl;
     cout << "# Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;
     cout << "# G.Baardsens results:" << 1.9434 << endl;
 
     ccd solver(fgas);
+    //cout << pow(2, 2.0/3.0) << endl;
+
+    /*
+    double val = 0;
+    for(int p = 0; p < fgas.iNbstates; ++p){
+        for(int q = 0; q < fgas.iNbstates; ++q){
+            for(int r = 0; r < fgas.iNbstates; ++r){
+                for(int s = 0; s < fgas.iNbstates; ++s){
+                    val = fgas.v2(p,q,r,s);
+                    if(val != 0){
+                        cout << p << " "<< q << " "<< r << " "<< s  << " " << val << endl;
+                    }
+                }
+            }
+        }
+    }
+    */
+
+
+
+
+
+
+
 
     //testing sp_mat initialization time
     /*
