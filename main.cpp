@@ -24,13 +24,14 @@ using namespace arma;
 int main()
 {
     electrongas fgas;
-    fgas.generate_state_list(3.0,1.0, 14);
+    fgas.generate_state_list(10.0,1.0, 14);
 
     //cout << "Energy per particle:" << fgas.eref(14)/14.0 << " (a.u)"  << endl;
     cout << "# Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;
     cout << "# G.Baardsens results:" << 1.9434 << endl;
 
     ccd solver(fgas);
+    //fgas.print();
     //cout << pow(2, 2.0/3.0) << endl;
 
     /*

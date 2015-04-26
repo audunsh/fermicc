@@ -18,6 +18,8 @@ public:
     double v3(int p, int q, int r, int s); //skip momentum kroenecker k_p + k_q == k_r + k_s
     double v4(int p, int q); //for the case <pq||pq>
 
+    void print();
+
 
     double f(int P, int Q);
     double h(int P, int Q);

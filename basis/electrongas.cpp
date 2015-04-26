@@ -64,7 +64,7 @@ void electrongas::generate_state_list(int Ne, double rs, int Np){
         for(int y = -Nmax; y<Nmax+1; y++){
             for(int z = -Nmax; z<Nmax+1; z++){
                 energy = (x*x + y*y + z*z);
-                e2 = 2*energy*(pi*pi)/(dL2);
+                e2 = 2*energy*(pi*pi)/(dL2); //consistent with Gustavs code (ref. SpBasisPW3d.f90)
                 if(energy < iN + 1){
                     k_combinations(index_count, 0) = e2; //energy*prefactor2*(53.63609*pi*pi/L3);
                     k_combinations(index_count, 1) = x;
@@ -396,3 +396,11 @@ double electrongas::analytic_energy(int nParticles){
     return .5*(2.21/(dr_s * dr_s) - 0.916/dr_s)*nParticles;
 }
 
+void electrongas::print(){
+    //print states in increasing order
+    int N = iNbstates;
+    for(int i = 0; i < N; ++i){
+        cout << i << "     " << vEnergy(i) << "     " << vKx(i) << "     " << vKy(i) << "     " << vKz(i) << "     " << vMs(i) << endl;
+    }
+
+}

@@ -373,7 +373,9 @@ void ccd::advance_intermediates(){
     sp_mat I4temp = T.p_rsq()*vhhpp.pqs_r();
 
 
-    L1 = .5*vpppp.pq_rs()*T.pq_rs();
+    //L1 = .5*vpppp.pq_rs()*T.pq_rs();
+    L1_dense_multiplication();
+
     L2 = .5*T.pq_rs()*spI1;
     fmL3.update(T.pr_qs()*fmI2.rp_qs(), Np, Nr, Nq, Ns);
     L3 = fmL3.pr_qs()-fmL3.pr_sq()-fmL3.rp_qs()+fmL3.rp_sq();
@@ -384,7 +386,7 @@ void ccd::advance_intermediates(){
     fmQ3.update_as_q_prs(.5*I4temp*T.q_prs(), Np, Nq, Nr, Ns);
     Q3 = fmQ3.pq_rs()-fmQ3.qp_rs();
 
-    T.update(vpphh.pq_rs() + L1+L2+L3-Q2-Q3, Np, Nq, Nr, Ns);
+    T.update(vpphh.pq_rs() + .5*L1+L2+L3-Q2-Q3, Np, Nq, Nr, Ns);
     T.set_amplitudes(ebs.vEnergy); //divide updated amplitides by energy denominator
 
     energy();
@@ -418,7 +420,7 @@ void ccd::advance(){
         t = clock();}
 
     fmL3.update(vhpph.sq_rp()*T.qs_pr(), Ns, Nq, Np, Nr);
-    L3 = fmL3.rq_sp() - fmL3.qr_sp() - fmL3.rq_ps() + fmL3.qr_ps();
+    L3 = fmL3.rq_sp() - fmL3.qr_sp() -fmL3.rq_ps() +fmL3.qr_ps();
     if(timing){
         cout << "Time spent on L3:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
         t = clock();}
