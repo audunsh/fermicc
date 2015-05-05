@@ -7,8 +7,8 @@
 #include "solver/unpack_sp_mat.h"
 #include <time.h>
 
-#include <eigen/Eigen/Dense>
-#include <eigen/Eigen/Sparse>
+//#include <eigen/Eigen/Dense>
+//#include <eigen/Eigen/Sparse>
 
 using namespace std;
 using namespace arma;

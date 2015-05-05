@@ -12,8 +12,8 @@
 #include "solver/flexmat.h"
 
 
-#include <eigen/Eigen/Dense>
-#include <eigen/Eigen/Sparse>
+//#include <eigen/Eigen/Dense>
+//#include <eigen/Eigen/Sparse>
 
 
 
@@ -24,7 +24,7 @@ using namespace arma;
 int main()
 {
     electrongas fgas;
-    fgas.generate_state_list(10.0,1.0, 14);
+    fgas.generate_state_list(20.0,1.0, 14);
 
     //cout << "Energy per particle:" << fgas.eref(14)/14.0 << " (a.u)"  << endl;
     cout << "# Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;
