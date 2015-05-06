@@ -39,6 +39,8 @@ public:
     void L1_block_multiplication(); //block ladder calculation
     void L1_dense_multiplication(); //block ladder calculation
 
+    void check_matrix_consistency();
+
     void energy();
 
     //The diagrams contributing to the CCD energy

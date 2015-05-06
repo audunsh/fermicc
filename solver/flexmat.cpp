@@ -194,12 +194,23 @@ mat flexmat::rows_dense(uvec urows){
 
 void flexmat::set_amplitudes(vec Energy){
     //Divide all values by corresponding energy (used only on amplitudes)
+
    vEnergy = Energy;
+   /*
    vec vEa = vEnergy.elem(vp + iNr);
    vec vEb = vEnergy.elem(vq + iNr);
    vec vEi = vEnergy.elem(vr);
    vec vEj = vEnergy.elem(vs);
    vValues = vValues/(vEi + vEj - vEa - vEb);
+   */
+
+   for(int i = 0; i < vValues.size(); ++i){
+       //cout << vp.size() << endl;
+       //cout << vEnergy(vp(i)) << endl;
+
+
+       vValues(i) = vValues(i)/(vEnergy(vr(i)) + vEnergy(vs(i)) - vEnergy(vp(i)+iNr) - vEnergy(vq(i)+iNr));
+   }
 
 }
 
@@ -252,7 +263,7 @@ void flexmat::update(sp_mat spC, int Np, int Nq, int Nr, int Ns){
 
 
 sp_mat flexmat::rows(uvec urows){
-    //returns a sparse matrix with the requested rows
+    //returns a sparse matrix containing only the requested rows
     sp_mat M(iNp*iNq,iNr*iNs);
     uint n,current_row;
     for(uint i = 0; i<urows.size(); ++i){

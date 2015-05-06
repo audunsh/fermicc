@@ -11,6 +11,7 @@ class electrongas
 {
 public:
     electrongas();
+    void generate_state_list2(int Ne, double rs, int Np);
     void generate_state_list(int Ne, double rs, int Np);
     double absdiff2(rowvec A, rowvec B);
     double v(int P, int Q, int R, int S);
@@ -43,7 +44,8 @@ public:
     double mu;
     int iNparticles;
 
-    double pi = 4*atan(1);
+    //double pi = 4*atan(1);
+    double pi = 3.1415;
 
     //added vectorized functionality, 21.03.2015
     ivec vKx,vKy,vKz, vMs;

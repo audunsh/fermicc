@@ -698,6 +698,7 @@ void initializer::sVhhhh(){
         }
     }
     //cout << "Number of discrepancies in Vhhhh:" <<  disccount << endl;
+    */
 
     double d1,d2;
     int discs = 0;
@@ -710,15 +711,16 @@ void initializer::sVhhhh(){
                     if(d1 != d2){
                         //cout << d1 << " " << d2 << endl;
                         discs += 1;
+                        Vhhhh(i + j*iNh, k + l*iNh) = d2;
 
                     }
                 }
             }
         }
     }
-    */
 
-    //cout << "Discrepancy found in Vhhhh:" << discs << endl;
+
+    cout << "Discrepancy found in Vhhhh:" << discs << endl;
 
 }
 
@@ -732,13 +734,13 @@ void initializer::sVhhpp(){
     uvec J = conv_to<uvec>::from(floor(IJ/iNh)); //convert to unsigned integer indexing vector
     uvec I = conv_to<uvec>::from(IJ) - J*iNh;
 
-    ivec KIx = bs.vKx.elem(I);
-    ivec KIy = bs.vKy.elem(I);
-    ivec KIz = bs.vKz.elem(I);
+    //ivec KIx = bs.vKx.elem(I);
+    //ivec KIy = bs.vKy.elem(I);
+    //ivec KIz = bs.vKz.elem(I);
 
-    ivec KJx = bs.vKx.elem(J);
-    ivec KJy = bs.vKy.elem(J);
-    ivec KJz = bs.vKz.elem(J);
+    //ivec KJx = bs.vKx.elem(J);
+    //ivec KJy = bs.vKy.elem(J);
+    //ivec KJz = bs.vKz.elem(J);
 
     ivec KIJx = bs.vKx.elem(I)+bs.vKx.elem(J);
     ivec KIJy = iNmax*(bs.vKy.elem(I)+bs.vKy.elem(J));
@@ -754,13 +756,13 @@ void initializer::sVhhpp(){
     uvec B = conv_to<uvec>::from(floor(AB/iNp)); //convert to unsigned integer indexing vector
     uvec A = conv_to<uvec>::from(AB) - B*iNp;
 
-    ivec KAx = bs.vKx.elem(A+iNh);
-    ivec KAy = bs.vKy.elem(A+iNh);
-    ivec KAz = bs.vKz.elem(A+iNh);
+    //ivec KAx = bs.vKx.elem(A+iNh);
+    //ivec KAy = bs.vKy.elem(A+iNh);
+    //ivec KAz = bs.vKz.elem(A+iNh);
 
-    ivec KBx = bs.vKx.elem(B+iNh);
-    ivec KBy = bs.vKy.elem(B+iNh);
-    ivec KBz = bs.vKz.elem(B+iNh);
+    //ivec KBx = bs.vKx.elem(B+iNh);
+    //ivec KBy = bs.vKy.elem(B+iNh);
+    //ivec KBz = bs.vKz.elem(B+iNh);
 
     ivec KABx = bs.vKx.elem(A+iNh)+bs.vKx.elem(B+iNh);
     ivec KABy = iNmax*(bs.vKy.elem(A+iNh)+bs.vKy.elem(B+iNh));
@@ -858,7 +860,7 @@ void initializer::sVhhpp(){
     //cout << V(conv_to<uvec>::from(ones(2)*13),conv_to<uvec>::from(ones(2)*12),conv_to<uvec>::from(ones(2)*46),conv_to<uvec>::from(ones(2)*42)) << endl; //this element is not inlcuded in the testing above!!!
     //cout << Vhhpp(181, 1152) << endl;
 
-    /*
+
     double val = 0;
     double val2 = 0;
     int disccount = 0;
@@ -881,8 +883,28 @@ void initializer::sVhhpp(){
     }
     cout << "Discrepancies in Vpphh:" << disccount << endl;
 
+    /*
 
     val = 0;
+    for(int i = 0; i<iNh; i++){
+        for(int j = 0; j<iNh; j++){
+            for(int a = 0; a<iNp; a++){
+                for(int b = 0; b<iNp; b++){
+                    val = bs.v2(i,j,a+iNh,b+iNh);
+                    //cout << Vhhpp(i + j*iNh, a + b*iNp) << "       " << val << endl;
+                    //cout << Vhhpp(i + j*iNh, a + b*iNp) << endl;
+                    //cout << i + j*iNh << " " << a + b*iNp << endl;
+                    if(abs(Vhhpp(i + j*iNh, a + b*iNp) - val)>0.00000001){
+                        //cout << i + j*iNh << " " << a + b*iNp << endl;
+                        cout << i << " " << j << " " << a  << " " << b  << endl;
+                        cout << Vhhpp(i + j*iNh, a + b*iNp) << " " << val << endl;
+                        Vhhpp(i + j*iNh, a + b*iNp) = val;
+                    }
+                }
+            }
+        }
+    }
+
     for(int i = 0; i<iNh; i++){
         for(int j = 0; j<iNh; j++){
             for(int a = 0; a<iNp; a++){
@@ -891,17 +913,17 @@ void initializer::sVhhpp(){
                     //cout << Vhhpp(i + j*iNh, a + b*iNp) << "       " << val << endl;
                     //cout << Vhhpp(i + j*iNh, a + b*iNp) << endl;
                     //cout << i + j*iNh << " " << a + b*iNp << endl;
-                    if(abs(Vhhpp(i + j*iNh, a + b*iNp) - val)>0.00000001){
+                    if(abs(Vpphh(a+ b*iNp, i + j*iNh) - val)>0.00000001){
                         //cout << i + j*iNh << " " << a + b*iNp << endl;
-                        cout << i << " " << j << " " << a  << " " << b  << endl;
-                        cout << Vhhpp(i + j*iNh, a + b*iNp) - val << endl;
+                        //cout << i << " " << j << " " << a  << " " << b  << endl;
+                        //cout << Vpphh(a+ b*iNp, i + j*iNh) << " " << val << endl;
+                        Vpphh(a+ b*iNp, i + j*iNh) = val;
                     }
                 }
             }
         }
     }
     */
-
 
 }
 
@@ -1027,9 +1049,9 @@ void initializer::sVhpph(){
     //cout << V(conv_to<uvec>::from(ones(2)*13),conv_to<uvec>::from(ones(2)*12),conv_to<uvec>::from(ones(2)*46),conv_to<uvec>::from(ones(2)*42)) << endl; //this element is not inlcuded in the testing above!!!
     //cout << Vhhpp(181, 1152) << endl;
 
+
+
     /*
-
-
     double val = 0;
     for(int i = 0; i<iNh; i++){
         for(int j = 0; j<iNh; j++){
@@ -1043,12 +1065,14 @@ void initializer::sVhpph(){
                         //cout << i + j*iNh << " " << a + b*iNp << endl;
                         cout << i << " " << a << " " << b  << " " << j  << endl;
                         cout << Vhpph(i + a*iNh, b + j*iNp) << " " << val << endl;
+                        Vhpph(i + a*iNh, b + j*iNp) = val;
                     }
                 }
             }
         }
     }
     */
+
 
 
 }

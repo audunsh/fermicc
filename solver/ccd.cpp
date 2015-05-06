@@ -64,6 +64,9 @@ ccd::ccd(electrongas bs){
     vpphh.init(iSetup.vValsVpphh, iSetup.aVpphh, iSetup.bVpphh, iSetup.iVpphh, iSetup.jVpphh, iSetup.iNp, iSetup.iNp, iSetup.iNh, iSetup.iNh);
     vpphh.shed_zeros();
 
+    mat H(vpphh.pq_rs());
+    H.save("pp_v_hh2.txt", raw_ascii);
+
 
     //set up first T2-amplitudes
     T.init(iSetup.vValsVpphh, iSetup.aVpphh, iSetup.bVpphh, iSetup.iVpphh, iSetup.jVpphh, iSetup.iNp, iSetup.iNp, iSetup.iNh, iSetup.iNh);
@@ -73,6 +76,7 @@ ccd::ccd(electrongas bs){
     T.map_indices();
     cout << "Amplitude mapping time:" <<  (float)(clock()-t)/CLOCKS_PER_SEC << endl;
 
+    check_matrix_consistency();
     // HOW TO SET UP FLEXMAT OBJECTS FROM CSC-MATRICES
     // flexmat V1;
     // V1.update(vhhhh.pq_rs(),vhhhh.iNp, vhhhh.iNq, vhhhh.iNr, vhhhh.iNs); //update (or initialize) with an sp_mat object (requires unpacking)
@@ -87,23 +91,9 @@ ccd::ccd(electrongas bs){
     //L1_block_multiplication();
     //cout << "Blocked/sparse mult time:" <<  (float)(clock()-t)/CLOCKS_PER_SEC << endl;
 
-    //compare Vpppp
+    //Inspect integrity of matrices
 
 
-    /*
-    for(int a = 0; a < iSetup.iNh; a++){
-        for(int b = 0; b < iSetup.iNh; b++){
-            for(int c = 0; c < iSetup.iNh; c++){
-                for(int d = 0; d < iSetup.iNh; d++){
-
-                    if(vhhhh.pq_rs()(a + b*iSetup.iNh, c + d*iSetup.iNh) != bs.v2(a , b, c,d)){
-                        cout << "Found discrepancy" << endl;
-                    }
-                }
-            }
-        }
-    }
-    */
 
 
 
@@ -133,6 +123,43 @@ ccd::ccd(electrongas bs){
     }
     //cout << CCSD_SG_energy() << endl;
     cout << "Energy per electron:" << correlation_energy/iSetup.iNh << endl;
+
+
+}
+
+void ccd::check_matrix_consistency(){
+    //Check that all elements in matrices correspond to the interaction given in the basis
+    //NOTE: This is a time consuming process, especially for large basis sets
+
+    int vpphh_err = 0;
+    int vhhpp_err = 0;
+    int tpphh_err = 0;
+    for(int a = 0; a < iSetup.iNp; a++){
+        for(int b = 0; b < iSetup.iNp; b++){
+            for(int i = 0; i < iSetup.iNh; i++){
+                for(int j = 0; j < iSetup.iNh; j++){
+
+                    if(vpphh.pq_rs()(a + b*iSetup.iNp, i + j*iSetup.iNh) != iSetup.bs.v2(a + iSetup.iNh , b+ iSetup.iNh, i,j)){
+                        //cout << "Found discrepancy" << endl;
+                        vpphh_err += 1;
+                    }
+                    if(vhhpp.pq_rs()(i+j*iSetup.iNh, a + b*iSetup.iNp) != iSetup.bs.v2(i,j,a + iSetup.iNh , b+ iSetup.iNh)){
+                        //cout << "Found discrepancy" << endl;
+                        vhhpp_err += 1;
+                    }
+                    if(T.pq_rs()(a + b*iSetup.iNp, i + j*iSetup.iNh) != iSetup.bs.v2(a + iSetup.iNh , b+ iSetup.iNh, i,j)/(iSetup.bs.vEnergy(i) + iSetup.bs.vEnergy(j)-iSetup.bs.vEnergy(a+iSetup.iNh)-iSetup.bs.vEnergy(b+iSetup.iNh))){
+                        cout << "Found discrepancy" << T.pq_rs()(a + b*iSetup.iNp, i + j*iSetup.iNh)<< iSetup.bs.v2(a + iSetup.iNh , b+ iSetup.iNh, i,j)/(iSetup.bs.vEnergy(i) + iSetup.bs.vEnergy(j)-iSetup.bs.vEnergy(a)-iSetup.bs.vEnergy(b))<< endl;
+                        tpphh_err += 1;
+                    }
+                }
+            }
+        }
+    }
+    cout << "Found " << vpphh_err << " inconsistent elements in vpphh." << endl;
+    cout << "Found " << vhhpp_err << " inconsistent elements in vhhpp." << endl;
+    cout << "Found " << tpphh_err << " inconsistent elements in thhpp." << endl;
+
+
 
 
 }
@@ -495,6 +522,9 @@ double ccd::CCSD_SG_energy(){
 void ccd::energy(){
     //Calculate the ground state energy
     sp_mat cv = vhhpp.pq_rs() * T.pq_rs();
+    //mat vhhpp2(vhhpp.pq_rs());
+    //mat tpphh2(T.pq_rs());
+    //mat Cv = vhhpp2*tpphh2;
     mat Cv(cv); //this is inefficient: does not utilize sp_mat functionality, one possibility through unpack_sp_mat
     double C_ = 0;
     for(int i = 0; i<Cv.n_cols; i++){
@@ -504,4 +534,6 @@ void ccd::energy(){
 
     correlation_energy = .25*C_;
     cout << "(CCD)Energy:" << .25*C_ << endl;
+    cout << "(CCD)Energy (per particle):" << .25*C_/iSetup.iNh << endl;
+
 }

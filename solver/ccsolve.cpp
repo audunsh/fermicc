@@ -146,7 +146,7 @@ double ccsolve::CCSD_SG_energy(){
         }
     }
     val1 += .25*val2 +.5*val3;
-    return val1;
+    return val1/iNp;
 }
 
 double ccsolve::CCSD_SG_dt2(int a, int b, int i, int j){

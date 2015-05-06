@@ -13,6 +13,95 @@ electrongas::electrongas()
 {
 }
 
+void electrongas::generate_state_list2(int Ne, double rs, int Np){
+    iN = Ne; //number of shells
+    dr_s = rs;
+
+    double Nmax = iN + 1; //sqrt(iN) + 1;
+    int energy = 0;
+    int nStates = 0;
+    iNparticles = Np;
+    int energy_integer = 0;
+    bool is_shell;
+    int n = 0;
+
+    //count number of states in shells
+    while(n < Ne+1){
+        is_shell = false;
+        for(int x = -Nmax; x<Nmax+1; x++){
+            for(int y = -Nmax; y<Nmax+1; y++){
+                for(int z = -Nmax; z<Nmax+1; z++){
+                    if(x*x+y*y+z*z == energy_integer){
+                        is_shell = true;
+                        nStates += 2;
+                    }
+                }
+            }
+        }
+        if(is_shell){
+            n += 1;
+        }
+        energy_integer += 1;
+    }
+    iNbstates = nStates;
+    //set size of all vectors
+    dL3 = iNparticles*4.0*pi*dr_s*dr_s*dr_s/3.0; //volume
+    dL2 = pow(dL3, 2.0/3.0); //area
+    mu =0;
+
+    mat k_combinations;
+    k_combinations.set_size(nStates, 5);
+    mSortedEnergy.set_size(nStates, 4);
+
+
+    vKx.set_size(nStates);
+    vKy.set_size(nStates);
+    vKz.set_size(nStates);
+    vEnergy.set_size(nStates);
+    vMs.set_size(nStates);
+
+
+    int index_count = 0;
+    energy_integer = 0;
+    double e2;
+    n = 0;
+
+    //initialize all states
+    while(n < Ne+1){
+        is_shell = false;
+        for(int x = -Nmax; x<Nmax+1; x++){
+            for(int y = -Nmax; y<Nmax+1; y++){
+                for(int z = -Nmax; z<Nmax+1; z++){
+                    if(x*x+y*y+z*z == energy_integer){
+                        e2 = 2*energy_integer*(pi*pi)/(dL2);
+                        //e2 = 2.13647*energy_integer*(pi*pi)/(dL2);
+                        is_shell = true;
+                        vKx(index_count) = x;
+                        vKy(index_count) = y;
+                        vKz(index_count) = z;
+                        vEnergy(index_count) = e2;
+                        vMs(index_count) = 1;
+                        index_count += 1;
+
+                        vKx(index_count) = x;
+                        vKy(index_count) = y;
+                        vKz(index_count) = z;
+                        vEnergy(index_count) = e2;
+                        vMs(index_count) = -1;
+                        index_count += 1;
+
+                    }
+                }
+            }
+        }
+        if(is_shell){
+            n += 1;
+        }
+        energy_integer += 1;
+    }
+    cout << "#Electrongas: number of states:" << nStates << endl;
+}
+
 void electrongas::generate_state_list(int Ne, double rs, int Np){
     iN = Ne;
 
@@ -386,8 +475,8 @@ double electrongas::eref(int nParticles){
             }
         }
     }
-    //cout << "Single particle energy:" << sp_energy << endl;
-    //cout << "Interaction energy:" << in_energy << endl;
+    cout << "Single particle energy:" << sp_energy << endl;
+    cout << "Interaction energy:" << in_energy << endl;
     return reference_energy;
 }
 
