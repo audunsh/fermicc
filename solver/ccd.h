@@ -52,6 +52,8 @@ public:
     double CCSD_SG_energy();
     double correlation_energy;
 
+    int iterations;
+
 
 };
 

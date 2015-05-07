@@ -475,8 +475,8 @@ double electrongas::eref(int nParticles){
             }
         }
     }
-    cout << "Single particle energy:" << sp_energy << endl;
-    cout << "Interaction energy:" << in_energy << endl;
+    //cout << "Single particle energy:" << sp_energy << endl;
+    //cout << "Interaction energy:" << in_energy << endl;
     return reference_energy;
 }
 

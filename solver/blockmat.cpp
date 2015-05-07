@@ -31,7 +31,6 @@ void blockmat::set_block(uint n, uvec pb, uvec qb, uvec rb, uvec sb){
     s(n) = sb;
     uvec req = conv_to<uvec>::from(rb + uNr*sb);
     requests(n) = req;
-
 }
 
 field<uvec> blockmat::get_block(uint n){

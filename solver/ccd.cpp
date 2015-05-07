@@ -14,6 +14,7 @@ using namespace std;
 using namespace arma;
 
 ccd::ccd(electrongas bs){
+    iterations = 0; //current number of iterations
     ebs = bs;
     iSetup = initializer(bs);
 
@@ -21,32 +22,25 @@ ccd::ccd(electrongas bs){
     clock_t t;
     t =  clock();
     iSetup.sVhhhhO();
-    cout << "Vhhhh init time:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+    cout << "[CCD]Vhhhh init time:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
     t = clock();
 
     iSetup.sVppppBlock();
 
 
-
-
-    //iSetup.sVppppO();  //DISABLE THIS ONE
-
-
-
-
-    cout << "Vpppp init time:" <<  (float)(clock()- t)/CLOCKS_PER_SEC << endl;
+    cout << "[CCD]Vpppp init time:" <<  (float)(clock()- t)/CLOCKS_PER_SEC << endl;
     t = clock();
 
     iSetup.sVhhpp();
-    cout << "Vhhpp init time:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+    cout << "[CCD]Vhhpp init time:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
     t = clock();
 
     //iSetup.sVpphh();
-    cout << "Vpphh init time:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+    cout << "[CCD]Vpphh init time:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
     t = clock();
 
     iSetup.sVhpph();
-    cout << "Vhpph init time:" <<  (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+    cout << "[CCD]Vhpph init time:" <<  (float)(clock()-t)/CLOCKS_PER_SEC << endl;
 
     //convert interaction data to flexmat objects
     vhhhh.init(iSetup.vValsVhhhh, iSetup.iVhhhh, iSetup.jVhhhh, iSetup.kVhhhh, iSetup.lVhhhh, iSetup.iNh, iSetup.iNh, iSetup.iNh, iSetup.iNh);
@@ -74,9 +68,11 @@ ccd::ccd(electrongas bs){
     T.set_amplitudes(bs.vEnergy);
     t = clock();
     T.map_indices();
-    cout << "Amplitude mapping time:" <<  (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+    cout << "[CCD]Amplitude mapping time:" <<  (float)(clock()-t)/CLOCKS_PER_SEC << endl;
 
-    check_matrix_consistency();
+    //check_matrix_consistency();
+
+
     // HOW TO SET UP FLEXMAT OBJECTS FROM CSC-MATRICES
     // flexmat V1;
     // V1.update(vhhhh.pq_rs(),vhhhh.iNp, vhhhh.iNq, vhhhh.iNr, vhhhh.iNs); //update (or initialize) with an sp_mat object (requires unpacking)
@@ -117,12 +113,13 @@ ccd::ccd(electrongas bs){
 
     for(int i = 0; i < 25; i++){
         //advance_intermediates();
-        cout << i+1 << " ";
+        //cout << i+1 << " ";
         advance();
+        iterations += 1;
 
     }
     //cout << CCSD_SG_energy() << endl;
-    cout << "Energy per electron:" << correlation_energy/iSetup.iNh << endl;
+    //cout << "[CCD] Energy per electron:" << correlation_energy/iSetup.iNh << endl;
 
 
 }
@@ -533,7 +530,7 @@ void ccd::energy(){
 
 
     correlation_energy = .25*C_;
-    cout << "(CCD)Energy:" << .25*C_ << endl;
-    cout << "(CCD)Energy (per particle):" << .25*C_/iSetup.iNh << endl;
+    cout << "["  << iterations  << "]" << "[CCD]Energy               :" << .25*C_ << endl;
+    cout << "["  << iterations  << "]" << "[CCD]Energy (per particle):" << .25*C_/iSetup.iNh << endl;
 
 }

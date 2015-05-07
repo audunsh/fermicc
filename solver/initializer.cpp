@@ -189,12 +189,96 @@ vec initializer::appendvec(vec V1, vec V2){
 }
 
 
-void initializer::sVppppBlock(){}
-void initializer::sVhpppBlock(){}
-void initializer::sVppphBlock(){}
+/*
+ * The CCDT specific interactions
+ *
+ */
+
 
 void initializer::sVhphh(){}
+void initializer::sVppphBlock(){
+
+}
+
+void initializer::sVhpppBlock(){
+    //Vhppp.set_size(iNhp, iNpp);
+
+    //indexing rows
+
+    vec IA = linspace(0,iNhp-1,iNhp);
+
+    uvec A = conv_to<uvec>::from(floor(IA/iNh)); //convert to unsigned integer indexing vector
+    uvec I = conv_to<uvec>::from(IA) - A*iNh;
+
+    ivec KIAx = bs.vKx.elem(I)+bs.vKx.elem(A+iNh);
+    ivec KIAy = iNmax*(bs.vKy.elem(I)+bs.vKy.elem(A+iNh));
+    ivec KIAz = iNmax2*(bs.vKz.elem(I)+bs.vKz.elem(A+iNh));
+
+    ivec KIA = KIAx+KIAy+KIAz;
+    ivec KIA_unique = unique(KIA);
+
+    //indexing columns
+
+    vec BC = linspace(0,iNp*iNp-1,iNp*iNp); //AB
+
+    uvec C = conv_to<uvec>::from(floor(BC/iNp)); //convert to unsigned integer indexing vector
+    uvec B = conv_to<uvec>::from(BC) - C*iNp;
+
+    ivec KBCx = bs.vKx.elem(B+iNh)+bs.vKx.elem(C);
+    ivec KBCy = iNmax*(bs.vKy.elem(B+iNh)+bs.vKy.elem(C));
+    ivec KBCz = iNmax2*(bs.vKz.elem(B+iNh)+bs.vKz.elem(C));
+
+    ivec KBC = KBCx+KBCy+KBCz;
+    ivec KBC_unique = unique(KBC);
+
+    //consolidating rows and columns
+
+    ivec K_joined = join_cols<imat>(KIA_unique, KBC_unique);
+
+    ivec K_unique = unique(K_joined);
+
+
+
+    uvec T0;// = conv_to<uvec>::from(zeros(0));
+    uvec T1;// = conv_to<uvec>::from(zeros(0));
+    T0.set_size(0);
+    T1.set_size(0);
+
+
+    field<uvec> TT;
+    TT.set_size(K_unique.size(), 2);
+    int iN = 0;
+    //int iN;
+    uvec Tia, Tbc;
+
+    for(int i = 0; i < K_unique.size(); ++i){
+
+        //vec Tia = IA.elem(find(KIA==K_unique(i)));
+        //vec ONh = ones(Tia.size()); //this needs not actually be stored
+
+        //vec Tbc = BC.elem(find(KBC==K_unique(i)));
+        //vec ONp = ones(Tbc.size()); //neither this one
+
+        Tia = find(KIA==K_unique(i));
+        Tbc = find(KBC==K_unique(i));
+
+        bmVhppp.set_block(i, I.elem(Tia), A.elem(Tia),B.elem(Tbc), C.elem(Tbc));
+        iN += Tia.size();
+    }
+
+
+
+}
+
 void initializer::sVphhp(){}
+
+
+/*
+ * The CCD specific interactions
+ *
+ */
+
+
 
 void initializer::sVppppO(){
     //optimized interaction for Vpppp
@@ -213,14 +297,6 @@ void initializer::sVppppO(){
             n += 1;
         }
     }
-
-
-
-
-    //careful here
-    //vec AB = linspace(0,iNp2-1,iNp2);
-    //uvec B = conv_to<uvec>::from(floor(AB/iNp)); //convert to unsigned integer indexing vector
-    //uvec A = conv_to<uvec>::from(AB) - B*iNp;
 
 
     cout << "Good so far... (1)"  << endl;
@@ -351,32 +427,6 @@ void initializer::sVppppO(){
     vValsVpppp(span(2*iN,3*iN-1)) = -vValsVppp;
     vValsVpppp(span(3*iN,4*iN-1)) = -vValsVppp;
 
-
-    //Testing that the full interaction is correct
-    /*
-    double val = 0;
-    double val2 = 0;
-    int disccount = 0;
-    int an,bn,cn,dn;
-    for(int n =0; n< vValsVpppp.size(); n++){
-        an = aVpppp(n) + iNh;
-        bn = bVpppp(n) + iNh;
-        cn = cVpppp(n) + iNh;
-        dn = dVpppp(n) + iNh;
-
-        val = bs.v2(an,bn,cn,dn);
-
-        if((abs(val - vValsVpppp(n)))>0.00001){
-            cout << val << " " << val2 << " " << vValsVpppp(n) << endl;
-            disccount += 1;
-        }
-    }
-    */
-
-
-    //cout << "Discrepancies in Vpppp:" << disccount << endl;
-    //cout << "Size of Vpppp         :" << vValsVpppp.size() << endl;
-
 }
 
 
@@ -414,39 +464,7 @@ void initializer::sVppppBlock(){
     }
 }
 
-void initializer::sVppphBlock(){
-    //Block interaction (store only blocks)
-    vec AB = linspace(0,iNp2-1,iNp2);
-    uvec B = conv_to<uvec>::from(floor(AB/iNp)); //convert to unsigned integer indexing vector
-    uvec A = conv_to<uvec>::from(AB) - B*iNp;
 
-
-    //Setting up a vector containint a unique integer identifier for K + M_s
-    ivec KABx = bs.vKx.elem(A+iNh)+bs.vKx.elem(B+iNh);
-    ivec KABy = iNmax*(bs.vKy.elem(A+iNh)+bs.vKy.elem(B+iNh));
-    ivec KABz = iNmax2*(bs.vKz.elem(A+iNh)+bs.vKz.elem(B+iNh));
-    ivec KABms = iNmax*iNmax2*(bs.vMs(A+iNh) + bs.vMs(B + iNh));
-
-    ivec KAB = KABx+KABy+KABz + KABms;
-    ivec KAB_unique = unique(KAB);
-
-    field<uvec> TT;
-    TT.set_size(KAB_unique.size(), 2);
-    u32 iN = 0;
-    vec T, O;
-    uvec tT;
-    uvec t0, t1;
-
-
-    bmVpppp.set_size(KAB_unique.size(), iNp, iNp, iNp, iNp);
-
-    for(uint i = 0; i < KAB_unique.size(); ++i){
-        //locating non-zero regions where K_a + K_b = K_c + K_d
-        //T = conv_to<vec>::from(find(KAB==KAB_unique(i))); //Is it possible to make this vector "shrink" as more indices is identified?
-        tT = find(KAB==KAB_unique(i));
-        bmVpppp.set_block(i, A.elem(tT), B.elem(tT),A.elem(tT), B.elem(tT));
-    }
-}
 
 void initializer::sVpppp(){
     //cout << "Hello from initializer!" << endl;
@@ -526,29 +544,6 @@ void initializer::sVpppp(){
 
     vValsVpppp = V3(aVpppp+iNh,bVpppp+iNh,cVpppp+iNh,dVpppp+iNh); //this works, tested agains bs.v2, 9.8.2015
 
-
-    /*
-    double val = 0;
-    double val2 = 0;
-    int disccount = 0;
-    int an,bn,cn,dn;
-    for(int n =0; n< vValsVpppp.size(); n++){
-        an = aVpppp(n) + iNh;
-        bn = bVpppp(n) + iNh;
-        cn = cVpppp(n) + iNh;
-        dn = dVpppp(n) + iNh;
-
-        val = bs.v2(an,bn,cn,dn);
-
-        if((abs(val - vValsVpppp(n)))>0.00001){
-            cout << val << " " << val2 << " " << vValsVpppp(n) << endl;
-            disccount += 1;
-        }
-    }
-
-    cout << "Discrepancies in Vpppp:" << disccount << endl;
-    cout << "Size of Vpppp         :" << vValsVpppp.size() << endl;
-    */
 }
 
 void initializer::sVhhhhO(){
@@ -724,48 +719,6 @@ void initializer::sVhhhh(){
     vValsVhhhh = V3(iVhhhh,jVhhhh,kVhhhh,lVhhhh);
 
 
-
-    //umat locations;
-    //locations.set_size(T0.size(),2);
-    //locations.col(0) = T0;
-    //locations.col(1) = T1;
-    //Vhhhh = sp_mat(locations.t(), vValsVhhhh, iNh2, iNh2);
-
-    //test for consistency
-
-    /*
-    //int disccount = 0;
-    for(int n= 0; n<vValsVhhhh.size();n++){
-        if(vValsVhhhh(n) !=  bs.v2(iVhhhh(n), jVhhhh(n), kVhhhh(n), lVhhhh(n))){
-            //disccount += 1;
-            cout << iVhhhh(n) << " " << jVhhhh(n)<< " " << kVhhhh(n)<< " " << lVhhhh(n)<< " " << vValsVhhhh(n)<< " " <<bs.v(iVhhhh(n), jVhhhh(n), kVhhhh(n), lVhhhh(n)) << endl;
-        }
-    }
-    //cout << "Number of discrepancies in Vhhhh:" <<  disccount << endl;
-    */
-
-    double d1,d2;
-    int discs = 0;
-    for(int i = 0; i< iNh; i++){
-        for(int j = i; j< iNh; j++){
-            for(int k = j; k< iNh; k++){
-                for(int l = k; l < iNh; l++){
-                    d1 = Vhhhh(i + j*iNh, k + l*iNh);
-                    d2 = bs.v2(i,j,k,l);
-                    if(d1 != d2){
-                        //cout << d1 << " " << d2 << endl;
-                        discs += 1;
-                        Vhhhh(i + j*iNh, k + l*iNh) = d2;
-
-                    }
-                }
-            }
-        }
-    }
-
-
-    cout << "Discrepancy found in Vhhhh:" << discs << endl;
-
 }
 
 void initializer::sVhhpp(){
@@ -778,13 +731,7 @@ void initializer::sVhhpp(){
     uvec J = conv_to<uvec>::from(floor(IJ/iNh)); //convert to unsigned integer indexing vector
     uvec I = conv_to<uvec>::from(IJ) - J*iNh;
 
-    //ivec KIx = bs.vKx.elem(I);
-    //ivec KIy = bs.vKy.elem(I);
-    //ivec KIz = bs.vKz.elem(I);
 
-    //ivec KJx = bs.vKx.elem(J);
-    //ivec KJy = bs.vKy.elem(J);
-    //ivec KJz = bs.vKz.elem(J);
 
     ivec KIJx = bs.vKx.elem(I)+bs.vKx.elem(J);
     ivec KIJy = iNmax*(bs.vKy.elem(I)+bs.vKy.elem(J));
@@ -800,14 +747,6 @@ void initializer::sVhhpp(){
     uvec B = conv_to<uvec>::from(floor(AB/iNp)); //convert to unsigned integer indexing vector
     uvec A = conv_to<uvec>::from(AB) - B*iNp;
 
-    //ivec KAx = bs.vKx.elem(A+iNh);
-    //ivec KAy = bs.vKy.elem(A+iNh);
-    //ivec KAz = bs.vKz.elem(A+iNh);
-
-    //ivec KBx = bs.vKx.elem(B+iNh);
-    //ivec KBy = bs.vKy.elem(B+iNh);
-    //ivec KBz = bs.vKz.elem(B+iNh);
-
     ivec KABx = bs.vKx.elem(A+iNh)+bs.vKx.elem(B+iNh);
     ivec KABy = iNmax*(bs.vKy.elem(A+iNh)+bs.vKy.elem(B+iNh));
     ivec KABz = iNmax2*(bs.vKz.elem(A+iNh)+bs.vKz.elem(B+iNh));
@@ -818,9 +757,6 @@ void initializer::sVhhpp(){
     //consolidating rows and columns
 
     ivec K_joined = join_cols<imat>(KIJ_unique, KAB_unique);
-    //K_joined.set_size(KAB_unique.size() + KIJ_unique.size());
-    //K_joined(span(0,KAB_unique.size()-1)) = KAB_unique;
-    //K_joined(span(KAB_unique.size(),KIJ_unique.size())) = KIJ_unique;
 
     ivec K_unique = unique(K_joined);
 
@@ -833,7 +769,7 @@ void initializer::sVhhpp(){
 
     field<uvec> TT;
     TT.set_size(K_unique.size(), 2);
-    //blocksVpphh.set_size(2*K_unique.size());
+
     int iN = 0;
 
     for(int i = 0; i < K_unique.size(); ++i){
@@ -843,16 +779,10 @@ void initializer::sVhhpp(){
         vec Tab = AB.elem(find(KAB==K_unique(i)));
         vec ONp = ones(Tab.size());
 
-        //Storing the blocks for Vpphh (amplitude tensor)
-        //blocksVpphh(2*i) = Tab;
-        //blocksVpphh(2*i+1) = Tij;
-
-
         if(Tij.size() != 0 && Tab.size() != 0){
             uvec t0 = conv_to<uvec>::from(kron(Tij, ONp));
             uvec t1 = conv_to<uvec>::from(kron(ONh, Tab));
-            //T0 = append(T0,t0);
-            //T1 = append(T1,t1);
+
             TT(i, 0) = t0;
             TT(i, 1) = t1;
             iN += t0.size();
@@ -890,84 +820,6 @@ void initializer::sVhhpp(){
 
     vValsVhhpp = V3(iVhhpp,jVhhpp,aVhhpp+iNh,bVhhpp+iNh);
     vValsVpphh = V3(aVhhpp+iNh,bVhhpp+iNh,iVhhpp,jVhhpp); //Symmetric? Do a test
-
-    //umat locations;
-    //locations.set_size(T0.size(),2);
-    //locations.col(0) = T0;
-    //locations.col(1) = T1;
-    //Vhhpp = sp_mat(locations.t(), vValsVhhpp, iNh2, iNp2);
-
-    //locations.col(0) = T1;
-    //locations.col(1) = T0;
-    //fmVpphh = flexmat(a,b,i,j,iNp,iNh);
-
-    //cout << V(conv_to<uvec>::from(ones(2)*13),conv_to<uvec>::from(ones(2)*12),conv_to<uvec>::from(ones(2)*46),conv_to<uvec>::from(ones(2)*42)) << endl; //this element is not inlcuded in the testing above!!!
-    //cout << Vhhpp(181, 1152) << endl;
-
-
-    double val = 0;
-    double val2 = 0;
-    int disccount = 0;
-    int an,bn,in,jn;
-
-    for(int n =0; n< vValsVhhpp.size(); n++){
-        //cout << aVhhpp(n) + iNh << endl;
-        an = aVhhpp(n) + iNh;
-        bn = bVhhpp(n) + iNh;
-        in = iVhhpp(n);
-        jn = jVhhpp(n);
-        //cout << an << endl;
-
-        val = bs.v2(an,bn,in,jn);
-
-        if((abs(val - vValsVpphh(n)))>0.00001){
-            cout << val << " " << vValsVpphh(n) << endl;
-            disccount += 1;
-        }
-    }
-    cout << "Discrepancies in Vpphh:" << disccount << endl;
-
-    /*
-
-    val = 0;
-    for(int i = 0; i<iNh; i++){
-        for(int j = 0; j<iNh; j++){
-            for(int a = 0; a<iNp; a++){
-                for(int b = 0; b<iNp; b++){
-                    val = bs.v2(i,j,a+iNh,b+iNh);
-                    //cout << Vhhpp(i + j*iNh, a + b*iNp) << "       " << val << endl;
-                    //cout << Vhhpp(i + j*iNh, a + b*iNp) << endl;
-                    //cout << i + j*iNh << " " << a + b*iNp << endl;
-                    if(abs(Vhhpp(i + j*iNh, a + b*iNp) - val)>0.00000001){
-                        //cout << i + j*iNh << " " << a + b*iNp << endl;
-                        cout << i << " " << j << " " << a  << " " << b  << endl;
-                        cout << Vhhpp(i + j*iNh, a + b*iNp) << " " << val << endl;
-                        Vhhpp(i + j*iNh, a + b*iNp) = val;
-                    }
-                }
-            }
-        }
-    }
-
-    for(int i = 0; i<iNh; i++){
-        for(int j = 0; j<iNh; j++){
-            for(int a = 0; a<iNp; a++){
-                for(int b = 0; b<iNp; b++){
-                    val = bs.v2(a+iNh,b+iNh,i,j);
-                    //cout << Vhhpp(i + j*iNh, a + b*iNp) << "       " << val << endl;
-                    //cout << Vhhpp(i + j*iNh, a + b*iNp) << endl;
-                    //cout << i + j*iNh << " " << a + b*iNp << endl;
-                    if(abs(Vpphh(a+ b*iNp, i + j*iNh) - val)>0.00000001){
-                        //cout << i + j*iNh << " " << a + b*iNp << endl;
-                        //cout << i << " " << j << " " << a  << " " << b  << endl;
-                        //cout << Vpphh(a+ b*iNp, i + j*iNh) << " " << val << endl;
-                        Vpphh(a+ b*iNp, i + j*iNh) = val;
-                    }
-                }
-            }
-        }
-    }
-    */
 
 }
 
@@ -1024,9 +876,6 @@ void initializer::sVhpph(){
     //consolidating rows and columns
 
     ivec K_joined = join_cols<imat>(KIA_unique, KBJ_unique);
-    //K_joined.set_size(KAB_unique.size() + KIJ_unique.size());
-    //K_joined(span(0,KAB_unique.size()-1)) = KAB_unique;
-    //K_joined(span(KAB_unique.size(),KIJ_unique.size())) = KIJ_unique;
 
     ivec K_unique = unique(K_joined);
 
@@ -1048,12 +897,6 @@ void initializer::sVhpph(){
 
         vec Tbj = BJ.elem(find(KBJ==K_unique(i)));
         vec ONp = ones(Tbj.size());
-
-        //153 1586
-        //uvec t0 = conv_to<uvec>::from(kron(Tij, ONp));
-        //uvec t1 = conv_to<uvec>::from(kron(ONh, Tab));
-        //T0 = append(T0,t0);
-        //T1 = append(T1,t1);
 
         if(Tia.size() != 0 && Tbj.size() != 0){
             uvec t0 = conv_to<uvec>::from(kron(Tia, ONp));
@@ -1084,38 +927,6 @@ void initializer::sVhpph(){
     bVhpph = conv_to<uvec>::from(T1) - jVhpph*iNp;
 
     vValsVhpph = V3(iVhpph,aVhpph+iNh,bVhpph+iNh,jVhpph);
-    //umat locations;
-    //locations.set_size(T0.size(),2);
-    //locations.col(0) = T0;
-    //locations.col(1) = T1;
-    //Vhpph = sp_mat(locations.t(), vValsVhpph, iNhp, iNhp);
-
-    //cout << V(conv_to<uvec>::from(ones(2)*13),conv_to<uvec>::from(ones(2)*12),conv_to<uvec>::from(ones(2)*46),conv_to<uvec>::from(ones(2)*42)) << endl; //this element is not inlcuded in the testing above!!!
-    //cout << Vhhpp(181, 1152) << endl;
-
-
-
-    /*
-    double val = 0;
-    for(int i = 0; i<iNh; i++){
-        for(int j = 0; j<iNh; j++){
-            for(int a = 0; a<iNp; a++){
-                for(int b = 0; b<iNp; b++){
-                    val = bs.v2(i,a+iNh,b+iNh,j);
-                    //cout << Vhhpp(i + j*iNh, a + b*iNp) << "       " << val << endl;
-                    //cout << Vhhpp(i + j*iNh, a + b*iNp) << endl;
-                    //cout << i + j*iNh << " " << a + b*iNp << endl;
-                    if(abs(Vhpph(i + a*iNh, b + j*iNp) - val)>0.000001){
-                        //cout << i + j*iNh << " " << a + b*iNp << endl;
-                        cout << i << " " << a << " " << b  << " " << j  << endl;
-                        cout << Vhpph(i + a*iNh, b + j*iNp) << " " << val << endl;
-                        Vhpph(i + a*iNh, b + j*iNp) = val;
-                    }
-                }
-            }
-        }
-    }
-    */
 
 
 

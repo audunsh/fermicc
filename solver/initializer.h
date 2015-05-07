@@ -34,7 +34,7 @@ public:
     void sVhpph();
 
     //triples specifics
-    void sVppppBlock();
+
     void sVhpppBlock();
     void sVppphBlock();
 
@@ -58,6 +58,8 @@ public:
 
     field<uvec> blocksVpphh;
 
+    field<uvec> blocksVhppp;
+
     uvec aVpppp;
     uvec bVpppp;
     uvec cVpppp;
@@ -73,7 +75,7 @@ public:
     blockmat bmVhhhh;
     blockmat bmVpphh;
     blockmat bmVhhpp;
-    blockmat bmVhpph;
+    blockmat bmVhppp;
 
     uvec iVhhhh;
     uvec jVhhhh;
