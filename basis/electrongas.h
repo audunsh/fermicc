@@ -44,8 +44,8 @@ public:
     double mu;
     int iNparticles;
 
-    //double pi = 4*atan(1);
-    double pi = 3.1415;
+    double pi = 4*atan(1);
+    //double pi = 3.1415;
 
     //added vectorized functionality, 21.03.2015
     ivec vKx,vKy,vKz, vMs;

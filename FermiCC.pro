@@ -17,7 +17,8 @@ SOURCES += main.cpp \
     solver/flexmat.cpp \
     solver/unpack_sp_mat.cpp \
     solver/blockmat.cpp \
-    solver/flexmat6.cpp
+    solver/flexmat6.cpp \
+    solver/ccdt.cpp
 
 include(deployment.pri)
 qtcAddDeployment()
@@ -30,7 +31,8 @@ HEADERS += \
     solver/flexmat.h \
     solver/unpack_sp_mat.h \
     solver/blockmat.h \
-    solver/flexmat6.h
+    solver/flexmat6.h \
+    solver/ccdt.h
 
 LIBS += -larmadillo -lblas -llapack
 

@@ -223,3 +223,11753 @@ void flexmat6::shed_zeros(){
 }
 
 
+void flexmat6::deinit(){
+    Nqt_rups = 0;
+    Nqtru_ps = 0;
+    Nqt_rusp = 0;
+    Nqtru_sp = 0;
+    Npqtru_s = 0;
+    Nsqtru_p = 0;
+    Nqru_pst = 0;
+    Npru_stq = 0;
+    Ntru_pqs = 0;
+    Nsru_tpq = 0;
+    Npq_rust = 0;
+    Npqru_st = 0;
+    Nst_rupq = 0;
+    Nstru_pq = 0;
+    Npsq_rtu = 0;
+    Ntur_pqs = 0;
+    Nqru_pst = 0;
+    Nrs_tupq = 0;
+    Nrstu_pq = 0;
+    Nps_qrtu = 0;
+    Npsqr_tu = 0;
+    Nqr_tups = 0;
+    Nqrtu_ps = 0;
+    Nst_pqru = 0;
+    Nstpq_ru = 0;
+    Nqr_tusp = 0;
+    Nqrtu_sp = 0;
+    Npqs_rtu = 0;
+
+    Ns_qtrup = 0;
+    Np_qtrus = 0;
+
+
+
+    //added manually
+    Nuqr_stp = 0;
+
+    Npqrs_tu = 0;
+
+    Nsp_qrtu = 0;
+
+    Npqs_tur = 0;
+
+    Npqr_stu = 0;
+    Npqr_sut = 0;
+    Npqr_tsu = 0;
+    Npqr_tus = 0;
+    Npqr_ust = 0;
+    Npqr_uts = 0;
+    Npqs_rtu = 0;
+    Npqs_rut = 0;
+    Npqs_tru = 0;
+    Npqs_tur = 0;
+    Npqs_urt = 0;
+    Npqs_utr = 0;
+    Npqt_rsu = 0;
+    Npqt_rus = 0;
+    Npqt_sru = 0;
+    Npqt_sur = 0;
+    Npqt_urs = 0;
+    Npqt_usr = 0;
+    Npqu_rst = 0;
+    Npqu_rts = 0;
+    Npqu_srt = 0;
+    Npqu_str = 0;
+    Npqu_trs = 0;
+    Npqu_tsr = 0;
+    Nprq_stu = 0;
+    Nprq_sut = 0;
+    Nprq_tsu = 0;
+    Nprq_tus = 0;
+    Nprq_ust = 0;
+    Nprq_uts = 0;
+    Nprs_qtu = 0;
+    Nprs_qut = 0;
+    Nprs_tqu = 0;
+    Nprs_tuq = 0;
+    Nprs_uqt = 0;
+    Nprs_utq = 0;
+    Nprt_qsu = 0;
+    Nprt_qus = 0;
+    Nprt_squ = 0;
+    Nprt_suq = 0;
+    Nprt_uqs = 0;
+    Nprt_usq = 0;
+    Npru_qst = 0;
+    Npru_qts = 0;
+    Npru_sqt = 0;
+    Npru_stq = 0;
+    Npru_tqs = 0;
+    Npru_tsq = 0;
+    Npsq_rtu = 0;
+    Npsq_rut = 0;
+    Npsq_tru = 0;
+    Npsq_tur = 0;
+    Npsq_urt = 0;
+    Npsq_utr = 0;
+    Npsr_qtu = 0;
+    Npsr_qut = 0;
+    Npsr_tqu = 0;
+    Npsr_tuq = 0;
+    Npsr_uqt = 0;
+    Npsr_utq = 0;
+    Npst_qru = 0;
+    Npst_qur = 0;
+    Npst_rqu = 0;
+    Npst_ruq = 0;
+    Npst_uqr = 0;
+    Npst_urq = 0;
+    Npsu_qrt = 0;
+    Npsu_qtr = 0;
+    Npsu_rqt = 0;
+    Npsu_rtq = 0;
+    Npsu_tqr = 0;
+    Npsu_trq = 0;
+    Nptq_rsu = 0;
+    Nptq_rus = 0;
+    Nptq_sru = 0;
+    Nptq_sur = 0;
+    Nptq_urs = 0;
+    Nptq_usr = 0;
+    Nptr_qsu = 0;
+    Nptr_qus = 0;
+    Nptr_squ = 0;
+    Nptr_suq = 0;
+    Nptr_uqs = 0;
+    Nptr_usq = 0;
+    Npts_qru = 0;
+    Npts_qur = 0;
+    Npts_rqu = 0;
+    Npts_ruq = 0;
+    Npts_uqr = 0;
+    Npts_urq = 0;
+    Nptu_qrs = 0;
+    Nptu_qsr = 0;
+    Nptu_rqs = 0;
+    Nptu_rsq = 0;
+    Nptu_sqr = 0;
+    Nptu_srq = 0;
+    Npuq_rst = 0;
+    Npuq_rts = 0;
+    Npuq_srt = 0;
+    Npuq_str = 0;
+    Npuq_trs = 0;
+    Npuq_tsr = 0;
+    Npur_qst = 0;
+    Npur_qts = 0;
+    Npur_sqt = 0;
+    Npur_stq = 0;
+    Npur_tqs = 0;
+    Npur_tsq = 0;
+    Npus_qrt = 0;
+    Npus_qtr = 0;
+    Npus_rqt = 0;
+    Npus_rtq = 0;
+    Npus_tqr = 0;
+    Npus_trq = 0;
+    Nput_qrs = 0;
+    Nput_qsr = 0;
+    Nput_rqs = 0;
+    Nput_rsq = 0;
+    Nput_sqr = 0;
+    Nput_srq = 0;
+    Nqpr_stu = 0;
+    Nqpr_sut = 0;
+    Nqpr_tsu = 0;
+    Nqpr_tus = 0;
+    Nqpr_ust = 0;
+    Nqpr_uts = 0;
+    Nqps_rtu = 0;
+    Nqps_rut = 0;
+    Nqps_tru = 0;
+    Nqps_tur = 0;
+    Nqps_urt = 0;
+    Nqps_utr = 0;
+    Nqpt_rsu = 0;
+    Nqpt_rus = 0;
+    Nqpt_sru = 0;
+    Nqpt_sur = 0;
+    Nqpt_urs = 0;
+    Nqpt_usr = 0;
+    Nqpu_rst = 0;
+    Nqpu_rts = 0;
+    Nqpu_srt = 0;
+    Nqpu_str = 0;
+    Nqpu_trs = 0;
+    Nqpu_tsr = 0;
+    Nqrp_stu = 0;
+    Nqrp_sut = 0;
+    Nqrp_tsu = 0;
+    Nqrp_tus = 0;
+    Nqrp_ust = 0;
+    Nqrp_uts = 0;
+    Nqrs_ptu = 0;
+    Nqrs_put = 0;
+    Nqrs_tpu = 0;
+    Nqrs_tup = 0;
+    Nqrs_upt = 0;
+    Nqrs_utp = 0;
+    Nqrt_psu = 0;
+    Nqrt_pus = 0;
+    Nqrt_spu = 0;
+    Nqrt_sup = 0;
+    Nqrt_ups = 0;
+    Nqrt_usp = 0;
+    Nqru_pst = 0;
+    Nqru_pts = 0;
+    Nqru_spt = 0;
+    Nqru_stp = 0;
+    Nqru_tps = 0;
+    Nqru_tsp = 0;
+    Nqsp_rtu = 0;
+    Nqsp_rut = 0;
+    Nqsp_tru = 0;
+    Nqsp_tur = 0;
+    Nqsp_urt = 0;
+    Nqsp_utr = 0;
+    Nqsr_ptu = 0;
+    Nqsr_put = 0;
+    Nqsr_tpu = 0;
+    Nqsr_tup = 0;
+    Nqsr_upt = 0;
+    Nqsr_utp = 0;
+    Nqst_pru = 0;
+    Nqst_pur = 0;
+    Nqst_rpu = 0;
+    Nqst_rup = 0;
+    Nqst_upr = 0;
+    Nqst_urp = 0;
+    Nqsu_prt = 0;
+    Nqsu_ptr = 0;
+    Nqsu_rpt = 0;
+    Nqsu_rtp = 0;
+    Nqsu_tpr = 0;
+    Nqsu_trp = 0;
+    Nqtp_rsu = 0;
+    Nqtp_rus = 0;
+    Nqtp_sru = 0;
+    Nqtp_sur = 0;
+    Nqtp_urs = 0;
+    Nqtp_usr = 0;
+    Nqtr_psu = 0;
+    Nqtr_pus = 0;
+    Nqtr_spu = 0;
+    Nqtr_sup = 0;
+    Nqtr_ups = 0;
+    Nqtr_usp = 0;
+    Nqts_pru = 0;
+    Nqts_pur = 0;
+    Nqts_rpu = 0;
+    Nqts_rup = 0;
+    Nqts_upr = 0;
+    Nqts_urp = 0;
+    Nqtu_prs = 0;
+    Nqtu_psr = 0;
+    Nqtu_rps = 0;
+    Nqtu_rsp = 0;
+    Nqtu_spr = 0;
+    Nqtu_srp = 0;
+    Nqup_rst = 0;
+    Nqup_rts = 0;
+    Nqup_srt = 0;
+    Nqup_str = 0;
+    Nqup_trs = 0;
+    Nqup_tsr = 0;
+    Nqur_pst = 0;
+    Nqur_pts = 0;
+    Nqur_spt = 0;
+    Nqur_stp = 0;
+    Nqur_tps = 0;
+    Nqur_tsp = 0;
+    Nqus_prt = 0;
+    Nqus_ptr = 0;
+    Nqus_rpt = 0;
+    Nqus_rtp = 0;
+    Nqus_tpr = 0;
+    Nqus_trp = 0;
+    Nqut_prs = 0;
+    Nqut_psr = 0;
+    Nqut_rps = 0;
+    Nqut_rsp = 0;
+    Nqut_spr = 0;
+    Nqut_srp = 0;
+    Nrpq_stu = 0;
+    Nrpq_sut = 0;
+    Nrpq_tsu = 0;
+    Nrpq_tus = 0;
+    Nrpq_ust = 0;
+    Nrpq_uts = 0;
+    Nrps_qtu = 0;
+    Nrps_qut = 0;
+    Nrps_tqu = 0;
+    Nrps_tuq = 0;
+    Nrps_uqt = 0;
+    Nrps_utq = 0;
+    Nrpt_qsu = 0;
+    Nrpt_qus = 0;
+    Nrpt_squ = 0;
+    Nrpt_suq = 0;
+    Nrpt_uqs = 0;
+    Nrpt_usq = 0;
+    Nrpu_qst = 0;
+    Nrpu_qts = 0;
+    Nrpu_sqt = 0;
+    Nrpu_stq = 0;
+    Nrpu_tqs = 0;
+    Nrpu_tsq = 0;
+    Nrqp_stu = 0;
+    Nrqp_sut = 0;
+    Nrqp_tsu = 0;
+    Nrqp_tus = 0;
+    Nrqp_ust = 0;
+    Nrqp_uts = 0;
+    Nrqs_ptu = 0;
+    Nrqs_put = 0;
+    Nrqs_tpu = 0;
+    Nrqs_tup = 0;
+    Nrqs_upt = 0;
+    Nrqs_utp = 0;
+    Nrqt_psu = 0;
+    Nrqt_pus = 0;
+    Nrqt_spu = 0;
+    Nrqt_sup = 0;
+    Nrqt_ups = 0;
+    Nrqt_usp = 0;
+    Nrqu_pst = 0;
+    Nrqu_pts = 0;
+    Nrqu_spt = 0;
+    Nrqu_stp = 0;
+    Nrqu_tps = 0;
+    Nrqu_tsp = 0;
+    Nrsp_qtu = 0;
+    Nrsp_qut = 0;
+    Nrsp_tqu = 0;
+    Nrsp_tuq = 0;
+    Nrsp_uqt = 0;
+    Nrsp_utq = 0;
+    Nrsq_ptu = 0;
+    Nrsq_put = 0;
+    Nrsq_tpu = 0;
+    Nrsq_tup = 0;
+    Nrsq_upt = 0;
+    Nrsq_utp = 0;
+    Nrst_pqu = 0;
+    Nrst_puq = 0;
+    Nrst_qpu = 0;
+    Nrst_qup = 0;
+    Nrst_upq = 0;
+    Nrst_uqp = 0;
+    Nrsu_pqt = 0;
+    Nrsu_ptq = 0;
+    Nrsu_qpt = 0;
+    Nrsu_qtp = 0;
+    Nrsu_tpq = 0;
+    Nrsu_tqp = 0;
+    Nrtp_qsu = 0;
+    Nrtp_qus = 0;
+    Nrtp_squ = 0;
+    Nrtp_suq = 0;
+    Nrtp_uqs = 0;
+    Nrtp_usq = 0;
+    Nrtq_psu = 0;
+    Nrtq_pus = 0;
+    Nrtq_spu = 0;
+    Nrtq_sup = 0;
+    Nrtq_ups = 0;
+    Nrtq_usp = 0;
+    Nrts_pqu = 0;
+    Nrts_puq = 0;
+    Nrts_qpu = 0;
+    Nrts_qup = 0;
+    Nrts_upq = 0;
+    Nrts_uqp = 0;
+    Nrtu_pqs = 0;
+    Nrtu_psq = 0;
+    Nrtu_qps = 0;
+    Nrtu_qsp = 0;
+    Nrtu_spq = 0;
+    Nrtu_sqp = 0;
+    Nrup_qst = 0;
+    Nrup_qts = 0;
+    Nrup_sqt = 0;
+    Nrup_stq = 0;
+    Nrup_tqs = 0;
+    Nrup_tsq = 0;
+    Nruq_pst = 0;
+    Nruq_pts = 0;
+    Nruq_spt = 0;
+    Nruq_stp = 0;
+    Nruq_tps = 0;
+    Nruq_tsp = 0;
+    Nrus_pqt = 0;
+    Nrus_ptq = 0;
+    Nrus_qpt = 0;
+    Nrus_qtp = 0;
+    Nrus_tpq = 0;
+    Nrus_tqp = 0;
+    Nrut_pqs = 0;
+    Nrut_psq = 0;
+    Nrut_qps = 0;
+    Nrut_qsp = 0;
+    Nrut_spq = 0;
+    Nrut_sqp = 0;
+    Nspq_rtu = 0;
+    Nspq_rut = 0;
+    Nspq_tru = 0;
+    Nspq_tur = 0;
+    Nspq_urt = 0;
+    Nspq_utr = 0;
+    Nspr_qtu = 0;
+    Nspr_qut = 0;
+    Nspr_tqu = 0;
+    Nspr_tuq = 0;
+    Nspr_uqt = 0;
+    Nspr_utq = 0;
+    Nspt_qru = 0;
+    Nspt_qur = 0;
+    Nspt_rqu = 0;
+    Nspt_ruq = 0;
+    Nspt_uqr = 0;
+    Nspt_urq = 0;
+    Nspu_qrt = 0;
+    Nspu_qtr = 0;
+    Nspu_rqt = 0;
+    Nspu_rtq = 0;
+    Nspu_tqr = 0;
+    Nspu_trq = 0;
+    Nsqp_rtu = 0;
+    Nsqp_rut = 0;
+    Nsqp_tru = 0;
+    Nsqp_tur = 0;
+    Nsqp_urt = 0;
+    Nsqp_utr = 0;
+    Nsqr_ptu = 0;
+    Nsqr_put = 0;
+    Nsqr_tpu = 0;
+    Nsqr_tup = 0;
+    Nsqr_upt = 0;
+    Nsqr_utp = 0;
+    Nsqt_pru = 0;
+    Nsqt_pur = 0;
+    Nsqt_rpu = 0;
+    Nsqt_rup = 0;
+    Nsqt_upr = 0;
+    Nsqt_urp = 0;
+    Nsqu_prt = 0;
+    Nsqu_ptr = 0;
+    Nsqu_rpt = 0;
+    Nsqu_rtp = 0;
+    Nsqu_tpr = 0;
+    Nsqu_trp = 0;
+    Nsrp_qtu = 0;
+    Nsrp_qut = 0;
+    Nsrp_tqu = 0;
+    Nsrp_tuq = 0;
+    Nsrp_uqt = 0;
+    Nsrp_utq = 0;
+    Nsrq_ptu = 0;
+    Nsrq_put = 0;
+    Nsrq_tpu = 0;
+    Nsrq_tup = 0;
+    Nsrq_upt = 0;
+    Nsrq_utp = 0;
+    Nsrt_pqu = 0;
+    Nsrt_puq = 0;
+    Nsrt_qpu = 0;
+    Nsrt_qup = 0;
+    Nsrt_upq = 0;
+    Nsrt_uqp = 0;
+    Nsru_pqt = 0;
+    Nsru_ptq = 0;
+    Nsru_qpt = 0;
+    Nsru_qtp = 0;
+    Nsru_tpq = 0;
+    Nsru_tqp = 0;
+    Nstp_qru = 0;
+    Nstp_qur = 0;
+    Nstp_rqu = 0;
+    Nstp_ruq = 0;
+    Nstp_uqr = 0;
+    Nstp_urq = 0;
+    Nstq_pru = 0;
+    Nstq_pur = 0;
+    Nstq_rpu = 0;
+    Nstq_rup = 0;
+    Nstq_upr = 0;
+    Nstq_urp = 0;
+    Nstr_pqu = 0;
+    Nstr_puq = 0;
+    Nstr_qpu = 0;
+    Nstr_qup = 0;
+    Nstr_upq = 0;
+    Nstr_uqp = 0;
+    Nstu_pqr = 0;
+    Nstu_prq = 0;
+    Nstu_qpr = 0;
+    Nstu_qrp = 0;
+    Nstu_rpq = 0;
+    Nstu_rqp = 0;
+    Nsup_qrt = 0;
+    Nsup_qtr = 0;
+    Nsup_rqt = 0;
+    Nsup_rtq = 0;
+    Nsup_tqr = 0;
+    Nsup_trq = 0;
+    Nsuq_prt = 0;
+    Nsuq_ptr = 0;
+    Nsuq_rpt = 0;
+    Nsuq_rtp = 0;
+    Nsuq_tpr = 0;
+    Nsuq_trp = 0;
+    Nsur_pqt = 0;
+    Nsur_ptq = 0;
+    Nsur_qpt = 0;
+    Nsur_qtp = 0;
+    Nsur_tpq = 0;
+    Nsur_tqp = 0;
+    Nsut_pqr = 0;
+    Nsut_prq = 0;
+    Nsut_qpr = 0;
+    Nsut_qrp = 0;
+    Nsut_rpq = 0;
+    Nsut_rqp = 0;
+    Ntpq_rsu = 0;
+    Ntpq_rus = 0;
+    Ntpq_sru = 0;
+    Ntpq_sur = 0;
+    Ntpq_urs = 0;
+    Ntpq_usr = 0;
+    Ntpr_qsu = 0;
+    Ntpr_qus = 0;
+    Ntpr_squ = 0;
+    Ntpr_suq = 0;
+    Ntpr_uqs = 0;
+    Ntpr_usq = 0;
+    Ntps_qru = 0;
+    Ntps_qur = 0;
+    Ntps_rqu = 0;
+    Ntps_ruq = 0;
+    Ntps_uqr = 0;
+    Ntps_urq = 0;
+    Ntpu_qrs = 0;
+    Ntpu_qsr = 0;
+    Ntpu_rqs = 0;
+    Ntpu_rsq = 0;
+    Ntpu_sqr = 0;
+    Ntpu_srq = 0;
+    Ntqp_rsu = 0;
+    Ntqp_rus = 0;
+    Ntqp_sru = 0;
+    Ntqp_sur = 0;
+    Ntqp_urs = 0;
+    Ntqp_usr = 0;
+    Ntqr_psu = 0;
+    Ntqr_pus = 0;
+    Ntqr_spu = 0;
+    Ntqr_sup = 0;
+    Ntqr_ups = 0;
+    Ntqr_usp = 0;
+    Ntqs_pru = 0;
+    Ntqs_pur = 0;
+    Ntqs_rpu = 0;
+    Ntqs_rup = 0;
+    Ntqs_upr = 0;
+    Ntqs_urp = 0;
+    Ntqu_prs = 0;
+    Ntqu_psr = 0;
+    Ntqu_rps = 0;
+    Ntqu_rsp = 0;
+    Ntqu_spr = 0;
+    Ntqu_srp = 0;
+    Ntrp_qsu = 0;
+    Ntrp_qus = 0;
+    Ntrp_squ = 0;
+    Ntrp_suq = 0;
+    Ntrp_uqs = 0;
+    Ntrp_usq = 0;
+    Ntrq_psu = 0;
+    Ntrq_pus = 0;
+    Ntrq_spu = 0;
+    Ntrq_sup = 0;
+    Ntrq_ups = 0;
+    Ntrq_usp = 0;
+    Ntrs_pqu = 0;
+    Ntrs_puq = 0;
+    Ntrs_qpu = 0;
+    Ntrs_qup = 0;
+    Ntrs_upq = 0;
+    Ntrs_uqp = 0;
+    Ntru_pqs = 0;
+    Ntru_psq = 0;
+    Ntru_qps = 0;
+    Ntru_qsp = 0;
+    Ntru_spq = 0;
+    Ntru_sqp = 0;
+    Ntsp_qru = 0;
+    Ntsp_qur = 0;
+    Ntsp_rqu = 0;
+    Ntsp_ruq = 0;
+    Ntsp_uqr = 0;
+    Ntsp_urq = 0;
+    Ntsq_pru = 0;
+    Ntsq_pur = 0;
+    Ntsq_rpu = 0;
+    Ntsq_rup = 0;
+    Ntsq_upr = 0;
+    Ntsq_urp = 0;
+    Ntsr_pqu = 0;
+    Ntsr_puq = 0;
+    Ntsr_qpu = 0;
+    Ntsr_qup = 0;
+    Ntsr_upq = 0;
+    Ntsr_uqp = 0;
+    Ntsu_pqr = 0;
+    Ntsu_prq = 0;
+    Ntsu_qpr = 0;
+    Ntsu_qrp = 0;
+    Ntsu_rpq = 0;
+    Ntsu_rqp = 0;
+    Ntup_qrs = 0;
+    Ntup_qsr = 0;
+    Ntup_rqs = 0;
+    Ntup_rsq = 0;
+    Ntup_sqr = 0;
+    Ntup_srq = 0;
+    Ntuq_prs = 0;
+    Ntuq_psr = 0;
+    Ntuq_rps = 0;
+    Ntuq_rsp = 0;
+    Ntuq_spr = 0;
+    Ntuq_srp = 0;
+    Ntur_pqs = 0;
+    Ntur_psq = 0;
+    Ntur_qps = 0;
+    Ntur_qsp = 0;
+    Ntur_spq = 0;
+    Ntur_sqp = 0;
+    Ntus_pqr = 0;
+    Ntus_prq = 0;
+    Ntus_qpr = 0;
+    Ntus_qrp = 0;
+    Ntus_rpq = 0;
+    Ntus_rqp = 0;
+    Nupq_rst = 0;
+    Nupq_rts = 0;
+    Nupq_srt = 0;
+    Nupq_str = 0;
+    Nupq_trs = 0;
+    Nupq_tsr = 0;
+    Nupr_qst = 0;
+    Nupr_qts = 0;
+    Nupr_sqt = 0;
+    Nupr_stq = 0;
+    Nupr_tqs = 0;
+    Nupr_tsq = 0;
+    Nups_qrt = 0;
+    Nups_qtr = 0;
+    Nups_rqt = 0;
+    Nups_rtq = 0;
+    Nups_tqr = 0;
+    Nups_trq = 0;
+    Nupt_qrs = 0;
+    Nupt_qsr = 0;
+    Nupt_rqs = 0;
+    Nupt_rsq = 0;
+    Nupt_sqr = 0;
+    Nupt_srq = 0;
+    Nuqp_rst = 0;
+    Nuqp_rts = 0;
+    Nuqp_srt = 0;
+    Nuqp_str = 0;
+    Nuqp_trs = 0;
+    Nuqp_tsr = 0;
+    Nuqr_pst = 0;
+    Nuqr_pts = 0;
+    Nuqr_spt = 0;
+    Nuqr_stp = 0;
+    Nuqr_tps = 0;
+    Nuqr_tsp = 0;
+    Nuqs_prt = 0;
+    Nuqs_ptr = 0;
+    Nuqs_rpt = 0;
+    Nuqs_rtp = 0;
+    Nuqs_tpr = 0;
+    Nuqs_trp = 0;
+    Nuqt_prs = 0;
+    Nuqt_psr = 0;
+    Nuqt_rps = 0;
+    Nuqt_rsp = 0;
+    Nuqt_spr = 0;
+    Nuqt_srp = 0;
+    Nurp_qst = 0;
+    Nurp_qts = 0;
+    Nurp_sqt = 0;
+    Nurp_stq = 0;
+    Nurp_tqs = 0;
+    Nurp_tsq = 0;
+    Nurq_pst = 0;
+    Nurq_pts = 0;
+    Nurq_spt = 0;
+    Nurq_stp = 0;
+    Nurq_tps = 0;
+    Nurq_tsp = 0;
+    Nurs_pqt = 0;
+    Nurs_ptq = 0;
+    Nurs_qpt = 0;
+    Nurs_qtp = 0;
+    Nurs_tpq = 0;
+    Nurs_tqp = 0;
+    Nurt_pqs = 0;
+    Nurt_psq = 0;
+    Nurt_qps = 0;
+    Nurt_qsp = 0;
+    Nurt_spq = 0;
+    Nurt_sqp = 0;
+    Nusp_qrt = 0;
+    Nusp_qtr = 0;
+    Nusp_rqt = 0;
+    Nusp_rtq = 0;
+    Nusp_tqr = 0;
+    Nusp_trq = 0;
+    Nusq_prt = 0;
+    Nusq_ptr = 0;
+    Nusq_rpt = 0;
+    Nusq_rtp = 0;
+    Nusq_tpr = 0;
+    Nusq_trp = 0;
+    Nusr_pqt = 0;
+    Nusr_ptq = 0;
+    Nusr_qpt = 0;
+    Nusr_qtp = 0;
+    Nusr_tpq = 0;
+    Nusr_tqp = 0;
+    Nust_pqr = 0;
+    Nust_prq = 0;
+    Nust_qpr = 0;
+    Nust_qrp = 0;
+    Nust_rpq = 0;
+    Nust_rqp = 0;
+    Nutp_qrs = 0;
+    Nutp_qsr = 0;
+    Nutp_rqs = 0;
+    Nutp_rsq = 0;
+    Nutp_sqr = 0;
+    Nutp_srq = 0;
+    Nutq_prs = 0;
+    Nutq_psr = 0;
+    Nutq_rps = 0;
+    Nutq_rsp = 0;
+    Nutq_spr = 0;
+    Nutq_srp = 0;
+    Nutr_pqs = 0;
+    Nutr_psq = 0;
+    Nutr_qps = 0;
+    Nutr_qsp = 0;
+    Nutr_spq = 0;
+    Nutr_sqp = 0;
+    Nuts_pqr = 0;
+    Nuts_prq = 0;
+    Nuts_qpr = 0;
+    Nuts_qrp = 0;
+    Nuts_rpq = 0;
+    Nuts_rqp = 0;
+
+
+}
+
+
+void flexmat6::update_as_qtru_ps(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vu = conv_to<uvec>::from(floor( H.vT0/(iNq*iNt*iNr)));
+    vr = conv_to<uvec>::from(floor((H.vT0 - vu*iNq*iNt*iNr)/(iNq*iNt)));
+    vt = conv_to<uvec>::from(floor((H.vT0 - vr*iNq*iNt - vu*iNq*iNt*iNr)/(iNq)));
+    vq = conv_to<uvec>::from(floor((H.vT0 - vt*iNq - vr*iNq*iNt - vu*iNq*iNt*iNr)));
+    vs = conv_to<uvec>::from(floor( H.vT1/(iNp)));
+    vp = conv_to<uvec>::from(H.vT1 - vs*iNp );
+    vValues = H.vVals;
+    deinit();
+}
+
+void flexmat6::update_as_qt_rups(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vt = conv_to<uvec>::from(floor( H.vT0/(iNq)));
+    vq = conv_to<uvec>::from(H.vT0 - vt*iNq );
+    vs = conv_to<uvec>::from(floor( H.vT1/(iNr*iNu*iNp)));
+    vp = conv_to<uvec>::from(floor((H.vT1 - vs*iNr*iNu*iNp)/(iNr*iNu)));
+    vu = conv_to<uvec>::from(floor((H.vT1 - vp*iNr*iNu - vs*iNr*iNu*iNp)/(iNr)));
+    vr = conv_to<uvec>::from(floor((H.vT1 - vu*iNr - vp*iNr*iNu - vs*iNr*iNu*iNp)));
+    vValues = H.vVals;
+    deinit();
+}
+
+sp_mat flexmat6::qtru_ps(){
+    if(Nqtru_ps == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vt*iNq + vr*iNt*iNq + vu*iNr*iNt*iNq;
+        locations.col(1) = vp + vs*iNp;
+        Vqtru_ps = sp_mat(locations.t(), vValues, iNq*iNt*iNr*iNu,iNp*iNs);
+        Nqtru_ps = 1;
+        return Vqtru_ps;
+    }
+    else{
+        return Vqtru_ps;
+    }
+}
+
+sp_mat flexmat6::qt_rups(){
+    if(Nqt_rups == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(1) = vr + vu*iNr + vp*iNu*iNr + vs*iNp*iNu*iNr;
+        locations.col(0) = vq + vt*iNq;
+        Vqt_rups = sp_mat(locations.t(), vValues, iNq*iNt*iNr*iNu,iNp*iNs);
+        Nqt_rups = 1;
+        return Vqt_rups;
+    }
+    else{
+        return Vqt_rups;
+    }
+}
+
+void flexmat6::update_as_qtru_sp(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vu = conv_to<uvec>::from(floor( H.vT0/(iNq*iNt*iNr)));
+    vr = conv_to<uvec>::from(floor((H.vT0 - vu*iNq*iNt*iNr)/(iNq*iNt)));
+    vt = conv_to<uvec>::from(floor((H.vT0 - vr*iNq*iNt - vu*iNq*iNt*iNr)/(iNq)));
+    vq = conv_to<uvec>::from(floor((H.vT0 - vt*iNq - vr*iNq*iNt - vu*iNq*iNt*iNr)));
+    vp = conv_to<uvec>::from(floor( H.vT1/(iNs)));
+    vs = conv_to<uvec>::from(H.vT1 - vp*iNs );
+    vValues = H.vVals;
+    deinit();
+}
+
+void flexmat6::update_as_qt_rusp(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vt = conv_to<uvec>::from(floor( H.vT0/(iNq)));
+    vq = conv_to<uvec>::from(H.vT0 - vt*iNq );
+    vp = conv_to<uvec>::from(floor( H.vT1/(iNr*iNu*iNs)));
+    vs = conv_to<uvec>::from(floor((H.vT1 - vp*iNr*iNu*iNs)/(iNr*iNu)));
+    vu = conv_to<uvec>::from(floor((H.vT1 - vs*iNr*iNu - vp*iNr*iNu*iNs)/(iNr)));
+    vr = conv_to<uvec>::from(floor((H.vT1 - vu*iNr - vs*iNr*iNu - vp*iNr*iNu*iNs)));
+    vValues = H.vVals;
+    deinit();
+}
+
+sp_mat flexmat6::qtru_sp(){
+    if(Nqtru_sp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vt*iNq + vr*iNt*iNq + vu*iNr*iNt*iNq;
+        locations.col(1) = vs + vp*iNs;
+        Vqtru_sp = sp_mat(locations.t(), vValues, iNq*iNt*iNr*iNu,iNs*iNp);
+        Nqtru_sp = 1;
+        return Vqtru_sp;
+    }
+    else{
+        return Vqtru_sp;
+    }
+}
+
+sp_mat flexmat6::qt_rusp(){
+    if(Nqt_rusp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(1) = vr + vu*iNr + vs*iNu*iNr + vp*iNs*iNu*iNr;
+        locations.col(0) = vq + vt*iNq;
+        Vqt_rusp = sp_mat(locations.t(), vValues, iNq*iNt*iNr*iNu,iNs*iNp);
+        Nqt_rusp = 1;
+        return Vqt_rusp;
+    }
+    else{
+        return Vqt_rusp;
+    }
+}
+
+void flexmat6::update_as_pqtru_s(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vu = conv_to<uvec>::from(floor( H.vT0/(iNp*iNq*iNt*iNr)));
+    vr = conv_to<uvec>::from(floor((H.vT0 - vu*iNp*iNq*iNt*iNr)/(iNp*iNq*iNt)));
+    vt = conv_to<uvec>::from(floor((H.vT0 - vr*iNp*iNq*iNt - vu*iNp*iNq*iNt*iNr)/(iNp*iNq)));
+    vq = conv_to<uvec>::from(floor((H.vT0 - vt*iNp*iNq - vr*iNp*iNq*iNt - vu*iNp*iNq*iNt*iNr)/(iNp)));
+    vp = conv_to<uvec>::from(floor((H.vT0 - vq*iNp - vt*iNp*iNq - vr*iNp*iNq*iNt - vu*iNp*iNq*iNt*iNr)));
+    vs = conv_to<uvec>::from(H.vT1);
+    vValues = H.vVals;
+    deinit();
+}
+
+void flexmat6::update_as_p_qtrus(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vs = conv_to<uvec>::from(floor( H.vT1/(iNq*iNt*iNr*iNu)));
+    vu = conv_to<uvec>::from(floor((H.vT1 - vs*iNq*iNt*iNr*iNu)/(iNq*iNt*iNr)));
+    vr = conv_to<uvec>::from(floor((H.vT1 - vu*iNq*iNt*iNr - vs*iNq*iNt*iNr*iNu)/(iNq*iNt)));
+    vt = conv_to<uvec>::from(floor((H.vT1 - vr*iNq*iNt - vu*iNq*iNt*iNr - vs*iNq*iNt*iNr*iNu)/(iNq)));
+    vq = conv_to<uvec>::from(floor((H.vT1 - vt*iNq - vr*iNq*iNt - vu*iNq*iNt*iNr - vs*iNq*iNt*iNr*iNu)));
+    vp = conv_to<uvec>::from(H.vT0);
+    vValues = H.vVals;
+    deinit();
+}
+
+sp_mat flexmat6::pqtru_s(){
+    if(Npqtru_s == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vq*iNp + vt*iNq*iNp + vr*iNt*iNq*iNp + vu*iNr*iNt*iNq*iNp;
+        locations.col(1) = vs;
+        Vpqtru_s = sp_mat(locations.t(), vValues, iNp*iNq*iNt*iNr*iNu,iNs);
+        Npqtru_s = 1;
+        return Vpqtru_s;
+    }
+    else{
+        return Vpqtru_s;
+    }
+}
+
+sp_mat flexmat6::p_qtrus(){
+    if(Np_qtrus == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(1) = vq + vt*iNq + vr*iNt*iNq + vu*iNr*iNt*iNq + vs*iNu*iNr*iNt*iNq;
+        locations.col(0) = vp;
+        Vp_qtrus = sp_mat(locations.t(), vValues, iNp,iNq*iNt*iNr*iNu*iNs);
+        Np_qtrus = 1;
+        return Vp_qtrus;
+    }
+    else{
+        return Vp_qtrus;
+    }
+}
+
+void flexmat6::update_as_sqtru_p(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vu = conv_to<uvec>::from(floor( H.vT0/(iNs*iNq*iNt*iNr)));
+    vr = conv_to<uvec>::from(floor((H.vT0 - vu*iNs*iNq*iNt*iNr)/(iNs*iNq*iNt)));
+    vt = conv_to<uvec>::from(floor((H.vT0 - vr*iNs*iNq*iNt - vu*iNs*iNq*iNt*iNr)/(iNs*iNq)));
+    vq = conv_to<uvec>::from(floor((H.vT0 - vt*iNs*iNq - vr*iNs*iNq*iNt - vu*iNs*iNq*iNt*iNr)/(iNs)));
+    vs = conv_to<uvec>::from(floor((H.vT0 - vq*iNs - vt*iNs*iNq - vr*iNs*iNq*iNt - vu*iNs*iNq*iNt*iNr)));
+    vp = conv_to<uvec>::from(H.vT1);
+    vValues = H.vVals;
+    deinit();
+}
+
+void flexmat6::update_as_s_qtrup(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vp = conv_to<uvec>::from(floor( H.vT1/(iNq*iNt*iNr*iNu)));
+    vu = conv_to<uvec>::from(floor((H.vT1 - vp*iNq*iNt*iNr*iNu)/(iNq*iNt*iNr)));
+    vr = conv_to<uvec>::from(floor((H.vT1 - vu*iNq*iNt*iNr - vp*iNq*iNt*iNr*iNu)/(iNq*iNt)));
+    vt = conv_to<uvec>::from(floor((H.vT1 - vr*iNq*iNt - vu*iNq*iNt*iNr - vp*iNq*iNt*iNr*iNu)/(iNq)));
+    vq = conv_to<uvec>::from(floor((H.vT1 - vt*iNq - vr*iNq*iNt - vu*iNq*iNt*iNr - vp*iNq*iNt*iNr*iNu)));
+    vs = conv_to<uvec>::from(H.vT0);
+    vValues = H.vVals;
+    deinit();
+}
+
+sp_mat flexmat6::sqtru_p(){
+    if(Nsqtru_p == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vq*iNs + vt*iNq*iNs + vr*iNt*iNq*iNs + vu*iNr*iNt*iNq*iNs;
+        locations.col(1) = vp;
+        Vsqtru_p = sp_mat(locations.t(), vValues, iNs*iNq*iNt*iNr*iNu,iNp);
+        Nsqtru_p = 1;
+        return Vsqtru_p;
+    }
+    else{
+        return Vsqtru_p;
+    }
+}
+
+sp_mat flexmat6::s_qtrup(){
+    if(Ns_qtrup == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(1) = vq + vt*iNq + vr*iNt*iNq + vu*iNr*iNt*iNq + vp*iNu*iNr*iNt*iNq;
+        locations.col(0) = vs;
+        Vs_qtrup = sp_mat(locations.t(), vValues, iNs,iNq*iNt*iNr*iNu*iNp);
+        Ns_qtrup = 1;
+        return Vs_qtrup;
+    }
+    else{
+        return Vs_qtrup;
+    }
+}
+
+void flexmat6::update_as_qru_pst(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vu = conv_to<uvec>::from(floor( H.vT0/(iNq*iNr)));
+    vr = conv_to<uvec>::from(floor((H.vT0 - vu*iNq*iNr)/(iNq)));
+    vq = conv_to<uvec>::from(floor((H.vT0 - vr*iNq - vu*iNq*iNr)));
+    vt = conv_to<uvec>::from(floor( H.vT1/(iNp*iNs)));
+    vs = conv_to<uvec>::from(floor((H.vT1 - vt*iNp*iNs)/(iNp)));
+    vp = conv_to<uvec>::from(floor((H.vT1 - vs*iNp - vt*iNp*iNs)));
+    vValues = H.vVals;
+    deinit();
+}
+
+sp_mat flexmat6::qru_pst(){
+    if(Nqru_pst == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vr*iNq + vu*iNr*iNq;
+        locations.col(1) = vp + vs*iNp + vt*iNs*iNp;
+        Vqru_pst = sp_mat(locations.t(), vValues, iNq*iNr*iNu,iNp*iNs*iNt);
+        Nqru_pst = 1;
+        return Vqru_pst;
+    }
+    else{
+        return Vqru_pst;
+    }
+}
+
+void flexmat6::update_as_pru_stq(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vu = conv_to<uvec>::from(floor( H.vT0/(iNp*iNr)));
+    vr = conv_to<uvec>::from(floor((H.vT0 - vu*iNp*iNr)/(iNp)));
+    vp = conv_to<uvec>::from(floor((H.vT0 - vr*iNp - vu*iNp*iNr)));
+    vq = conv_to<uvec>::from(floor( H.vT1/(iNs*iNt)));
+    vt = conv_to<uvec>::from(floor((H.vT1 - vq*iNs*iNt)/(iNs)));
+    vs = conv_to<uvec>::from(floor((H.vT1 - vt*iNs - vq*iNs*iNt)));
+    vValues = H.vVals;
+    deinit();
+}
+
+sp_mat flexmat6::pru_stq(){
+    if(Npru_stq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vr*iNp + vu*iNr*iNp;
+        locations.col(1) = vs + vt*iNs + vq*iNt*iNs;
+        Vpru_stq = sp_mat(locations.t(), vValues, iNp*iNr*iNu,iNs*iNt*iNq);
+        Npru_stq = 1;
+        return Vpru_stq;
+    }
+    else{
+        return Vpru_stq;
+    }
+}
+
+void flexmat6::update_as_tru_pqs(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vu = conv_to<uvec>::from(floor( H.vT0/(iNt*iNr)));
+    vr = conv_to<uvec>::from(floor((H.vT0 - vu*iNt*iNr)/(iNt)));
+    vt = conv_to<uvec>::from(floor((H.vT0 - vr*iNt - vu*iNt*iNr)));
+    vs = conv_to<uvec>::from(floor( H.vT1/(iNp*iNq)));
+    vq = conv_to<uvec>::from(floor((H.vT1 - vs*iNp*iNq)/(iNp)));
+    vp = conv_to<uvec>::from(floor((H.vT1 - vq*iNp - vs*iNp*iNq)));
+    vValues = H.vVals;
+    deinit();
+}
+
+sp_mat flexmat6::tru_pqs(){
+    if(Ntru_pqs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vr*iNt + vu*iNr*iNt;
+        locations.col(1) = vp + vq*iNp + vs*iNq*iNp;
+        Vtru_pqs = sp_mat(locations.t(), vValues, iNt*iNr*iNu,iNp*iNq*iNs);
+        Ntru_pqs = 1;
+        return Vtru_pqs;
+    }
+    else{
+        return Vtru_pqs;
+    }
+}
+
+void flexmat6::update_as_sru_tpq(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vu = conv_to<uvec>::from(floor( H.vT0/(iNs*iNr)));
+    vr = conv_to<uvec>::from(floor((H.vT0 - vu*iNs*iNr)/(iNs)));
+    vs = conv_to<uvec>::from(floor((H.vT0 - vr*iNs - vu*iNs*iNr)));
+    vq = conv_to<uvec>::from(floor( H.vT1/(iNt*iNp)));
+    vp = conv_to<uvec>::from(floor((H.vT1 - vq*iNt*iNp)/(iNt)));
+    vt = conv_to<uvec>::from(floor((H.vT1 - vp*iNt - vq*iNt*iNp)));
+    vValues = H.vVals;
+    deinit();
+}
+
+sp_mat flexmat6::sru_tpq(){
+    if(Nsru_tpq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vr*iNs + vu*iNr*iNs;
+        locations.col(1) = vt + vp*iNt + vq*iNp*iNt;
+        Vsru_tpq = sp_mat(locations.t(), vValues, iNs*iNr*iNu,iNt*iNp*iNq);
+        Nsru_tpq = 1;
+        return Vsru_tpq;
+    }
+    else{
+        return Vsru_tpq;
+    }
+}
+
+void flexmat6::update_as_pqru_st(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vu = conv_to<uvec>::from(floor( H.vT0/(iNp*iNq*iNr)));
+    vr = conv_to<uvec>::from(floor((H.vT0 - vu*iNp*iNq*iNr)/(iNp*iNq)));
+    vq = conv_to<uvec>::from(floor((H.vT0 - vr*iNp*iNq - vu*iNp*iNq*iNr)/(iNp)));
+    vp = conv_to<uvec>::from(floor((H.vT0 - vq*iNp - vr*iNp*iNq - vu*iNp*iNq*iNr)));
+    vt = conv_to<uvec>::from(floor( H.vT1/(iNs)));
+    vs = conv_to<uvec>::from(H.vT1 - vt*iNs );
+    vValues = H.vVals;
+    deinit();
+}
+
+void flexmat6::update_as_pq_rust(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vq = conv_to<uvec>::from(floor( H.vT0/(iNp)));
+    vp = conv_to<uvec>::from(H.vT0 - vq*iNp );
+    vt = conv_to<uvec>::from(floor( H.vT1/(iNr*iNu*iNs)));
+    vs = conv_to<uvec>::from(floor((H.vT1 - vt*iNr*iNu*iNs)/(iNr*iNu)));
+    vu = conv_to<uvec>::from(floor((H.vT1 - vs*iNr*iNu - vt*iNr*iNu*iNs)/(iNr)));
+    vr = conv_to<uvec>::from(floor((H.vT1 - vu*iNr - vs*iNr*iNu - vt*iNr*iNu*iNs)));
+    vValues = H.vVals;
+    deinit();
+}
+
+sp_mat flexmat6::pqru_st(){
+    if(Npqru_st == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vq*iNp + vr*iNq*iNp + vu*iNr*iNq*iNp;
+        locations.col(1) = vs + vt*iNs;
+        Vpqru_st = sp_mat(locations.t(), vValues, iNp*iNq*iNr*iNu,iNs*iNt);
+        Npqru_st = 1;
+        return Vpqru_st;
+    }
+    else{
+        return Vpqru_st;
+    }
+}
+
+sp_mat flexmat6::pq_rust(){
+    if(Npq_rust == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(1) = vr + vu*iNr + vs*iNu*iNr + vt*iNs*iNu*iNr;
+        locations.col(0) = vp + vq*iNp;
+        Vpq_rust = sp_mat(locations.t(), vValues, iNp*iNq*iNr*iNu,iNs*iNt);
+        Npq_rust = 1;
+        return Vpq_rust;
+    }
+    else{
+        return Vpq_rust;
+    }
+}
+
+void flexmat6::update_as_stru_pq(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vu = conv_to<uvec>::from(floor( H.vT0/(iNs*iNt*iNr)));
+    vr = conv_to<uvec>::from(floor((H.vT0 - vu*iNs*iNt*iNr)/(iNs*iNt)));
+    vt = conv_to<uvec>::from(floor((H.vT0 - vr*iNs*iNt - vu*iNs*iNt*iNr)/(iNs)));
+    vs = conv_to<uvec>::from(floor((H.vT0 - vt*iNs - vr*iNs*iNt - vu*iNs*iNt*iNr)));
+    vq = conv_to<uvec>::from(floor( H.vT1/(iNp)));
+    vp = conv_to<uvec>::from(H.vT1 - vq*iNp );
+    vValues = H.vVals;
+    deinit();
+}
+
+void flexmat6::update_as_st_rupq(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vt = conv_to<uvec>::from(floor( H.vT0/(iNs)));
+    vs = conv_to<uvec>::from(H.vT0 - vt*iNs );
+    vq = conv_to<uvec>::from(floor( H.vT1/(iNr*iNu*iNp)));
+    vp = conv_to<uvec>::from(floor((H.vT1 - vq*iNr*iNu*iNp)/(iNr*iNu)));
+    vu = conv_to<uvec>::from(floor((H.vT1 - vp*iNr*iNu - vq*iNr*iNu*iNp)/(iNr)));
+    vr = conv_to<uvec>::from(floor((H.vT1 - vu*iNr - vp*iNr*iNu - vq*iNr*iNu*iNp)));
+    vValues = H.vVals;
+    deinit();
+}
+
+sp_mat flexmat6::stru_pq(){
+    if(Nstru_pq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vt*iNs + vr*iNt*iNs + vu*iNr*iNt*iNs;
+        locations.col(1) = vp + vq*iNp;
+        Vstru_pq = sp_mat(locations.t(), vValues, iNs*iNt*iNr*iNu,iNp*iNq);
+        Nstru_pq = 1;
+        return Vstru_pq;
+    }
+    else{
+        return Vstru_pq;
+    }
+}
+
+sp_mat flexmat6::st_rupq(){
+    if(Nst_rupq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(1) = vr + vu*iNr + vp*iNu*iNr + vq*iNp*iNu*iNr;
+        locations.col(0) = vs + vt*iNs;
+        Vst_rupq = sp_mat(locations.t(), vValues, iNs*iNt*iNr*iNu,iNp*iNq);
+        Nst_rupq = 1;
+        return Vst_rupq;
+    }
+    else{
+        return Vst_rupq;
+    }
+}
+
+void flexmat6::update_as_psq_rtu(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vq = conv_to<uvec>::from(floor( H.vT0/(iNp*iNs)));
+    vs = conv_to<uvec>::from(floor((H.vT0 - vq*iNp*iNs)/(iNp)));
+    vp = conv_to<uvec>::from(floor((H.vT0 - vs*iNp - vq*iNp*iNs)));
+    vu = conv_to<uvec>::from(floor( H.vT1/(iNr*iNt)));
+    vt = conv_to<uvec>::from(floor((H.vT1 - vu*iNr*iNt)/(iNr)));
+    vr = conv_to<uvec>::from(floor((H.vT1 - vt*iNr - vu*iNr*iNt)));
+    vValues = H.vVals;
+    deinit();
+}
+
+sp_mat flexmat6::psq_rtu(){
+    if(Npsq_rtu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vs*iNp + vq*iNs*iNp;
+        locations.col(1) = vr + vt*iNr + vu*iNt*iNr;
+        Vpsq_rtu = sp_mat(locations.t(), vValues, iNp*iNs*iNq,iNr*iNt*iNu);
+        Npsq_rtu = 1;
+        return Vpsq_rtu;
+    }
+    else{
+        return Vpsq_rtu;
+    }
+}
+
+void flexmat6::update_as_tur_pqs(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vr = conv_to<uvec>::from(floor( H.vT0/(iNt*iNu)));
+    vu = conv_to<uvec>::from(floor((H.vT0 - vr*iNt*iNu)/(iNt)));
+    vt = conv_to<uvec>::from(floor((H.vT0 - vu*iNt - vr*iNt*iNu)));
+    vs = conv_to<uvec>::from(floor( H.vT1/(iNp*iNq)));
+    vq = conv_to<uvec>::from(floor((H.vT1 - vs*iNp*iNq)/(iNp)));
+    vp = conv_to<uvec>::from(floor((H.vT1 - vq*iNp - vs*iNp*iNq)));
+    vValues = H.vVals;
+    deinit();
+}
+
+sp_mat flexmat6::tur_pqs(){
+    if(Ntur_pqs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vu*iNt + vr*iNu*iNt;
+        locations.col(1) = vp + vq*iNp + vs*iNq*iNp;
+        Vtur_pqs = sp_mat(locations.t(), vValues, iNt*iNu*iNr,iNp*iNq*iNs);
+        Ntur_pqs = 1;
+        return Vtur_pqs;
+    }
+    else{
+        return Vtur_pqs;
+    }
+}
+
+
+
+
+
+void flexmat6::update_as_rstu_pq(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vu = conv_to<uvec>::from(floor( H.vT0/(iNr*iNs*iNt)));
+    vt = conv_to<uvec>::from(floor((H.vT0 - vu*iNr*iNs*iNt)/(iNr*iNs)));
+    vs = conv_to<uvec>::from(floor((H.vT0 - vt*iNr*iNs - vu*iNr*iNs*iNt)/(iNr)));
+    vr = conv_to<uvec>::from(floor((H.vT0 - vs*iNr - vt*iNr*iNs - vu*iNr*iNs*iNt)));
+    vq = conv_to<uvec>::from(floor( H.vT1/(iNp)));
+    vp = conv_to<uvec>::from(H.vT1 - vq*iNp );
+    vValues = H.vVals;
+    deinit();
+}
+
+void flexmat6::update_as_rs_tupq(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vs = conv_to<uvec>::from(floor( H.vT0/(iNr)));
+    vr = conv_to<uvec>::from(H.vT0 - vs*iNr );
+    vq = conv_to<uvec>::from(floor( H.vT1/(iNt*iNu*iNp)));
+    vp = conv_to<uvec>::from(floor((H.vT1 - vq*iNt*iNu*iNp)/(iNt*iNu)));
+    vu = conv_to<uvec>::from(floor((H.vT1 - vp*iNt*iNu - vq*iNt*iNu*iNp)/(iNt)));
+    vt = conv_to<uvec>::from(floor((H.vT1 - vu*iNt - vp*iNt*iNu - vq*iNt*iNu*iNp)));
+    vValues = H.vVals;
+    deinit();
+}
+
+sp_mat flexmat6::rstu_pq(){
+    if(Nrstu_pq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vs*iNr + vt*iNs*iNr + vu*iNt*iNs*iNr;
+        locations.col(1) = vp + vq*iNp;
+        Vrstu_pq = sp_mat(locations.t(), vValues, iNr*iNs*iNt*iNu,iNp*iNq);
+        Nrstu_pq = 1;
+        return Vrstu_pq;
+    }
+    else{
+        return Vrstu_pq;
+    }
+}
+
+sp_mat flexmat6::rs_tupq(){
+    if(Nrs_tupq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(1) = vt + vu*iNt + vp*iNu*iNt + vq*iNp*iNu*iNt;
+        locations.col(0) = vr + vs*iNr;
+        Vrs_tupq = sp_mat(locations.t(), vValues, iNr*iNs*iNt*iNu,iNp*iNq);
+        Nrs_tupq = 1;
+        return Vrs_tupq;
+    }
+    else{
+        return Vrs_tupq;
+    }
+}
+
+void flexmat6::update_as_psqr_tu(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vr = conv_to<uvec>::from(floor( H.vT0/(iNp*iNs*iNq)));
+    vq = conv_to<uvec>::from(floor((H.vT0 - vr*iNp*iNs*iNq)/(iNp*iNs)));
+    vs = conv_to<uvec>::from(floor((H.vT0 - vq*iNp*iNs - vr*iNp*iNs*iNq)/(iNp)));
+    vp = conv_to<uvec>::from(floor((H.vT0 - vs*iNp - vq*iNp*iNs - vr*iNp*iNs*iNq)));
+    vu = conv_to<uvec>::from(floor( H.vT1/(iNt)));
+    vt = conv_to<uvec>::from(H.vT1 - vu*iNt );
+    vValues = H.vVals;
+    deinit();
+}
+
+void flexmat6::update_as_ps_qrtu(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vs = conv_to<uvec>::from(floor( H.vT0/(iNp)));
+    vp = conv_to<uvec>::from(H.vT0 - vs*iNp );
+    vu = conv_to<uvec>::from(floor( H.vT1/(iNq*iNr*iNt)));
+    vt = conv_to<uvec>::from(floor((H.vT1 - vu*iNq*iNr*iNt)/(iNq*iNr)));
+    vr = conv_to<uvec>::from(floor((H.vT1 - vt*iNq*iNr - vu*iNq*iNr*iNt)/(iNq)));
+    vq = conv_to<uvec>::from(floor((H.vT1 - vr*iNq - vt*iNq*iNr - vu*iNq*iNr*iNt)));
+    vValues = H.vVals;
+    deinit();
+}
+
+sp_mat flexmat6::psqr_tu(){
+    if(Npsqr_tu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vs*iNp + vq*iNs*iNp + vr*iNq*iNs*iNp;
+        locations.col(1) = vt + vu*iNt;
+        Vpsqr_tu = sp_mat(locations.t(), vValues, iNp*iNs*iNq*iNr,iNt*iNu);
+        Npsqr_tu = 1;
+        return Vpsqr_tu;
+    }
+    else{
+        return Vpsqr_tu;
+    }
+}
+
+sp_mat flexmat6::ps_qrtu(){
+    if(Nps_qrtu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(1) = vq + vr*iNq + vt*iNr*iNq + vu*iNt*iNr*iNq;
+        locations.col(0) = vp + vs*iNp;
+        Vps_qrtu = sp_mat(locations.t(), vValues, iNp*iNs*iNq*iNr,iNt*iNu);
+        Nps_qrtu = 1;
+        return Vps_qrtu;
+    }
+    else{
+        return Vps_qrtu;
+    }
+}
+
+void flexmat6::update_as_qrtu_ps(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vu = conv_to<uvec>::from(floor( H.vT0/(iNq*iNr*iNt)));
+    vt = conv_to<uvec>::from(floor((H.vT0 - vu*iNq*iNr*iNt)/(iNq*iNr)));
+    vr = conv_to<uvec>::from(floor((H.vT0 - vt*iNq*iNr - vu*iNq*iNr*iNt)/(iNq)));
+    vq = conv_to<uvec>::from(floor((H.vT0 - vr*iNq - vt*iNq*iNr - vu*iNq*iNr*iNt)));
+    vs = conv_to<uvec>::from(floor( H.vT1/(iNp)));
+    vp = conv_to<uvec>::from(H.vT1 - vs*iNp );
+    vValues = H.vVals;
+    deinit();
+}
+
+void flexmat6::update_as_qr_tups(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vr = conv_to<uvec>::from(floor( H.vT0/(iNq)));
+    vq = conv_to<uvec>::from(H.vT0 - vr*iNq );
+    vs = conv_to<uvec>::from(floor( H.vT1/(iNt*iNu*iNp)));
+    vp = conv_to<uvec>::from(floor((H.vT1 - vs*iNt*iNu*iNp)/(iNt*iNu)));
+    vu = conv_to<uvec>::from(floor((H.vT1 - vp*iNt*iNu - vs*iNt*iNu*iNp)/(iNt)));
+    vt = conv_to<uvec>::from(floor((H.vT1 - vu*iNt - vp*iNt*iNu - vs*iNt*iNu*iNp)));
+    vValues = H.vVals;
+    deinit();
+}
+
+sp_mat flexmat6::qrtu_ps(){
+    if(Nqrtu_ps == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vr*iNq + vt*iNr*iNq + vu*iNt*iNr*iNq;
+        locations.col(1) = vp + vs*iNp;
+        Vqrtu_ps = sp_mat(locations.t(), vValues, iNq*iNr*iNt*iNu,iNp*iNs);
+        Nqrtu_ps = 1;
+        return Vqrtu_ps;
+    }
+    else{
+        return Vqrtu_ps;
+    }
+}
+
+sp_mat flexmat6::qr_tups(){
+    if(Nqr_tups == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(1) = vt + vu*iNt + vp*iNu*iNt + vs*iNp*iNu*iNt;
+        locations.col(0) = vq + vr*iNq;
+        Vqr_tups = sp_mat(locations.t(), vValues, iNq*iNr*iNt*iNu,iNp*iNs);
+        Nqr_tups = 1;
+        return Vqr_tups;
+    }
+    else{
+        return Vqr_tups;
+    }
+}
+
+void flexmat6::update_as_stpq_ru(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vq = conv_to<uvec>::from(floor( H.vT0/(iNs*iNt*iNp)));
+    vp = conv_to<uvec>::from(floor((H.vT0 - vq*iNs*iNt*iNp)/(iNs*iNt)));
+    vt = conv_to<uvec>::from(floor((H.vT0 - vp*iNs*iNt - vq*iNs*iNt*iNp)/(iNs)));
+    vs = conv_to<uvec>::from(floor((H.vT0 - vt*iNs - vp*iNs*iNt - vq*iNs*iNt*iNp)));
+    vu = conv_to<uvec>::from(floor( H.vT1/(iNr)));
+    vr = conv_to<uvec>::from(H.vT1 - vu*iNr );
+    vValues = H.vVals;
+    deinit();
+}
+
+void flexmat6::update_as_st_pqru(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vt = conv_to<uvec>::from(floor( H.vT0/(iNs)));
+    vs = conv_to<uvec>::from(H.vT0 - vt*iNs );
+    vu = conv_to<uvec>::from(floor( H.vT1/(iNp*iNq*iNr)));
+    vr = conv_to<uvec>::from(floor((H.vT1 - vu*iNp*iNq*iNr)/(iNp*iNq)));
+    vq = conv_to<uvec>::from(floor((H.vT1 - vr*iNp*iNq - vu*iNp*iNq*iNr)/(iNp)));
+    vp = conv_to<uvec>::from(floor((H.vT1 - vq*iNp - vr*iNp*iNq - vu*iNp*iNq*iNr)));
+    vValues = H.vVals;
+    deinit();
+}
+
+sp_mat flexmat6::stpq_ru(){
+    if(Nstpq_ru == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vt*iNs + vp*iNt*iNs + vq*iNp*iNt*iNs;
+        locations.col(1) = vr + vu*iNr;
+        Vstpq_ru = sp_mat(locations.t(), vValues, iNs*iNt*iNp*iNq,iNr*iNu);
+        Nstpq_ru = 1;
+        return Vstpq_ru;
+    }
+    else{
+        return Vstpq_ru;
+    }
+}
+
+sp_mat flexmat6::st_pqru(){
+    if(Nst_pqru == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(1) = vp + vq*iNp + vr*iNq*iNp + vu*iNr*iNq*iNp;
+        locations.col(0) = vs + vt*iNs;
+        Vst_pqru = sp_mat(locations.t(), vValues, iNs*iNt*iNp*iNq,iNr*iNu);
+        Nst_pqru = 1;
+        return Vst_pqru;
+    }
+    else{
+        return Vst_pqru;
+    }
+}
+
+void flexmat6::update_as_qrtu_sp(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vu = conv_to<uvec>::from(floor( H.vT0/(iNq*iNr*iNt)));
+    vt = conv_to<uvec>::from(floor((H.vT0 - vu*iNq*iNr*iNt)/(iNq*iNr)));
+    vr = conv_to<uvec>::from(floor((H.vT0 - vt*iNq*iNr - vu*iNq*iNr*iNt)/(iNq)));
+    vq = conv_to<uvec>::from(floor((H.vT0 - vr*iNq - vt*iNq*iNr - vu*iNq*iNr*iNt)));
+    vp = conv_to<uvec>::from(floor( H.vT1/(iNs)));
+    vs = conv_to<uvec>::from(H.vT1 - vp*iNs );
+    vValues = H.vVals;
+    deinit();
+}
+
+void flexmat6::update_as_qr_tusp(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vr = conv_to<uvec>::from(floor( H.vT0/(iNq)));
+    vq = conv_to<uvec>::from(H.vT0 - vr*iNq );
+    vp = conv_to<uvec>::from(floor( H.vT1/(iNt*iNu*iNs)));
+    vs = conv_to<uvec>::from(floor((H.vT1 - vp*iNt*iNu*iNs)/(iNt*iNu)));
+    vu = conv_to<uvec>::from(floor((H.vT1 - vs*iNt*iNu - vp*iNt*iNu*iNs)/(iNt)));
+    vt = conv_to<uvec>::from(floor((H.vT1 - vu*iNt - vs*iNt*iNu - vp*iNt*iNu*iNs)));
+    vValues = H.vVals;
+    deinit();
+}
+
+sp_mat flexmat6::qrtu_sp(){
+    if(Nqrtu_sp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vr*iNq + vt*iNr*iNq + vu*iNt*iNr*iNq;
+        locations.col(1) = vs + vp*iNs;
+        Vqrtu_sp = sp_mat(locations.t(), vValues, iNq*iNr*iNt*iNu,iNs*iNp);
+        Nqrtu_sp = 1;
+        return Vqrtu_sp;
+    }
+    else{
+        return Vqrtu_sp;
+    }
+}
+
+sp_mat flexmat6::qr_tusp(){
+    if(Nqr_tusp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(1) = vt + vu*iNt + vs*iNu*iNt + vp*iNs*iNu*iNt;
+        locations.col(0) = vq + vr*iNq;
+        Vqr_tusp = sp_mat(locations.t(), vValues, iNq*iNr*iNt*iNu,iNs*iNp);
+        Nqr_tusp = 1;
+        return Vqr_tusp;
+    }
+    else{
+        return Vqr_tusp;
+    }
+}
+
+void flexmat6::update_as_pqs_rtu(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vs = conv_to<uvec>::from(floor( H.vT0/(iNp*iNq)));
+    vq = conv_to<uvec>::from(floor((H.vT0 - vs*iNp*iNq)/(iNp)));
+    vp = conv_to<uvec>::from(floor((H.vT0 - vq*iNp - vs*iNp*iNq)));
+    vu = conv_to<uvec>::from(floor( H.vT1/(iNr*iNt)));
+    vt = conv_to<uvec>::from(floor((H.vT1 - vu*iNr*iNt)/(iNr)));
+    vr = conv_to<uvec>::from(floor((H.vT1 - vt*iNr - vu*iNr*iNt)));
+    vValues = H.vVals;
+    deinit();
+}
+
+sp_mat flexmat6::pqs_rtu(){
+    if(Npqs_rtu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vq*iNp + vs*iNq*iNp;
+        locations.col(1) = vr + vt*iNr + vu*iNt*iNr;
+        Vpqs_rtu = sp_mat(locations.t(), vValues, iNp*iNq*iNs,iNr*iNt*iNu);
+        Npqs_rtu = 1;
+        return Vpqs_rtu;
+    }
+    else{
+        return Vpqs_rtu;
+    }
+}
+
+
+void flexmat6::update_as_uqr_stp(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vr = conv_to<uvec>::from(floor( H.vT0/(iNu*iNq)));
+    vq = conv_to<uvec>::from(floor((H.vT0 - vr*iNu*iNq)/(iNu)));
+    vu = conv_to<uvec>::from(floor((H.vT0 - vq*iNu - vr*iNu*iNq)));
+    vp = conv_to<uvec>::from(floor( H.vT1/(iNs*iNt)));
+    vt = conv_to<uvec>::from(floor((H.vT1 - vp*iNs*iNt)/(iNs)));
+    vs = conv_to<uvec>::from(floor((H.vT1 - vt*iNs - vp*iNs*iNt)));
+    vValues = H.vVals;
+    deinit();
+}
+
+sp_mat flexmat6::uqr_stp(){
+    if(Nuqr_stp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vq*iNu + vr*iNq*iNu;
+        locations.col(1) = vs + vt*iNs + vp*iNt*iNs;
+        Vuqr_stp = sp_mat(locations.t(), vValues, iNu*iNq*iNr,iNs*iNt*iNp);
+        Nuqr_stp = 1;
+        return Vuqr_stp;
+    }
+    else{
+        return Vuqr_stp;
+    }
+}
+
+sp_mat flexmat6::pqrs_tu(){
+    if(Npqrs_tu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vq*iNp + vr*iNq*iNp + vs*iNr*iNq*iNp;
+        locations.col(1) = vt + vu*iNt;
+        Vpqrs_tu = sp_mat(locations.t(), vValues, iNp*iNq*iNr*iNs,iNt*iNu);
+        Npqrs_tu = 1;
+        return Vpqrs_tu;
+    }
+    else{
+        return Vpqrs_tu;
+    }
+}
+
+sp_mat flexmat6::sp_qrtu(){
+    if(Nsp_qrtu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(1) = vq + vr*iNq + vt*iNr*iNq + vu*iNt*iNr*iNq;
+        locations.col(0) = vs + vp*iNs;
+        Vsp_qrtu = sp_mat(locations.t(), vValues, iNs*iNp*iNq*iNr,iNt*iNu);
+        Nsp_qrtu = 1;
+        return Vsp_qrtu;
+    }
+    else{
+        return Vsp_qrtu;
+    }
+}
+
+sp_mat flexmat6::pqs_tur(){
+    if(Npqs_tur == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vq*iNp + vs*iNq*iNp;
+        locations.col(1) = vt + vu*iNt + vr*iNu*iNt;
+        Vpqs_tur = sp_mat(locations.t(), vValues, iNp*iNq*iNs,iNt*iNu*iNr);
+        Npqs_tur = 1;
+        return Vpqs_tur;
+    }
+    else{
+        return Vpqs_tur;
+    }
+}
+
+//Autogenerated again
+
+sp_mat flexmat6::pqr_stu(){
+    if(Npqr_stu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vq*iNp + vr*iNq*iNp;
+        locations.col(1) = vs + vt*iNs + vu*iNt*iNs;
+        Vpqr_stu = sp_mat(locations.t(), vValues, iNp*iNq*iNr,iNs*iNt*iNu);
+        Npqr_stu = 1;
+        return Vpqr_stu;
+    }
+    else{
+        return Vpqr_stu;
+    }
+}
+
+sp_mat flexmat6::pqr_sut(){
+    if(Npqr_sut == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vq*iNp + vr*iNq*iNp;
+        locations.col(1) = vs + vu*iNs + vt*iNu*iNs;
+        Vpqr_sut = sp_mat(locations.t(), vValues, iNp*iNq*iNr,iNs*iNu*iNt);
+        Npqr_sut = 1;
+        return Vpqr_sut;
+    }
+    else{
+        return Vpqr_sut;
+    }
+}
+
+sp_mat flexmat6::pqr_tsu(){
+    if(Npqr_tsu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vq*iNp + vr*iNq*iNp;
+        locations.col(1) = vt + vs*iNt + vu*iNs*iNt;
+        Vpqr_tsu = sp_mat(locations.t(), vValues, iNp*iNq*iNr,iNt*iNs*iNu);
+        Npqr_tsu = 1;
+        return Vpqr_tsu;
+    }
+    else{
+        return Vpqr_tsu;
+    }
+}
+
+sp_mat flexmat6::pqr_tus(){
+    if(Npqr_tus == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vq*iNp + vr*iNq*iNp;
+        locations.col(1) = vt + vu*iNt + vs*iNu*iNt;
+        Vpqr_tus = sp_mat(locations.t(), vValues, iNp*iNq*iNr,iNt*iNu*iNs);
+        Npqr_tus = 1;
+        return Vpqr_tus;
+    }
+    else{
+        return Vpqr_tus;
+    }
+}
+
+sp_mat flexmat6::pqr_ust(){
+    if(Npqr_ust == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vq*iNp + vr*iNq*iNp;
+        locations.col(1) = vu + vs*iNu + vt*iNs*iNu;
+        Vpqr_ust = sp_mat(locations.t(), vValues, iNp*iNq*iNr,iNu*iNs*iNt);
+        Npqr_ust = 1;
+        return Vpqr_ust;
+    }
+    else{
+        return Vpqr_ust;
+    }
+}
+
+sp_mat flexmat6::pqr_uts(){
+    if(Npqr_uts == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vq*iNp + vr*iNq*iNp;
+        locations.col(1) = vu + vt*iNu + vs*iNt*iNu;
+        Vpqr_uts = sp_mat(locations.t(), vValues, iNp*iNq*iNr,iNu*iNt*iNs);
+        Npqr_uts = 1;
+        return Vpqr_uts;
+    }
+    else{
+        return Vpqr_uts;
+    }
+}
+
+
+sp_mat flexmat6::pqs_rut(){
+    if(Npqs_rut == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vq*iNp + vs*iNq*iNp;
+        locations.col(1) = vr + vu*iNr + vt*iNu*iNr;
+        Vpqs_rut = sp_mat(locations.t(), vValues, iNp*iNq*iNs,iNr*iNu*iNt);
+        Npqs_rut = 1;
+        return Vpqs_rut;
+    }
+    else{
+        return Vpqs_rut;
+    }
+}
+
+sp_mat flexmat6::pqs_tru(){
+    if(Npqs_tru == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vq*iNp + vs*iNq*iNp;
+        locations.col(1) = vt + vr*iNt + vu*iNr*iNt;
+        Vpqs_tru = sp_mat(locations.t(), vValues, iNp*iNq*iNs,iNt*iNr*iNu);
+        Npqs_tru = 1;
+        return Vpqs_tru;
+    }
+    else{
+        return Vpqs_tru;
+    }
+}
+
+
+
+sp_mat flexmat6::pqs_urt(){
+    if(Npqs_urt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vq*iNp + vs*iNq*iNp;
+        locations.col(1) = vu + vr*iNu + vt*iNr*iNu;
+        Vpqs_urt = sp_mat(locations.t(), vValues, iNp*iNq*iNs,iNu*iNr*iNt);
+        Npqs_urt = 1;
+        return Vpqs_urt;
+    }
+    else{
+        return Vpqs_urt;
+    }
+}
+
+sp_mat flexmat6::pqs_utr(){
+    if(Npqs_utr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vq*iNp + vs*iNq*iNp;
+        locations.col(1) = vu + vt*iNu + vr*iNt*iNu;
+        Vpqs_utr = sp_mat(locations.t(), vValues, iNp*iNq*iNs,iNu*iNt*iNr);
+        Npqs_utr = 1;
+        return Vpqs_utr;
+    }
+    else{
+        return Vpqs_utr;
+    }
+}
+
+sp_mat flexmat6::pqt_rsu(){
+    if(Npqt_rsu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vq*iNp + vt*iNq*iNp;
+        locations.col(1) = vr + vs*iNr + vu*iNs*iNr;
+        Vpqt_rsu = sp_mat(locations.t(), vValues, iNp*iNq*iNt,iNr*iNs*iNu);
+        Npqt_rsu = 1;
+        return Vpqt_rsu;
+    }
+    else{
+        return Vpqt_rsu;
+    }
+}
+
+sp_mat flexmat6::pqt_rus(){
+    if(Npqt_rus == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vq*iNp + vt*iNq*iNp;
+        locations.col(1) = vr + vu*iNr + vs*iNu*iNr;
+        Vpqt_rus = sp_mat(locations.t(), vValues, iNp*iNq*iNt,iNr*iNu*iNs);
+        Npqt_rus = 1;
+        return Vpqt_rus;
+    }
+    else{
+        return Vpqt_rus;
+    }
+}
+
+sp_mat flexmat6::pqt_sru(){
+    if(Npqt_sru == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vq*iNp + vt*iNq*iNp;
+        locations.col(1) = vs + vr*iNs + vu*iNr*iNs;
+        Vpqt_sru = sp_mat(locations.t(), vValues, iNp*iNq*iNt,iNs*iNr*iNu);
+        Npqt_sru = 1;
+        return Vpqt_sru;
+    }
+    else{
+        return Vpqt_sru;
+    }
+}
+
+sp_mat flexmat6::pqt_sur(){
+    if(Npqt_sur == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vq*iNp + vt*iNq*iNp;
+        locations.col(1) = vs + vu*iNs + vr*iNu*iNs;
+        Vpqt_sur = sp_mat(locations.t(), vValues, iNp*iNq*iNt,iNs*iNu*iNr);
+        Npqt_sur = 1;
+        return Vpqt_sur;
+    }
+    else{
+        return Vpqt_sur;
+    }
+}
+
+sp_mat flexmat6::pqt_urs(){
+    if(Npqt_urs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vq*iNp + vt*iNq*iNp;
+        locations.col(1) = vu + vr*iNu + vs*iNr*iNu;
+        Vpqt_urs = sp_mat(locations.t(), vValues, iNp*iNq*iNt,iNu*iNr*iNs);
+        Npqt_urs = 1;
+        return Vpqt_urs;
+    }
+    else{
+        return Vpqt_urs;
+    }
+}
+
+sp_mat flexmat6::pqt_usr(){
+    if(Npqt_usr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vq*iNp + vt*iNq*iNp;
+        locations.col(1) = vu + vs*iNu + vr*iNs*iNu;
+        Vpqt_usr = sp_mat(locations.t(), vValues, iNp*iNq*iNt,iNu*iNs*iNr);
+        Npqt_usr = 1;
+        return Vpqt_usr;
+    }
+    else{
+        return Vpqt_usr;
+    }
+}
+
+sp_mat flexmat6::pqu_rst(){
+    if(Npqu_rst == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vq*iNp + vu*iNq*iNp;
+        locations.col(1) = vr + vs*iNr + vt*iNs*iNr;
+        Vpqu_rst = sp_mat(locations.t(), vValues, iNp*iNq*iNu,iNr*iNs*iNt);
+        Npqu_rst = 1;
+        return Vpqu_rst;
+    }
+    else{
+        return Vpqu_rst;
+    }
+}
+
+sp_mat flexmat6::pqu_rts(){
+    if(Npqu_rts == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vq*iNp + vu*iNq*iNp;
+        locations.col(1) = vr + vt*iNr + vs*iNt*iNr;
+        Vpqu_rts = sp_mat(locations.t(), vValues, iNp*iNq*iNu,iNr*iNt*iNs);
+        Npqu_rts = 1;
+        return Vpqu_rts;
+    }
+    else{
+        return Vpqu_rts;
+    }
+}
+
+sp_mat flexmat6::pqu_srt(){
+    if(Npqu_srt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vq*iNp + vu*iNq*iNp;
+        locations.col(1) = vs + vr*iNs + vt*iNr*iNs;
+        Vpqu_srt = sp_mat(locations.t(), vValues, iNp*iNq*iNu,iNs*iNr*iNt);
+        Npqu_srt = 1;
+        return Vpqu_srt;
+    }
+    else{
+        return Vpqu_srt;
+    }
+}
+
+sp_mat flexmat6::pqu_str(){
+    if(Npqu_str == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vq*iNp + vu*iNq*iNp;
+        locations.col(1) = vs + vt*iNs + vr*iNt*iNs;
+        Vpqu_str = sp_mat(locations.t(), vValues, iNp*iNq*iNu,iNs*iNt*iNr);
+        Npqu_str = 1;
+        return Vpqu_str;
+    }
+    else{
+        return Vpqu_str;
+    }
+}
+
+sp_mat flexmat6::pqu_trs(){
+    if(Npqu_trs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vq*iNp + vu*iNq*iNp;
+        locations.col(1) = vt + vr*iNt + vs*iNr*iNt;
+        Vpqu_trs = sp_mat(locations.t(), vValues, iNp*iNq*iNu,iNt*iNr*iNs);
+        Npqu_trs = 1;
+        return Vpqu_trs;
+    }
+    else{
+        return Vpqu_trs;
+    }
+}
+
+sp_mat flexmat6::pqu_tsr(){
+    if(Npqu_tsr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vq*iNp + vu*iNq*iNp;
+        locations.col(1) = vt + vs*iNt + vr*iNs*iNt;
+        Vpqu_tsr = sp_mat(locations.t(), vValues, iNp*iNq*iNu,iNt*iNs*iNr);
+        Npqu_tsr = 1;
+        return Vpqu_tsr;
+    }
+    else{
+        return Vpqu_tsr;
+    }
+}
+
+sp_mat flexmat6::prq_stu(){
+    if(Nprq_stu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vr*iNp + vq*iNr*iNp;
+        locations.col(1) = vs + vt*iNs + vu*iNt*iNs;
+        Vprq_stu = sp_mat(locations.t(), vValues, iNp*iNr*iNq,iNs*iNt*iNu);
+        Nprq_stu = 1;
+        return Vprq_stu;
+    }
+    else{
+        return Vprq_stu;
+    }
+}
+
+sp_mat flexmat6::prq_sut(){
+    if(Nprq_sut == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vr*iNp + vq*iNr*iNp;
+        locations.col(1) = vs + vu*iNs + vt*iNu*iNs;
+        Vprq_sut = sp_mat(locations.t(), vValues, iNp*iNr*iNq,iNs*iNu*iNt);
+        Nprq_sut = 1;
+        return Vprq_sut;
+    }
+    else{
+        return Vprq_sut;
+    }
+}
+
+sp_mat flexmat6::prq_tsu(){
+    if(Nprq_tsu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vr*iNp + vq*iNr*iNp;
+        locations.col(1) = vt + vs*iNt + vu*iNs*iNt;
+        Vprq_tsu = sp_mat(locations.t(), vValues, iNp*iNr*iNq,iNt*iNs*iNu);
+        Nprq_tsu = 1;
+        return Vprq_tsu;
+    }
+    else{
+        return Vprq_tsu;
+    }
+}
+
+sp_mat flexmat6::prq_tus(){
+    if(Nprq_tus == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vr*iNp + vq*iNr*iNp;
+        locations.col(1) = vt + vu*iNt + vs*iNu*iNt;
+        Vprq_tus = sp_mat(locations.t(), vValues, iNp*iNr*iNq,iNt*iNu*iNs);
+        Nprq_tus = 1;
+        return Vprq_tus;
+    }
+    else{
+        return Vprq_tus;
+    }
+}
+
+sp_mat flexmat6::prq_ust(){
+    if(Nprq_ust == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vr*iNp + vq*iNr*iNp;
+        locations.col(1) = vu + vs*iNu + vt*iNs*iNu;
+        Vprq_ust = sp_mat(locations.t(), vValues, iNp*iNr*iNq,iNu*iNs*iNt);
+        Nprq_ust = 1;
+        return Vprq_ust;
+    }
+    else{
+        return Vprq_ust;
+    }
+}
+
+sp_mat flexmat6::prq_uts(){
+    if(Nprq_uts == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vr*iNp + vq*iNr*iNp;
+        locations.col(1) = vu + vt*iNu + vs*iNt*iNu;
+        Vprq_uts = sp_mat(locations.t(), vValues, iNp*iNr*iNq,iNu*iNt*iNs);
+        Nprq_uts = 1;
+        return Vprq_uts;
+    }
+    else{
+        return Vprq_uts;
+    }
+}
+
+sp_mat flexmat6::prs_qtu(){
+    if(Nprs_qtu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vr*iNp + vs*iNr*iNp;
+        locations.col(1) = vq + vt*iNq + vu*iNt*iNq;
+        Vprs_qtu = sp_mat(locations.t(), vValues, iNp*iNr*iNs,iNq*iNt*iNu);
+        Nprs_qtu = 1;
+        return Vprs_qtu;
+    }
+    else{
+        return Vprs_qtu;
+    }
+}
+
+sp_mat flexmat6::prs_qut(){
+    if(Nprs_qut == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vr*iNp + vs*iNr*iNp;
+        locations.col(1) = vq + vu*iNq + vt*iNu*iNq;
+        Vprs_qut = sp_mat(locations.t(), vValues, iNp*iNr*iNs,iNq*iNu*iNt);
+        Nprs_qut = 1;
+        return Vprs_qut;
+    }
+    else{
+        return Vprs_qut;
+    }
+}
+
+sp_mat flexmat6::prs_tqu(){
+    if(Nprs_tqu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vr*iNp + vs*iNr*iNp;
+        locations.col(1) = vt + vq*iNt + vu*iNq*iNt;
+        Vprs_tqu = sp_mat(locations.t(), vValues, iNp*iNr*iNs,iNt*iNq*iNu);
+        Nprs_tqu = 1;
+        return Vprs_tqu;
+    }
+    else{
+        return Vprs_tqu;
+    }
+}
+
+sp_mat flexmat6::prs_tuq(){
+    if(Nprs_tuq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vr*iNp + vs*iNr*iNp;
+        locations.col(1) = vt + vu*iNt + vq*iNu*iNt;
+        Vprs_tuq = sp_mat(locations.t(), vValues, iNp*iNr*iNs,iNt*iNu*iNq);
+        Nprs_tuq = 1;
+        return Vprs_tuq;
+    }
+    else{
+        return Vprs_tuq;
+    }
+}
+
+sp_mat flexmat6::prs_uqt(){
+    if(Nprs_uqt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vr*iNp + vs*iNr*iNp;
+        locations.col(1) = vu + vq*iNu + vt*iNq*iNu;
+        Vprs_uqt = sp_mat(locations.t(), vValues, iNp*iNr*iNs,iNu*iNq*iNt);
+        Nprs_uqt = 1;
+        return Vprs_uqt;
+    }
+    else{
+        return Vprs_uqt;
+    }
+}
+
+sp_mat flexmat6::prs_utq(){
+    if(Nprs_utq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vr*iNp + vs*iNr*iNp;
+        locations.col(1) = vu + vt*iNu + vq*iNt*iNu;
+        Vprs_utq = sp_mat(locations.t(), vValues, iNp*iNr*iNs,iNu*iNt*iNq);
+        Nprs_utq = 1;
+        return Vprs_utq;
+    }
+    else{
+        return Vprs_utq;
+    }
+}
+
+sp_mat flexmat6::prt_qsu(){
+    if(Nprt_qsu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vr*iNp + vt*iNr*iNp;
+        locations.col(1) = vq + vs*iNq + vu*iNs*iNq;
+        Vprt_qsu = sp_mat(locations.t(), vValues, iNp*iNr*iNt,iNq*iNs*iNu);
+        Nprt_qsu = 1;
+        return Vprt_qsu;
+    }
+    else{
+        return Vprt_qsu;
+    }
+}
+
+sp_mat flexmat6::prt_qus(){
+    if(Nprt_qus == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vr*iNp + vt*iNr*iNp;
+        locations.col(1) = vq + vu*iNq + vs*iNu*iNq;
+        Vprt_qus = sp_mat(locations.t(), vValues, iNp*iNr*iNt,iNq*iNu*iNs);
+        Nprt_qus = 1;
+        return Vprt_qus;
+    }
+    else{
+        return Vprt_qus;
+    }
+}
+
+sp_mat flexmat6::prt_squ(){
+    if(Nprt_squ == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vr*iNp + vt*iNr*iNp;
+        locations.col(1) = vs + vq*iNs + vu*iNq*iNs;
+        Vprt_squ = sp_mat(locations.t(), vValues, iNp*iNr*iNt,iNs*iNq*iNu);
+        Nprt_squ = 1;
+        return Vprt_squ;
+    }
+    else{
+        return Vprt_squ;
+    }
+}
+
+sp_mat flexmat6::prt_suq(){
+    if(Nprt_suq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vr*iNp + vt*iNr*iNp;
+        locations.col(1) = vs + vu*iNs + vq*iNu*iNs;
+        Vprt_suq = sp_mat(locations.t(), vValues, iNp*iNr*iNt,iNs*iNu*iNq);
+        Nprt_suq = 1;
+        return Vprt_suq;
+    }
+    else{
+        return Vprt_suq;
+    }
+}
+
+sp_mat flexmat6::prt_uqs(){
+    if(Nprt_uqs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vr*iNp + vt*iNr*iNp;
+        locations.col(1) = vu + vq*iNu + vs*iNq*iNu;
+        Vprt_uqs = sp_mat(locations.t(), vValues, iNp*iNr*iNt,iNu*iNq*iNs);
+        Nprt_uqs = 1;
+        return Vprt_uqs;
+    }
+    else{
+        return Vprt_uqs;
+    }
+}
+
+sp_mat flexmat6::prt_usq(){
+    if(Nprt_usq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vr*iNp + vt*iNr*iNp;
+        locations.col(1) = vu + vs*iNu + vq*iNs*iNu;
+        Vprt_usq = sp_mat(locations.t(), vValues, iNp*iNr*iNt,iNu*iNs*iNq);
+        Nprt_usq = 1;
+        return Vprt_usq;
+    }
+    else{
+        return Vprt_usq;
+    }
+}
+
+sp_mat flexmat6::pru_qst(){
+    if(Npru_qst == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vr*iNp + vu*iNr*iNp;
+        locations.col(1) = vq + vs*iNq + vt*iNs*iNq;
+        Vpru_qst = sp_mat(locations.t(), vValues, iNp*iNr*iNu,iNq*iNs*iNt);
+        Npru_qst = 1;
+        return Vpru_qst;
+    }
+    else{
+        return Vpru_qst;
+    }
+}
+
+sp_mat flexmat6::pru_qts(){
+    if(Npru_qts == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vr*iNp + vu*iNr*iNp;
+        locations.col(1) = vq + vt*iNq + vs*iNt*iNq;
+        Vpru_qts = sp_mat(locations.t(), vValues, iNp*iNr*iNu,iNq*iNt*iNs);
+        Npru_qts = 1;
+        return Vpru_qts;
+    }
+    else{
+        return Vpru_qts;
+    }
+}
+
+sp_mat flexmat6::pru_sqt(){
+    if(Npru_sqt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vr*iNp + vu*iNr*iNp;
+        locations.col(1) = vs + vq*iNs + vt*iNq*iNs;
+        Vpru_sqt = sp_mat(locations.t(), vValues, iNp*iNr*iNu,iNs*iNq*iNt);
+        Npru_sqt = 1;
+        return Vpru_sqt;
+    }
+    else{
+        return Vpru_sqt;
+    }
+}
+
+
+
+sp_mat flexmat6::pru_tqs(){
+    if(Npru_tqs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vr*iNp + vu*iNr*iNp;
+        locations.col(1) = vt + vq*iNt + vs*iNq*iNt;
+        Vpru_tqs = sp_mat(locations.t(), vValues, iNp*iNr*iNu,iNt*iNq*iNs);
+        Npru_tqs = 1;
+        return Vpru_tqs;
+    }
+    else{
+        return Vpru_tqs;
+    }
+}
+
+sp_mat flexmat6::pru_tsq(){
+    if(Npru_tsq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vr*iNp + vu*iNr*iNp;
+        locations.col(1) = vt + vs*iNt + vq*iNs*iNt;
+        Vpru_tsq = sp_mat(locations.t(), vValues, iNp*iNr*iNu,iNt*iNs*iNq);
+        Npru_tsq = 1;
+        return Vpru_tsq;
+    }
+    else{
+        return Vpru_tsq;
+    }
+}
+
+
+
+sp_mat flexmat6::psq_rut(){
+    if(Npsq_rut == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vs*iNp + vq*iNs*iNp;
+        locations.col(1) = vr + vu*iNr + vt*iNu*iNr;
+        Vpsq_rut = sp_mat(locations.t(), vValues, iNp*iNs*iNq,iNr*iNu*iNt);
+        Npsq_rut = 1;
+        return Vpsq_rut;
+    }
+    else{
+        return Vpsq_rut;
+    }
+}
+
+sp_mat flexmat6::psq_tru(){
+    if(Npsq_tru == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vs*iNp + vq*iNs*iNp;
+        locations.col(1) = vt + vr*iNt + vu*iNr*iNt;
+        Vpsq_tru = sp_mat(locations.t(), vValues, iNp*iNs*iNq,iNt*iNr*iNu);
+        Npsq_tru = 1;
+        return Vpsq_tru;
+    }
+    else{
+        return Vpsq_tru;
+    }
+}
+
+sp_mat flexmat6::psq_tur(){
+    if(Npsq_tur == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vs*iNp + vq*iNs*iNp;
+        locations.col(1) = vt + vu*iNt + vr*iNu*iNt;
+        Vpsq_tur = sp_mat(locations.t(), vValues, iNp*iNs*iNq,iNt*iNu*iNr);
+        Npsq_tur = 1;
+        return Vpsq_tur;
+    }
+    else{
+        return Vpsq_tur;
+    }
+}
+
+sp_mat flexmat6::psq_urt(){
+    if(Npsq_urt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vs*iNp + vq*iNs*iNp;
+        locations.col(1) = vu + vr*iNu + vt*iNr*iNu;
+        Vpsq_urt = sp_mat(locations.t(), vValues, iNp*iNs*iNq,iNu*iNr*iNt);
+        Npsq_urt = 1;
+        return Vpsq_urt;
+    }
+    else{
+        return Vpsq_urt;
+    }
+}
+
+sp_mat flexmat6::psq_utr(){
+    if(Npsq_utr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vs*iNp + vq*iNs*iNp;
+        locations.col(1) = vu + vt*iNu + vr*iNt*iNu;
+        Vpsq_utr = sp_mat(locations.t(), vValues, iNp*iNs*iNq,iNu*iNt*iNr);
+        Npsq_utr = 1;
+        return Vpsq_utr;
+    }
+    else{
+        return Vpsq_utr;
+    }
+}
+
+sp_mat flexmat6::psr_qtu(){
+    if(Npsr_qtu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vs*iNp + vr*iNs*iNp;
+        locations.col(1) = vq + vt*iNq + vu*iNt*iNq;
+        Vpsr_qtu = sp_mat(locations.t(), vValues, iNp*iNs*iNr,iNq*iNt*iNu);
+        Npsr_qtu = 1;
+        return Vpsr_qtu;
+    }
+    else{
+        return Vpsr_qtu;
+    }
+}
+
+sp_mat flexmat6::psr_qut(){
+    if(Npsr_qut == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vs*iNp + vr*iNs*iNp;
+        locations.col(1) = vq + vu*iNq + vt*iNu*iNq;
+        Vpsr_qut = sp_mat(locations.t(), vValues, iNp*iNs*iNr,iNq*iNu*iNt);
+        Npsr_qut = 1;
+        return Vpsr_qut;
+    }
+    else{
+        return Vpsr_qut;
+    }
+}
+
+sp_mat flexmat6::psr_tqu(){
+    if(Npsr_tqu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vs*iNp + vr*iNs*iNp;
+        locations.col(1) = vt + vq*iNt + vu*iNq*iNt;
+        Vpsr_tqu = sp_mat(locations.t(), vValues, iNp*iNs*iNr,iNt*iNq*iNu);
+        Npsr_tqu = 1;
+        return Vpsr_tqu;
+    }
+    else{
+        return Vpsr_tqu;
+    }
+}
+
+sp_mat flexmat6::psr_tuq(){
+    if(Npsr_tuq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vs*iNp + vr*iNs*iNp;
+        locations.col(1) = vt + vu*iNt + vq*iNu*iNt;
+        Vpsr_tuq = sp_mat(locations.t(), vValues, iNp*iNs*iNr,iNt*iNu*iNq);
+        Npsr_tuq = 1;
+        return Vpsr_tuq;
+    }
+    else{
+        return Vpsr_tuq;
+    }
+}
+
+sp_mat flexmat6::psr_uqt(){
+    if(Npsr_uqt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vs*iNp + vr*iNs*iNp;
+        locations.col(1) = vu + vq*iNu + vt*iNq*iNu;
+        Vpsr_uqt = sp_mat(locations.t(), vValues, iNp*iNs*iNr,iNu*iNq*iNt);
+        Npsr_uqt = 1;
+        return Vpsr_uqt;
+    }
+    else{
+        return Vpsr_uqt;
+    }
+}
+
+sp_mat flexmat6::psr_utq(){
+    if(Npsr_utq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vs*iNp + vr*iNs*iNp;
+        locations.col(1) = vu + vt*iNu + vq*iNt*iNu;
+        Vpsr_utq = sp_mat(locations.t(), vValues, iNp*iNs*iNr,iNu*iNt*iNq);
+        Npsr_utq = 1;
+        return Vpsr_utq;
+    }
+    else{
+        return Vpsr_utq;
+    }
+}
+
+sp_mat flexmat6::pst_qru(){
+    if(Npst_qru == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vs*iNp + vt*iNs*iNp;
+        locations.col(1) = vq + vr*iNq + vu*iNr*iNq;
+        Vpst_qru = sp_mat(locations.t(), vValues, iNp*iNs*iNt,iNq*iNr*iNu);
+        Npst_qru = 1;
+        return Vpst_qru;
+    }
+    else{
+        return Vpst_qru;
+    }
+}
+
+sp_mat flexmat6::pst_qur(){
+    if(Npst_qur == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vs*iNp + vt*iNs*iNp;
+        locations.col(1) = vq + vu*iNq + vr*iNu*iNq;
+        Vpst_qur = sp_mat(locations.t(), vValues, iNp*iNs*iNt,iNq*iNu*iNr);
+        Npst_qur = 1;
+        return Vpst_qur;
+    }
+    else{
+        return Vpst_qur;
+    }
+}
+
+sp_mat flexmat6::pst_rqu(){
+    if(Npst_rqu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vs*iNp + vt*iNs*iNp;
+        locations.col(1) = vr + vq*iNr + vu*iNq*iNr;
+        Vpst_rqu = sp_mat(locations.t(), vValues, iNp*iNs*iNt,iNr*iNq*iNu);
+        Npst_rqu = 1;
+        return Vpst_rqu;
+    }
+    else{
+        return Vpst_rqu;
+    }
+}
+
+sp_mat flexmat6::pst_ruq(){
+    if(Npst_ruq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vs*iNp + vt*iNs*iNp;
+        locations.col(1) = vr + vu*iNr + vq*iNu*iNr;
+        Vpst_ruq = sp_mat(locations.t(), vValues, iNp*iNs*iNt,iNr*iNu*iNq);
+        Npst_ruq = 1;
+        return Vpst_ruq;
+    }
+    else{
+        return Vpst_ruq;
+    }
+}
+
+sp_mat flexmat6::pst_uqr(){
+    if(Npst_uqr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vs*iNp + vt*iNs*iNp;
+        locations.col(1) = vu + vq*iNu + vr*iNq*iNu;
+        Vpst_uqr = sp_mat(locations.t(), vValues, iNp*iNs*iNt,iNu*iNq*iNr);
+        Npst_uqr = 1;
+        return Vpst_uqr;
+    }
+    else{
+        return Vpst_uqr;
+    }
+}
+
+sp_mat flexmat6::pst_urq(){
+    if(Npst_urq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vs*iNp + vt*iNs*iNp;
+        locations.col(1) = vu + vr*iNu + vq*iNr*iNu;
+        Vpst_urq = sp_mat(locations.t(), vValues, iNp*iNs*iNt,iNu*iNr*iNq);
+        Npst_urq = 1;
+        return Vpst_urq;
+    }
+    else{
+        return Vpst_urq;
+    }
+}
+
+sp_mat flexmat6::psu_qrt(){
+    if(Npsu_qrt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vs*iNp + vu*iNs*iNp;
+        locations.col(1) = vq + vr*iNq + vt*iNr*iNq;
+        Vpsu_qrt = sp_mat(locations.t(), vValues, iNp*iNs*iNu,iNq*iNr*iNt);
+        Npsu_qrt = 1;
+        return Vpsu_qrt;
+    }
+    else{
+        return Vpsu_qrt;
+    }
+}
+
+sp_mat flexmat6::psu_qtr(){
+    if(Npsu_qtr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vs*iNp + vu*iNs*iNp;
+        locations.col(1) = vq + vt*iNq + vr*iNt*iNq;
+        Vpsu_qtr = sp_mat(locations.t(), vValues, iNp*iNs*iNu,iNq*iNt*iNr);
+        Npsu_qtr = 1;
+        return Vpsu_qtr;
+    }
+    else{
+        return Vpsu_qtr;
+    }
+}
+
+sp_mat flexmat6::psu_rqt(){
+    if(Npsu_rqt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vs*iNp + vu*iNs*iNp;
+        locations.col(1) = vr + vq*iNr + vt*iNq*iNr;
+        Vpsu_rqt = sp_mat(locations.t(), vValues, iNp*iNs*iNu,iNr*iNq*iNt);
+        Npsu_rqt = 1;
+        return Vpsu_rqt;
+    }
+    else{
+        return Vpsu_rqt;
+    }
+}
+
+sp_mat flexmat6::psu_rtq(){
+    if(Npsu_rtq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vs*iNp + vu*iNs*iNp;
+        locations.col(1) = vr + vt*iNr + vq*iNt*iNr;
+        Vpsu_rtq = sp_mat(locations.t(), vValues, iNp*iNs*iNu,iNr*iNt*iNq);
+        Npsu_rtq = 1;
+        return Vpsu_rtq;
+    }
+    else{
+        return Vpsu_rtq;
+    }
+}
+
+sp_mat flexmat6::psu_tqr(){
+    if(Npsu_tqr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vs*iNp + vu*iNs*iNp;
+        locations.col(1) = vt + vq*iNt + vr*iNq*iNt;
+        Vpsu_tqr = sp_mat(locations.t(), vValues, iNp*iNs*iNu,iNt*iNq*iNr);
+        Npsu_tqr = 1;
+        return Vpsu_tqr;
+    }
+    else{
+        return Vpsu_tqr;
+    }
+}
+
+sp_mat flexmat6::psu_trq(){
+    if(Npsu_trq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vs*iNp + vu*iNs*iNp;
+        locations.col(1) = vt + vr*iNt + vq*iNr*iNt;
+        Vpsu_trq = sp_mat(locations.t(), vValues, iNp*iNs*iNu,iNt*iNr*iNq);
+        Npsu_trq = 1;
+        return Vpsu_trq;
+    }
+    else{
+        return Vpsu_trq;
+    }
+}
+
+sp_mat flexmat6::ptq_rsu(){
+    if(Nptq_rsu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vt*iNp + vq*iNt*iNp;
+        locations.col(1) = vr + vs*iNr + vu*iNs*iNr;
+        Vptq_rsu = sp_mat(locations.t(), vValues, iNp*iNt*iNq,iNr*iNs*iNu);
+        Nptq_rsu = 1;
+        return Vptq_rsu;
+    }
+    else{
+        return Vptq_rsu;
+    }
+}
+
+sp_mat flexmat6::ptq_rus(){
+    if(Nptq_rus == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vt*iNp + vq*iNt*iNp;
+        locations.col(1) = vr + vu*iNr + vs*iNu*iNr;
+        Vptq_rus = sp_mat(locations.t(), vValues, iNp*iNt*iNq,iNr*iNu*iNs);
+        Nptq_rus = 1;
+        return Vptq_rus;
+    }
+    else{
+        return Vptq_rus;
+    }
+}
+
+sp_mat flexmat6::ptq_sru(){
+    if(Nptq_sru == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vt*iNp + vq*iNt*iNp;
+        locations.col(1) = vs + vr*iNs + vu*iNr*iNs;
+        Vptq_sru = sp_mat(locations.t(), vValues, iNp*iNt*iNq,iNs*iNr*iNu);
+        Nptq_sru = 1;
+        return Vptq_sru;
+    }
+    else{
+        return Vptq_sru;
+    }
+}
+
+sp_mat flexmat6::ptq_sur(){
+    if(Nptq_sur == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vt*iNp + vq*iNt*iNp;
+        locations.col(1) = vs + vu*iNs + vr*iNu*iNs;
+        Vptq_sur = sp_mat(locations.t(), vValues, iNp*iNt*iNq,iNs*iNu*iNr);
+        Nptq_sur = 1;
+        return Vptq_sur;
+    }
+    else{
+        return Vptq_sur;
+    }
+}
+
+sp_mat flexmat6::ptq_urs(){
+    if(Nptq_urs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vt*iNp + vq*iNt*iNp;
+        locations.col(1) = vu + vr*iNu + vs*iNr*iNu;
+        Vptq_urs = sp_mat(locations.t(), vValues, iNp*iNt*iNq,iNu*iNr*iNs);
+        Nptq_urs = 1;
+        return Vptq_urs;
+    }
+    else{
+        return Vptq_urs;
+    }
+}
+
+sp_mat flexmat6::ptq_usr(){
+    if(Nptq_usr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vt*iNp + vq*iNt*iNp;
+        locations.col(1) = vu + vs*iNu + vr*iNs*iNu;
+        Vptq_usr = sp_mat(locations.t(), vValues, iNp*iNt*iNq,iNu*iNs*iNr);
+        Nptq_usr = 1;
+        return Vptq_usr;
+    }
+    else{
+        return Vptq_usr;
+    }
+}
+
+sp_mat flexmat6::ptr_qsu(){
+    if(Nptr_qsu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vt*iNp + vr*iNt*iNp;
+        locations.col(1) = vq + vs*iNq + vu*iNs*iNq;
+        Vptr_qsu = sp_mat(locations.t(), vValues, iNp*iNt*iNr,iNq*iNs*iNu);
+        Nptr_qsu = 1;
+        return Vptr_qsu;
+    }
+    else{
+        return Vptr_qsu;
+    }
+}
+
+sp_mat flexmat6::ptr_qus(){
+    if(Nptr_qus == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vt*iNp + vr*iNt*iNp;
+        locations.col(1) = vq + vu*iNq + vs*iNu*iNq;
+        Vptr_qus = sp_mat(locations.t(), vValues, iNp*iNt*iNr,iNq*iNu*iNs);
+        Nptr_qus = 1;
+        return Vptr_qus;
+    }
+    else{
+        return Vptr_qus;
+    }
+}
+
+sp_mat flexmat6::ptr_squ(){
+    if(Nptr_squ == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vt*iNp + vr*iNt*iNp;
+        locations.col(1) = vs + vq*iNs + vu*iNq*iNs;
+        Vptr_squ = sp_mat(locations.t(), vValues, iNp*iNt*iNr,iNs*iNq*iNu);
+        Nptr_squ = 1;
+        return Vptr_squ;
+    }
+    else{
+        return Vptr_squ;
+    }
+}
+
+sp_mat flexmat6::ptr_suq(){
+    if(Nptr_suq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vt*iNp + vr*iNt*iNp;
+        locations.col(1) = vs + vu*iNs + vq*iNu*iNs;
+        Vptr_suq = sp_mat(locations.t(), vValues, iNp*iNt*iNr,iNs*iNu*iNq);
+        Nptr_suq = 1;
+        return Vptr_suq;
+    }
+    else{
+        return Vptr_suq;
+    }
+}
+
+sp_mat flexmat6::ptr_uqs(){
+    if(Nptr_uqs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vt*iNp + vr*iNt*iNp;
+        locations.col(1) = vu + vq*iNu + vs*iNq*iNu;
+        Vptr_uqs = sp_mat(locations.t(), vValues, iNp*iNt*iNr,iNu*iNq*iNs);
+        Nptr_uqs = 1;
+        return Vptr_uqs;
+    }
+    else{
+        return Vptr_uqs;
+    }
+}
+
+sp_mat flexmat6::ptr_usq(){
+    if(Nptr_usq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vt*iNp + vr*iNt*iNp;
+        locations.col(1) = vu + vs*iNu + vq*iNs*iNu;
+        Vptr_usq = sp_mat(locations.t(), vValues, iNp*iNt*iNr,iNu*iNs*iNq);
+        Nptr_usq = 1;
+        return Vptr_usq;
+    }
+    else{
+        return Vptr_usq;
+    }
+}
+
+sp_mat flexmat6::pts_qru(){
+    if(Npts_qru == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vt*iNp + vs*iNt*iNp;
+        locations.col(1) = vq + vr*iNq + vu*iNr*iNq;
+        Vpts_qru = sp_mat(locations.t(), vValues, iNp*iNt*iNs,iNq*iNr*iNu);
+        Npts_qru = 1;
+        return Vpts_qru;
+    }
+    else{
+        return Vpts_qru;
+    }
+}
+
+sp_mat flexmat6::pts_qur(){
+    if(Npts_qur == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vt*iNp + vs*iNt*iNp;
+        locations.col(1) = vq + vu*iNq + vr*iNu*iNq;
+        Vpts_qur = sp_mat(locations.t(), vValues, iNp*iNt*iNs,iNq*iNu*iNr);
+        Npts_qur = 1;
+        return Vpts_qur;
+    }
+    else{
+        return Vpts_qur;
+    }
+}
+
+sp_mat flexmat6::pts_rqu(){
+    if(Npts_rqu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vt*iNp + vs*iNt*iNp;
+        locations.col(1) = vr + vq*iNr + vu*iNq*iNr;
+        Vpts_rqu = sp_mat(locations.t(), vValues, iNp*iNt*iNs,iNr*iNq*iNu);
+        Npts_rqu = 1;
+        return Vpts_rqu;
+    }
+    else{
+        return Vpts_rqu;
+    }
+}
+
+sp_mat flexmat6::pts_ruq(){
+    if(Npts_ruq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vt*iNp + vs*iNt*iNp;
+        locations.col(1) = vr + vu*iNr + vq*iNu*iNr;
+        Vpts_ruq = sp_mat(locations.t(), vValues, iNp*iNt*iNs,iNr*iNu*iNq);
+        Npts_ruq = 1;
+        return Vpts_ruq;
+    }
+    else{
+        return Vpts_ruq;
+    }
+}
+
+sp_mat flexmat6::pts_uqr(){
+    if(Npts_uqr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vt*iNp + vs*iNt*iNp;
+        locations.col(1) = vu + vq*iNu + vr*iNq*iNu;
+        Vpts_uqr = sp_mat(locations.t(), vValues, iNp*iNt*iNs,iNu*iNq*iNr);
+        Npts_uqr = 1;
+        return Vpts_uqr;
+    }
+    else{
+        return Vpts_uqr;
+    }
+}
+
+sp_mat flexmat6::pts_urq(){
+    if(Npts_urq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vt*iNp + vs*iNt*iNp;
+        locations.col(1) = vu + vr*iNu + vq*iNr*iNu;
+        Vpts_urq = sp_mat(locations.t(), vValues, iNp*iNt*iNs,iNu*iNr*iNq);
+        Npts_urq = 1;
+        return Vpts_urq;
+    }
+    else{
+        return Vpts_urq;
+    }
+}
+
+sp_mat flexmat6::ptu_qrs(){
+    if(Nptu_qrs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vt*iNp + vu*iNt*iNp;
+        locations.col(1) = vq + vr*iNq + vs*iNr*iNq;
+        Vptu_qrs = sp_mat(locations.t(), vValues, iNp*iNt*iNu,iNq*iNr*iNs);
+        Nptu_qrs = 1;
+        return Vptu_qrs;
+    }
+    else{
+        return Vptu_qrs;
+    }
+}
+
+sp_mat flexmat6::ptu_qsr(){
+    if(Nptu_qsr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vt*iNp + vu*iNt*iNp;
+        locations.col(1) = vq + vs*iNq + vr*iNs*iNq;
+        Vptu_qsr = sp_mat(locations.t(), vValues, iNp*iNt*iNu,iNq*iNs*iNr);
+        Nptu_qsr = 1;
+        return Vptu_qsr;
+    }
+    else{
+        return Vptu_qsr;
+    }
+}
+
+sp_mat flexmat6::ptu_rqs(){
+    if(Nptu_rqs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vt*iNp + vu*iNt*iNp;
+        locations.col(1) = vr + vq*iNr + vs*iNq*iNr;
+        Vptu_rqs = sp_mat(locations.t(), vValues, iNp*iNt*iNu,iNr*iNq*iNs);
+        Nptu_rqs = 1;
+        return Vptu_rqs;
+    }
+    else{
+        return Vptu_rqs;
+    }
+}
+
+sp_mat flexmat6::ptu_rsq(){
+    if(Nptu_rsq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vt*iNp + vu*iNt*iNp;
+        locations.col(1) = vr + vs*iNr + vq*iNs*iNr;
+        Vptu_rsq = sp_mat(locations.t(), vValues, iNp*iNt*iNu,iNr*iNs*iNq);
+        Nptu_rsq = 1;
+        return Vptu_rsq;
+    }
+    else{
+        return Vptu_rsq;
+    }
+}
+
+sp_mat flexmat6::ptu_sqr(){
+    if(Nptu_sqr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vt*iNp + vu*iNt*iNp;
+        locations.col(1) = vs + vq*iNs + vr*iNq*iNs;
+        Vptu_sqr = sp_mat(locations.t(), vValues, iNp*iNt*iNu,iNs*iNq*iNr);
+        Nptu_sqr = 1;
+        return Vptu_sqr;
+    }
+    else{
+        return Vptu_sqr;
+    }
+}
+
+sp_mat flexmat6::ptu_srq(){
+    if(Nptu_srq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vt*iNp + vu*iNt*iNp;
+        locations.col(1) = vs + vr*iNs + vq*iNr*iNs;
+        Vptu_srq = sp_mat(locations.t(), vValues, iNp*iNt*iNu,iNs*iNr*iNq);
+        Nptu_srq = 1;
+        return Vptu_srq;
+    }
+    else{
+        return Vptu_srq;
+    }
+}
+
+sp_mat flexmat6::puq_rst(){
+    if(Npuq_rst == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vu*iNp + vq*iNu*iNp;
+        locations.col(1) = vr + vs*iNr + vt*iNs*iNr;
+        Vpuq_rst = sp_mat(locations.t(), vValues, iNp*iNu*iNq,iNr*iNs*iNt);
+        Npuq_rst = 1;
+        return Vpuq_rst;
+    }
+    else{
+        return Vpuq_rst;
+    }
+}
+
+sp_mat flexmat6::puq_rts(){
+    if(Npuq_rts == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vu*iNp + vq*iNu*iNp;
+        locations.col(1) = vr + vt*iNr + vs*iNt*iNr;
+        Vpuq_rts = sp_mat(locations.t(), vValues, iNp*iNu*iNq,iNr*iNt*iNs);
+        Npuq_rts = 1;
+        return Vpuq_rts;
+    }
+    else{
+        return Vpuq_rts;
+    }
+}
+
+sp_mat flexmat6::puq_srt(){
+    if(Npuq_srt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vu*iNp + vq*iNu*iNp;
+        locations.col(1) = vs + vr*iNs + vt*iNr*iNs;
+        Vpuq_srt = sp_mat(locations.t(), vValues, iNp*iNu*iNq,iNs*iNr*iNt);
+        Npuq_srt = 1;
+        return Vpuq_srt;
+    }
+    else{
+        return Vpuq_srt;
+    }
+}
+
+sp_mat flexmat6::puq_str(){
+    if(Npuq_str == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vu*iNp + vq*iNu*iNp;
+        locations.col(1) = vs + vt*iNs + vr*iNt*iNs;
+        Vpuq_str = sp_mat(locations.t(), vValues, iNp*iNu*iNq,iNs*iNt*iNr);
+        Npuq_str = 1;
+        return Vpuq_str;
+    }
+    else{
+        return Vpuq_str;
+    }
+}
+
+sp_mat flexmat6::puq_trs(){
+    if(Npuq_trs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vu*iNp + vq*iNu*iNp;
+        locations.col(1) = vt + vr*iNt + vs*iNr*iNt;
+        Vpuq_trs = sp_mat(locations.t(), vValues, iNp*iNu*iNq,iNt*iNr*iNs);
+        Npuq_trs = 1;
+        return Vpuq_trs;
+    }
+    else{
+        return Vpuq_trs;
+    }
+}
+
+sp_mat flexmat6::puq_tsr(){
+    if(Npuq_tsr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vu*iNp + vq*iNu*iNp;
+        locations.col(1) = vt + vs*iNt + vr*iNs*iNt;
+        Vpuq_tsr = sp_mat(locations.t(), vValues, iNp*iNu*iNq,iNt*iNs*iNr);
+        Npuq_tsr = 1;
+        return Vpuq_tsr;
+    }
+    else{
+        return Vpuq_tsr;
+    }
+}
+
+sp_mat flexmat6::pur_qst(){
+    if(Npur_qst == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vu*iNp + vr*iNu*iNp;
+        locations.col(1) = vq + vs*iNq + vt*iNs*iNq;
+        Vpur_qst = sp_mat(locations.t(), vValues, iNp*iNu*iNr,iNq*iNs*iNt);
+        Npur_qst = 1;
+        return Vpur_qst;
+    }
+    else{
+        return Vpur_qst;
+    }
+}
+
+sp_mat flexmat6::pur_qts(){
+    if(Npur_qts == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vu*iNp + vr*iNu*iNp;
+        locations.col(1) = vq + vt*iNq + vs*iNt*iNq;
+        Vpur_qts = sp_mat(locations.t(), vValues, iNp*iNu*iNr,iNq*iNt*iNs);
+        Npur_qts = 1;
+        return Vpur_qts;
+    }
+    else{
+        return Vpur_qts;
+    }
+}
+
+sp_mat flexmat6::pur_sqt(){
+    if(Npur_sqt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vu*iNp + vr*iNu*iNp;
+        locations.col(1) = vs + vq*iNs + vt*iNq*iNs;
+        Vpur_sqt = sp_mat(locations.t(), vValues, iNp*iNu*iNr,iNs*iNq*iNt);
+        Npur_sqt = 1;
+        return Vpur_sqt;
+    }
+    else{
+        return Vpur_sqt;
+    }
+}
+
+sp_mat flexmat6::pur_stq(){
+    if(Npur_stq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vu*iNp + vr*iNu*iNp;
+        locations.col(1) = vs + vt*iNs + vq*iNt*iNs;
+        Vpur_stq = sp_mat(locations.t(), vValues, iNp*iNu*iNr,iNs*iNt*iNq);
+        Npur_stq = 1;
+        return Vpur_stq;
+    }
+    else{
+        return Vpur_stq;
+    }
+}
+
+sp_mat flexmat6::pur_tqs(){
+    if(Npur_tqs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vu*iNp + vr*iNu*iNp;
+        locations.col(1) = vt + vq*iNt + vs*iNq*iNt;
+        Vpur_tqs = sp_mat(locations.t(), vValues, iNp*iNu*iNr,iNt*iNq*iNs);
+        Npur_tqs = 1;
+        return Vpur_tqs;
+    }
+    else{
+        return Vpur_tqs;
+    }
+}
+
+sp_mat flexmat6::pur_tsq(){
+    if(Npur_tsq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vu*iNp + vr*iNu*iNp;
+        locations.col(1) = vt + vs*iNt + vq*iNs*iNt;
+        Vpur_tsq = sp_mat(locations.t(), vValues, iNp*iNu*iNr,iNt*iNs*iNq);
+        Npur_tsq = 1;
+        return Vpur_tsq;
+    }
+    else{
+        return Vpur_tsq;
+    }
+}
+
+sp_mat flexmat6::pus_qrt(){
+    if(Npus_qrt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vu*iNp + vs*iNu*iNp;
+        locations.col(1) = vq + vr*iNq + vt*iNr*iNq;
+        Vpus_qrt = sp_mat(locations.t(), vValues, iNp*iNu*iNs,iNq*iNr*iNt);
+        Npus_qrt = 1;
+        return Vpus_qrt;
+    }
+    else{
+        return Vpus_qrt;
+    }
+}
+
+sp_mat flexmat6::pus_qtr(){
+    if(Npus_qtr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vu*iNp + vs*iNu*iNp;
+        locations.col(1) = vq + vt*iNq + vr*iNt*iNq;
+        Vpus_qtr = sp_mat(locations.t(), vValues, iNp*iNu*iNs,iNq*iNt*iNr);
+        Npus_qtr = 1;
+        return Vpus_qtr;
+    }
+    else{
+        return Vpus_qtr;
+    }
+}
+
+sp_mat flexmat6::pus_rqt(){
+    if(Npus_rqt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vu*iNp + vs*iNu*iNp;
+        locations.col(1) = vr + vq*iNr + vt*iNq*iNr;
+        Vpus_rqt = sp_mat(locations.t(), vValues, iNp*iNu*iNs,iNr*iNq*iNt);
+        Npus_rqt = 1;
+        return Vpus_rqt;
+    }
+    else{
+        return Vpus_rqt;
+    }
+}
+
+sp_mat flexmat6::pus_rtq(){
+    if(Npus_rtq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vu*iNp + vs*iNu*iNp;
+        locations.col(1) = vr + vt*iNr + vq*iNt*iNr;
+        Vpus_rtq = sp_mat(locations.t(), vValues, iNp*iNu*iNs,iNr*iNt*iNq);
+        Npus_rtq = 1;
+        return Vpus_rtq;
+    }
+    else{
+        return Vpus_rtq;
+    }
+}
+
+sp_mat flexmat6::pus_tqr(){
+    if(Npus_tqr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vu*iNp + vs*iNu*iNp;
+        locations.col(1) = vt + vq*iNt + vr*iNq*iNt;
+        Vpus_tqr = sp_mat(locations.t(), vValues, iNp*iNu*iNs,iNt*iNq*iNr);
+        Npus_tqr = 1;
+        return Vpus_tqr;
+    }
+    else{
+        return Vpus_tqr;
+    }
+}
+
+sp_mat flexmat6::pus_trq(){
+    if(Npus_trq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vu*iNp + vs*iNu*iNp;
+        locations.col(1) = vt + vr*iNt + vq*iNr*iNt;
+        Vpus_trq = sp_mat(locations.t(), vValues, iNp*iNu*iNs,iNt*iNr*iNq);
+        Npus_trq = 1;
+        return Vpus_trq;
+    }
+    else{
+        return Vpus_trq;
+    }
+}
+
+sp_mat flexmat6::put_qrs(){
+    if(Nput_qrs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vu*iNp + vt*iNu*iNp;
+        locations.col(1) = vq + vr*iNq + vs*iNr*iNq;
+        Vput_qrs = sp_mat(locations.t(), vValues, iNp*iNu*iNt,iNq*iNr*iNs);
+        Nput_qrs = 1;
+        return Vput_qrs;
+    }
+    else{
+        return Vput_qrs;
+    }
+}
+
+sp_mat flexmat6::put_qsr(){
+    if(Nput_qsr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vu*iNp + vt*iNu*iNp;
+        locations.col(1) = vq + vs*iNq + vr*iNs*iNq;
+        Vput_qsr = sp_mat(locations.t(), vValues, iNp*iNu*iNt,iNq*iNs*iNr);
+        Nput_qsr = 1;
+        return Vput_qsr;
+    }
+    else{
+        return Vput_qsr;
+    }
+}
+
+sp_mat flexmat6::put_rqs(){
+    if(Nput_rqs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vu*iNp + vt*iNu*iNp;
+        locations.col(1) = vr + vq*iNr + vs*iNq*iNr;
+        Vput_rqs = sp_mat(locations.t(), vValues, iNp*iNu*iNt,iNr*iNq*iNs);
+        Nput_rqs = 1;
+        return Vput_rqs;
+    }
+    else{
+        return Vput_rqs;
+    }
+}
+
+sp_mat flexmat6::put_rsq(){
+    if(Nput_rsq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vu*iNp + vt*iNu*iNp;
+        locations.col(1) = vr + vs*iNr + vq*iNs*iNr;
+        Vput_rsq = sp_mat(locations.t(), vValues, iNp*iNu*iNt,iNr*iNs*iNq);
+        Nput_rsq = 1;
+        return Vput_rsq;
+    }
+    else{
+        return Vput_rsq;
+    }
+}
+
+sp_mat flexmat6::put_sqr(){
+    if(Nput_sqr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vu*iNp + vt*iNu*iNp;
+        locations.col(1) = vs + vq*iNs + vr*iNq*iNs;
+        Vput_sqr = sp_mat(locations.t(), vValues, iNp*iNu*iNt,iNs*iNq*iNr);
+        Nput_sqr = 1;
+        return Vput_sqr;
+    }
+    else{
+        return Vput_sqr;
+    }
+}
+
+sp_mat flexmat6::put_srq(){
+    if(Nput_srq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vp + vu*iNp + vt*iNu*iNp;
+        locations.col(1) = vs + vr*iNs + vq*iNr*iNs;
+        Vput_srq = sp_mat(locations.t(), vValues, iNp*iNu*iNt,iNs*iNr*iNq);
+        Nput_srq = 1;
+        return Vput_srq;
+    }
+    else{
+        return Vput_srq;
+    }
+}
+
+sp_mat flexmat6::qpr_stu(){
+    if(Nqpr_stu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vp*iNq + vr*iNp*iNq;
+        locations.col(1) = vs + vt*iNs + vu*iNt*iNs;
+        Vqpr_stu = sp_mat(locations.t(), vValues, iNq*iNp*iNr,iNs*iNt*iNu);
+        Nqpr_stu = 1;
+        return Vqpr_stu;
+    }
+    else{
+        return Vqpr_stu;
+    }
+}
+
+sp_mat flexmat6::qpr_sut(){
+    if(Nqpr_sut == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vp*iNq + vr*iNp*iNq;
+        locations.col(1) = vs + vu*iNs + vt*iNu*iNs;
+        Vqpr_sut = sp_mat(locations.t(), vValues, iNq*iNp*iNr,iNs*iNu*iNt);
+        Nqpr_sut = 1;
+        return Vqpr_sut;
+    }
+    else{
+        return Vqpr_sut;
+    }
+}
+
+sp_mat flexmat6::qpr_tsu(){
+    if(Nqpr_tsu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vp*iNq + vr*iNp*iNq;
+        locations.col(1) = vt + vs*iNt + vu*iNs*iNt;
+        Vqpr_tsu = sp_mat(locations.t(), vValues, iNq*iNp*iNr,iNt*iNs*iNu);
+        Nqpr_tsu = 1;
+        return Vqpr_tsu;
+    }
+    else{
+        return Vqpr_tsu;
+    }
+}
+
+sp_mat flexmat6::qpr_tus(){
+    if(Nqpr_tus == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vp*iNq + vr*iNp*iNq;
+        locations.col(1) = vt + vu*iNt + vs*iNu*iNt;
+        Vqpr_tus = sp_mat(locations.t(), vValues, iNq*iNp*iNr,iNt*iNu*iNs);
+        Nqpr_tus = 1;
+        return Vqpr_tus;
+    }
+    else{
+        return Vqpr_tus;
+    }
+}
+
+sp_mat flexmat6::qpr_ust(){
+    if(Nqpr_ust == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vp*iNq + vr*iNp*iNq;
+        locations.col(1) = vu + vs*iNu + vt*iNs*iNu;
+        Vqpr_ust = sp_mat(locations.t(), vValues, iNq*iNp*iNr,iNu*iNs*iNt);
+        Nqpr_ust = 1;
+        return Vqpr_ust;
+    }
+    else{
+        return Vqpr_ust;
+    }
+}
+
+sp_mat flexmat6::qpr_uts(){
+    if(Nqpr_uts == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vp*iNq + vr*iNp*iNq;
+        locations.col(1) = vu + vt*iNu + vs*iNt*iNu;
+        Vqpr_uts = sp_mat(locations.t(), vValues, iNq*iNp*iNr,iNu*iNt*iNs);
+        Nqpr_uts = 1;
+        return Vqpr_uts;
+    }
+    else{
+        return Vqpr_uts;
+    }
+}
+
+sp_mat flexmat6::qps_rtu(){
+    if(Nqps_rtu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vp*iNq + vs*iNp*iNq;
+        locations.col(1) = vr + vt*iNr + vu*iNt*iNr;
+        Vqps_rtu = sp_mat(locations.t(), vValues, iNq*iNp*iNs,iNr*iNt*iNu);
+        Nqps_rtu = 1;
+        return Vqps_rtu;
+    }
+    else{
+        return Vqps_rtu;
+    }
+}
+
+sp_mat flexmat6::qps_rut(){
+    if(Nqps_rut == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vp*iNq + vs*iNp*iNq;
+        locations.col(1) = vr + vu*iNr + vt*iNu*iNr;
+        Vqps_rut = sp_mat(locations.t(), vValues, iNq*iNp*iNs,iNr*iNu*iNt);
+        Nqps_rut = 1;
+        return Vqps_rut;
+    }
+    else{
+        return Vqps_rut;
+    }
+}
+
+sp_mat flexmat6::qps_tru(){
+    if(Nqps_tru == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vp*iNq + vs*iNp*iNq;
+        locations.col(1) = vt + vr*iNt + vu*iNr*iNt;
+        Vqps_tru = sp_mat(locations.t(), vValues, iNq*iNp*iNs,iNt*iNr*iNu);
+        Nqps_tru = 1;
+        return Vqps_tru;
+    }
+    else{
+        return Vqps_tru;
+    }
+}
+
+sp_mat flexmat6::qps_tur(){
+    if(Nqps_tur == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vp*iNq + vs*iNp*iNq;
+        locations.col(1) = vt + vu*iNt + vr*iNu*iNt;
+        Vqps_tur = sp_mat(locations.t(), vValues, iNq*iNp*iNs,iNt*iNu*iNr);
+        Nqps_tur = 1;
+        return Vqps_tur;
+    }
+    else{
+        return Vqps_tur;
+    }
+}
+
+sp_mat flexmat6::qps_urt(){
+    if(Nqps_urt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vp*iNq + vs*iNp*iNq;
+        locations.col(1) = vu + vr*iNu + vt*iNr*iNu;
+        Vqps_urt = sp_mat(locations.t(), vValues, iNq*iNp*iNs,iNu*iNr*iNt);
+        Nqps_urt = 1;
+        return Vqps_urt;
+    }
+    else{
+        return Vqps_urt;
+    }
+}
+
+sp_mat flexmat6::qps_utr(){
+    if(Nqps_utr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vp*iNq + vs*iNp*iNq;
+        locations.col(1) = vu + vt*iNu + vr*iNt*iNu;
+        Vqps_utr = sp_mat(locations.t(), vValues, iNq*iNp*iNs,iNu*iNt*iNr);
+        Nqps_utr = 1;
+        return Vqps_utr;
+    }
+    else{
+        return Vqps_utr;
+    }
+}
+
+sp_mat flexmat6::qpt_rsu(){
+    if(Nqpt_rsu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vp*iNq + vt*iNp*iNq;
+        locations.col(1) = vr + vs*iNr + vu*iNs*iNr;
+        Vqpt_rsu = sp_mat(locations.t(), vValues, iNq*iNp*iNt,iNr*iNs*iNu);
+        Nqpt_rsu = 1;
+        return Vqpt_rsu;
+    }
+    else{
+        return Vqpt_rsu;
+    }
+}
+
+sp_mat flexmat6::qpt_rus(){
+    if(Nqpt_rus == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vp*iNq + vt*iNp*iNq;
+        locations.col(1) = vr + vu*iNr + vs*iNu*iNr;
+        Vqpt_rus = sp_mat(locations.t(), vValues, iNq*iNp*iNt,iNr*iNu*iNs);
+        Nqpt_rus = 1;
+        return Vqpt_rus;
+    }
+    else{
+        return Vqpt_rus;
+    }
+}
+
+sp_mat flexmat6::qpt_sru(){
+    if(Nqpt_sru == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vp*iNq + vt*iNp*iNq;
+        locations.col(1) = vs + vr*iNs + vu*iNr*iNs;
+        Vqpt_sru = sp_mat(locations.t(), vValues, iNq*iNp*iNt,iNs*iNr*iNu);
+        Nqpt_sru = 1;
+        return Vqpt_sru;
+    }
+    else{
+        return Vqpt_sru;
+    }
+}
+
+sp_mat flexmat6::qpt_sur(){
+    if(Nqpt_sur == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vp*iNq + vt*iNp*iNq;
+        locations.col(1) = vs + vu*iNs + vr*iNu*iNs;
+        Vqpt_sur = sp_mat(locations.t(), vValues, iNq*iNp*iNt,iNs*iNu*iNr);
+        Nqpt_sur = 1;
+        return Vqpt_sur;
+    }
+    else{
+        return Vqpt_sur;
+    }
+}
+
+sp_mat flexmat6::qpt_urs(){
+    if(Nqpt_urs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vp*iNq + vt*iNp*iNq;
+        locations.col(1) = vu + vr*iNu + vs*iNr*iNu;
+        Vqpt_urs = sp_mat(locations.t(), vValues, iNq*iNp*iNt,iNu*iNr*iNs);
+        Nqpt_urs = 1;
+        return Vqpt_urs;
+    }
+    else{
+        return Vqpt_urs;
+    }
+}
+
+sp_mat flexmat6::qpt_usr(){
+    if(Nqpt_usr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vp*iNq + vt*iNp*iNq;
+        locations.col(1) = vu + vs*iNu + vr*iNs*iNu;
+        Vqpt_usr = sp_mat(locations.t(), vValues, iNq*iNp*iNt,iNu*iNs*iNr);
+        Nqpt_usr = 1;
+        return Vqpt_usr;
+    }
+    else{
+        return Vqpt_usr;
+    }
+}
+
+sp_mat flexmat6::qpu_rst(){
+    if(Nqpu_rst == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vp*iNq + vu*iNp*iNq;
+        locations.col(1) = vr + vs*iNr + vt*iNs*iNr;
+        Vqpu_rst = sp_mat(locations.t(), vValues, iNq*iNp*iNu,iNr*iNs*iNt);
+        Nqpu_rst = 1;
+        return Vqpu_rst;
+    }
+    else{
+        return Vqpu_rst;
+    }
+}
+
+sp_mat flexmat6::qpu_rts(){
+    if(Nqpu_rts == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vp*iNq + vu*iNp*iNq;
+        locations.col(1) = vr + vt*iNr + vs*iNt*iNr;
+        Vqpu_rts = sp_mat(locations.t(), vValues, iNq*iNp*iNu,iNr*iNt*iNs);
+        Nqpu_rts = 1;
+        return Vqpu_rts;
+    }
+    else{
+        return Vqpu_rts;
+    }
+}
+
+sp_mat flexmat6::qpu_srt(){
+    if(Nqpu_srt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vp*iNq + vu*iNp*iNq;
+        locations.col(1) = vs + vr*iNs + vt*iNr*iNs;
+        Vqpu_srt = sp_mat(locations.t(), vValues, iNq*iNp*iNu,iNs*iNr*iNt);
+        Nqpu_srt = 1;
+        return Vqpu_srt;
+    }
+    else{
+        return Vqpu_srt;
+    }
+}
+
+sp_mat flexmat6::qpu_str(){
+    if(Nqpu_str == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vp*iNq + vu*iNp*iNq;
+        locations.col(1) = vs + vt*iNs + vr*iNt*iNs;
+        Vqpu_str = sp_mat(locations.t(), vValues, iNq*iNp*iNu,iNs*iNt*iNr);
+        Nqpu_str = 1;
+        return Vqpu_str;
+    }
+    else{
+        return Vqpu_str;
+    }
+}
+
+sp_mat flexmat6::qpu_trs(){
+    if(Nqpu_trs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vp*iNq + vu*iNp*iNq;
+        locations.col(1) = vt + vr*iNt + vs*iNr*iNt;
+        Vqpu_trs = sp_mat(locations.t(), vValues, iNq*iNp*iNu,iNt*iNr*iNs);
+        Nqpu_trs = 1;
+        return Vqpu_trs;
+    }
+    else{
+        return Vqpu_trs;
+    }
+}
+
+sp_mat flexmat6::qpu_tsr(){
+    if(Nqpu_tsr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vp*iNq + vu*iNp*iNq;
+        locations.col(1) = vt + vs*iNt + vr*iNs*iNt;
+        Vqpu_tsr = sp_mat(locations.t(), vValues, iNq*iNp*iNu,iNt*iNs*iNr);
+        Nqpu_tsr = 1;
+        return Vqpu_tsr;
+    }
+    else{
+        return Vqpu_tsr;
+    }
+}
+
+sp_mat flexmat6::qrp_stu(){
+    if(Nqrp_stu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vr*iNq + vp*iNr*iNq;
+        locations.col(1) = vs + vt*iNs + vu*iNt*iNs;
+        Vqrp_stu = sp_mat(locations.t(), vValues, iNq*iNr*iNp,iNs*iNt*iNu);
+        Nqrp_stu = 1;
+        return Vqrp_stu;
+    }
+    else{
+        return Vqrp_stu;
+    }
+}
+
+sp_mat flexmat6::qrp_sut(){
+    if(Nqrp_sut == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vr*iNq + vp*iNr*iNq;
+        locations.col(1) = vs + vu*iNs + vt*iNu*iNs;
+        Vqrp_sut = sp_mat(locations.t(), vValues, iNq*iNr*iNp,iNs*iNu*iNt);
+        Nqrp_sut = 1;
+        return Vqrp_sut;
+    }
+    else{
+        return Vqrp_sut;
+    }
+}
+
+sp_mat flexmat6::qrp_tsu(){
+    if(Nqrp_tsu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vr*iNq + vp*iNr*iNq;
+        locations.col(1) = vt + vs*iNt + vu*iNs*iNt;
+        Vqrp_tsu = sp_mat(locations.t(), vValues, iNq*iNr*iNp,iNt*iNs*iNu);
+        Nqrp_tsu = 1;
+        return Vqrp_tsu;
+    }
+    else{
+        return Vqrp_tsu;
+    }
+}
+
+sp_mat flexmat6::qrp_tus(){
+    if(Nqrp_tus == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vr*iNq + vp*iNr*iNq;
+        locations.col(1) = vt + vu*iNt + vs*iNu*iNt;
+        Vqrp_tus = sp_mat(locations.t(), vValues, iNq*iNr*iNp,iNt*iNu*iNs);
+        Nqrp_tus = 1;
+        return Vqrp_tus;
+    }
+    else{
+        return Vqrp_tus;
+    }
+}
+
+sp_mat flexmat6::qrp_ust(){
+    if(Nqrp_ust == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vr*iNq + vp*iNr*iNq;
+        locations.col(1) = vu + vs*iNu + vt*iNs*iNu;
+        Vqrp_ust = sp_mat(locations.t(), vValues, iNq*iNr*iNp,iNu*iNs*iNt);
+        Nqrp_ust = 1;
+        return Vqrp_ust;
+    }
+    else{
+        return Vqrp_ust;
+    }
+}
+
+sp_mat flexmat6::qrp_uts(){
+    if(Nqrp_uts == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vr*iNq + vp*iNr*iNq;
+        locations.col(1) = vu + vt*iNu + vs*iNt*iNu;
+        Vqrp_uts = sp_mat(locations.t(), vValues, iNq*iNr*iNp,iNu*iNt*iNs);
+        Nqrp_uts = 1;
+        return Vqrp_uts;
+    }
+    else{
+        return Vqrp_uts;
+    }
+}
+
+sp_mat flexmat6::qrs_ptu(){
+    if(Nqrs_ptu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vr*iNq + vs*iNr*iNq;
+        locations.col(1) = vp + vt*iNp + vu*iNt*iNp;
+        Vqrs_ptu = sp_mat(locations.t(), vValues, iNq*iNr*iNs,iNp*iNt*iNu);
+        Nqrs_ptu = 1;
+        return Vqrs_ptu;
+    }
+    else{
+        return Vqrs_ptu;
+    }
+}
+
+sp_mat flexmat6::qrs_put(){
+    if(Nqrs_put == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vr*iNq + vs*iNr*iNq;
+        locations.col(1) = vp + vu*iNp + vt*iNu*iNp;
+        Vqrs_put = sp_mat(locations.t(), vValues, iNq*iNr*iNs,iNp*iNu*iNt);
+        Nqrs_put = 1;
+        return Vqrs_put;
+    }
+    else{
+        return Vqrs_put;
+    }
+}
+
+sp_mat flexmat6::qrs_tpu(){
+    if(Nqrs_tpu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vr*iNq + vs*iNr*iNq;
+        locations.col(1) = vt + vp*iNt + vu*iNp*iNt;
+        Vqrs_tpu = sp_mat(locations.t(), vValues, iNq*iNr*iNs,iNt*iNp*iNu);
+        Nqrs_tpu = 1;
+        return Vqrs_tpu;
+    }
+    else{
+        return Vqrs_tpu;
+    }
+}
+
+sp_mat flexmat6::qrs_tup(){
+    if(Nqrs_tup == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vr*iNq + vs*iNr*iNq;
+        locations.col(1) = vt + vu*iNt + vp*iNu*iNt;
+        Vqrs_tup = sp_mat(locations.t(), vValues, iNq*iNr*iNs,iNt*iNu*iNp);
+        Nqrs_tup = 1;
+        return Vqrs_tup;
+    }
+    else{
+        return Vqrs_tup;
+    }
+}
+
+sp_mat flexmat6::qrs_upt(){
+    if(Nqrs_upt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vr*iNq + vs*iNr*iNq;
+        locations.col(1) = vu + vp*iNu + vt*iNp*iNu;
+        Vqrs_upt = sp_mat(locations.t(), vValues, iNq*iNr*iNs,iNu*iNp*iNt);
+        Nqrs_upt = 1;
+        return Vqrs_upt;
+    }
+    else{
+        return Vqrs_upt;
+    }
+}
+
+sp_mat flexmat6::qrs_utp(){
+    if(Nqrs_utp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vr*iNq + vs*iNr*iNq;
+        locations.col(1) = vu + vt*iNu + vp*iNt*iNu;
+        Vqrs_utp = sp_mat(locations.t(), vValues, iNq*iNr*iNs,iNu*iNt*iNp);
+        Nqrs_utp = 1;
+        return Vqrs_utp;
+    }
+    else{
+        return Vqrs_utp;
+    }
+}
+
+sp_mat flexmat6::qrt_psu(){
+    if(Nqrt_psu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vr*iNq + vt*iNr*iNq;
+        locations.col(1) = vp + vs*iNp + vu*iNs*iNp;
+        Vqrt_psu = sp_mat(locations.t(), vValues, iNq*iNr*iNt,iNp*iNs*iNu);
+        Nqrt_psu = 1;
+        return Vqrt_psu;
+    }
+    else{
+        return Vqrt_psu;
+    }
+}
+
+sp_mat flexmat6::qrt_pus(){
+    if(Nqrt_pus == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vr*iNq + vt*iNr*iNq;
+        locations.col(1) = vp + vu*iNp + vs*iNu*iNp;
+        Vqrt_pus = sp_mat(locations.t(), vValues, iNq*iNr*iNt,iNp*iNu*iNs);
+        Nqrt_pus = 1;
+        return Vqrt_pus;
+    }
+    else{
+        return Vqrt_pus;
+    }
+}
+
+sp_mat flexmat6::qrt_spu(){
+    if(Nqrt_spu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vr*iNq + vt*iNr*iNq;
+        locations.col(1) = vs + vp*iNs + vu*iNp*iNs;
+        Vqrt_spu = sp_mat(locations.t(), vValues, iNq*iNr*iNt,iNs*iNp*iNu);
+        Nqrt_spu = 1;
+        return Vqrt_spu;
+    }
+    else{
+        return Vqrt_spu;
+    }
+}
+
+sp_mat flexmat6::qrt_sup(){
+    if(Nqrt_sup == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vr*iNq + vt*iNr*iNq;
+        locations.col(1) = vs + vu*iNs + vp*iNu*iNs;
+        Vqrt_sup = sp_mat(locations.t(), vValues, iNq*iNr*iNt,iNs*iNu*iNp);
+        Nqrt_sup = 1;
+        return Vqrt_sup;
+    }
+    else{
+        return Vqrt_sup;
+    }
+}
+
+sp_mat flexmat6::qrt_ups(){
+    if(Nqrt_ups == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vr*iNq + vt*iNr*iNq;
+        locations.col(1) = vu + vp*iNu + vs*iNp*iNu;
+        Vqrt_ups = sp_mat(locations.t(), vValues, iNq*iNr*iNt,iNu*iNp*iNs);
+        Nqrt_ups = 1;
+        return Vqrt_ups;
+    }
+    else{
+        return Vqrt_ups;
+    }
+}
+
+sp_mat flexmat6::qrt_usp(){
+    if(Nqrt_usp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vr*iNq + vt*iNr*iNq;
+        locations.col(1) = vu + vs*iNu + vp*iNs*iNu;
+        Vqrt_usp = sp_mat(locations.t(), vValues, iNq*iNr*iNt,iNu*iNs*iNp);
+        Nqrt_usp = 1;
+        return Vqrt_usp;
+    }
+    else{
+        return Vqrt_usp;
+    }
+}
+
+
+
+sp_mat flexmat6::qru_pts(){
+    if(Nqru_pts == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vr*iNq + vu*iNr*iNq;
+        locations.col(1) = vp + vt*iNp + vs*iNt*iNp;
+        Vqru_pts = sp_mat(locations.t(), vValues, iNq*iNr*iNu,iNp*iNt*iNs);
+        Nqru_pts = 1;
+        return Vqru_pts;
+    }
+    else{
+        return Vqru_pts;
+    }
+}
+
+sp_mat flexmat6::qru_spt(){
+    if(Nqru_spt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vr*iNq + vu*iNr*iNq;
+        locations.col(1) = vs + vp*iNs + vt*iNp*iNs;
+        Vqru_spt = sp_mat(locations.t(), vValues, iNq*iNr*iNu,iNs*iNp*iNt);
+        Nqru_spt = 1;
+        return Vqru_spt;
+    }
+    else{
+        return Vqru_spt;
+    }
+}
+
+sp_mat flexmat6::qru_stp(){
+    if(Nqru_stp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vr*iNq + vu*iNr*iNq;
+        locations.col(1) = vs + vt*iNs + vp*iNt*iNs;
+        Vqru_stp = sp_mat(locations.t(), vValues, iNq*iNr*iNu,iNs*iNt*iNp);
+        Nqru_stp = 1;
+        return Vqru_stp;
+    }
+    else{
+        return Vqru_stp;
+    }
+}
+
+sp_mat flexmat6::qru_tps(){
+    if(Nqru_tps == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vr*iNq + vu*iNr*iNq;
+        locations.col(1) = vt + vp*iNt + vs*iNp*iNt;
+        Vqru_tps = sp_mat(locations.t(), vValues, iNq*iNr*iNu,iNt*iNp*iNs);
+        Nqru_tps = 1;
+        return Vqru_tps;
+    }
+    else{
+        return Vqru_tps;
+    }
+}
+
+sp_mat flexmat6::qru_tsp(){
+    if(Nqru_tsp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vr*iNq + vu*iNr*iNq;
+        locations.col(1) = vt + vs*iNt + vp*iNs*iNt;
+        Vqru_tsp = sp_mat(locations.t(), vValues, iNq*iNr*iNu,iNt*iNs*iNp);
+        Nqru_tsp = 1;
+        return Vqru_tsp;
+    }
+    else{
+        return Vqru_tsp;
+    }
+}
+
+sp_mat flexmat6::qsp_rtu(){
+    if(Nqsp_rtu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vs*iNq + vp*iNs*iNq;
+        locations.col(1) = vr + vt*iNr + vu*iNt*iNr;
+        Vqsp_rtu = sp_mat(locations.t(), vValues, iNq*iNs*iNp,iNr*iNt*iNu);
+        Nqsp_rtu = 1;
+        return Vqsp_rtu;
+    }
+    else{
+        return Vqsp_rtu;
+    }
+}
+
+sp_mat flexmat6::qsp_rut(){
+    if(Nqsp_rut == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vs*iNq + vp*iNs*iNq;
+        locations.col(1) = vr + vu*iNr + vt*iNu*iNr;
+        Vqsp_rut = sp_mat(locations.t(), vValues, iNq*iNs*iNp,iNr*iNu*iNt);
+        Nqsp_rut = 1;
+        return Vqsp_rut;
+    }
+    else{
+        return Vqsp_rut;
+    }
+}
+
+sp_mat flexmat6::qsp_tru(){
+    if(Nqsp_tru == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vs*iNq + vp*iNs*iNq;
+        locations.col(1) = vt + vr*iNt + vu*iNr*iNt;
+        Vqsp_tru = sp_mat(locations.t(), vValues, iNq*iNs*iNp,iNt*iNr*iNu);
+        Nqsp_tru = 1;
+        return Vqsp_tru;
+    }
+    else{
+        return Vqsp_tru;
+    }
+}
+
+sp_mat flexmat6::qsp_tur(){
+    if(Nqsp_tur == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vs*iNq + vp*iNs*iNq;
+        locations.col(1) = vt + vu*iNt + vr*iNu*iNt;
+        Vqsp_tur = sp_mat(locations.t(), vValues, iNq*iNs*iNp,iNt*iNu*iNr);
+        Nqsp_tur = 1;
+        return Vqsp_tur;
+    }
+    else{
+        return Vqsp_tur;
+    }
+}
+
+sp_mat flexmat6::qsp_urt(){
+    if(Nqsp_urt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vs*iNq + vp*iNs*iNq;
+        locations.col(1) = vu + vr*iNu + vt*iNr*iNu;
+        Vqsp_urt = sp_mat(locations.t(), vValues, iNq*iNs*iNp,iNu*iNr*iNt);
+        Nqsp_urt = 1;
+        return Vqsp_urt;
+    }
+    else{
+        return Vqsp_urt;
+    }
+}
+
+sp_mat flexmat6::qsp_utr(){
+    if(Nqsp_utr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vs*iNq + vp*iNs*iNq;
+        locations.col(1) = vu + vt*iNu + vr*iNt*iNu;
+        Vqsp_utr = sp_mat(locations.t(), vValues, iNq*iNs*iNp,iNu*iNt*iNr);
+        Nqsp_utr = 1;
+        return Vqsp_utr;
+    }
+    else{
+        return Vqsp_utr;
+    }
+}
+
+sp_mat flexmat6::qsr_ptu(){
+    if(Nqsr_ptu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vs*iNq + vr*iNs*iNq;
+        locations.col(1) = vp + vt*iNp + vu*iNt*iNp;
+        Vqsr_ptu = sp_mat(locations.t(), vValues, iNq*iNs*iNr,iNp*iNt*iNu);
+        Nqsr_ptu = 1;
+        return Vqsr_ptu;
+    }
+    else{
+        return Vqsr_ptu;
+    }
+}
+
+sp_mat flexmat6::qsr_put(){
+    if(Nqsr_put == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vs*iNq + vr*iNs*iNq;
+        locations.col(1) = vp + vu*iNp + vt*iNu*iNp;
+        Vqsr_put = sp_mat(locations.t(), vValues, iNq*iNs*iNr,iNp*iNu*iNt);
+        Nqsr_put = 1;
+        return Vqsr_put;
+    }
+    else{
+        return Vqsr_put;
+    }
+}
+
+sp_mat flexmat6::qsr_tpu(){
+    if(Nqsr_tpu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vs*iNq + vr*iNs*iNq;
+        locations.col(1) = vt + vp*iNt + vu*iNp*iNt;
+        Vqsr_tpu = sp_mat(locations.t(), vValues, iNq*iNs*iNr,iNt*iNp*iNu);
+        Nqsr_tpu = 1;
+        return Vqsr_tpu;
+    }
+    else{
+        return Vqsr_tpu;
+    }
+}
+
+sp_mat flexmat6::qsr_tup(){
+    if(Nqsr_tup == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vs*iNq + vr*iNs*iNq;
+        locations.col(1) = vt + vu*iNt + vp*iNu*iNt;
+        Vqsr_tup = sp_mat(locations.t(), vValues, iNq*iNs*iNr,iNt*iNu*iNp);
+        Nqsr_tup = 1;
+        return Vqsr_tup;
+    }
+    else{
+        return Vqsr_tup;
+    }
+}
+
+sp_mat flexmat6::qsr_upt(){
+    if(Nqsr_upt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vs*iNq + vr*iNs*iNq;
+        locations.col(1) = vu + vp*iNu + vt*iNp*iNu;
+        Vqsr_upt = sp_mat(locations.t(), vValues, iNq*iNs*iNr,iNu*iNp*iNt);
+        Nqsr_upt = 1;
+        return Vqsr_upt;
+    }
+    else{
+        return Vqsr_upt;
+    }
+}
+
+sp_mat flexmat6::qsr_utp(){
+    if(Nqsr_utp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vs*iNq + vr*iNs*iNq;
+        locations.col(1) = vu + vt*iNu + vp*iNt*iNu;
+        Vqsr_utp = sp_mat(locations.t(), vValues, iNq*iNs*iNr,iNu*iNt*iNp);
+        Nqsr_utp = 1;
+        return Vqsr_utp;
+    }
+    else{
+        return Vqsr_utp;
+    }
+}
+
+sp_mat flexmat6::qst_pru(){
+    if(Nqst_pru == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vs*iNq + vt*iNs*iNq;
+        locations.col(1) = vp + vr*iNp + vu*iNr*iNp;
+        Vqst_pru = sp_mat(locations.t(), vValues, iNq*iNs*iNt,iNp*iNr*iNu);
+        Nqst_pru = 1;
+        return Vqst_pru;
+    }
+    else{
+        return Vqst_pru;
+    }
+}
+
+sp_mat flexmat6::qst_pur(){
+    if(Nqst_pur == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vs*iNq + vt*iNs*iNq;
+        locations.col(1) = vp + vu*iNp + vr*iNu*iNp;
+        Vqst_pur = sp_mat(locations.t(), vValues, iNq*iNs*iNt,iNp*iNu*iNr);
+        Nqst_pur = 1;
+        return Vqst_pur;
+    }
+    else{
+        return Vqst_pur;
+    }
+}
+
+sp_mat flexmat6::qst_rpu(){
+    if(Nqst_rpu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vs*iNq + vt*iNs*iNq;
+        locations.col(1) = vr + vp*iNr + vu*iNp*iNr;
+        Vqst_rpu = sp_mat(locations.t(), vValues, iNq*iNs*iNt,iNr*iNp*iNu);
+        Nqst_rpu = 1;
+        return Vqst_rpu;
+    }
+    else{
+        return Vqst_rpu;
+    }
+}
+
+sp_mat flexmat6::qst_rup(){
+    if(Nqst_rup == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vs*iNq + vt*iNs*iNq;
+        locations.col(1) = vr + vu*iNr + vp*iNu*iNr;
+        Vqst_rup = sp_mat(locations.t(), vValues, iNq*iNs*iNt,iNr*iNu*iNp);
+        Nqst_rup = 1;
+        return Vqst_rup;
+    }
+    else{
+        return Vqst_rup;
+    }
+}
+
+sp_mat flexmat6::qst_upr(){
+    if(Nqst_upr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vs*iNq + vt*iNs*iNq;
+        locations.col(1) = vu + vp*iNu + vr*iNp*iNu;
+        Vqst_upr = sp_mat(locations.t(), vValues, iNq*iNs*iNt,iNu*iNp*iNr);
+        Nqst_upr = 1;
+        return Vqst_upr;
+    }
+    else{
+        return Vqst_upr;
+    }
+}
+
+sp_mat flexmat6::qst_urp(){
+    if(Nqst_urp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vs*iNq + vt*iNs*iNq;
+        locations.col(1) = vu + vr*iNu + vp*iNr*iNu;
+        Vqst_urp = sp_mat(locations.t(), vValues, iNq*iNs*iNt,iNu*iNr*iNp);
+        Nqst_urp = 1;
+        return Vqst_urp;
+    }
+    else{
+        return Vqst_urp;
+    }
+}
+
+sp_mat flexmat6::qsu_prt(){
+    if(Nqsu_prt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vs*iNq + vu*iNs*iNq;
+        locations.col(1) = vp + vr*iNp + vt*iNr*iNp;
+        Vqsu_prt = sp_mat(locations.t(), vValues, iNq*iNs*iNu,iNp*iNr*iNt);
+        Nqsu_prt = 1;
+        return Vqsu_prt;
+    }
+    else{
+        return Vqsu_prt;
+    }
+}
+
+sp_mat flexmat6::qsu_ptr(){
+    if(Nqsu_ptr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vs*iNq + vu*iNs*iNq;
+        locations.col(1) = vp + vt*iNp + vr*iNt*iNp;
+        Vqsu_ptr = sp_mat(locations.t(), vValues, iNq*iNs*iNu,iNp*iNt*iNr);
+        Nqsu_ptr = 1;
+        return Vqsu_ptr;
+    }
+    else{
+        return Vqsu_ptr;
+    }
+}
+
+sp_mat flexmat6::qsu_rpt(){
+    if(Nqsu_rpt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vs*iNq + vu*iNs*iNq;
+        locations.col(1) = vr + vp*iNr + vt*iNp*iNr;
+        Vqsu_rpt = sp_mat(locations.t(), vValues, iNq*iNs*iNu,iNr*iNp*iNt);
+        Nqsu_rpt = 1;
+        return Vqsu_rpt;
+    }
+    else{
+        return Vqsu_rpt;
+    }
+}
+
+sp_mat flexmat6::qsu_rtp(){
+    if(Nqsu_rtp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vs*iNq + vu*iNs*iNq;
+        locations.col(1) = vr + vt*iNr + vp*iNt*iNr;
+        Vqsu_rtp = sp_mat(locations.t(), vValues, iNq*iNs*iNu,iNr*iNt*iNp);
+        Nqsu_rtp = 1;
+        return Vqsu_rtp;
+    }
+    else{
+        return Vqsu_rtp;
+    }
+}
+
+sp_mat flexmat6::qsu_tpr(){
+    if(Nqsu_tpr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vs*iNq + vu*iNs*iNq;
+        locations.col(1) = vt + vp*iNt + vr*iNp*iNt;
+        Vqsu_tpr = sp_mat(locations.t(), vValues, iNq*iNs*iNu,iNt*iNp*iNr);
+        Nqsu_tpr = 1;
+        return Vqsu_tpr;
+    }
+    else{
+        return Vqsu_tpr;
+    }
+}
+
+sp_mat flexmat6::qsu_trp(){
+    if(Nqsu_trp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vs*iNq + vu*iNs*iNq;
+        locations.col(1) = vt + vr*iNt + vp*iNr*iNt;
+        Vqsu_trp = sp_mat(locations.t(), vValues, iNq*iNs*iNu,iNt*iNr*iNp);
+        Nqsu_trp = 1;
+        return Vqsu_trp;
+    }
+    else{
+        return Vqsu_trp;
+    }
+}
+
+sp_mat flexmat6::qtp_rsu(){
+    if(Nqtp_rsu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vt*iNq + vp*iNt*iNq;
+        locations.col(1) = vr + vs*iNr + vu*iNs*iNr;
+        Vqtp_rsu = sp_mat(locations.t(), vValues, iNq*iNt*iNp,iNr*iNs*iNu);
+        Nqtp_rsu = 1;
+        return Vqtp_rsu;
+    }
+    else{
+        return Vqtp_rsu;
+    }
+}
+
+sp_mat flexmat6::qtp_rus(){
+    if(Nqtp_rus == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vt*iNq + vp*iNt*iNq;
+        locations.col(1) = vr + vu*iNr + vs*iNu*iNr;
+        Vqtp_rus = sp_mat(locations.t(), vValues, iNq*iNt*iNp,iNr*iNu*iNs);
+        Nqtp_rus = 1;
+        return Vqtp_rus;
+    }
+    else{
+        return Vqtp_rus;
+    }
+}
+
+sp_mat flexmat6::qtp_sru(){
+    if(Nqtp_sru == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vt*iNq + vp*iNt*iNq;
+        locations.col(1) = vs + vr*iNs + vu*iNr*iNs;
+        Vqtp_sru = sp_mat(locations.t(), vValues, iNq*iNt*iNp,iNs*iNr*iNu);
+        Nqtp_sru = 1;
+        return Vqtp_sru;
+    }
+    else{
+        return Vqtp_sru;
+    }
+}
+
+sp_mat flexmat6::qtp_sur(){
+    if(Nqtp_sur == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vt*iNq + vp*iNt*iNq;
+        locations.col(1) = vs + vu*iNs + vr*iNu*iNs;
+        Vqtp_sur = sp_mat(locations.t(), vValues, iNq*iNt*iNp,iNs*iNu*iNr);
+        Nqtp_sur = 1;
+        return Vqtp_sur;
+    }
+    else{
+        return Vqtp_sur;
+    }
+}
+
+sp_mat flexmat6::qtp_urs(){
+    if(Nqtp_urs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vt*iNq + vp*iNt*iNq;
+        locations.col(1) = vu + vr*iNu + vs*iNr*iNu;
+        Vqtp_urs = sp_mat(locations.t(), vValues, iNq*iNt*iNp,iNu*iNr*iNs);
+        Nqtp_urs = 1;
+        return Vqtp_urs;
+    }
+    else{
+        return Vqtp_urs;
+    }
+}
+
+sp_mat flexmat6::qtp_usr(){
+    if(Nqtp_usr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vt*iNq + vp*iNt*iNq;
+        locations.col(1) = vu + vs*iNu + vr*iNs*iNu;
+        Vqtp_usr = sp_mat(locations.t(), vValues, iNq*iNt*iNp,iNu*iNs*iNr);
+        Nqtp_usr = 1;
+        return Vqtp_usr;
+    }
+    else{
+        return Vqtp_usr;
+    }
+}
+
+sp_mat flexmat6::qtr_psu(){
+    if(Nqtr_psu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vt*iNq + vr*iNt*iNq;
+        locations.col(1) = vp + vs*iNp + vu*iNs*iNp;
+        Vqtr_psu = sp_mat(locations.t(), vValues, iNq*iNt*iNr,iNp*iNs*iNu);
+        Nqtr_psu = 1;
+        return Vqtr_psu;
+    }
+    else{
+        return Vqtr_psu;
+    }
+}
+
+sp_mat flexmat6::qtr_pus(){
+    if(Nqtr_pus == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vt*iNq + vr*iNt*iNq;
+        locations.col(1) = vp + vu*iNp + vs*iNu*iNp;
+        Vqtr_pus = sp_mat(locations.t(), vValues, iNq*iNt*iNr,iNp*iNu*iNs);
+        Nqtr_pus = 1;
+        return Vqtr_pus;
+    }
+    else{
+        return Vqtr_pus;
+    }
+}
+
+sp_mat flexmat6::qtr_spu(){
+    if(Nqtr_spu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vt*iNq + vr*iNt*iNq;
+        locations.col(1) = vs + vp*iNs + vu*iNp*iNs;
+        Vqtr_spu = sp_mat(locations.t(), vValues, iNq*iNt*iNr,iNs*iNp*iNu);
+        Nqtr_spu = 1;
+        return Vqtr_spu;
+    }
+    else{
+        return Vqtr_spu;
+    }
+}
+
+sp_mat flexmat6::qtr_sup(){
+    if(Nqtr_sup == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vt*iNq + vr*iNt*iNq;
+        locations.col(1) = vs + vu*iNs + vp*iNu*iNs;
+        Vqtr_sup = sp_mat(locations.t(), vValues, iNq*iNt*iNr,iNs*iNu*iNp);
+        Nqtr_sup = 1;
+        return Vqtr_sup;
+    }
+    else{
+        return Vqtr_sup;
+    }
+}
+
+sp_mat flexmat6::qtr_ups(){
+    if(Nqtr_ups == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vt*iNq + vr*iNt*iNq;
+        locations.col(1) = vu + vp*iNu + vs*iNp*iNu;
+        Vqtr_ups = sp_mat(locations.t(), vValues, iNq*iNt*iNr,iNu*iNp*iNs);
+        Nqtr_ups = 1;
+        return Vqtr_ups;
+    }
+    else{
+        return Vqtr_ups;
+    }
+}
+
+sp_mat flexmat6::qtr_usp(){
+    if(Nqtr_usp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vt*iNq + vr*iNt*iNq;
+        locations.col(1) = vu + vs*iNu + vp*iNs*iNu;
+        Vqtr_usp = sp_mat(locations.t(), vValues, iNq*iNt*iNr,iNu*iNs*iNp);
+        Nqtr_usp = 1;
+        return Vqtr_usp;
+    }
+    else{
+        return Vqtr_usp;
+    }
+}
+
+sp_mat flexmat6::qts_pru(){
+    if(Nqts_pru == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vt*iNq + vs*iNt*iNq;
+        locations.col(1) = vp + vr*iNp + vu*iNr*iNp;
+        Vqts_pru = sp_mat(locations.t(), vValues, iNq*iNt*iNs,iNp*iNr*iNu);
+        Nqts_pru = 1;
+        return Vqts_pru;
+    }
+    else{
+        return Vqts_pru;
+    }
+}
+
+sp_mat flexmat6::qts_pur(){
+    if(Nqts_pur == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vt*iNq + vs*iNt*iNq;
+        locations.col(1) = vp + vu*iNp + vr*iNu*iNp;
+        Vqts_pur = sp_mat(locations.t(), vValues, iNq*iNt*iNs,iNp*iNu*iNr);
+        Nqts_pur = 1;
+        return Vqts_pur;
+    }
+    else{
+        return Vqts_pur;
+    }
+}
+
+sp_mat flexmat6::qts_rpu(){
+    if(Nqts_rpu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vt*iNq + vs*iNt*iNq;
+        locations.col(1) = vr + vp*iNr + vu*iNp*iNr;
+        Vqts_rpu = sp_mat(locations.t(), vValues, iNq*iNt*iNs,iNr*iNp*iNu);
+        Nqts_rpu = 1;
+        return Vqts_rpu;
+    }
+    else{
+        return Vqts_rpu;
+    }
+}
+
+sp_mat flexmat6::qts_rup(){
+    if(Nqts_rup == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vt*iNq + vs*iNt*iNq;
+        locations.col(1) = vr + vu*iNr + vp*iNu*iNr;
+        Vqts_rup = sp_mat(locations.t(), vValues, iNq*iNt*iNs,iNr*iNu*iNp);
+        Nqts_rup = 1;
+        return Vqts_rup;
+    }
+    else{
+        return Vqts_rup;
+    }
+}
+
+sp_mat flexmat6::qts_upr(){
+    if(Nqts_upr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vt*iNq + vs*iNt*iNq;
+        locations.col(1) = vu + vp*iNu + vr*iNp*iNu;
+        Vqts_upr = sp_mat(locations.t(), vValues, iNq*iNt*iNs,iNu*iNp*iNr);
+        Nqts_upr = 1;
+        return Vqts_upr;
+    }
+    else{
+        return Vqts_upr;
+    }
+}
+
+sp_mat flexmat6::qts_urp(){
+    if(Nqts_urp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vt*iNq + vs*iNt*iNq;
+        locations.col(1) = vu + vr*iNu + vp*iNr*iNu;
+        Vqts_urp = sp_mat(locations.t(), vValues, iNq*iNt*iNs,iNu*iNr*iNp);
+        Nqts_urp = 1;
+        return Vqts_urp;
+    }
+    else{
+        return Vqts_urp;
+    }
+}
+
+sp_mat flexmat6::qtu_prs(){
+    if(Nqtu_prs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vt*iNq + vu*iNt*iNq;
+        locations.col(1) = vp + vr*iNp + vs*iNr*iNp;
+        Vqtu_prs = sp_mat(locations.t(), vValues, iNq*iNt*iNu,iNp*iNr*iNs);
+        Nqtu_prs = 1;
+        return Vqtu_prs;
+    }
+    else{
+        return Vqtu_prs;
+    }
+}
+
+sp_mat flexmat6::qtu_psr(){
+    if(Nqtu_psr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vt*iNq + vu*iNt*iNq;
+        locations.col(1) = vp + vs*iNp + vr*iNs*iNp;
+        Vqtu_psr = sp_mat(locations.t(), vValues, iNq*iNt*iNu,iNp*iNs*iNr);
+        Nqtu_psr = 1;
+        return Vqtu_psr;
+    }
+    else{
+        return Vqtu_psr;
+    }
+}
+
+sp_mat flexmat6::qtu_rps(){
+    if(Nqtu_rps == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vt*iNq + vu*iNt*iNq;
+        locations.col(1) = vr + vp*iNr + vs*iNp*iNr;
+        Vqtu_rps = sp_mat(locations.t(), vValues, iNq*iNt*iNu,iNr*iNp*iNs);
+        Nqtu_rps = 1;
+        return Vqtu_rps;
+    }
+    else{
+        return Vqtu_rps;
+    }
+}
+
+sp_mat flexmat6::qtu_rsp(){
+    if(Nqtu_rsp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vt*iNq + vu*iNt*iNq;
+        locations.col(1) = vr + vs*iNr + vp*iNs*iNr;
+        Vqtu_rsp = sp_mat(locations.t(), vValues, iNq*iNt*iNu,iNr*iNs*iNp);
+        Nqtu_rsp = 1;
+        return Vqtu_rsp;
+    }
+    else{
+        return Vqtu_rsp;
+    }
+}
+
+sp_mat flexmat6::qtu_spr(){
+    if(Nqtu_spr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vt*iNq + vu*iNt*iNq;
+        locations.col(1) = vs + vp*iNs + vr*iNp*iNs;
+        Vqtu_spr = sp_mat(locations.t(), vValues, iNq*iNt*iNu,iNs*iNp*iNr);
+        Nqtu_spr = 1;
+        return Vqtu_spr;
+    }
+    else{
+        return Vqtu_spr;
+    }
+}
+
+sp_mat flexmat6::qtu_srp(){
+    if(Nqtu_srp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vt*iNq + vu*iNt*iNq;
+        locations.col(1) = vs + vr*iNs + vp*iNr*iNs;
+        Vqtu_srp = sp_mat(locations.t(), vValues, iNq*iNt*iNu,iNs*iNr*iNp);
+        Nqtu_srp = 1;
+        return Vqtu_srp;
+    }
+    else{
+        return Vqtu_srp;
+    }
+}
+
+sp_mat flexmat6::qup_rst(){
+    if(Nqup_rst == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vu*iNq + vp*iNu*iNq;
+        locations.col(1) = vr + vs*iNr + vt*iNs*iNr;
+        Vqup_rst = sp_mat(locations.t(), vValues, iNq*iNu*iNp,iNr*iNs*iNt);
+        Nqup_rst = 1;
+        return Vqup_rst;
+    }
+    else{
+        return Vqup_rst;
+    }
+}
+
+sp_mat flexmat6::qup_rts(){
+    if(Nqup_rts == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vu*iNq + vp*iNu*iNq;
+        locations.col(1) = vr + vt*iNr + vs*iNt*iNr;
+        Vqup_rts = sp_mat(locations.t(), vValues, iNq*iNu*iNp,iNr*iNt*iNs);
+        Nqup_rts = 1;
+        return Vqup_rts;
+    }
+    else{
+        return Vqup_rts;
+    }
+}
+
+sp_mat flexmat6::qup_srt(){
+    if(Nqup_srt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vu*iNq + vp*iNu*iNq;
+        locations.col(1) = vs + vr*iNs + vt*iNr*iNs;
+        Vqup_srt = sp_mat(locations.t(), vValues, iNq*iNu*iNp,iNs*iNr*iNt);
+        Nqup_srt = 1;
+        return Vqup_srt;
+    }
+    else{
+        return Vqup_srt;
+    }
+}
+
+sp_mat flexmat6::qup_str(){
+    if(Nqup_str == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vu*iNq + vp*iNu*iNq;
+        locations.col(1) = vs + vt*iNs + vr*iNt*iNs;
+        Vqup_str = sp_mat(locations.t(), vValues, iNq*iNu*iNp,iNs*iNt*iNr);
+        Nqup_str = 1;
+        return Vqup_str;
+    }
+    else{
+        return Vqup_str;
+    }
+}
+
+sp_mat flexmat6::qup_trs(){
+    if(Nqup_trs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vu*iNq + vp*iNu*iNq;
+        locations.col(1) = vt + vr*iNt + vs*iNr*iNt;
+        Vqup_trs = sp_mat(locations.t(), vValues, iNq*iNu*iNp,iNt*iNr*iNs);
+        Nqup_trs = 1;
+        return Vqup_trs;
+    }
+    else{
+        return Vqup_trs;
+    }
+}
+
+sp_mat flexmat6::qup_tsr(){
+    if(Nqup_tsr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vu*iNq + vp*iNu*iNq;
+        locations.col(1) = vt + vs*iNt + vr*iNs*iNt;
+        Vqup_tsr = sp_mat(locations.t(), vValues, iNq*iNu*iNp,iNt*iNs*iNr);
+        Nqup_tsr = 1;
+        return Vqup_tsr;
+    }
+    else{
+        return Vqup_tsr;
+    }
+}
+
+sp_mat flexmat6::qur_pst(){
+    if(Nqur_pst == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vu*iNq + vr*iNu*iNq;
+        locations.col(1) = vp + vs*iNp + vt*iNs*iNp;
+        Vqur_pst = sp_mat(locations.t(), vValues, iNq*iNu*iNr,iNp*iNs*iNt);
+        Nqur_pst = 1;
+        return Vqur_pst;
+    }
+    else{
+        return Vqur_pst;
+    }
+}
+
+sp_mat flexmat6::qur_pts(){
+    if(Nqur_pts == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vu*iNq + vr*iNu*iNq;
+        locations.col(1) = vp + vt*iNp + vs*iNt*iNp;
+        Vqur_pts = sp_mat(locations.t(), vValues, iNq*iNu*iNr,iNp*iNt*iNs);
+        Nqur_pts = 1;
+        return Vqur_pts;
+    }
+    else{
+        return Vqur_pts;
+    }
+}
+
+sp_mat flexmat6::qur_spt(){
+    if(Nqur_spt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vu*iNq + vr*iNu*iNq;
+        locations.col(1) = vs + vp*iNs + vt*iNp*iNs;
+        Vqur_spt = sp_mat(locations.t(), vValues, iNq*iNu*iNr,iNs*iNp*iNt);
+        Nqur_spt = 1;
+        return Vqur_spt;
+    }
+    else{
+        return Vqur_spt;
+    }
+}
+
+sp_mat flexmat6::qur_stp(){
+    if(Nqur_stp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vu*iNq + vr*iNu*iNq;
+        locations.col(1) = vs + vt*iNs + vp*iNt*iNs;
+        Vqur_stp = sp_mat(locations.t(), vValues, iNq*iNu*iNr,iNs*iNt*iNp);
+        Nqur_stp = 1;
+        return Vqur_stp;
+    }
+    else{
+        return Vqur_stp;
+    }
+}
+
+sp_mat flexmat6::qur_tps(){
+    if(Nqur_tps == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vu*iNq + vr*iNu*iNq;
+        locations.col(1) = vt + vp*iNt + vs*iNp*iNt;
+        Vqur_tps = sp_mat(locations.t(), vValues, iNq*iNu*iNr,iNt*iNp*iNs);
+        Nqur_tps = 1;
+        return Vqur_tps;
+    }
+    else{
+        return Vqur_tps;
+    }
+}
+
+sp_mat flexmat6::qur_tsp(){
+    if(Nqur_tsp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vu*iNq + vr*iNu*iNq;
+        locations.col(1) = vt + vs*iNt + vp*iNs*iNt;
+        Vqur_tsp = sp_mat(locations.t(), vValues, iNq*iNu*iNr,iNt*iNs*iNp);
+        Nqur_tsp = 1;
+        return Vqur_tsp;
+    }
+    else{
+        return Vqur_tsp;
+    }
+}
+
+sp_mat flexmat6::qus_prt(){
+    if(Nqus_prt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vu*iNq + vs*iNu*iNq;
+        locations.col(1) = vp + vr*iNp + vt*iNr*iNp;
+        Vqus_prt = sp_mat(locations.t(), vValues, iNq*iNu*iNs,iNp*iNr*iNt);
+        Nqus_prt = 1;
+        return Vqus_prt;
+    }
+    else{
+        return Vqus_prt;
+    }
+}
+
+sp_mat flexmat6::qus_ptr(){
+    if(Nqus_ptr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vu*iNq + vs*iNu*iNq;
+        locations.col(1) = vp + vt*iNp + vr*iNt*iNp;
+        Vqus_ptr = sp_mat(locations.t(), vValues, iNq*iNu*iNs,iNp*iNt*iNr);
+        Nqus_ptr = 1;
+        return Vqus_ptr;
+    }
+    else{
+        return Vqus_ptr;
+    }
+}
+
+sp_mat flexmat6::qus_rpt(){
+    if(Nqus_rpt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vu*iNq + vs*iNu*iNq;
+        locations.col(1) = vr + vp*iNr + vt*iNp*iNr;
+        Vqus_rpt = sp_mat(locations.t(), vValues, iNq*iNu*iNs,iNr*iNp*iNt);
+        Nqus_rpt = 1;
+        return Vqus_rpt;
+    }
+    else{
+        return Vqus_rpt;
+    }
+}
+
+sp_mat flexmat6::qus_rtp(){
+    if(Nqus_rtp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vu*iNq + vs*iNu*iNq;
+        locations.col(1) = vr + vt*iNr + vp*iNt*iNr;
+        Vqus_rtp = sp_mat(locations.t(), vValues, iNq*iNu*iNs,iNr*iNt*iNp);
+        Nqus_rtp = 1;
+        return Vqus_rtp;
+    }
+    else{
+        return Vqus_rtp;
+    }
+}
+
+sp_mat flexmat6::qus_tpr(){
+    if(Nqus_tpr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vu*iNq + vs*iNu*iNq;
+        locations.col(1) = vt + vp*iNt + vr*iNp*iNt;
+        Vqus_tpr = sp_mat(locations.t(), vValues, iNq*iNu*iNs,iNt*iNp*iNr);
+        Nqus_tpr = 1;
+        return Vqus_tpr;
+    }
+    else{
+        return Vqus_tpr;
+    }
+}
+
+sp_mat flexmat6::qus_trp(){
+    if(Nqus_trp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vu*iNq + vs*iNu*iNq;
+        locations.col(1) = vt + vr*iNt + vp*iNr*iNt;
+        Vqus_trp = sp_mat(locations.t(), vValues, iNq*iNu*iNs,iNt*iNr*iNp);
+        Nqus_trp = 1;
+        return Vqus_trp;
+    }
+    else{
+        return Vqus_trp;
+    }
+}
+
+sp_mat flexmat6::qut_prs(){
+    if(Nqut_prs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vu*iNq + vt*iNu*iNq;
+        locations.col(1) = vp + vr*iNp + vs*iNr*iNp;
+        Vqut_prs = sp_mat(locations.t(), vValues, iNq*iNu*iNt,iNp*iNr*iNs);
+        Nqut_prs = 1;
+        return Vqut_prs;
+    }
+    else{
+        return Vqut_prs;
+    }
+}
+
+sp_mat flexmat6::qut_psr(){
+    if(Nqut_psr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vu*iNq + vt*iNu*iNq;
+        locations.col(1) = vp + vs*iNp + vr*iNs*iNp;
+        Vqut_psr = sp_mat(locations.t(), vValues, iNq*iNu*iNt,iNp*iNs*iNr);
+        Nqut_psr = 1;
+        return Vqut_psr;
+    }
+    else{
+        return Vqut_psr;
+    }
+}
+
+sp_mat flexmat6::qut_rps(){
+    if(Nqut_rps == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vu*iNq + vt*iNu*iNq;
+        locations.col(1) = vr + vp*iNr + vs*iNp*iNr;
+        Vqut_rps = sp_mat(locations.t(), vValues, iNq*iNu*iNt,iNr*iNp*iNs);
+        Nqut_rps = 1;
+        return Vqut_rps;
+    }
+    else{
+        return Vqut_rps;
+    }
+}
+
+sp_mat flexmat6::qut_rsp(){
+    if(Nqut_rsp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vu*iNq + vt*iNu*iNq;
+        locations.col(1) = vr + vs*iNr + vp*iNs*iNr;
+        Vqut_rsp = sp_mat(locations.t(), vValues, iNq*iNu*iNt,iNr*iNs*iNp);
+        Nqut_rsp = 1;
+        return Vqut_rsp;
+    }
+    else{
+        return Vqut_rsp;
+    }
+}
+
+sp_mat flexmat6::qut_spr(){
+    if(Nqut_spr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vu*iNq + vt*iNu*iNq;
+        locations.col(1) = vs + vp*iNs + vr*iNp*iNs;
+        Vqut_spr = sp_mat(locations.t(), vValues, iNq*iNu*iNt,iNs*iNp*iNr);
+        Nqut_spr = 1;
+        return Vqut_spr;
+    }
+    else{
+        return Vqut_spr;
+    }
+}
+
+sp_mat flexmat6::qut_srp(){
+    if(Nqut_srp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vq + vu*iNq + vt*iNu*iNq;
+        locations.col(1) = vs + vr*iNs + vp*iNr*iNs;
+        Vqut_srp = sp_mat(locations.t(), vValues, iNq*iNu*iNt,iNs*iNr*iNp);
+        Nqut_srp = 1;
+        return Vqut_srp;
+    }
+    else{
+        return Vqut_srp;
+    }
+}
+
+sp_mat flexmat6::rpq_stu(){
+    if(Nrpq_stu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vp*iNr + vq*iNp*iNr;
+        locations.col(1) = vs + vt*iNs + vu*iNt*iNs;
+        Vrpq_stu = sp_mat(locations.t(), vValues, iNr*iNp*iNq,iNs*iNt*iNu);
+        Nrpq_stu = 1;
+        return Vrpq_stu;
+    }
+    else{
+        return Vrpq_stu;
+    }
+}
+
+sp_mat flexmat6::rpq_sut(){
+    if(Nrpq_sut == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vp*iNr + vq*iNp*iNr;
+        locations.col(1) = vs + vu*iNs + vt*iNu*iNs;
+        Vrpq_sut = sp_mat(locations.t(), vValues, iNr*iNp*iNq,iNs*iNu*iNt);
+        Nrpq_sut = 1;
+        return Vrpq_sut;
+    }
+    else{
+        return Vrpq_sut;
+    }
+}
+
+sp_mat flexmat6::rpq_tsu(){
+    if(Nrpq_tsu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vp*iNr + vq*iNp*iNr;
+        locations.col(1) = vt + vs*iNt + vu*iNs*iNt;
+        Vrpq_tsu = sp_mat(locations.t(), vValues, iNr*iNp*iNq,iNt*iNs*iNu);
+        Nrpq_tsu = 1;
+        return Vrpq_tsu;
+    }
+    else{
+        return Vrpq_tsu;
+    }
+}
+
+sp_mat flexmat6::rpq_tus(){
+    if(Nrpq_tus == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vp*iNr + vq*iNp*iNr;
+        locations.col(1) = vt + vu*iNt + vs*iNu*iNt;
+        Vrpq_tus = sp_mat(locations.t(), vValues, iNr*iNp*iNq,iNt*iNu*iNs);
+        Nrpq_tus = 1;
+        return Vrpq_tus;
+    }
+    else{
+        return Vrpq_tus;
+    }
+}
+
+sp_mat flexmat6::rpq_ust(){
+    if(Nrpq_ust == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vp*iNr + vq*iNp*iNr;
+        locations.col(1) = vu + vs*iNu + vt*iNs*iNu;
+        Vrpq_ust = sp_mat(locations.t(), vValues, iNr*iNp*iNq,iNu*iNs*iNt);
+        Nrpq_ust = 1;
+        return Vrpq_ust;
+    }
+    else{
+        return Vrpq_ust;
+    }
+}
+
+sp_mat flexmat6::rpq_uts(){
+    if(Nrpq_uts == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vp*iNr + vq*iNp*iNr;
+        locations.col(1) = vu + vt*iNu + vs*iNt*iNu;
+        Vrpq_uts = sp_mat(locations.t(), vValues, iNr*iNp*iNq,iNu*iNt*iNs);
+        Nrpq_uts = 1;
+        return Vrpq_uts;
+    }
+    else{
+        return Vrpq_uts;
+    }
+}
+
+sp_mat flexmat6::rps_qtu(){
+    if(Nrps_qtu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vp*iNr + vs*iNp*iNr;
+        locations.col(1) = vq + vt*iNq + vu*iNt*iNq;
+        Vrps_qtu = sp_mat(locations.t(), vValues, iNr*iNp*iNs,iNq*iNt*iNu);
+        Nrps_qtu = 1;
+        return Vrps_qtu;
+    }
+    else{
+        return Vrps_qtu;
+    }
+}
+
+sp_mat flexmat6::rps_qut(){
+    if(Nrps_qut == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vp*iNr + vs*iNp*iNr;
+        locations.col(1) = vq + vu*iNq + vt*iNu*iNq;
+        Vrps_qut = sp_mat(locations.t(), vValues, iNr*iNp*iNs,iNq*iNu*iNt);
+        Nrps_qut = 1;
+        return Vrps_qut;
+    }
+    else{
+        return Vrps_qut;
+    }
+}
+
+sp_mat flexmat6::rps_tqu(){
+    if(Nrps_tqu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vp*iNr + vs*iNp*iNr;
+        locations.col(1) = vt + vq*iNt + vu*iNq*iNt;
+        Vrps_tqu = sp_mat(locations.t(), vValues, iNr*iNp*iNs,iNt*iNq*iNu);
+        Nrps_tqu = 1;
+        return Vrps_tqu;
+    }
+    else{
+        return Vrps_tqu;
+    }
+}
+
+sp_mat flexmat6::rps_tuq(){
+    if(Nrps_tuq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vp*iNr + vs*iNp*iNr;
+        locations.col(1) = vt + vu*iNt + vq*iNu*iNt;
+        Vrps_tuq = sp_mat(locations.t(), vValues, iNr*iNp*iNs,iNt*iNu*iNq);
+        Nrps_tuq = 1;
+        return Vrps_tuq;
+    }
+    else{
+        return Vrps_tuq;
+    }
+}
+
+sp_mat flexmat6::rps_uqt(){
+    if(Nrps_uqt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vp*iNr + vs*iNp*iNr;
+        locations.col(1) = vu + vq*iNu + vt*iNq*iNu;
+        Vrps_uqt = sp_mat(locations.t(), vValues, iNr*iNp*iNs,iNu*iNq*iNt);
+        Nrps_uqt = 1;
+        return Vrps_uqt;
+    }
+    else{
+        return Vrps_uqt;
+    }
+}
+
+sp_mat flexmat6::rps_utq(){
+    if(Nrps_utq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vp*iNr + vs*iNp*iNr;
+        locations.col(1) = vu + vt*iNu + vq*iNt*iNu;
+        Vrps_utq = sp_mat(locations.t(), vValues, iNr*iNp*iNs,iNu*iNt*iNq);
+        Nrps_utq = 1;
+        return Vrps_utq;
+    }
+    else{
+        return Vrps_utq;
+    }
+}
+
+sp_mat flexmat6::rpt_qsu(){
+    if(Nrpt_qsu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vp*iNr + vt*iNp*iNr;
+        locations.col(1) = vq + vs*iNq + vu*iNs*iNq;
+        Vrpt_qsu = sp_mat(locations.t(), vValues, iNr*iNp*iNt,iNq*iNs*iNu);
+        Nrpt_qsu = 1;
+        return Vrpt_qsu;
+    }
+    else{
+        return Vrpt_qsu;
+    }
+}
+
+sp_mat flexmat6::rpt_qus(){
+    if(Nrpt_qus == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vp*iNr + vt*iNp*iNr;
+        locations.col(1) = vq + vu*iNq + vs*iNu*iNq;
+        Vrpt_qus = sp_mat(locations.t(), vValues, iNr*iNp*iNt,iNq*iNu*iNs);
+        Nrpt_qus = 1;
+        return Vrpt_qus;
+    }
+    else{
+        return Vrpt_qus;
+    }
+}
+
+sp_mat flexmat6::rpt_squ(){
+    if(Nrpt_squ == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vp*iNr + vt*iNp*iNr;
+        locations.col(1) = vs + vq*iNs + vu*iNq*iNs;
+        Vrpt_squ = sp_mat(locations.t(), vValues, iNr*iNp*iNt,iNs*iNq*iNu);
+        Nrpt_squ = 1;
+        return Vrpt_squ;
+    }
+    else{
+        return Vrpt_squ;
+    }
+}
+
+sp_mat flexmat6::rpt_suq(){
+    if(Nrpt_suq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vp*iNr + vt*iNp*iNr;
+        locations.col(1) = vs + vu*iNs + vq*iNu*iNs;
+        Vrpt_suq = sp_mat(locations.t(), vValues, iNr*iNp*iNt,iNs*iNu*iNq);
+        Nrpt_suq = 1;
+        return Vrpt_suq;
+    }
+    else{
+        return Vrpt_suq;
+    }
+}
+
+sp_mat flexmat6::rpt_uqs(){
+    if(Nrpt_uqs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vp*iNr + vt*iNp*iNr;
+        locations.col(1) = vu + vq*iNu + vs*iNq*iNu;
+        Vrpt_uqs = sp_mat(locations.t(), vValues, iNr*iNp*iNt,iNu*iNq*iNs);
+        Nrpt_uqs = 1;
+        return Vrpt_uqs;
+    }
+    else{
+        return Vrpt_uqs;
+    }
+}
+
+sp_mat flexmat6::rpt_usq(){
+    if(Nrpt_usq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vp*iNr + vt*iNp*iNr;
+        locations.col(1) = vu + vs*iNu + vq*iNs*iNu;
+        Vrpt_usq = sp_mat(locations.t(), vValues, iNr*iNp*iNt,iNu*iNs*iNq);
+        Nrpt_usq = 1;
+        return Vrpt_usq;
+    }
+    else{
+        return Vrpt_usq;
+    }
+}
+
+sp_mat flexmat6::rpu_qst(){
+    if(Nrpu_qst == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vp*iNr + vu*iNp*iNr;
+        locations.col(1) = vq + vs*iNq + vt*iNs*iNq;
+        Vrpu_qst = sp_mat(locations.t(), vValues, iNr*iNp*iNu,iNq*iNs*iNt);
+        Nrpu_qst = 1;
+        return Vrpu_qst;
+    }
+    else{
+        return Vrpu_qst;
+    }
+}
+
+sp_mat flexmat6::rpu_qts(){
+    if(Nrpu_qts == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vp*iNr + vu*iNp*iNr;
+        locations.col(1) = vq + vt*iNq + vs*iNt*iNq;
+        Vrpu_qts = sp_mat(locations.t(), vValues, iNr*iNp*iNu,iNq*iNt*iNs);
+        Nrpu_qts = 1;
+        return Vrpu_qts;
+    }
+    else{
+        return Vrpu_qts;
+    }
+}
+
+sp_mat flexmat6::rpu_sqt(){
+    if(Nrpu_sqt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vp*iNr + vu*iNp*iNr;
+        locations.col(1) = vs + vq*iNs + vt*iNq*iNs;
+        Vrpu_sqt = sp_mat(locations.t(), vValues, iNr*iNp*iNu,iNs*iNq*iNt);
+        Nrpu_sqt = 1;
+        return Vrpu_sqt;
+    }
+    else{
+        return Vrpu_sqt;
+    }
+}
+
+sp_mat flexmat6::rpu_stq(){
+    if(Nrpu_stq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vp*iNr + vu*iNp*iNr;
+        locations.col(1) = vs + vt*iNs + vq*iNt*iNs;
+        Vrpu_stq = sp_mat(locations.t(), vValues, iNr*iNp*iNu,iNs*iNt*iNq);
+        Nrpu_stq = 1;
+        return Vrpu_stq;
+    }
+    else{
+        return Vrpu_stq;
+    }
+}
+
+sp_mat flexmat6::rpu_tqs(){
+    if(Nrpu_tqs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vp*iNr + vu*iNp*iNr;
+        locations.col(1) = vt + vq*iNt + vs*iNq*iNt;
+        Vrpu_tqs = sp_mat(locations.t(), vValues, iNr*iNp*iNu,iNt*iNq*iNs);
+        Nrpu_tqs = 1;
+        return Vrpu_tqs;
+    }
+    else{
+        return Vrpu_tqs;
+    }
+}
+
+sp_mat flexmat6::rpu_tsq(){
+    if(Nrpu_tsq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vp*iNr + vu*iNp*iNr;
+        locations.col(1) = vt + vs*iNt + vq*iNs*iNt;
+        Vrpu_tsq = sp_mat(locations.t(), vValues, iNr*iNp*iNu,iNt*iNs*iNq);
+        Nrpu_tsq = 1;
+        return Vrpu_tsq;
+    }
+    else{
+        return Vrpu_tsq;
+    }
+}
+
+sp_mat flexmat6::rqp_stu(){
+    if(Nrqp_stu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vq*iNr + vp*iNq*iNr;
+        locations.col(1) = vs + vt*iNs + vu*iNt*iNs;
+        Vrqp_stu = sp_mat(locations.t(), vValues, iNr*iNq*iNp,iNs*iNt*iNu);
+        Nrqp_stu = 1;
+        return Vrqp_stu;
+    }
+    else{
+        return Vrqp_stu;
+    }
+}
+
+sp_mat flexmat6::rqp_sut(){
+    if(Nrqp_sut == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vq*iNr + vp*iNq*iNr;
+        locations.col(1) = vs + vu*iNs + vt*iNu*iNs;
+        Vrqp_sut = sp_mat(locations.t(), vValues, iNr*iNq*iNp,iNs*iNu*iNt);
+        Nrqp_sut = 1;
+        return Vrqp_sut;
+    }
+    else{
+        return Vrqp_sut;
+    }
+}
+
+sp_mat flexmat6::rqp_tsu(){
+    if(Nrqp_tsu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vq*iNr + vp*iNq*iNr;
+        locations.col(1) = vt + vs*iNt + vu*iNs*iNt;
+        Vrqp_tsu = sp_mat(locations.t(), vValues, iNr*iNq*iNp,iNt*iNs*iNu);
+        Nrqp_tsu = 1;
+        return Vrqp_tsu;
+    }
+    else{
+        return Vrqp_tsu;
+    }
+}
+
+sp_mat flexmat6::rqp_tus(){
+    if(Nrqp_tus == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vq*iNr + vp*iNq*iNr;
+        locations.col(1) = vt + vu*iNt + vs*iNu*iNt;
+        Vrqp_tus = sp_mat(locations.t(), vValues, iNr*iNq*iNp,iNt*iNu*iNs);
+        Nrqp_tus = 1;
+        return Vrqp_tus;
+    }
+    else{
+        return Vrqp_tus;
+    }
+}
+
+sp_mat flexmat6::rqp_ust(){
+    if(Nrqp_ust == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vq*iNr + vp*iNq*iNr;
+        locations.col(1) = vu + vs*iNu + vt*iNs*iNu;
+        Vrqp_ust = sp_mat(locations.t(), vValues, iNr*iNq*iNp,iNu*iNs*iNt);
+        Nrqp_ust = 1;
+        return Vrqp_ust;
+    }
+    else{
+        return Vrqp_ust;
+    }
+}
+
+sp_mat flexmat6::rqp_uts(){
+    if(Nrqp_uts == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vq*iNr + vp*iNq*iNr;
+        locations.col(1) = vu + vt*iNu + vs*iNt*iNu;
+        Vrqp_uts = sp_mat(locations.t(), vValues, iNr*iNq*iNp,iNu*iNt*iNs);
+        Nrqp_uts = 1;
+        return Vrqp_uts;
+    }
+    else{
+        return Vrqp_uts;
+    }
+}
+
+sp_mat flexmat6::rqs_ptu(){
+    if(Nrqs_ptu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vq*iNr + vs*iNq*iNr;
+        locations.col(1) = vp + vt*iNp + vu*iNt*iNp;
+        Vrqs_ptu = sp_mat(locations.t(), vValues, iNr*iNq*iNs,iNp*iNt*iNu);
+        Nrqs_ptu = 1;
+        return Vrqs_ptu;
+    }
+    else{
+        return Vrqs_ptu;
+    }
+}
+
+sp_mat flexmat6::rqs_put(){
+    if(Nrqs_put == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vq*iNr + vs*iNq*iNr;
+        locations.col(1) = vp + vu*iNp + vt*iNu*iNp;
+        Vrqs_put = sp_mat(locations.t(), vValues, iNr*iNq*iNs,iNp*iNu*iNt);
+        Nrqs_put = 1;
+        return Vrqs_put;
+    }
+    else{
+        return Vrqs_put;
+    }
+}
+
+sp_mat flexmat6::rqs_tpu(){
+    if(Nrqs_tpu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vq*iNr + vs*iNq*iNr;
+        locations.col(1) = vt + vp*iNt + vu*iNp*iNt;
+        Vrqs_tpu = sp_mat(locations.t(), vValues, iNr*iNq*iNs,iNt*iNp*iNu);
+        Nrqs_tpu = 1;
+        return Vrqs_tpu;
+    }
+    else{
+        return Vrqs_tpu;
+    }
+}
+
+sp_mat flexmat6::rqs_tup(){
+    if(Nrqs_tup == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vq*iNr + vs*iNq*iNr;
+        locations.col(1) = vt + vu*iNt + vp*iNu*iNt;
+        Vrqs_tup = sp_mat(locations.t(), vValues, iNr*iNq*iNs,iNt*iNu*iNp);
+        Nrqs_tup = 1;
+        return Vrqs_tup;
+    }
+    else{
+        return Vrqs_tup;
+    }
+}
+
+sp_mat flexmat6::rqs_upt(){
+    if(Nrqs_upt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vq*iNr + vs*iNq*iNr;
+        locations.col(1) = vu + vp*iNu + vt*iNp*iNu;
+        Vrqs_upt = sp_mat(locations.t(), vValues, iNr*iNq*iNs,iNu*iNp*iNt);
+        Nrqs_upt = 1;
+        return Vrqs_upt;
+    }
+    else{
+        return Vrqs_upt;
+    }
+}
+
+sp_mat flexmat6::rqs_utp(){
+    if(Nrqs_utp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vq*iNr + vs*iNq*iNr;
+        locations.col(1) = vu + vt*iNu + vp*iNt*iNu;
+        Vrqs_utp = sp_mat(locations.t(), vValues, iNr*iNq*iNs,iNu*iNt*iNp);
+        Nrqs_utp = 1;
+        return Vrqs_utp;
+    }
+    else{
+        return Vrqs_utp;
+    }
+}
+
+sp_mat flexmat6::rqt_psu(){
+    if(Nrqt_psu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vq*iNr + vt*iNq*iNr;
+        locations.col(1) = vp + vs*iNp + vu*iNs*iNp;
+        Vrqt_psu = sp_mat(locations.t(), vValues, iNr*iNq*iNt,iNp*iNs*iNu);
+        Nrqt_psu = 1;
+        return Vrqt_psu;
+    }
+    else{
+        return Vrqt_psu;
+    }
+}
+
+sp_mat flexmat6::rqt_pus(){
+    if(Nrqt_pus == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vq*iNr + vt*iNq*iNr;
+        locations.col(1) = vp + vu*iNp + vs*iNu*iNp;
+        Vrqt_pus = sp_mat(locations.t(), vValues, iNr*iNq*iNt,iNp*iNu*iNs);
+        Nrqt_pus = 1;
+        return Vrqt_pus;
+    }
+    else{
+        return Vrqt_pus;
+    }
+}
+
+sp_mat flexmat6::rqt_spu(){
+    if(Nrqt_spu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vq*iNr + vt*iNq*iNr;
+        locations.col(1) = vs + vp*iNs + vu*iNp*iNs;
+        Vrqt_spu = sp_mat(locations.t(), vValues, iNr*iNq*iNt,iNs*iNp*iNu);
+        Nrqt_spu = 1;
+        return Vrqt_spu;
+    }
+    else{
+        return Vrqt_spu;
+    }
+}
+
+sp_mat flexmat6::rqt_sup(){
+    if(Nrqt_sup == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vq*iNr + vt*iNq*iNr;
+        locations.col(1) = vs + vu*iNs + vp*iNu*iNs;
+        Vrqt_sup = sp_mat(locations.t(), vValues, iNr*iNq*iNt,iNs*iNu*iNp);
+        Nrqt_sup = 1;
+        return Vrqt_sup;
+    }
+    else{
+        return Vrqt_sup;
+    }
+}
+
+sp_mat flexmat6::rqt_ups(){
+    if(Nrqt_ups == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vq*iNr + vt*iNq*iNr;
+        locations.col(1) = vu + vp*iNu + vs*iNp*iNu;
+        Vrqt_ups = sp_mat(locations.t(), vValues, iNr*iNq*iNt,iNu*iNp*iNs);
+        Nrqt_ups = 1;
+        return Vrqt_ups;
+    }
+    else{
+        return Vrqt_ups;
+    }
+}
+
+sp_mat flexmat6::rqt_usp(){
+    if(Nrqt_usp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vq*iNr + vt*iNq*iNr;
+        locations.col(1) = vu + vs*iNu + vp*iNs*iNu;
+        Vrqt_usp = sp_mat(locations.t(), vValues, iNr*iNq*iNt,iNu*iNs*iNp);
+        Nrqt_usp = 1;
+        return Vrqt_usp;
+    }
+    else{
+        return Vrqt_usp;
+    }
+}
+
+sp_mat flexmat6::rqu_pst(){
+    if(Nrqu_pst == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vq*iNr + vu*iNq*iNr;
+        locations.col(1) = vp + vs*iNp + vt*iNs*iNp;
+        Vrqu_pst = sp_mat(locations.t(), vValues, iNr*iNq*iNu,iNp*iNs*iNt);
+        Nrqu_pst = 1;
+        return Vrqu_pst;
+    }
+    else{
+        return Vrqu_pst;
+    }
+}
+
+sp_mat flexmat6::rqu_pts(){
+    if(Nrqu_pts == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vq*iNr + vu*iNq*iNr;
+        locations.col(1) = vp + vt*iNp + vs*iNt*iNp;
+        Vrqu_pts = sp_mat(locations.t(), vValues, iNr*iNq*iNu,iNp*iNt*iNs);
+        Nrqu_pts = 1;
+        return Vrqu_pts;
+    }
+    else{
+        return Vrqu_pts;
+    }
+}
+
+sp_mat flexmat6::rqu_spt(){
+    if(Nrqu_spt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vq*iNr + vu*iNq*iNr;
+        locations.col(1) = vs + vp*iNs + vt*iNp*iNs;
+        Vrqu_spt = sp_mat(locations.t(), vValues, iNr*iNq*iNu,iNs*iNp*iNt);
+        Nrqu_spt = 1;
+        return Vrqu_spt;
+    }
+    else{
+        return Vrqu_spt;
+    }
+}
+
+sp_mat flexmat6::rqu_stp(){
+    if(Nrqu_stp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vq*iNr + vu*iNq*iNr;
+        locations.col(1) = vs + vt*iNs + vp*iNt*iNs;
+        Vrqu_stp = sp_mat(locations.t(), vValues, iNr*iNq*iNu,iNs*iNt*iNp);
+        Nrqu_stp = 1;
+        return Vrqu_stp;
+    }
+    else{
+        return Vrqu_stp;
+    }
+}
+
+sp_mat flexmat6::rqu_tps(){
+    if(Nrqu_tps == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vq*iNr + vu*iNq*iNr;
+        locations.col(1) = vt + vp*iNt + vs*iNp*iNt;
+        Vrqu_tps = sp_mat(locations.t(), vValues, iNr*iNq*iNu,iNt*iNp*iNs);
+        Nrqu_tps = 1;
+        return Vrqu_tps;
+    }
+    else{
+        return Vrqu_tps;
+    }
+}
+
+sp_mat flexmat6::rqu_tsp(){
+    if(Nrqu_tsp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vq*iNr + vu*iNq*iNr;
+        locations.col(1) = vt + vs*iNt + vp*iNs*iNt;
+        Vrqu_tsp = sp_mat(locations.t(), vValues, iNr*iNq*iNu,iNt*iNs*iNp);
+        Nrqu_tsp = 1;
+        return Vrqu_tsp;
+    }
+    else{
+        return Vrqu_tsp;
+    }
+}
+
+sp_mat flexmat6::rsp_qtu(){
+    if(Nrsp_qtu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vs*iNr + vp*iNs*iNr;
+        locations.col(1) = vq + vt*iNq + vu*iNt*iNq;
+        Vrsp_qtu = sp_mat(locations.t(), vValues, iNr*iNs*iNp,iNq*iNt*iNu);
+        Nrsp_qtu = 1;
+        return Vrsp_qtu;
+    }
+    else{
+        return Vrsp_qtu;
+    }
+}
+
+sp_mat flexmat6::rsp_qut(){
+    if(Nrsp_qut == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vs*iNr + vp*iNs*iNr;
+        locations.col(1) = vq + vu*iNq + vt*iNu*iNq;
+        Vrsp_qut = sp_mat(locations.t(), vValues, iNr*iNs*iNp,iNq*iNu*iNt);
+        Nrsp_qut = 1;
+        return Vrsp_qut;
+    }
+    else{
+        return Vrsp_qut;
+    }
+}
+
+sp_mat flexmat6::rsp_tqu(){
+    if(Nrsp_tqu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vs*iNr + vp*iNs*iNr;
+        locations.col(1) = vt + vq*iNt + vu*iNq*iNt;
+        Vrsp_tqu = sp_mat(locations.t(), vValues, iNr*iNs*iNp,iNt*iNq*iNu);
+        Nrsp_tqu = 1;
+        return Vrsp_tqu;
+    }
+    else{
+        return Vrsp_tqu;
+    }
+}
+
+sp_mat flexmat6::rsp_tuq(){
+    if(Nrsp_tuq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vs*iNr + vp*iNs*iNr;
+        locations.col(1) = vt + vu*iNt + vq*iNu*iNt;
+        Vrsp_tuq = sp_mat(locations.t(), vValues, iNr*iNs*iNp,iNt*iNu*iNq);
+        Nrsp_tuq = 1;
+        return Vrsp_tuq;
+    }
+    else{
+        return Vrsp_tuq;
+    }
+}
+
+sp_mat flexmat6::rsp_uqt(){
+    if(Nrsp_uqt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vs*iNr + vp*iNs*iNr;
+        locations.col(1) = vu + vq*iNu + vt*iNq*iNu;
+        Vrsp_uqt = sp_mat(locations.t(), vValues, iNr*iNs*iNp,iNu*iNq*iNt);
+        Nrsp_uqt = 1;
+        return Vrsp_uqt;
+    }
+    else{
+        return Vrsp_uqt;
+    }
+}
+
+sp_mat flexmat6::rsp_utq(){
+    if(Nrsp_utq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vs*iNr + vp*iNs*iNr;
+        locations.col(1) = vu + vt*iNu + vq*iNt*iNu;
+        Vrsp_utq = sp_mat(locations.t(), vValues, iNr*iNs*iNp,iNu*iNt*iNq);
+        Nrsp_utq = 1;
+        return Vrsp_utq;
+    }
+    else{
+        return Vrsp_utq;
+    }
+}
+
+sp_mat flexmat6::rsq_ptu(){
+    if(Nrsq_ptu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vs*iNr + vq*iNs*iNr;
+        locations.col(1) = vp + vt*iNp + vu*iNt*iNp;
+        Vrsq_ptu = sp_mat(locations.t(), vValues, iNr*iNs*iNq,iNp*iNt*iNu);
+        Nrsq_ptu = 1;
+        return Vrsq_ptu;
+    }
+    else{
+        return Vrsq_ptu;
+    }
+}
+
+sp_mat flexmat6::rsq_put(){
+    if(Nrsq_put == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vs*iNr + vq*iNs*iNr;
+        locations.col(1) = vp + vu*iNp + vt*iNu*iNp;
+        Vrsq_put = sp_mat(locations.t(), vValues, iNr*iNs*iNq,iNp*iNu*iNt);
+        Nrsq_put = 1;
+        return Vrsq_put;
+    }
+    else{
+        return Vrsq_put;
+    }
+}
+
+sp_mat flexmat6::rsq_tpu(){
+    if(Nrsq_tpu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vs*iNr + vq*iNs*iNr;
+        locations.col(1) = vt + vp*iNt + vu*iNp*iNt;
+        Vrsq_tpu = sp_mat(locations.t(), vValues, iNr*iNs*iNq,iNt*iNp*iNu);
+        Nrsq_tpu = 1;
+        return Vrsq_tpu;
+    }
+    else{
+        return Vrsq_tpu;
+    }
+}
+
+sp_mat flexmat6::rsq_tup(){
+    if(Nrsq_tup == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vs*iNr + vq*iNs*iNr;
+        locations.col(1) = vt + vu*iNt + vp*iNu*iNt;
+        Vrsq_tup = sp_mat(locations.t(), vValues, iNr*iNs*iNq,iNt*iNu*iNp);
+        Nrsq_tup = 1;
+        return Vrsq_tup;
+    }
+    else{
+        return Vrsq_tup;
+    }
+}
+
+sp_mat flexmat6::rsq_upt(){
+    if(Nrsq_upt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vs*iNr + vq*iNs*iNr;
+        locations.col(1) = vu + vp*iNu + vt*iNp*iNu;
+        Vrsq_upt = sp_mat(locations.t(), vValues, iNr*iNs*iNq,iNu*iNp*iNt);
+        Nrsq_upt = 1;
+        return Vrsq_upt;
+    }
+    else{
+        return Vrsq_upt;
+    }
+}
+
+sp_mat flexmat6::rsq_utp(){
+    if(Nrsq_utp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vs*iNr + vq*iNs*iNr;
+        locations.col(1) = vu + vt*iNu + vp*iNt*iNu;
+        Vrsq_utp = sp_mat(locations.t(), vValues, iNr*iNs*iNq,iNu*iNt*iNp);
+        Nrsq_utp = 1;
+        return Vrsq_utp;
+    }
+    else{
+        return Vrsq_utp;
+    }
+}
+
+sp_mat flexmat6::rst_pqu(){
+    if(Nrst_pqu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vs*iNr + vt*iNs*iNr;
+        locations.col(1) = vp + vq*iNp + vu*iNq*iNp;
+        Vrst_pqu = sp_mat(locations.t(), vValues, iNr*iNs*iNt,iNp*iNq*iNu);
+        Nrst_pqu = 1;
+        return Vrst_pqu;
+    }
+    else{
+        return Vrst_pqu;
+    }
+}
+
+sp_mat flexmat6::rst_puq(){
+    if(Nrst_puq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vs*iNr + vt*iNs*iNr;
+        locations.col(1) = vp + vu*iNp + vq*iNu*iNp;
+        Vrst_puq = sp_mat(locations.t(), vValues, iNr*iNs*iNt,iNp*iNu*iNq);
+        Nrst_puq = 1;
+        return Vrst_puq;
+    }
+    else{
+        return Vrst_puq;
+    }
+}
+
+sp_mat flexmat6::rst_qpu(){
+    if(Nrst_qpu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vs*iNr + vt*iNs*iNr;
+        locations.col(1) = vq + vp*iNq + vu*iNp*iNq;
+        Vrst_qpu = sp_mat(locations.t(), vValues, iNr*iNs*iNt,iNq*iNp*iNu);
+        Nrst_qpu = 1;
+        return Vrst_qpu;
+    }
+    else{
+        return Vrst_qpu;
+    }
+}
+
+sp_mat flexmat6::rst_qup(){
+    if(Nrst_qup == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vs*iNr + vt*iNs*iNr;
+        locations.col(1) = vq + vu*iNq + vp*iNu*iNq;
+        Vrst_qup = sp_mat(locations.t(), vValues, iNr*iNs*iNt,iNq*iNu*iNp);
+        Nrst_qup = 1;
+        return Vrst_qup;
+    }
+    else{
+        return Vrst_qup;
+    }
+}
+
+sp_mat flexmat6::rst_upq(){
+    if(Nrst_upq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vs*iNr + vt*iNs*iNr;
+        locations.col(1) = vu + vp*iNu + vq*iNp*iNu;
+        Vrst_upq = sp_mat(locations.t(), vValues, iNr*iNs*iNt,iNu*iNp*iNq);
+        Nrst_upq = 1;
+        return Vrst_upq;
+    }
+    else{
+        return Vrst_upq;
+    }
+}
+
+sp_mat flexmat6::rst_uqp(){
+    if(Nrst_uqp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vs*iNr + vt*iNs*iNr;
+        locations.col(1) = vu + vq*iNu + vp*iNq*iNu;
+        Vrst_uqp = sp_mat(locations.t(), vValues, iNr*iNs*iNt,iNu*iNq*iNp);
+        Nrst_uqp = 1;
+        return Vrst_uqp;
+    }
+    else{
+        return Vrst_uqp;
+    }
+}
+
+sp_mat flexmat6::rsu_pqt(){
+    if(Nrsu_pqt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vs*iNr + vu*iNs*iNr;
+        locations.col(1) = vp + vq*iNp + vt*iNq*iNp;
+        Vrsu_pqt = sp_mat(locations.t(), vValues, iNr*iNs*iNu,iNp*iNq*iNt);
+        Nrsu_pqt = 1;
+        return Vrsu_pqt;
+    }
+    else{
+        return Vrsu_pqt;
+    }
+}
+
+sp_mat flexmat6::rsu_ptq(){
+    if(Nrsu_ptq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vs*iNr + vu*iNs*iNr;
+        locations.col(1) = vp + vt*iNp + vq*iNt*iNp;
+        Vrsu_ptq = sp_mat(locations.t(), vValues, iNr*iNs*iNu,iNp*iNt*iNq);
+        Nrsu_ptq = 1;
+        return Vrsu_ptq;
+    }
+    else{
+        return Vrsu_ptq;
+    }
+}
+
+sp_mat flexmat6::rsu_qpt(){
+    if(Nrsu_qpt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vs*iNr + vu*iNs*iNr;
+        locations.col(1) = vq + vp*iNq + vt*iNp*iNq;
+        Vrsu_qpt = sp_mat(locations.t(), vValues, iNr*iNs*iNu,iNq*iNp*iNt);
+        Nrsu_qpt = 1;
+        return Vrsu_qpt;
+    }
+    else{
+        return Vrsu_qpt;
+    }
+}
+
+sp_mat flexmat6::rsu_qtp(){
+    if(Nrsu_qtp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vs*iNr + vu*iNs*iNr;
+        locations.col(1) = vq + vt*iNq + vp*iNt*iNq;
+        Vrsu_qtp = sp_mat(locations.t(), vValues, iNr*iNs*iNu,iNq*iNt*iNp);
+        Nrsu_qtp = 1;
+        return Vrsu_qtp;
+    }
+    else{
+        return Vrsu_qtp;
+    }
+}
+
+sp_mat flexmat6::rsu_tpq(){
+    if(Nrsu_tpq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vs*iNr + vu*iNs*iNr;
+        locations.col(1) = vt + vp*iNt + vq*iNp*iNt;
+        Vrsu_tpq = sp_mat(locations.t(), vValues, iNr*iNs*iNu,iNt*iNp*iNq);
+        Nrsu_tpq = 1;
+        return Vrsu_tpq;
+    }
+    else{
+        return Vrsu_tpq;
+    }
+}
+
+sp_mat flexmat6::rsu_tqp(){
+    if(Nrsu_tqp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vs*iNr + vu*iNs*iNr;
+        locations.col(1) = vt + vq*iNt + vp*iNq*iNt;
+        Vrsu_tqp = sp_mat(locations.t(), vValues, iNr*iNs*iNu,iNt*iNq*iNp);
+        Nrsu_tqp = 1;
+        return Vrsu_tqp;
+    }
+    else{
+        return Vrsu_tqp;
+    }
+}
+
+sp_mat flexmat6::rtp_qsu(){
+    if(Nrtp_qsu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vt*iNr + vp*iNt*iNr;
+        locations.col(1) = vq + vs*iNq + vu*iNs*iNq;
+        Vrtp_qsu = sp_mat(locations.t(), vValues, iNr*iNt*iNp,iNq*iNs*iNu);
+        Nrtp_qsu = 1;
+        return Vrtp_qsu;
+    }
+    else{
+        return Vrtp_qsu;
+    }
+}
+
+sp_mat flexmat6::rtp_qus(){
+    if(Nrtp_qus == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vt*iNr + vp*iNt*iNr;
+        locations.col(1) = vq + vu*iNq + vs*iNu*iNq;
+        Vrtp_qus = sp_mat(locations.t(), vValues, iNr*iNt*iNp,iNq*iNu*iNs);
+        Nrtp_qus = 1;
+        return Vrtp_qus;
+    }
+    else{
+        return Vrtp_qus;
+    }
+}
+
+sp_mat flexmat6::rtp_squ(){
+    if(Nrtp_squ == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vt*iNr + vp*iNt*iNr;
+        locations.col(1) = vs + vq*iNs + vu*iNq*iNs;
+        Vrtp_squ = sp_mat(locations.t(), vValues, iNr*iNt*iNp,iNs*iNq*iNu);
+        Nrtp_squ = 1;
+        return Vrtp_squ;
+    }
+    else{
+        return Vrtp_squ;
+    }
+}
+
+sp_mat flexmat6::rtp_suq(){
+    if(Nrtp_suq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vt*iNr + vp*iNt*iNr;
+        locations.col(1) = vs + vu*iNs + vq*iNu*iNs;
+        Vrtp_suq = sp_mat(locations.t(), vValues, iNr*iNt*iNp,iNs*iNu*iNq);
+        Nrtp_suq = 1;
+        return Vrtp_suq;
+    }
+    else{
+        return Vrtp_suq;
+    }
+}
+
+sp_mat flexmat6::rtp_uqs(){
+    if(Nrtp_uqs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vt*iNr + vp*iNt*iNr;
+        locations.col(1) = vu + vq*iNu + vs*iNq*iNu;
+        Vrtp_uqs = sp_mat(locations.t(), vValues, iNr*iNt*iNp,iNu*iNq*iNs);
+        Nrtp_uqs = 1;
+        return Vrtp_uqs;
+    }
+    else{
+        return Vrtp_uqs;
+    }
+}
+
+sp_mat flexmat6::rtp_usq(){
+    if(Nrtp_usq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vt*iNr + vp*iNt*iNr;
+        locations.col(1) = vu + vs*iNu + vq*iNs*iNu;
+        Vrtp_usq = sp_mat(locations.t(), vValues, iNr*iNt*iNp,iNu*iNs*iNq);
+        Nrtp_usq = 1;
+        return Vrtp_usq;
+    }
+    else{
+        return Vrtp_usq;
+    }
+}
+
+sp_mat flexmat6::rtq_psu(){
+    if(Nrtq_psu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vt*iNr + vq*iNt*iNr;
+        locations.col(1) = vp + vs*iNp + vu*iNs*iNp;
+        Vrtq_psu = sp_mat(locations.t(), vValues, iNr*iNt*iNq,iNp*iNs*iNu);
+        Nrtq_psu = 1;
+        return Vrtq_psu;
+    }
+    else{
+        return Vrtq_psu;
+    }
+}
+
+sp_mat flexmat6::rtq_pus(){
+    if(Nrtq_pus == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vt*iNr + vq*iNt*iNr;
+        locations.col(1) = vp + vu*iNp + vs*iNu*iNp;
+        Vrtq_pus = sp_mat(locations.t(), vValues, iNr*iNt*iNq,iNp*iNu*iNs);
+        Nrtq_pus = 1;
+        return Vrtq_pus;
+    }
+    else{
+        return Vrtq_pus;
+    }
+}
+
+sp_mat flexmat6::rtq_spu(){
+    if(Nrtq_spu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vt*iNr + vq*iNt*iNr;
+        locations.col(1) = vs + vp*iNs + vu*iNp*iNs;
+        Vrtq_spu = sp_mat(locations.t(), vValues, iNr*iNt*iNq,iNs*iNp*iNu);
+        Nrtq_spu = 1;
+        return Vrtq_spu;
+    }
+    else{
+        return Vrtq_spu;
+    }
+}
+
+sp_mat flexmat6::rtq_sup(){
+    if(Nrtq_sup == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vt*iNr + vq*iNt*iNr;
+        locations.col(1) = vs + vu*iNs + vp*iNu*iNs;
+        Vrtq_sup = sp_mat(locations.t(), vValues, iNr*iNt*iNq,iNs*iNu*iNp);
+        Nrtq_sup = 1;
+        return Vrtq_sup;
+    }
+    else{
+        return Vrtq_sup;
+    }
+}
+
+sp_mat flexmat6::rtq_ups(){
+    if(Nrtq_ups == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vt*iNr + vq*iNt*iNr;
+        locations.col(1) = vu + vp*iNu + vs*iNp*iNu;
+        Vrtq_ups = sp_mat(locations.t(), vValues, iNr*iNt*iNq,iNu*iNp*iNs);
+        Nrtq_ups = 1;
+        return Vrtq_ups;
+    }
+    else{
+        return Vrtq_ups;
+    }
+}
+
+sp_mat flexmat6::rtq_usp(){
+    if(Nrtq_usp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vt*iNr + vq*iNt*iNr;
+        locations.col(1) = vu + vs*iNu + vp*iNs*iNu;
+        Vrtq_usp = sp_mat(locations.t(), vValues, iNr*iNt*iNq,iNu*iNs*iNp);
+        Nrtq_usp = 1;
+        return Vrtq_usp;
+    }
+    else{
+        return Vrtq_usp;
+    }
+}
+
+sp_mat flexmat6::rts_pqu(){
+    if(Nrts_pqu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vt*iNr + vs*iNt*iNr;
+        locations.col(1) = vp + vq*iNp + vu*iNq*iNp;
+        Vrts_pqu = sp_mat(locations.t(), vValues, iNr*iNt*iNs,iNp*iNq*iNu);
+        Nrts_pqu = 1;
+        return Vrts_pqu;
+    }
+    else{
+        return Vrts_pqu;
+    }
+}
+
+sp_mat flexmat6::rts_puq(){
+    if(Nrts_puq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vt*iNr + vs*iNt*iNr;
+        locations.col(1) = vp + vu*iNp + vq*iNu*iNp;
+        Vrts_puq = sp_mat(locations.t(), vValues, iNr*iNt*iNs,iNp*iNu*iNq);
+        Nrts_puq = 1;
+        return Vrts_puq;
+    }
+    else{
+        return Vrts_puq;
+    }
+}
+
+sp_mat flexmat6::rts_qpu(){
+    if(Nrts_qpu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vt*iNr + vs*iNt*iNr;
+        locations.col(1) = vq + vp*iNq + vu*iNp*iNq;
+        Vrts_qpu = sp_mat(locations.t(), vValues, iNr*iNt*iNs,iNq*iNp*iNu);
+        Nrts_qpu = 1;
+        return Vrts_qpu;
+    }
+    else{
+        return Vrts_qpu;
+    }
+}
+
+sp_mat flexmat6::rts_qup(){
+    if(Nrts_qup == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vt*iNr + vs*iNt*iNr;
+        locations.col(1) = vq + vu*iNq + vp*iNu*iNq;
+        Vrts_qup = sp_mat(locations.t(), vValues, iNr*iNt*iNs,iNq*iNu*iNp);
+        Nrts_qup = 1;
+        return Vrts_qup;
+    }
+    else{
+        return Vrts_qup;
+    }
+}
+
+sp_mat flexmat6::rts_upq(){
+    if(Nrts_upq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vt*iNr + vs*iNt*iNr;
+        locations.col(1) = vu + vp*iNu + vq*iNp*iNu;
+        Vrts_upq = sp_mat(locations.t(), vValues, iNr*iNt*iNs,iNu*iNp*iNq);
+        Nrts_upq = 1;
+        return Vrts_upq;
+    }
+    else{
+        return Vrts_upq;
+    }
+}
+
+sp_mat flexmat6::rts_uqp(){
+    if(Nrts_uqp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vt*iNr + vs*iNt*iNr;
+        locations.col(1) = vu + vq*iNu + vp*iNq*iNu;
+        Vrts_uqp = sp_mat(locations.t(), vValues, iNr*iNt*iNs,iNu*iNq*iNp);
+        Nrts_uqp = 1;
+        return Vrts_uqp;
+    }
+    else{
+        return Vrts_uqp;
+    }
+}
+
+sp_mat flexmat6::rtu_pqs(){
+    if(Nrtu_pqs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vt*iNr + vu*iNt*iNr;
+        locations.col(1) = vp + vq*iNp + vs*iNq*iNp;
+        Vrtu_pqs = sp_mat(locations.t(), vValues, iNr*iNt*iNu,iNp*iNq*iNs);
+        Nrtu_pqs = 1;
+        return Vrtu_pqs;
+    }
+    else{
+        return Vrtu_pqs;
+    }
+}
+
+sp_mat flexmat6::rtu_psq(){
+    if(Nrtu_psq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vt*iNr + vu*iNt*iNr;
+        locations.col(1) = vp + vs*iNp + vq*iNs*iNp;
+        Vrtu_psq = sp_mat(locations.t(), vValues, iNr*iNt*iNu,iNp*iNs*iNq);
+        Nrtu_psq = 1;
+        return Vrtu_psq;
+    }
+    else{
+        return Vrtu_psq;
+    }
+}
+
+sp_mat flexmat6::rtu_qps(){
+    if(Nrtu_qps == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vt*iNr + vu*iNt*iNr;
+        locations.col(1) = vq + vp*iNq + vs*iNp*iNq;
+        Vrtu_qps = sp_mat(locations.t(), vValues, iNr*iNt*iNu,iNq*iNp*iNs);
+        Nrtu_qps = 1;
+        return Vrtu_qps;
+    }
+    else{
+        return Vrtu_qps;
+    }
+}
+
+sp_mat flexmat6::rtu_qsp(){
+    if(Nrtu_qsp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vt*iNr + vu*iNt*iNr;
+        locations.col(1) = vq + vs*iNq + vp*iNs*iNq;
+        Vrtu_qsp = sp_mat(locations.t(), vValues, iNr*iNt*iNu,iNq*iNs*iNp);
+        Nrtu_qsp = 1;
+        return Vrtu_qsp;
+    }
+    else{
+        return Vrtu_qsp;
+    }
+}
+
+sp_mat flexmat6::rtu_spq(){
+    if(Nrtu_spq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vt*iNr + vu*iNt*iNr;
+        locations.col(1) = vs + vp*iNs + vq*iNp*iNs;
+        Vrtu_spq = sp_mat(locations.t(), vValues, iNr*iNt*iNu,iNs*iNp*iNq);
+        Nrtu_spq = 1;
+        return Vrtu_spq;
+    }
+    else{
+        return Vrtu_spq;
+    }
+}
+
+sp_mat flexmat6::rtu_sqp(){
+    if(Nrtu_sqp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vt*iNr + vu*iNt*iNr;
+        locations.col(1) = vs + vq*iNs + vp*iNq*iNs;
+        Vrtu_sqp = sp_mat(locations.t(), vValues, iNr*iNt*iNu,iNs*iNq*iNp);
+        Nrtu_sqp = 1;
+        return Vrtu_sqp;
+    }
+    else{
+        return Vrtu_sqp;
+    }
+}
+
+sp_mat flexmat6::rup_qst(){
+    if(Nrup_qst == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vu*iNr + vp*iNu*iNr;
+        locations.col(1) = vq + vs*iNq + vt*iNs*iNq;
+        Vrup_qst = sp_mat(locations.t(), vValues, iNr*iNu*iNp,iNq*iNs*iNt);
+        Nrup_qst = 1;
+        return Vrup_qst;
+    }
+    else{
+        return Vrup_qst;
+    }
+}
+
+sp_mat flexmat6::rup_qts(){
+    if(Nrup_qts == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vu*iNr + vp*iNu*iNr;
+        locations.col(1) = vq + vt*iNq + vs*iNt*iNq;
+        Vrup_qts = sp_mat(locations.t(), vValues, iNr*iNu*iNp,iNq*iNt*iNs);
+        Nrup_qts = 1;
+        return Vrup_qts;
+    }
+    else{
+        return Vrup_qts;
+    }
+}
+
+sp_mat flexmat6::rup_sqt(){
+    if(Nrup_sqt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vu*iNr + vp*iNu*iNr;
+        locations.col(1) = vs + vq*iNs + vt*iNq*iNs;
+        Vrup_sqt = sp_mat(locations.t(), vValues, iNr*iNu*iNp,iNs*iNq*iNt);
+        Nrup_sqt = 1;
+        return Vrup_sqt;
+    }
+    else{
+        return Vrup_sqt;
+    }
+}
+
+sp_mat flexmat6::rup_stq(){
+    if(Nrup_stq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vu*iNr + vp*iNu*iNr;
+        locations.col(1) = vs + vt*iNs + vq*iNt*iNs;
+        Vrup_stq = sp_mat(locations.t(), vValues, iNr*iNu*iNp,iNs*iNt*iNq);
+        Nrup_stq = 1;
+        return Vrup_stq;
+    }
+    else{
+        return Vrup_stq;
+    }
+}
+
+sp_mat flexmat6::rup_tqs(){
+    if(Nrup_tqs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vu*iNr + vp*iNu*iNr;
+        locations.col(1) = vt + vq*iNt + vs*iNq*iNt;
+        Vrup_tqs = sp_mat(locations.t(), vValues, iNr*iNu*iNp,iNt*iNq*iNs);
+        Nrup_tqs = 1;
+        return Vrup_tqs;
+    }
+    else{
+        return Vrup_tqs;
+    }
+}
+
+sp_mat flexmat6::rup_tsq(){
+    if(Nrup_tsq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vu*iNr + vp*iNu*iNr;
+        locations.col(1) = vt + vs*iNt + vq*iNs*iNt;
+        Vrup_tsq = sp_mat(locations.t(), vValues, iNr*iNu*iNp,iNt*iNs*iNq);
+        Nrup_tsq = 1;
+        return Vrup_tsq;
+    }
+    else{
+        return Vrup_tsq;
+    }
+}
+
+sp_mat flexmat6::ruq_pst(){
+    if(Nruq_pst == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vu*iNr + vq*iNu*iNr;
+        locations.col(1) = vp + vs*iNp + vt*iNs*iNp;
+        Vruq_pst = sp_mat(locations.t(), vValues, iNr*iNu*iNq,iNp*iNs*iNt);
+        Nruq_pst = 1;
+        return Vruq_pst;
+    }
+    else{
+        return Vruq_pst;
+    }
+}
+
+sp_mat flexmat6::ruq_pts(){
+    if(Nruq_pts == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vu*iNr + vq*iNu*iNr;
+        locations.col(1) = vp + vt*iNp + vs*iNt*iNp;
+        Vruq_pts = sp_mat(locations.t(), vValues, iNr*iNu*iNq,iNp*iNt*iNs);
+        Nruq_pts = 1;
+        return Vruq_pts;
+    }
+    else{
+        return Vruq_pts;
+    }
+}
+
+sp_mat flexmat6::ruq_spt(){
+    if(Nruq_spt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vu*iNr + vq*iNu*iNr;
+        locations.col(1) = vs + vp*iNs + vt*iNp*iNs;
+        Vruq_spt = sp_mat(locations.t(), vValues, iNr*iNu*iNq,iNs*iNp*iNt);
+        Nruq_spt = 1;
+        return Vruq_spt;
+    }
+    else{
+        return Vruq_spt;
+    }
+}
+
+sp_mat flexmat6::ruq_stp(){
+    if(Nruq_stp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vu*iNr + vq*iNu*iNr;
+        locations.col(1) = vs + vt*iNs + vp*iNt*iNs;
+        Vruq_stp = sp_mat(locations.t(), vValues, iNr*iNu*iNq,iNs*iNt*iNp);
+        Nruq_stp = 1;
+        return Vruq_stp;
+    }
+    else{
+        return Vruq_stp;
+    }
+}
+
+sp_mat flexmat6::ruq_tps(){
+    if(Nruq_tps == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vu*iNr + vq*iNu*iNr;
+        locations.col(1) = vt + vp*iNt + vs*iNp*iNt;
+        Vruq_tps = sp_mat(locations.t(), vValues, iNr*iNu*iNq,iNt*iNp*iNs);
+        Nruq_tps = 1;
+        return Vruq_tps;
+    }
+    else{
+        return Vruq_tps;
+    }
+}
+
+sp_mat flexmat6::ruq_tsp(){
+    if(Nruq_tsp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vu*iNr + vq*iNu*iNr;
+        locations.col(1) = vt + vs*iNt + vp*iNs*iNt;
+        Vruq_tsp = sp_mat(locations.t(), vValues, iNr*iNu*iNq,iNt*iNs*iNp);
+        Nruq_tsp = 1;
+        return Vruq_tsp;
+    }
+    else{
+        return Vruq_tsp;
+    }
+}
+
+sp_mat flexmat6::rus_pqt(){
+    if(Nrus_pqt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vu*iNr + vs*iNu*iNr;
+        locations.col(1) = vp + vq*iNp + vt*iNq*iNp;
+        Vrus_pqt = sp_mat(locations.t(), vValues, iNr*iNu*iNs,iNp*iNq*iNt);
+        Nrus_pqt = 1;
+        return Vrus_pqt;
+    }
+    else{
+        return Vrus_pqt;
+    }
+}
+
+sp_mat flexmat6::rus_ptq(){
+    if(Nrus_ptq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vu*iNr + vs*iNu*iNr;
+        locations.col(1) = vp + vt*iNp + vq*iNt*iNp;
+        Vrus_ptq = sp_mat(locations.t(), vValues, iNr*iNu*iNs,iNp*iNt*iNq);
+        Nrus_ptq = 1;
+        return Vrus_ptq;
+    }
+    else{
+        return Vrus_ptq;
+    }
+}
+
+sp_mat flexmat6::rus_qpt(){
+    if(Nrus_qpt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vu*iNr + vs*iNu*iNr;
+        locations.col(1) = vq + vp*iNq + vt*iNp*iNq;
+        Vrus_qpt = sp_mat(locations.t(), vValues, iNr*iNu*iNs,iNq*iNp*iNt);
+        Nrus_qpt = 1;
+        return Vrus_qpt;
+    }
+    else{
+        return Vrus_qpt;
+    }
+}
+
+sp_mat flexmat6::rus_qtp(){
+    if(Nrus_qtp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vu*iNr + vs*iNu*iNr;
+        locations.col(1) = vq + vt*iNq + vp*iNt*iNq;
+        Vrus_qtp = sp_mat(locations.t(), vValues, iNr*iNu*iNs,iNq*iNt*iNp);
+        Nrus_qtp = 1;
+        return Vrus_qtp;
+    }
+    else{
+        return Vrus_qtp;
+    }
+}
+
+sp_mat flexmat6::rus_tpq(){
+    if(Nrus_tpq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vu*iNr + vs*iNu*iNr;
+        locations.col(1) = vt + vp*iNt + vq*iNp*iNt;
+        Vrus_tpq = sp_mat(locations.t(), vValues, iNr*iNu*iNs,iNt*iNp*iNq);
+        Nrus_tpq = 1;
+        return Vrus_tpq;
+    }
+    else{
+        return Vrus_tpq;
+    }
+}
+
+sp_mat flexmat6::rus_tqp(){
+    if(Nrus_tqp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vu*iNr + vs*iNu*iNr;
+        locations.col(1) = vt + vq*iNt + vp*iNq*iNt;
+        Vrus_tqp = sp_mat(locations.t(), vValues, iNr*iNu*iNs,iNt*iNq*iNp);
+        Nrus_tqp = 1;
+        return Vrus_tqp;
+    }
+    else{
+        return Vrus_tqp;
+    }
+}
+
+sp_mat flexmat6::rut_pqs(){
+    if(Nrut_pqs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vu*iNr + vt*iNu*iNr;
+        locations.col(1) = vp + vq*iNp + vs*iNq*iNp;
+        Vrut_pqs = sp_mat(locations.t(), vValues, iNr*iNu*iNt,iNp*iNq*iNs);
+        Nrut_pqs = 1;
+        return Vrut_pqs;
+    }
+    else{
+        return Vrut_pqs;
+    }
+}
+
+sp_mat flexmat6::rut_psq(){
+    if(Nrut_psq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vu*iNr + vt*iNu*iNr;
+        locations.col(1) = vp + vs*iNp + vq*iNs*iNp;
+        Vrut_psq = sp_mat(locations.t(), vValues, iNr*iNu*iNt,iNp*iNs*iNq);
+        Nrut_psq = 1;
+        return Vrut_psq;
+    }
+    else{
+        return Vrut_psq;
+    }
+}
+
+sp_mat flexmat6::rut_qps(){
+    if(Nrut_qps == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vu*iNr + vt*iNu*iNr;
+        locations.col(1) = vq + vp*iNq + vs*iNp*iNq;
+        Vrut_qps = sp_mat(locations.t(), vValues, iNr*iNu*iNt,iNq*iNp*iNs);
+        Nrut_qps = 1;
+        return Vrut_qps;
+    }
+    else{
+        return Vrut_qps;
+    }
+}
+
+sp_mat flexmat6::rut_qsp(){
+    if(Nrut_qsp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vu*iNr + vt*iNu*iNr;
+        locations.col(1) = vq + vs*iNq + vp*iNs*iNq;
+        Vrut_qsp = sp_mat(locations.t(), vValues, iNr*iNu*iNt,iNq*iNs*iNp);
+        Nrut_qsp = 1;
+        return Vrut_qsp;
+    }
+    else{
+        return Vrut_qsp;
+    }
+}
+
+sp_mat flexmat6::rut_spq(){
+    if(Nrut_spq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vu*iNr + vt*iNu*iNr;
+        locations.col(1) = vs + vp*iNs + vq*iNp*iNs;
+        Vrut_spq = sp_mat(locations.t(), vValues, iNr*iNu*iNt,iNs*iNp*iNq);
+        Nrut_spq = 1;
+        return Vrut_spq;
+    }
+    else{
+        return Vrut_spq;
+    }
+}
+
+sp_mat flexmat6::rut_sqp(){
+    if(Nrut_sqp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vr + vu*iNr + vt*iNu*iNr;
+        locations.col(1) = vs + vq*iNs + vp*iNq*iNs;
+        Vrut_sqp = sp_mat(locations.t(), vValues, iNr*iNu*iNt,iNs*iNq*iNp);
+        Nrut_sqp = 1;
+        return Vrut_sqp;
+    }
+    else{
+        return Vrut_sqp;
+    }
+}
+
+sp_mat flexmat6::spq_rtu(){
+    if(Nspq_rtu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vp*iNs + vq*iNp*iNs;
+        locations.col(1) = vr + vt*iNr + vu*iNt*iNr;
+        Vspq_rtu = sp_mat(locations.t(), vValues, iNs*iNp*iNq,iNr*iNt*iNu);
+        Nspq_rtu = 1;
+        return Vspq_rtu;
+    }
+    else{
+        return Vspq_rtu;
+    }
+}
+
+sp_mat flexmat6::spq_rut(){
+    if(Nspq_rut == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vp*iNs + vq*iNp*iNs;
+        locations.col(1) = vr + vu*iNr + vt*iNu*iNr;
+        Vspq_rut = sp_mat(locations.t(), vValues, iNs*iNp*iNq,iNr*iNu*iNt);
+        Nspq_rut = 1;
+        return Vspq_rut;
+    }
+    else{
+        return Vspq_rut;
+    }
+}
+
+sp_mat flexmat6::spq_tru(){
+    if(Nspq_tru == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vp*iNs + vq*iNp*iNs;
+        locations.col(1) = vt + vr*iNt + vu*iNr*iNt;
+        Vspq_tru = sp_mat(locations.t(), vValues, iNs*iNp*iNq,iNt*iNr*iNu);
+        Nspq_tru = 1;
+        return Vspq_tru;
+    }
+    else{
+        return Vspq_tru;
+    }
+}
+
+sp_mat flexmat6::spq_tur(){
+    if(Nspq_tur == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vp*iNs + vq*iNp*iNs;
+        locations.col(1) = vt + vu*iNt + vr*iNu*iNt;
+        Vspq_tur = sp_mat(locations.t(), vValues, iNs*iNp*iNq,iNt*iNu*iNr);
+        Nspq_tur = 1;
+        return Vspq_tur;
+    }
+    else{
+        return Vspq_tur;
+    }
+}
+
+sp_mat flexmat6::spq_urt(){
+    if(Nspq_urt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vp*iNs + vq*iNp*iNs;
+        locations.col(1) = vu + vr*iNu + vt*iNr*iNu;
+        Vspq_urt = sp_mat(locations.t(), vValues, iNs*iNp*iNq,iNu*iNr*iNt);
+        Nspq_urt = 1;
+        return Vspq_urt;
+    }
+    else{
+        return Vspq_urt;
+    }
+}
+
+sp_mat flexmat6::spq_utr(){
+    if(Nspq_utr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vp*iNs + vq*iNp*iNs;
+        locations.col(1) = vu + vt*iNu + vr*iNt*iNu;
+        Vspq_utr = sp_mat(locations.t(), vValues, iNs*iNp*iNq,iNu*iNt*iNr);
+        Nspq_utr = 1;
+        return Vspq_utr;
+    }
+    else{
+        return Vspq_utr;
+    }
+}
+
+sp_mat flexmat6::spr_qtu(){
+    if(Nspr_qtu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vp*iNs + vr*iNp*iNs;
+        locations.col(1) = vq + vt*iNq + vu*iNt*iNq;
+        Vspr_qtu = sp_mat(locations.t(), vValues, iNs*iNp*iNr,iNq*iNt*iNu);
+        Nspr_qtu = 1;
+        return Vspr_qtu;
+    }
+    else{
+        return Vspr_qtu;
+    }
+}
+
+sp_mat flexmat6::spr_qut(){
+    if(Nspr_qut == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vp*iNs + vr*iNp*iNs;
+        locations.col(1) = vq + vu*iNq + vt*iNu*iNq;
+        Vspr_qut = sp_mat(locations.t(), vValues, iNs*iNp*iNr,iNq*iNu*iNt);
+        Nspr_qut = 1;
+        return Vspr_qut;
+    }
+    else{
+        return Vspr_qut;
+    }
+}
+
+sp_mat flexmat6::spr_tqu(){
+    if(Nspr_tqu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vp*iNs + vr*iNp*iNs;
+        locations.col(1) = vt + vq*iNt + vu*iNq*iNt;
+        Vspr_tqu = sp_mat(locations.t(), vValues, iNs*iNp*iNr,iNt*iNq*iNu);
+        Nspr_tqu = 1;
+        return Vspr_tqu;
+    }
+    else{
+        return Vspr_tqu;
+    }
+}
+
+sp_mat flexmat6::spr_tuq(){
+    if(Nspr_tuq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vp*iNs + vr*iNp*iNs;
+        locations.col(1) = vt + vu*iNt + vq*iNu*iNt;
+        Vspr_tuq = sp_mat(locations.t(), vValues, iNs*iNp*iNr,iNt*iNu*iNq);
+        Nspr_tuq = 1;
+        return Vspr_tuq;
+    }
+    else{
+        return Vspr_tuq;
+    }
+}
+
+sp_mat flexmat6::spr_uqt(){
+    if(Nspr_uqt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vp*iNs + vr*iNp*iNs;
+        locations.col(1) = vu + vq*iNu + vt*iNq*iNu;
+        Vspr_uqt = sp_mat(locations.t(), vValues, iNs*iNp*iNr,iNu*iNq*iNt);
+        Nspr_uqt = 1;
+        return Vspr_uqt;
+    }
+    else{
+        return Vspr_uqt;
+    }
+}
+
+sp_mat flexmat6::spr_utq(){
+    if(Nspr_utq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vp*iNs + vr*iNp*iNs;
+        locations.col(1) = vu + vt*iNu + vq*iNt*iNu;
+        Vspr_utq = sp_mat(locations.t(), vValues, iNs*iNp*iNr,iNu*iNt*iNq);
+        Nspr_utq = 1;
+        return Vspr_utq;
+    }
+    else{
+        return Vspr_utq;
+    }
+}
+
+sp_mat flexmat6::spt_qru(){
+    if(Nspt_qru == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vp*iNs + vt*iNp*iNs;
+        locations.col(1) = vq + vr*iNq + vu*iNr*iNq;
+        Vspt_qru = sp_mat(locations.t(), vValues, iNs*iNp*iNt,iNq*iNr*iNu);
+        Nspt_qru = 1;
+        return Vspt_qru;
+    }
+    else{
+        return Vspt_qru;
+    }
+}
+
+sp_mat flexmat6::spt_qur(){
+    if(Nspt_qur == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vp*iNs + vt*iNp*iNs;
+        locations.col(1) = vq + vu*iNq + vr*iNu*iNq;
+        Vspt_qur = sp_mat(locations.t(), vValues, iNs*iNp*iNt,iNq*iNu*iNr);
+        Nspt_qur = 1;
+        return Vspt_qur;
+    }
+    else{
+        return Vspt_qur;
+    }
+}
+
+sp_mat flexmat6::spt_rqu(){
+    if(Nspt_rqu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vp*iNs + vt*iNp*iNs;
+        locations.col(1) = vr + vq*iNr + vu*iNq*iNr;
+        Vspt_rqu = sp_mat(locations.t(), vValues, iNs*iNp*iNt,iNr*iNq*iNu);
+        Nspt_rqu = 1;
+        return Vspt_rqu;
+    }
+    else{
+        return Vspt_rqu;
+    }
+}
+
+sp_mat flexmat6::spt_ruq(){
+    if(Nspt_ruq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vp*iNs + vt*iNp*iNs;
+        locations.col(1) = vr + vu*iNr + vq*iNu*iNr;
+        Vspt_ruq = sp_mat(locations.t(), vValues, iNs*iNp*iNt,iNr*iNu*iNq);
+        Nspt_ruq = 1;
+        return Vspt_ruq;
+    }
+    else{
+        return Vspt_ruq;
+    }
+}
+
+sp_mat flexmat6::spt_uqr(){
+    if(Nspt_uqr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vp*iNs + vt*iNp*iNs;
+        locations.col(1) = vu + vq*iNu + vr*iNq*iNu;
+        Vspt_uqr = sp_mat(locations.t(), vValues, iNs*iNp*iNt,iNu*iNq*iNr);
+        Nspt_uqr = 1;
+        return Vspt_uqr;
+    }
+    else{
+        return Vspt_uqr;
+    }
+}
+
+sp_mat flexmat6::spt_urq(){
+    if(Nspt_urq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vp*iNs + vt*iNp*iNs;
+        locations.col(1) = vu + vr*iNu + vq*iNr*iNu;
+        Vspt_urq = sp_mat(locations.t(), vValues, iNs*iNp*iNt,iNu*iNr*iNq);
+        Nspt_urq = 1;
+        return Vspt_urq;
+    }
+    else{
+        return Vspt_urq;
+    }
+}
+
+sp_mat flexmat6::spu_qrt(){
+    if(Nspu_qrt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vp*iNs + vu*iNp*iNs;
+        locations.col(1) = vq + vr*iNq + vt*iNr*iNq;
+        Vspu_qrt = sp_mat(locations.t(), vValues, iNs*iNp*iNu,iNq*iNr*iNt);
+        Nspu_qrt = 1;
+        return Vspu_qrt;
+    }
+    else{
+        return Vspu_qrt;
+    }
+}
+
+sp_mat flexmat6::spu_qtr(){
+    if(Nspu_qtr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vp*iNs + vu*iNp*iNs;
+        locations.col(1) = vq + vt*iNq + vr*iNt*iNq;
+        Vspu_qtr = sp_mat(locations.t(), vValues, iNs*iNp*iNu,iNq*iNt*iNr);
+        Nspu_qtr = 1;
+        return Vspu_qtr;
+    }
+    else{
+        return Vspu_qtr;
+    }
+}
+
+sp_mat flexmat6::spu_rqt(){
+    if(Nspu_rqt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vp*iNs + vu*iNp*iNs;
+        locations.col(1) = vr + vq*iNr + vt*iNq*iNr;
+        Vspu_rqt = sp_mat(locations.t(), vValues, iNs*iNp*iNu,iNr*iNq*iNt);
+        Nspu_rqt = 1;
+        return Vspu_rqt;
+    }
+    else{
+        return Vspu_rqt;
+    }
+}
+
+sp_mat flexmat6::spu_rtq(){
+    if(Nspu_rtq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vp*iNs + vu*iNp*iNs;
+        locations.col(1) = vr + vt*iNr + vq*iNt*iNr;
+        Vspu_rtq = sp_mat(locations.t(), vValues, iNs*iNp*iNu,iNr*iNt*iNq);
+        Nspu_rtq = 1;
+        return Vspu_rtq;
+    }
+    else{
+        return Vspu_rtq;
+    }
+}
+
+sp_mat flexmat6::spu_tqr(){
+    if(Nspu_tqr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vp*iNs + vu*iNp*iNs;
+        locations.col(1) = vt + vq*iNt + vr*iNq*iNt;
+        Vspu_tqr = sp_mat(locations.t(), vValues, iNs*iNp*iNu,iNt*iNq*iNr);
+        Nspu_tqr = 1;
+        return Vspu_tqr;
+    }
+    else{
+        return Vspu_tqr;
+    }
+}
+
+sp_mat flexmat6::spu_trq(){
+    if(Nspu_trq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vp*iNs + vu*iNp*iNs;
+        locations.col(1) = vt + vr*iNt + vq*iNr*iNt;
+        Vspu_trq = sp_mat(locations.t(), vValues, iNs*iNp*iNu,iNt*iNr*iNq);
+        Nspu_trq = 1;
+        return Vspu_trq;
+    }
+    else{
+        return Vspu_trq;
+    }
+}
+
+sp_mat flexmat6::sqp_rtu(){
+    if(Nsqp_rtu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vq*iNs + vp*iNq*iNs;
+        locations.col(1) = vr + vt*iNr + vu*iNt*iNr;
+        Vsqp_rtu = sp_mat(locations.t(), vValues, iNs*iNq*iNp,iNr*iNt*iNu);
+        Nsqp_rtu = 1;
+        return Vsqp_rtu;
+    }
+    else{
+        return Vsqp_rtu;
+    }
+}
+
+sp_mat flexmat6::sqp_rut(){
+    if(Nsqp_rut == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vq*iNs + vp*iNq*iNs;
+        locations.col(1) = vr + vu*iNr + vt*iNu*iNr;
+        Vsqp_rut = sp_mat(locations.t(), vValues, iNs*iNq*iNp,iNr*iNu*iNt);
+        Nsqp_rut = 1;
+        return Vsqp_rut;
+    }
+    else{
+        return Vsqp_rut;
+    }
+}
+
+sp_mat flexmat6::sqp_tru(){
+    if(Nsqp_tru == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vq*iNs + vp*iNq*iNs;
+        locations.col(1) = vt + vr*iNt + vu*iNr*iNt;
+        Vsqp_tru = sp_mat(locations.t(), vValues, iNs*iNq*iNp,iNt*iNr*iNu);
+        Nsqp_tru = 1;
+        return Vsqp_tru;
+    }
+    else{
+        return Vsqp_tru;
+    }
+}
+
+sp_mat flexmat6::sqp_tur(){
+    if(Nsqp_tur == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vq*iNs + vp*iNq*iNs;
+        locations.col(1) = vt + vu*iNt + vr*iNu*iNt;
+        Vsqp_tur = sp_mat(locations.t(), vValues, iNs*iNq*iNp,iNt*iNu*iNr);
+        Nsqp_tur = 1;
+        return Vsqp_tur;
+    }
+    else{
+        return Vsqp_tur;
+    }
+}
+
+sp_mat flexmat6::sqp_urt(){
+    if(Nsqp_urt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vq*iNs + vp*iNq*iNs;
+        locations.col(1) = vu + vr*iNu + vt*iNr*iNu;
+        Vsqp_urt = sp_mat(locations.t(), vValues, iNs*iNq*iNp,iNu*iNr*iNt);
+        Nsqp_urt = 1;
+        return Vsqp_urt;
+    }
+    else{
+        return Vsqp_urt;
+    }
+}
+
+sp_mat flexmat6::sqp_utr(){
+    if(Nsqp_utr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vq*iNs + vp*iNq*iNs;
+        locations.col(1) = vu + vt*iNu + vr*iNt*iNu;
+        Vsqp_utr = sp_mat(locations.t(), vValues, iNs*iNq*iNp,iNu*iNt*iNr);
+        Nsqp_utr = 1;
+        return Vsqp_utr;
+    }
+    else{
+        return Vsqp_utr;
+    }
+}
+
+sp_mat flexmat6::sqr_ptu(){
+    if(Nsqr_ptu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vq*iNs + vr*iNq*iNs;
+        locations.col(1) = vp + vt*iNp + vu*iNt*iNp;
+        Vsqr_ptu = sp_mat(locations.t(), vValues, iNs*iNq*iNr,iNp*iNt*iNu);
+        Nsqr_ptu = 1;
+        return Vsqr_ptu;
+    }
+    else{
+        return Vsqr_ptu;
+    }
+}
+
+sp_mat flexmat6::sqr_put(){
+    if(Nsqr_put == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vq*iNs + vr*iNq*iNs;
+        locations.col(1) = vp + vu*iNp + vt*iNu*iNp;
+        Vsqr_put = sp_mat(locations.t(), vValues, iNs*iNq*iNr,iNp*iNu*iNt);
+        Nsqr_put = 1;
+        return Vsqr_put;
+    }
+    else{
+        return Vsqr_put;
+    }
+}
+
+sp_mat flexmat6::sqr_tpu(){
+    if(Nsqr_tpu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vq*iNs + vr*iNq*iNs;
+        locations.col(1) = vt + vp*iNt + vu*iNp*iNt;
+        Vsqr_tpu = sp_mat(locations.t(), vValues, iNs*iNq*iNr,iNt*iNp*iNu);
+        Nsqr_tpu = 1;
+        return Vsqr_tpu;
+    }
+    else{
+        return Vsqr_tpu;
+    }
+}
+
+sp_mat flexmat6::sqr_tup(){
+    if(Nsqr_tup == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vq*iNs + vr*iNq*iNs;
+        locations.col(1) = vt + vu*iNt + vp*iNu*iNt;
+        Vsqr_tup = sp_mat(locations.t(), vValues, iNs*iNq*iNr,iNt*iNu*iNp);
+        Nsqr_tup = 1;
+        return Vsqr_tup;
+    }
+    else{
+        return Vsqr_tup;
+    }
+}
+
+sp_mat flexmat6::sqr_upt(){
+    if(Nsqr_upt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vq*iNs + vr*iNq*iNs;
+        locations.col(1) = vu + vp*iNu + vt*iNp*iNu;
+        Vsqr_upt = sp_mat(locations.t(), vValues, iNs*iNq*iNr,iNu*iNp*iNt);
+        Nsqr_upt = 1;
+        return Vsqr_upt;
+    }
+    else{
+        return Vsqr_upt;
+    }
+}
+
+sp_mat flexmat6::sqr_utp(){
+    if(Nsqr_utp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vq*iNs + vr*iNq*iNs;
+        locations.col(1) = vu + vt*iNu + vp*iNt*iNu;
+        Vsqr_utp = sp_mat(locations.t(), vValues, iNs*iNq*iNr,iNu*iNt*iNp);
+        Nsqr_utp = 1;
+        return Vsqr_utp;
+    }
+    else{
+        return Vsqr_utp;
+    }
+}
+
+sp_mat flexmat6::sqt_pru(){
+    if(Nsqt_pru == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vq*iNs + vt*iNq*iNs;
+        locations.col(1) = vp + vr*iNp + vu*iNr*iNp;
+        Vsqt_pru = sp_mat(locations.t(), vValues, iNs*iNq*iNt,iNp*iNr*iNu);
+        Nsqt_pru = 1;
+        return Vsqt_pru;
+    }
+    else{
+        return Vsqt_pru;
+    }
+}
+
+sp_mat flexmat6::sqt_pur(){
+    if(Nsqt_pur == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vq*iNs + vt*iNq*iNs;
+        locations.col(1) = vp + vu*iNp + vr*iNu*iNp;
+        Vsqt_pur = sp_mat(locations.t(), vValues, iNs*iNq*iNt,iNp*iNu*iNr);
+        Nsqt_pur = 1;
+        return Vsqt_pur;
+    }
+    else{
+        return Vsqt_pur;
+    }
+}
+
+sp_mat flexmat6::sqt_rpu(){
+    if(Nsqt_rpu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vq*iNs + vt*iNq*iNs;
+        locations.col(1) = vr + vp*iNr + vu*iNp*iNr;
+        Vsqt_rpu = sp_mat(locations.t(), vValues, iNs*iNq*iNt,iNr*iNp*iNu);
+        Nsqt_rpu = 1;
+        return Vsqt_rpu;
+    }
+    else{
+        return Vsqt_rpu;
+    }
+}
+
+sp_mat flexmat6::sqt_rup(){
+    if(Nsqt_rup == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vq*iNs + vt*iNq*iNs;
+        locations.col(1) = vr + vu*iNr + vp*iNu*iNr;
+        Vsqt_rup = sp_mat(locations.t(), vValues, iNs*iNq*iNt,iNr*iNu*iNp);
+        Nsqt_rup = 1;
+        return Vsqt_rup;
+    }
+    else{
+        return Vsqt_rup;
+    }
+}
+
+sp_mat flexmat6::sqt_upr(){
+    if(Nsqt_upr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vq*iNs + vt*iNq*iNs;
+        locations.col(1) = vu + vp*iNu + vr*iNp*iNu;
+        Vsqt_upr = sp_mat(locations.t(), vValues, iNs*iNq*iNt,iNu*iNp*iNr);
+        Nsqt_upr = 1;
+        return Vsqt_upr;
+    }
+    else{
+        return Vsqt_upr;
+    }
+}
+
+sp_mat flexmat6::sqt_urp(){
+    if(Nsqt_urp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vq*iNs + vt*iNq*iNs;
+        locations.col(1) = vu + vr*iNu + vp*iNr*iNu;
+        Vsqt_urp = sp_mat(locations.t(), vValues, iNs*iNq*iNt,iNu*iNr*iNp);
+        Nsqt_urp = 1;
+        return Vsqt_urp;
+    }
+    else{
+        return Vsqt_urp;
+    }
+}
+
+sp_mat flexmat6::squ_prt(){
+    if(Nsqu_prt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vq*iNs + vu*iNq*iNs;
+        locations.col(1) = vp + vr*iNp + vt*iNr*iNp;
+        Vsqu_prt = sp_mat(locations.t(), vValues, iNs*iNq*iNu,iNp*iNr*iNt);
+        Nsqu_prt = 1;
+        return Vsqu_prt;
+    }
+    else{
+        return Vsqu_prt;
+    }
+}
+
+sp_mat flexmat6::squ_ptr(){
+    if(Nsqu_ptr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vq*iNs + vu*iNq*iNs;
+        locations.col(1) = vp + vt*iNp + vr*iNt*iNp;
+        Vsqu_ptr = sp_mat(locations.t(), vValues, iNs*iNq*iNu,iNp*iNt*iNr);
+        Nsqu_ptr = 1;
+        return Vsqu_ptr;
+    }
+    else{
+        return Vsqu_ptr;
+    }
+}
+
+sp_mat flexmat6::squ_rpt(){
+    if(Nsqu_rpt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vq*iNs + vu*iNq*iNs;
+        locations.col(1) = vr + vp*iNr + vt*iNp*iNr;
+        Vsqu_rpt = sp_mat(locations.t(), vValues, iNs*iNq*iNu,iNr*iNp*iNt);
+        Nsqu_rpt = 1;
+        return Vsqu_rpt;
+    }
+    else{
+        return Vsqu_rpt;
+    }
+}
+
+sp_mat flexmat6::squ_rtp(){
+    if(Nsqu_rtp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vq*iNs + vu*iNq*iNs;
+        locations.col(1) = vr + vt*iNr + vp*iNt*iNr;
+        Vsqu_rtp = sp_mat(locations.t(), vValues, iNs*iNq*iNu,iNr*iNt*iNp);
+        Nsqu_rtp = 1;
+        return Vsqu_rtp;
+    }
+    else{
+        return Vsqu_rtp;
+    }
+}
+
+sp_mat flexmat6::squ_tpr(){
+    if(Nsqu_tpr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vq*iNs + vu*iNq*iNs;
+        locations.col(1) = vt + vp*iNt + vr*iNp*iNt;
+        Vsqu_tpr = sp_mat(locations.t(), vValues, iNs*iNq*iNu,iNt*iNp*iNr);
+        Nsqu_tpr = 1;
+        return Vsqu_tpr;
+    }
+    else{
+        return Vsqu_tpr;
+    }
+}
+
+sp_mat flexmat6::squ_trp(){
+    if(Nsqu_trp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vq*iNs + vu*iNq*iNs;
+        locations.col(1) = vt + vr*iNt + vp*iNr*iNt;
+        Vsqu_trp = sp_mat(locations.t(), vValues, iNs*iNq*iNu,iNt*iNr*iNp);
+        Nsqu_trp = 1;
+        return Vsqu_trp;
+    }
+    else{
+        return Vsqu_trp;
+    }
+}
+
+sp_mat flexmat6::srp_qtu(){
+    if(Nsrp_qtu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vr*iNs + vp*iNr*iNs;
+        locations.col(1) = vq + vt*iNq + vu*iNt*iNq;
+        Vsrp_qtu = sp_mat(locations.t(), vValues, iNs*iNr*iNp,iNq*iNt*iNu);
+        Nsrp_qtu = 1;
+        return Vsrp_qtu;
+    }
+    else{
+        return Vsrp_qtu;
+    }
+}
+
+sp_mat flexmat6::srp_qut(){
+    if(Nsrp_qut == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vr*iNs + vp*iNr*iNs;
+        locations.col(1) = vq + vu*iNq + vt*iNu*iNq;
+        Vsrp_qut = sp_mat(locations.t(), vValues, iNs*iNr*iNp,iNq*iNu*iNt);
+        Nsrp_qut = 1;
+        return Vsrp_qut;
+    }
+    else{
+        return Vsrp_qut;
+    }
+}
+
+sp_mat flexmat6::srp_tqu(){
+    if(Nsrp_tqu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vr*iNs + vp*iNr*iNs;
+        locations.col(1) = vt + vq*iNt + vu*iNq*iNt;
+        Vsrp_tqu = sp_mat(locations.t(), vValues, iNs*iNr*iNp,iNt*iNq*iNu);
+        Nsrp_tqu = 1;
+        return Vsrp_tqu;
+    }
+    else{
+        return Vsrp_tqu;
+    }
+}
+
+sp_mat flexmat6::srp_tuq(){
+    if(Nsrp_tuq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vr*iNs + vp*iNr*iNs;
+        locations.col(1) = vt + vu*iNt + vq*iNu*iNt;
+        Vsrp_tuq = sp_mat(locations.t(), vValues, iNs*iNr*iNp,iNt*iNu*iNq);
+        Nsrp_tuq = 1;
+        return Vsrp_tuq;
+    }
+    else{
+        return Vsrp_tuq;
+    }
+}
+
+sp_mat flexmat6::srp_uqt(){
+    if(Nsrp_uqt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vr*iNs + vp*iNr*iNs;
+        locations.col(1) = vu + vq*iNu + vt*iNq*iNu;
+        Vsrp_uqt = sp_mat(locations.t(), vValues, iNs*iNr*iNp,iNu*iNq*iNt);
+        Nsrp_uqt = 1;
+        return Vsrp_uqt;
+    }
+    else{
+        return Vsrp_uqt;
+    }
+}
+
+sp_mat flexmat6::srp_utq(){
+    if(Nsrp_utq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vr*iNs + vp*iNr*iNs;
+        locations.col(1) = vu + vt*iNu + vq*iNt*iNu;
+        Vsrp_utq = sp_mat(locations.t(), vValues, iNs*iNr*iNp,iNu*iNt*iNq);
+        Nsrp_utq = 1;
+        return Vsrp_utq;
+    }
+    else{
+        return Vsrp_utq;
+    }
+}
+
+sp_mat flexmat6::srq_ptu(){
+    if(Nsrq_ptu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vr*iNs + vq*iNr*iNs;
+        locations.col(1) = vp + vt*iNp + vu*iNt*iNp;
+        Vsrq_ptu = sp_mat(locations.t(), vValues, iNs*iNr*iNq,iNp*iNt*iNu);
+        Nsrq_ptu = 1;
+        return Vsrq_ptu;
+    }
+    else{
+        return Vsrq_ptu;
+    }
+}
+
+sp_mat flexmat6::srq_put(){
+    if(Nsrq_put == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vr*iNs + vq*iNr*iNs;
+        locations.col(1) = vp + vu*iNp + vt*iNu*iNp;
+        Vsrq_put = sp_mat(locations.t(), vValues, iNs*iNr*iNq,iNp*iNu*iNt);
+        Nsrq_put = 1;
+        return Vsrq_put;
+    }
+    else{
+        return Vsrq_put;
+    }
+}
+
+sp_mat flexmat6::srq_tpu(){
+    if(Nsrq_tpu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vr*iNs + vq*iNr*iNs;
+        locations.col(1) = vt + vp*iNt + vu*iNp*iNt;
+        Vsrq_tpu = sp_mat(locations.t(), vValues, iNs*iNr*iNq,iNt*iNp*iNu);
+        Nsrq_tpu = 1;
+        return Vsrq_tpu;
+    }
+    else{
+        return Vsrq_tpu;
+    }
+}
+
+sp_mat flexmat6::srq_tup(){
+    if(Nsrq_tup == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vr*iNs + vq*iNr*iNs;
+        locations.col(1) = vt + vu*iNt + vp*iNu*iNt;
+        Vsrq_tup = sp_mat(locations.t(), vValues, iNs*iNr*iNq,iNt*iNu*iNp);
+        Nsrq_tup = 1;
+        return Vsrq_tup;
+    }
+    else{
+        return Vsrq_tup;
+    }
+}
+
+sp_mat flexmat6::srq_upt(){
+    if(Nsrq_upt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vr*iNs + vq*iNr*iNs;
+        locations.col(1) = vu + vp*iNu + vt*iNp*iNu;
+        Vsrq_upt = sp_mat(locations.t(), vValues, iNs*iNr*iNq,iNu*iNp*iNt);
+        Nsrq_upt = 1;
+        return Vsrq_upt;
+    }
+    else{
+        return Vsrq_upt;
+    }
+}
+
+sp_mat flexmat6::srq_utp(){
+    if(Nsrq_utp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vr*iNs + vq*iNr*iNs;
+        locations.col(1) = vu + vt*iNu + vp*iNt*iNu;
+        Vsrq_utp = sp_mat(locations.t(), vValues, iNs*iNr*iNq,iNu*iNt*iNp);
+        Nsrq_utp = 1;
+        return Vsrq_utp;
+    }
+    else{
+        return Vsrq_utp;
+    }
+}
+
+sp_mat flexmat6::srt_pqu(){
+    if(Nsrt_pqu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vr*iNs + vt*iNr*iNs;
+        locations.col(1) = vp + vq*iNp + vu*iNq*iNp;
+        Vsrt_pqu = sp_mat(locations.t(), vValues, iNs*iNr*iNt,iNp*iNq*iNu);
+        Nsrt_pqu = 1;
+        return Vsrt_pqu;
+    }
+    else{
+        return Vsrt_pqu;
+    }
+}
+
+sp_mat flexmat6::srt_puq(){
+    if(Nsrt_puq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vr*iNs + vt*iNr*iNs;
+        locations.col(1) = vp + vu*iNp + vq*iNu*iNp;
+        Vsrt_puq = sp_mat(locations.t(), vValues, iNs*iNr*iNt,iNp*iNu*iNq);
+        Nsrt_puq = 1;
+        return Vsrt_puq;
+    }
+    else{
+        return Vsrt_puq;
+    }
+}
+
+sp_mat flexmat6::srt_qpu(){
+    if(Nsrt_qpu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vr*iNs + vt*iNr*iNs;
+        locations.col(1) = vq + vp*iNq + vu*iNp*iNq;
+        Vsrt_qpu = sp_mat(locations.t(), vValues, iNs*iNr*iNt,iNq*iNp*iNu);
+        Nsrt_qpu = 1;
+        return Vsrt_qpu;
+    }
+    else{
+        return Vsrt_qpu;
+    }
+}
+
+sp_mat flexmat6::srt_qup(){
+    if(Nsrt_qup == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vr*iNs + vt*iNr*iNs;
+        locations.col(1) = vq + vu*iNq + vp*iNu*iNq;
+        Vsrt_qup = sp_mat(locations.t(), vValues, iNs*iNr*iNt,iNq*iNu*iNp);
+        Nsrt_qup = 1;
+        return Vsrt_qup;
+    }
+    else{
+        return Vsrt_qup;
+    }
+}
+
+sp_mat flexmat6::srt_upq(){
+    if(Nsrt_upq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vr*iNs + vt*iNr*iNs;
+        locations.col(1) = vu + vp*iNu + vq*iNp*iNu;
+        Vsrt_upq = sp_mat(locations.t(), vValues, iNs*iNr*iNt,iNu*iNp*iNq);
+        Nsrt_upq = 1;
+        return Vsrt_upq;
+    }
+    else{
+        return Vsrt_upq;
+    }
+}
+
+sp_mat flexmat6::srt_uqp(){
+    if(Nsrt_uqp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vr*iNs + vt*iNr*iNs;
+        locations.col(1) = vu + vq*iNu + vp*iNq*iNu;
+        Vsrt_uqp = sp_mat(locations.t(), vValues, iNs*iNr*iNt,iNu*iNq*iNp);
+        Nsrt_uqp = 1;
+        return Vsrt_uqp;
+    }
+    else{
+        return Vsrt_uqp;
+    }
+}
+
+sp_mat flexmat6::sru_pqt(){
+    if(Nsru_pqt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vr*iNs + vu*iNr*iNs;
+        locations.col(1) = vp + vq*iNp + vt*iNq*iNp;
+        Vsru_pqt = sp_mat(locations.t(), vValues, iNs*iNr*iNu,iNp*iNq*iNt);
+        Nsru_pqt = 1;
+        return Vsru_pqt;
+    }
+    else{
+        return Vsru_pqt;
+    }
+}
+
+sp_mat flexmat6::sru_ptq(){
+    if(Nsru_ptq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vr*iNs + vu*iNr*iNs;
+        locations.col(1) = vp + vt*iNp + vq*iNt*iNp;
+        Vsru_ptq = sp_mat(locations.t(), vValues, iNs*iNr*iNu,iNp*iNt*iNq);
+        Nsru_ptq = 1;
+        return Vsru_ptq;
+    }
+    else{
+        return Vsru_ptq;
+    }
+}
+
+sp_mat flexmat6::sru_qpt(){
+    if(Nsru_qpt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vr*iNs + vu*iNr*iNs;
+        locations.col(1) = vq + vp*iNq + vt*iNp*iNq;
+        Vsru_qpt = sp_mat(locations.t(), vValues, iNs*iNr*iNu,iNq*iNp*iNt);
+        Nsru_qpt = 1;
+        return Vsru_qpt;
+    }
+    else{
+        return Vsru_qpt;
+    }
+}
+
+sp_mat flexmat6::sru_qtp(){
+    if(Nsru_qtp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vr*iNs + vu*iNr*iNs;
+        locations.col(1) = vq + vt*iNq + vp*iNt*iNq;
+        Vsru_qtp = sp_mat(locations.t(), vValues, iNs*iNr*iNu,iNq*iNt*iNp);
+        Nsru_qtp = 1;
+        return Vsru_qtp;
+    }
+    else{
+        return Vsru_qtp;
+    }
+}
+
+
+
+sp_mat flexmat6::sru_tqp(){
+    if(Nsru_tqp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vr*iNs + vu*iNr*iNs;
+        locations.col(1) = vt + vq*iNt + vp*iNq*iNt;
+        Vsru_tqp = sp_mat(locations.t(), vValues, iNs*iNr*iNu,iNt*iNq*iNp);
+        Nsru_tqp = 1;
+        return Vsru_tqp;
+    }
+    else{
+        return Vsru_tqp;
+    }
+}
+
+sp_mat flexmat6::stp_qru(){
+    if(Nstp_qru == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vt*iNs + vp*iNt*iNs;
+        locations.col(1) = vq + vr*iNq + vu*iNr*iNq;
+        Vstp_qru = sp_mat(locations.t(), vValues, iNs*iNt*iNp,iNq*iNr*iNu);
+        Nstp_qru = 1;
+        return Vstp_qru;
+    }
+    else{
+        return Vstp_qru;
+    }
+}
+
+sp_mat flexmat6::stp_qur(){
+    if(Nstp_qur == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vt*iNs + vp*iNt*iNs;
+        locations.col(1) = vq + vu*iNq + vr*iNu*iNq;
+        Vstp_qur = sp_mat(locations.t(), vValues, iNs*iNt*iNp,iNq*iNu*iNr);
+        Nstp_qur = 1;
+        return Vstp_qur;
+    }
+    else{
+        return Vstp_qur;
+    }
+}
+
+sp_mat flexmat6::stp_rqu(){
+    if(Nstp_rqu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vt*iNs + vp*iNt*iNs;
+        locations.col(1) = vr + vq*iNr + vu*iNq*iNr;
+        Vstp_rqu = sp_mat(locations.t(), vValues, iNs*iNt*iNp,iNr*iNq*iNu);
+        Nstp_rqu = 1;
+        return Vstp_rqu;
+    }
+    else{
+        return Vstp_rqu;
+    }
+}
+
+sp_mat flexmat6::stp_ruq(){
+    if(Nstp_ruq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vt*iNs + vp*iNt*iNs;
+        locations.col(1) = vr + vu*iNr + vq*iNu*iNr;
+        Vstp_ruq = sp_mat(locations.t(), vValues, iNs*iNt*iNp,iNr*iNu*iNq);
+        Nstp_ruq = 1;
+        return Vstp_ruq;
+    }
+    else{
+        return Vstp_ruq;
+    }
+}
+
+sp_mat flexmat6::stp_uqr(){
+    if(Nstp_uqr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vt*iNs + vp*iNt*iNs;
+        locations.col(1) = vu + vq*iNu + vr*iNq*iNu;
+        Vstp_uqr = sp_mat(locations.t(), vValues, iNs*iNt*iNp,iNu*iNq*iNr);
+        Nstp_uqr = 1;
+        return Vstp_uqr;
+    }
+    else{
+        return Vstp_uqr;
+    }
+}
+
+sp_mat flexmat6::stp_urq(){
+    if(Nstp_urq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vt*iNs + vp*iNt*iNs;
+        locations.col(1) = vu + vr*iNu + vq*iNr*iNu;
+        Vstp_urq = sp_mat(locations.t(), vValues, iNs*iNt*iNp,iNu*iNr*iNq);
+        Nstp_urq = 1;
+        return Vstp_urq;
+    }
+    else{
+        return Vstp_urq;
+    }
+}
+
+sp_mat flexmat6::stq_pru(){
+    if(Nstq_pru == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vt*iNs + vq*iNt*iNs;
+        locations.col(1) = vp + vr*iNp + vu*iNr*iNp;
+        Vstq_pru = sp_mat(locations.t(), vValues, iNs*iNt*iNq,iNp*iNr*iNu);
+        Nstq_pru = 1;
+        return Vstq_pru;
+    }
+    else{
+        return Vstq_pru;
+    }
+}
+
+sp_mat flexmat6::stq_pur(){
+    if(Nstq_pur == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vt*iNs + vq*iNt*iNs;
+        locations.col(1) = vp + vu*iNp + vr*iNu*iNp;
+        Vstq_pur = sp_mat(locations.t(), vValues, iNs*iNt*iNq,iNp*iNu*iNr);
+        Nstq_pur = 1;
+        return Vstq_pur;
+    }
+    else{
+        return Vstq_pur;
+    }
+}
+
+sp_mat flexmat6::stq_rpu(){
+    if(Nstq_rpu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vt*iNs + vq*iNt*iNs;
+        locations.col(1) = vr + vp*iNr + vu*iNp*iNr;
+        Vstq_rpu = sp_mat(locations.t(), vValues, iNs*iNt*iNq,iNr*iNp*iNu);
+        Nstq_rpu = 1;
+        return Vstq_rpu;
+    }
+    else{
+        return Vstq_rpu;
+    }
+}
+
+sp_mat flexmat6::stq_rup(){
+    if(Nstq_rup == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vt*iNs + vq*iNt*iNs;
+        locations.col(1) = vr + vu*iNr + vp*iNu*iNr;
+        Vstq_rup = sp_mat(locations.t(), vValues, iNs*iNt*iNq,iNr*iNu*iNp);
+        Nstq_rup = 1;
+        return Vstq_rup;
+    }
+    else{
+        return Vstq_rup;
+    }
+}
+
+sp_mat flexmat6::stq_upr(){
+    if(Nstq_upr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vt*iNs + vq*iNt*iNs;
+        locations.col(1) = vu + vp*iNu + vr*iNp*iNu;
+        Vstq_upr = sp_mat(locations.t(), vValues, iNs*iNt*iNq,iNu*iNp*iNr);
+        Nstq_upr = 1;
+        return Vstq_upr;
+    }
+    else{
+        return Vstq_upr;
+    }
+}
+
+sp_mat flexmat6::stq_urp(){
+    if(Nstq_urp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vt*iNs + vq*iNt*iNs;
+        locations.col(1) = vu + vr*iNu + vp*iNr*iNu;
+        Vstq_urp = sp_mat(locations.t(), vValues, iNs*iNt*iNq,iNu*iNr*iNp);
+        Nstq_urp = 1;
+        return Vstq_urp;
+    }
+    else{
+        return Vstq_urp;
+    }
+}
+
+sp_mat flexmat6::str_pqu(){
+    if(Nstr_pqu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vt*iNs + vr*iNt*iNs;
+        locations.col(1) = vp + vq*iNp + vu*iNq*iNp;
+        Vstr_pqu = sp_mat(locations.t(), vValues, iNs*iNt*iNr,iNp*iNq*iNu);
+        Nstr_pqu = 1;
+        return Vstr_pqu;
+    }
+    else{
+        return Vstr_pqu;
+    }
+}
+
+sp_mat flexmat6::str_puq(){
+    if(Nstr_puq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vt*iNs + vr*iNt*iNs;
+        locations.col(1) = vp + vu*iNp + vq*iNu*iNp;
+        Vstr_puq = sp_mat(locations.t(), vValues, iNs*iNt*iNr,iNp*iNu*iNq);
+        Nstr_puq = 1;
+        return Vstr_puq;
+    }
+    else{
+        return Vstr_puq;
+    }
+}
+
+sp_mat flexmat6::str_qpu(){
+    if(Nstr_qpu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vt*iNs + vr*iNt*iNs;
+        locations.col(1) = vq + vp*iNq + vu*iNp*iNq;
+        Vstr_qpu = sp_mat(locations.t(), vValues, iNs*iNt*iNr,iNq*iNp*iNu);
+        Nstr_qpu = 1;
+        return Vstr_qpu;
+    }
+    else{
+        return Vstr_qpu;
+    }
+}
+
+sp_mat flexmat6::str_qup(){
+    if(Nstr_qup == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vt*iNs + vr*iNt*iNs;
+        locations.col(1) = vq + vu*iNq + vp*iNu*iNq;
+        Vstr_qup = sp_mat(locations.t(), vValues, iNs*iNt*iNr,iNq*iNu*iNp);
+        Nstr_qup = 1;
+        return Vstr_qup;
+    }
+    else{
+        return Vstr_qup;
+    }
+}
+
+sp_mat flexmat6::str_upq(){
+    if(Nstr_upq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vt*iNs + vr*iNt*iNs;
+        locations.col(1) = vu + vp*iNu + vq*iNp*iNu;
+        Vstr_upq = sp_mat(locations.t(), vValues, iNs*iNt*iNr,iNu*iNp*iNq);
+        Nstr_upq = 1;
+        return Vstr_upq;
+    }
+    else{
+        return Vstr_upq;
+    }
+}
+
+sp_mat flexmat6::str_uqp(){
+    if(Nstr_uqp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vt*iNs + vr*iNt*iNs;
+        locations.col(1) = vu + vq*iNu + vp*iNq*iNu;
+        Vstr_uqp = sp_mat(locations.t(), vValues, iNs*iNt*iNr,iNu*iNq*iNp);
+        Nstr_uqp = 1;
+        return Vstr_uqp;
+    }
+    else{
+        return Vstr_uqp;
+    }
+}
+
+sp_mat flexmat6::stu_pqr(){
+    if(Nstu_pqr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vt*iNs + vu*iNt*iNs;
+        locations.col(1) = vp + vq*iNp + vr*iNq*iNp;
+        Vstu_pqr = sp_mat(locations.t(), vValues, iNs*iNt*iNu,iNp*iNq*iNr);
+        Nstu_pqr = 1;
+        return Vstu_pqr;
+    }
+    else{
+        return Vstu_pqr;
+    }
+}
+
+sp_mat flexmat6::stu_prq(){
+    if(Nstu_prq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vt*iNs + vu*iNt*iNs;
+        locations.col(1) = vp + vr*iNp + vq*iNr*iNp;
+        Vstu_prq = sp_mat(locations.t(), vValues, iNs*iNt*iNu,iNp*iNr*iNq);
+        Nstu_prq = 1;
+        return Vstu_prq;
+    }
+    else{
+        return Vstu_prq;
+    }
+}
+
+sp_mat flexmat6::stu_qpr(){
+    if(Nstu_qpr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vt*iNs + vu*iNt*iNs;
+        locations.col(1) = vq + vp*iNq + vr*iNp*iNq;
+        Vstu_qpr = sp_mat(locations.t(), vValues, iNs*iNt*iNu,iNq*iNp*iNr);
+        Nstu_qpr = 1;
+        return Vstu_qpr;
+    }
+    else{
+        return Vstu_qpr;
+    }
+}
+
+sp_mat flexmat6::stu_qrp(){
+    if(Nstu_qrp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vt*iNs + vu*iNt*iNs;
+        locations.col(1) = vq + vr*iNq + vp*iNr*iNq;
+        Vstu_qrp = sp_mat(locations.t(), vValues, iNs*iNt*iNu,iNq*iNr*iNp);
+        Nstu_qrp = 1;
+        return Vstu_qrp;
+    }
+    else{
+        return Vstu_qrp;
+    }
+}
+
+sp_mat flexmat6::stu_rpq(){
+    if(Nstu_rpq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vt*iNs + vu*iNt*iNs;
+        locations.col(1) = vr + vp*iNr + vq*iNp*iNr;
+        Vstu_rpq = sp_mat(locations.t(), vValues, iNs*iNt*iNu,iNr*iNp*iNq);
+        Nstu_rpq = 1;
+        return Vstu_rpq;
+    }
+    else{
+        return Vstu_rpq;
+    }
+}
+
+sp_mat flexmat6::stu_rqp(){
+    if(Nstu_rqp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vt*iNs + vu*iNt*iNs;
+        locations.col(1) = vr + vq*iNr + vp*iNq*iNr;
+        Vstu_rqp = sp_mat(locations.t(), vValues, iNs*iNt*iNu,iNr*iNq*iNp);
+        Nstu_rqp = 1;
+        return Vstu_rqp;
+    }
+    else{
+        return Vstu_rqp;
+    }
+}
+
+sp_mat flexmat6::sup_qrt(){
+    if(Nsup_qrt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vu*iNs + vp*iNu*iNs;
+        locations.col(1) = vq + vr*iNq + vt*iNr*iNq;
+        Vsup_qrt = sp_mat(locations.t(), vValues, iNs*iNu*iNp,iNq*iNr*iNt);
+        Nsup_qrt = 1;
+        return Vsup_qrt;
+    }
+    else{
+        return Vsup_qrt;
+    }
+}
+
+sp_mat flexmat6::sup_qtr(){
+    if(Nsup_qtr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vu*iNs + vp*iNu*iNs;
+        locations.col(1) = vq + vt*iNq + vr*iNt*iNq;
+        Vsup_qtr = sp_mat(locations.t(), vValues, iNs*iNu*iNp,iNq*iNt*iNr);
+        Nsup_qtr = 1;
+        return Vsup_qtr;
+    }
+    else{
+        return Vsup_qtr;
+    }
+}
+
+sp_mat flexmat6::sup_rqt(){
+    if(Nsup_rqt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vu*iNs + vp*iNu*iNs;
+        locations.col(1) = vr + vq*iNr + vt*iNq*iNr;
+        Vsup_rqt = sp_mat(locations.t(), vValues, iNs*iNu*iNp,iNr*iNq*iNt);
+        Nsup_rqt = 1;
+        return Vsup_rqt;
+    }
+    else{
+        return Vsup_rqt;
+    }
+}
+
+sp_mat flexmat6::sup_rtq(){
+    if(Nsup_rtq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vu*iNs + vp*iNu*iNs;
+        locations.col(1) = vr + vt*iNr + vq*iNt*iNr;
+        Vsup_rtq = sp_mat(locations.t(), vValues, iNs*iNu*iNp,iNr*iNt*iNq);
+        Nsup_rtq = 1;
+        return Vsup_rtq;
+    }
+    else{
+        return Vsup_rtq;
+    }
+}
+
+sp_mat flexmat6::sup_tqr(){
+    if(Nsup_tqr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vu*iNs + vp*iNu*iNs;
+        locations.col(1) = vt + vq*iNt + vr*iNq*iNt;
+        Vsup_tqr = sp_mat(locations.t(), vValues, iNs*iNu*iNp,iNt*iNq*iNr);
+        Nsup_tqr = 1;
+        return Vsup_tqr;
+    }
+    else{
+        return Vsup_tqr;
+    }
+}
+
+sp_mat flexmat6::sup_trq(){
+    if(Nsup_trq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vu*iNs + vp*iNu*iNs;
+        locations.col(1) = vt + vr*iNt + vq*iNr*iNt;
+        Vsup_trq = sp_mat(locations.t(), vValues, iNs*iNu*iNp,iNt*iNr*iNq);
+        Nsup_trq = 1;
+        return Vsup_trq;
+    }
+    else{
+        return Vsup_trq;
+    }
+}
+
+sp_mat flexmat6::suq_prt(){
+    if(Nsuq_prt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vu*iNs + vq*iNu*iNs;
+        locations.col(1) = vp + vr*iNp + vt*iNr*iNp;
+        Vsuq_prt = sp_mat(locations.t(), vValues, iNs*iNu*iNq,iNp*iNr*iNt);
+        Nsuq_prt = 1;
+        return Vsuq_prt;
+    }
+    else{
+        return Vsuq_prt;
+    }
+}
+
+sp_mat flexmat6::suq_ptr(){
+    if(Nsuq_ptr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vu*iNs + vq*iNu*iNs;
+        locations.col(1) = vp + vt*iNp + vr*iNt*iNp;
+        Vsuq_ptr = sp_mat(locations.t(), vValues, iNs*iNu*iNq,iNp*iNt*iNr);
+        Nsuq_ptr = 1;
+        return Vsuq_ptr;
+    }
+    else{
+        return Vsuq_ptr;
+    }
+}
+
+sp_mat flexmat6::suq_rpt(){
+    if(Nsuq_rpt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vu*iNs + vq*iNu*iNs;
+        locations.col(1) = vr + vp*iNr + vt*iNp*iNr;
+        Vsuq_rpt = sp_mat(locations.t(), vValues, iNs*iNu*iNq,iNr*iNp*iNt);
+        Nsuq_rpt = 1;
+        return Vsuq_rpt;
+    }
+    else{
+        return Vsuq_rpt;
+    }
+}
+
+sp_mat flexmat6::suq_rtp(){
+    if(Nsuq_rtp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vu*iNs + vq*iNu*iNs;
+        locations.col(1) = vr + vt*iNr + vp*iNt*iNr;
+        Vsuq_rtp = sp_mat(locations.t(), vValues, iNs*iNu*iNq,iNr*iNt*iNp);
+        Nsuq_rtp = 1;
+        return Vsuq_rtp;
+    }
+    else{
+        return Vsuq_rtp;
+    }
+}
+
+sp_mat flexmat6::suq_tpr(){
+    if(Nsuq_tpr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vu*iNs + vq*iNu*iNs;
+        locations.col(1) = vt + vp*iNt + vr*iNp*iNt;
+        Vsuq_tpr = sp_mat(locations.t(), vValues, iNs*iNu*iNq,iNt*iNp*iNr);
+        Nsuq_tpr = 1;
+        return Vsuq_tpr;
+    }
+    else{
+        return Vsuq_tpr;
+    }
+}
+
+sp_mat flexmat6::suq_trp(){
+    if(Nsuq_trp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vu*iNs + vq*iNu*iNs;
+        locations.col(1) = vt + vr*iNt + vp*iNr*iNt;
+        Vsuq_trp = sp_mat(locations.t(), vValues, iNs*iNu*iNq,iNt*iNr*iNp);
+        Nsuq_trp = 1;
+        return Vsuq_trp;
+    }
+    else{
+        return Vsuq_trp;
+    }
+}
+
+sp_mat flexmat6::sur_pqt(){
+    if(Nsur_pqt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vu*iNs + vr*iNu*iNs;
+        locations.col(1) = vp + vq*iNp + vt*iNq*iNp;
+        Vsur_pqt = sp_mat(locations.t(), vValues, iNs*iNu*iNr,iNp*iNq*iNt);
+        Nsur_pqt = 1;
+        return Vsur_pqt;
+    }
+    else{
+        return Vsur_pqt;
+    }
+}
+
+sp_mat flexmat6::sur_ptq(){
+    if(Nsur_ptq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vu*iNs + vr*iNu*iNs;
+        locations.col(1) = vp + vt*iNp + vq*iNt*iNp;
+        Vsur_ptq = sp_mat(locations.t(), vValues, iNs*iNu*iNr,iNp*iNt*iNq);
+        Nsur_ptq = 1;
+        return Vsur_ptq;
+    }
+    else{
+        return Vsur_ptq;
+    }
+}
+
+sp_mat flexmat6::sur_qpt(){
+    if(Nsur_qpt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vu*iNs + vr*iNu*iNs;
+        locations.col(1) = vq + vp*iNq + vt*iNp*iNq;
+        Vsur_qpt = sp_mat(locations.t(), vValues, iNs*iNu*iNr,iNq*iNp*iNt);
+        Nsur_qpt = 1;
+        return Vsur_qpt;
+    }
+    else{
+        return Vsur_qpt;
+    }
+}
+
+sp_mat flexmat6::sur_qtp(){
+    if(Nsur_qtp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vu*iNs + vr*iNu*iNs;
+        locations.col(1) = vq + vt*iNq + vp*iNt*iNq;
+        Vsur_qtp = sp_mat(locations.t(), vValues, iNs*iNu*iNr,iNq*iNt*iNp);
+        Nsur_qtp = 1;
+        return Vsur_qtp;
+    }
+    else{
+        return Vsur_qtp;
+    }
+}
+
+sp_mat flexmat6::sur_tpq(){
+    if(Nsur_tpq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vu*iNs + vr*iNu*iNs;
+        locations.col(1) = vt + vp*iNt + vq*iNp*iNt;
+        Vsur_tpq = sp_mat(locations.t(), vValues, iNs*iNu*iNr,iNt*iNp*iNq);
+        Nsur_tpq = 1;
+        return Vsur_tpq;
+    }
+    else{
+        return Vsur_tpq;
+    }
+}
+
+sp_mat flexmat6::sur_tqp(){
+    if(Nsur_tqp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vu*iNs + vr*iNu*iNs;
+        locations.col(1) = vt + vq*iNt + vp*iNq*iNt;
+        Vsur_tqp = sp_mat(locations.t(), vValues, iNs*iNu*iNr,iNt*iNq*iNp);
+        Nsur_tqp = 1;
+        return Vsur_tqp;
+    }
+    else{
+        return Vsur_tqp;
+    }
+}
+
+sp_mat flexmat6::sut_pqr(){
+    if(Nsut_pqr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vu*iNs + vt*iNu*iNs;
+        locations.col(1) = vp + vq*iNp + vr*iNq*iNp;
+        Vsut_pqr = sp_mat(locations.t(), vValues, iNs*iNu*iNt,iNp*iNq*iNr);
+        Nsut_pqr = 1;
+        return Vsut_pqr;
+    }
+    else{
+        return Vsut_pqr;
+    }
+}
+
+sp_mat flexmat6::sut_prq(){
+    if(Nsut_prq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vu*iNs + vt*iNu*iNs;
+        locations.col(1) = vp + vr*iNp + vq*iNr*iNp;
+        Vsut_prq = sp_mat(locations.t(), vValues, iNs*iNu*iNt,iNp*iNr*iNq);
+        Nsut_prq = 1;
+        return Vsut_prq;
+    }
+    else{
+        return Vsut_prq;
+    }
+}
+
+sp_mat flexmat6::sut_qpr(){
+    if(Nsut_qpr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vu*iNs + vt*iNu*iNs;
+        locations.col(1) = vq + vp*iNq + vr*iNp*iNq;
+        Vsut_qpr = sp_mat(locations.t(), vValues, iNs*iNu*iNt,iNq*iNp*iNr);
+        Nsut_qpr = 1;
+        return Vsut_qpr;
+    }
+    else{
+        return Vsut_qpr;
+    }
+}
+
+sp_mat flexmat6::sut_qrp(){
+    if(Nsut_qrp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vu*iNs + vt*iNu*iNs;
+        locations.col(1) = vq + vr*iNq + vp*iNr*iNq;
+        Vsut_qrp = sp_mat(locations.t(), vValues, iNs*iNu*iNt,iNq*iNr*iNp);
+        Nsut_qrp = 1;
+        return Vsut_qrp;
+    }
+    else{
+        return Vsut_qrp;
+    }
+}
+
+sp_mat flexmat6::sut_rpq(){
+    if(Nsut_rpq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vu*iNs + vt*iNu*iNs;
+        locations.col(1) = vr + vp*iNr + vq*iNp*iNr;
+        Vsut_rpq = sp_mat(locations.t(), vValues, iNs*iNu*iNt,iNr*iNp*iNq);
+        Nsut_rpq = 1;
+        return Vsut_rpq;
+    }
+    else{
+        return Vsut_rpq;
+    }
+}
+
+sp_mat flexmat6::sut_rqp(){
+    if(Nsut_rqp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vs + vu*iNs + vt*iNu*iNs;
+        locations.col(1) = vr + vq*iNr + vp*iNq*iNr;
+        Vsut_rqp = sp_mat(locations.t(), vValues, iNs*iNu*iNt,iNr*iNq*iNp);
+        Nsut_rqp = 1;
+        return Vsut_rqp;
+    }
+    else{
+        return Vsut_rqp;
+    }
+}
+
+sp_mat flexmat6::tpq_rsu(){
+    if(Ntpq_rsu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vp*iNt + vq*iNp*iNt;
+        locations.col(1) = vr + vs*iNr + vu*iNs*iNr;
+        Vtpq_rsu = sp_mat(locations.t(), vValues, iNt*iNp*iNq,iNr*iNs*iNu);
+        Ntpq_rsu = 1;
+        return Vtpq_rsu;
+    }
+    else{
+        return Vtpq_rsu;
+    }
+}
+
+sp_mat flexmat6::tpq_rus(){
+    if(Ntpq_rus == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vp*iNt + vq*iNp*iNt;
+        locations.col(1) = vr + vu*iNr + vs*iNu*iNr;
+        Vtpq_rus = sp_mat(locations.t(), vValues, iNt*iNp*iNq,iNr*iNu*iNs);
+        Ntpq_rus = 1;
+        return Vtpq_rus;
+    }
+    else{
+        return Vtpq_rus;
+    }
+}
+
+sp_mat flexmat6::tpq_sru(){
+    if(Ntpq_sru == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vp*iNt + vq*iNp*iNt;
+        locations.col(1) = vs + vr*iNs + vu*iNr*iNs;
+        Vtpq_sru = sp_mat(locations.t(), vValues, iNt*iNp*iNq,iNs*iNr*iNu);
+        Ntpq_sru = 1;
+        return Vtpq_sru;
+    }
+    else{
+        return Vtpq_sru;
+    }
+}
+
+sp_mat flexmat6::tpq_sur(){
+    if(Ntpq_sur == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vp*iNt + vq*iNp*iNt;
+        locations.col(1) = vs + vu*iNs + vr*iNu*iNs;
+        Vtpq_sur = sp_mat(locations.t(), vValues, iNt*iNp*iNq,iNs*iNu*iNr);
+        Ntpq_sur = 1;
+        return Vtpq_sur;
+    }
+    else{
+        return Vtpq_sur;
+    }
+}
+
+sp_mat flexmat6::tpq_urs(){
+    if(Ntpq_urs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vp*iNt + vq*iNp*iNt;
+        locations.col(1) = vu + vr*iNu + vs*iNr*iNu;
+        Vtpq_urs = sp_mat(locations.t(), vValues, iNt*iNp*iNq,iNu*iNr*iNs);
+        Ntpq_urs = 1;
+        return Vtpq_urs;
+    }
+    else{
+        return Vtpq_urs;
+    }
+}
+
+sp_mat flexmat6::tpq_usr(){
+    if(Ntpq_usr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vp*iNt + vq*iNp*iNt;
+        locations.col(1) = vu + vs*iNu + vr*iNs*iNu;
+        Vtpq_usr = sp_mat(locations.t(), vValues, iNt*iNp*iNq,iNu*iNs*iNr);
+        Ntpq_usr = 1;
+        return Vtpq_usr;
+    }
+    else{
+        return Vtpq_usr;
+    }
+}
+
+sp_mat flexmat6::tpr_qsu(){
+    if(Ntpr_qsu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vp*iNt + vr*iNp*iNt;
+        locations.col(1) = vq + vs*iNq + vu*iNs*iNq;
+        Vtpr_qsu = sp_mat(locations.t(), vValues, iNt*iNp*iNr,iNq*iNs*iNu);
+        Ntpr_qsu = 1;
+        return Vtpr_qsu;
+    }
+    else{
+        return Vtpr_qsu;
+    }
+}
+
+sp_mat flexmat6::tpr_qus(){
+    if(Ntpr_qus == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vp*iNt + vr*iNp*iNt;
+        locations.col(1) = vq + vu*iNq + vs*iNu*iNq;
+        Vtpr_qus = sp_mat(locations.t(), vValues, iNt*iNp*iNr,iNq*iNu*iNs);
+        Ntpr_qus = 1;
+        return Vtpr_qus;
+    }
+    else{
+        return Vtpr_qus;
+    }
+}
+
+sp_mat flexmat6::tpr_squ(){
+    if(Ntpr_squ == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vp*iNt + vr*iNp*iNt;
+        locations.col(1) = vs + vq*iNs + vu*iNq*iNs;
+        Vtpr_squ = sp_mat(locations.t(), vValues, iNt*iNp*iNr,iNs*iNq*iNu);
+        Ntpr_squ = 1;
+        return Vtpr_squ;
+    }
+    else{
+        return Vtpr_squ;
+    }
+}
+
+sp_mat flexmat6::tpr_suq(){
+    if(Ntpr_suq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vp*iNt + vr*iNp*iNt;
+        locations.col(1) = vs + vu*iNs + vq*iNu*iNs;
+        Vtpr_suq = sp_mat(locations.t(), vValues, iNt*iNp*iNr,iNs*iNu*iNq);
+        Ntpr_suq = 1;
+        return Vtpr_suq;
+    }
+    else{
+        return Vtpr_suq;
+    }
+}
+
+sp_mat flexmat6::tpr_uqs(){
+    if(Ntpr_uqs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vp*iNt + vr*iNp*iNt;
+        locations.col(1) = vu + vq*iNu + vs*iNq*iNu;
+        Vtpr_uqs = sp_mat(locations.t(), vValues, iNt*iNp*iNr,iNu*iNq*iNs);
+        Ntpr_uqs = 1;
+        return Vtpr_uqs;
+    }
+    else{
+        return Vtpr_uqs;
+    }
+}
+
+sp_mat flexmat6::tpr_usq(){
+    if(Ntpr_usq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vp*iNt + vr*iNp*iNt;
+        locations.col(1) = vu + vs*iNu + vq*iNs*iNu;
+        Vtpr_usq = sp_mat(locations.t(), vValues, iNt*iNp*iNr,iNu*iNs*iNq);
+        Ntpr_usq = 1;
+        return Vtpr_usq;
+    }
+    else{
+        return Vtpr_usq;
+    }
+}
+
+sp_mat flexmat6::tps_qru(){
+    if(Ntps_qru == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vp*iNt + vs*iNp*iNt;
+        locations.col(1) = vq + vr*iNq + vu*iNr*iNq;
+        Vtps_qru = sp_mat(locations.t(), vValues, iNt*iNp*iNs,iNq*iNr*iNu);
+        Ntps_qru = 1;
+        return Vtps_qru;
+    }
+    else{
+        return Vtps_qru;
+    }
+}
+
+sp_mat flexmat6::tps_qur(){
+    if(Ntps_qur == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vp*iNt + vs*iNp*iNt;
+        locations.col(1) = vq + vu*iNq + vr*iNu*iNq;
+        Vtps_qur = sp_mat(locations.t(), vValues, iNt*iNp*iNs,iNq*iNu*iNr);
+        Ntps_qur = 1;
+        return Vtps_qur;
+    }
+    else{
+        return Vtps_qur;
+    }
+}
+
+sp_mat flexmat6::tps_rqu(){
+    if(Ntps_rqu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vp*iNt + vs*iNp*iNt;
+        locations.col(1) = vr + vq*iNr + vu*iNq*iNr;
+        Vtps_rqu = sp_mat(locations.t(), vValues, iNt*iNp*iNs,iNr*iNq*iNu);
+        Ntps_rqu = 1;
+        return Vtps_rqu;
+    }
+    else{
+        return Vtps_rqu;
+    }
+}
+
+sp_mat flexmat6::tps_ruq(){
+    if(Ntps_ruq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vp*iNt + vs*iNp*iNt;
+        locations.col(1) = vr + vu*iNr + vq*iNu*iNr;
+        Vtps_ruq = sp_mat(locations.t(), vValues, iNt*iNp*iNs,iNr*iNu*iNq);
+        Ntps_ruq = 1;
+        return Vtps_ruq;
+    }
+    else{
+        return Vtps_ruq;
+    }
+}
+
+sp_mat flexmat6::tps_uqr(){
+    if(Ntps_uqr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vp*iNt + vs*iNp*iNt;
+        locations.col(1) = vu + vq*iNu + vr*iNq*iNu;
+        Vtps_uqr = sp_mat(locations.t(), vValues, iNt*iNp*iNs,iNu*iNq*iNr);
+        Ntps_uqr = 1;
+        return Vtps_uqr;
+    }
+    else{
+        return Vtps_uqr;
+    }
+}
+
+sp_mat flexmat6::tps_urq(){
+    if(Ntps_urq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vp*iNt + vs*iNp*iNt;
+        locations.col(1) = vu + vr*iNu + vq*iNr*iNu;
+        Vtps_urq = sp_mat(locations.t(), vValues, iNt*iNp*iNs,iNu*iNr*iNq);
+        Ntps_urq = 1;
+        return Vtps_urq;
+    }
+    else{
+        return Vtps_urq;
+    }
+}
+
+sp_mat flexmat6::tpu_qrs(){
+    if(Ntpu_qrs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vp*iNt + vu*iNp*iNt;
+        locations.col(1) = vq + vr*iNq + vs*iNr*iNq;
+        Vtpu_qrs = sp_mat(locations.t(), vValues, iNt*iNp*iNu,iNq*iNr*iNs);
+        Ntpu_qrs = 1;
+        return Vtpu_qrs;
+    }
+    else{
+        return Vtpu_qrs;
+    }
+}
+
+sp_mat flexmat6::tpu_qsr(){
+    if(Ntpu_qsr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vp*iNt + vu*iNp*iNt;
+        locations.col(1) = vq + vs*iNq + vr*iNs*iNq;
+        Vtpu_qsr = sp_mat(locations.t(), vValues, iNt*iNp*iNu,iNq*iNs*iNr);
+        Ntpu_qsr = 1;
+        return Vtpu_qsr;
+    }
+    else{
+        return Vtpu_qsr;
+    }
+}
+
+sp_mat flexmat6::tpu_rqs(){
+    if(Ntpu_rqs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vp*iNt + vu*iNp*iNt;
+        locations.col(1) = vr + vq*iNr + vs*iNq*iNr;
+        Vtpu_rqs = sp_mat(locations.t(), vValues, iNt*iNp*iNu,iNr*iNq*iNs);
+        Ntpu_rqs = 1;
+        return Vtpu_rqs;
+    }
+    else{
+        return Vtpu_rqs;
+    }
+}
+
+sp_mat flexmat6::tpu_rsq(){
+    if(Ntpu_rsq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vp*iNt + vu*iNp*iNt;
+        locations.col(1) = vr + vs*iNr + vq*iNs*iNr;
+        Vtpu_rsq = sp_mat(locations.t(), vValues, iNt*iNp*iNu,iNr*iNs*iNq);
+        Ntpu_rsq = 1;
+        return Vtpu_rsq;
+    }
+    else{
+        return Vtpu_rsq;
+    }
+}
+
+sp_mat flexmat6::tpu_sqr(){
+    if(Ntpu_sqr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vp*iNt + vu*iNp*iNt;
+        locations.col(1) = vs + vq*iNs + vr*iNq*iNs;
+        Vtpu_sqr = sp_mat(locations.t(), vValues, iNt*iNp*iNu,iNs*iNq*iNr);
+        Ntpu_sqr = 1;
+        return Vtpu_sqr;
+    }
+    else{
+        return Vtpu_sqr;
+    }
+}
+
+sp_mat flexmat6::tpu_srq(){
+    if(Ntpu_srq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vp*iNt + vu*iNp*iNt;
+        locations.col(1) = vs + vr*iNs + vq*iNr*iNs;
+        Vtpu_srq = sp_mat(locations.t(), vValues, iNt*iNp*iNu,iNs*iNr*iNq);
+        Ntpu_srq = 1;
+        return Vtpu_srq;
+    }
+    else{
+        return Vtpu_srq;
+    }
+}
+
+sp_mat flexmat6::tqp_rsu(){
+    if(Ntqp_rsu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vq*iNt + vp*iNq*iNt;
+        locations.col(1) = vr + vs*iNr + vu*iNs*iNr;
+        Vtqp_rsu = sp_mat(locations.t(), vValues, iNt*iNq*iNp,iNr*iNs*iNu);
+        Ntqp_rsu = 1;
+        return Vtqp_rsu;
+    }
+    else{
+        return Vtqp_rsu;
+    }
+}
+
+sp_mat flexmat6::tqp_rus(){
+    if(Ntqp_rus == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vq*iNt + vp*iNq*iNt;
+        locations.col(1) = vr + vu*iNr + vs*iNu*iNr;
+        Vtqp_rus = sp_mat(locations.t(), vValues, iNt*iNq*iNp,iNr*iNu*iNs);
+        Ntqp_rus = 1;
+        return Vtqp_rus;
+    }
+    else{
+        return Vtqp_rus;
+    }
+}
+
+sp_mat flexmat6::tqp_sru(){
+    if(Ntqp_sru == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vq*iNt + vp*iNq*iNt;
+        locations.col(1) = vs + vr*iNs + vu*iNr*iNs;
+        Vtqp_sru = sp_mat(locations.t(), vValues, iNt*iNq*iNp,iNs*iNr*iNu);
+        Ntqp_sru = 1;
+        return Vtqp_sru;
+    }
+    else{
+        return Vtqp_sru;
+    }
+}
+
+sp_mat flexmat6::tqp_sur(){
+    if(Ntqp_sur == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vq*iNt + vp*iNq*iNt;
+        locations.col(1) = vs + vu*iNs + vr*iNu*iNs;
+        Vtqp_sur = sp_mat(locations.t(), vValues, iNt*iNq*iNp,iNs*iNu*iNr);
+        Ntqp_sur = 1;
+        return Vtqp_sur;
+    }
+    else{
+        return Vtqp_sur;
+    }
+}
+
+sp_mat flexmat6::tqp_urs(){
+    if(Ntqp_urs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vq*iNt + vp*iNq*iNt;
+        locations.col(1) = vu + vr*iNu + vs*iNr*iNu;
+        Vtqp_urs = sp_mat(locations.t(), vValues, iNt*iNq*iNp,iNu*iNr*iNs);
+        Ntqp_urs = 1;
+        return Vtqp_urs;
+    }
+    else{
+        return Vtqp_urs;
+    }
+}
+
+sp_mat flexmat6::tqp_usr(){
+    if(Ntqp_usr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vq*iNt + vp*iNq*iNt;
+        locations.col(1) = vu + vs*iNu + vr*iNs*iNu;
+        Vtqp_usr = sp_mat(locations.t(), vValues, iNt*iNq*iNp,iNu*iNs*iNr);
+        Ntqp_usr = 1;
+        return Vtqp_usr;
+    }
+    else{
+        return Vtqp_usr;
+    }
+}
+
+sp_mat flexmat6::tqr_psu(){
+    if(Ntqr_psu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vq*iNt + vr*iNq*iNt;
+        locations.col(1) = vp + vs*iNp + vu*iNs*iNp;
+        Vtqr_psu = sp_mat(locations.t(), vValues, iNt*iNq*iNr,iNp*iNs*iNu);
+        Ntqr_psu = 1;
+        return Vtqr_psu;
+    }
+    else{
+        return Vtqr_psu;
+    }
+}
+
+sp_mat flexmat6::tqr_pus(){
+    if(Ntqr_pus == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vq*iNt + vr*iNq*iNt;
+        locations.col(1) = vp + vu*iNp + vs*iNu*iNp;
+        Vtqr_pus = sp_mat(locations.t(), vValues, iNt*iNq*iNr,iNp*iNu*iNs);
+        Ntqr_pus = 1;
+        return Vtqr_pus;
+    }
+    else{
+        return Vtqr_pus;
+    }
+}
+
+sp_mat flexmat6::tqr_spu(){
+    if(Ntqr_spu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vq*iNt + vr*iNq*iNt;
+        locations.col(1) = vs + vp*iNs + vu*iNp*iNs;
+        Vtqr_spu = sp_mat(locations.t(), vValues, iNt*iNq*iNr,iNs*iNp*iNu);
+        Ntqr_spu = 1;
+        return Vtqr_spu;
+    }
+    else{
+        return Vtqr_spu;
+    }
+}
+
+sp_mat flexmat6::tqr_sup(){
+    if(Ntqr_sup == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vq*iNt + vr*iNq*iNt;
+        locations.col(1) = vs + vu*iNs + vp*iNu*iNs;
+        Vtqr_sup = sp_mat(locations.t(), vValues, iNt*iNq*iNr,iNs*iNu*iNp);
+        Ntqr_sup = 1;
+        return Vtqr_sup;
+    }
+    else{
+        return Vtqr_sup;
+    }
+}
+
+sp_mat flexmat6::tqr_ups(){
+    if(Ntqr_ups == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vq*iNt + vr*iNq*iNt;
+        locations.col(1) = vu + vp*iNu + vs*iNp*iNu;
+        Vtqr_ups = sp_mat(locations.t(), vValues, iNt*iNq*iNr,iNu*iNp*iNs);
+        Ntqr_ups = 1;
+        return Vtqr_ups;
+    }
+    else{
+        return Vtqr_ups;
+    }
+}
+
+sp_mat flexmat6::tqr_usp(){
+    if(Ntqr_usp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vq*iNt + vr*iNq*iNt;
+        locations.col(1) = vu + vs*iNu + vp*iNs*iNu;
+        Vtqr_usp = sp_mat(locations.t(), vValues, iNt*iNq*iNr,iNu*iNs*iNp);
+        Ntqr_usp = 1;
+        return Vtqr_usp;
+    }
+    else{
+        return Vtqr_usp;
+    }
+}
+
+sp_mat flexmat6::tqs_pru(){
+    if(Ntqs_pru == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vq*iNt + vs*iNq*iNt;
+        locations.col(1) = vp + vr*iNp + vu*iNr*iNp;
+        Vtqs_pru = sp_mat(locations.t(), vValues, iNt*iNq*iNs,iNp*iNr*iNu);
+        Ntqs_pru = 1;
+        return Vtqs_pru;
+    }
+    else{
+        return Vtqs_pru;
+    }
+}
+
+sp_mat flexmat6::tqs_pur(){
+    if(Ntqs_pur == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vq*iNt + vs*iNq*iNt;
+        locations.col(1) = vp + vu*iNp + vr*iNu*iNp;
+        Vtqs_pur = sp_mat(locations.t(), vValues, iNt*iNq*iNs,iNp*iNu*iNr);
+        Ntqs_pur = 1;
+        return Vtqs_pur;
+    }
+    else{
+        return Vtqs_pur;
+    }
+}
+
+sp_mat flexmat6::tqs_rpu(){
+    if(Ntqs_rpu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vq*iNt + vs*iNq*iNt;
+        locations.col(1) = vr + vp*iNr + vu*iNp*iNr;
+        Vtqs_rpu = sp_mat(locations.t(), vValues, iNt*iNq*iNs,iNr*iNp*iNu);
+        Ntqs_rpu = 1;
+        return Vtqs_rpu;
+    }
+    else{
+        return Vtqs_rpu;
+    }
+}
+
+sp_mat flexmat6::tqs_rup(){
+    if(Ntqs_rup == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vq*iNt + vs*iNq*iNt;
+        locations.col(1) = vr + vu*iNr + vp*iNu*iNr;
+        Vtqs_rup = sp_mat(locations.t(), vValues, iNt*iNq*iNs,iNr*iNu*iNp);
+        Ntqs_rup = 1;
+        return Vtqs_rup;
+    }
+    else{
+        return Vtqs_rup;
+    }
+}
+
+sp_mat flexmat6::tqs_upr(){
+    if(Ntqs_upr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vq*iNt + vs*iNq*iNt;
+        locations.col(1) = vu + vp*iNu + vr*iNp*iNu;
+        Vtqs_upr = sp_mat(locations.t(), vValues, iNt*iNq*iNs,iNu*iNp*iNr);
+        Ntqs_upr = 1;
+        return Vtqs_upr;
+    }
+    else{
+        return Vtqs_upr;
+    }
+}
+
+sp_mat flexmat6::tqs_urp(){
+    if(Ntqs_urp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vq*iNt + vs*iNq*iNt;
+        locations.col(1) = vu + vr*iNu + vp*iNr*iNu;
+        Vtqs_urp = sp_mat(locations.t(), vValues, iNt*iNq*iNs,iNu*iNr*iNp);
+        Ntqs_urp = 1;
+        return Vtqs_urp;
+    }
+    else{
+        return Vtqs_urp;
+    }
+}
+
+sp_mat flexmat6::tqu_prs(){
+    if(Ntqu_prs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vq*iNt + vu*iNq*iNt;
+        locations.col(1) = vp + vr*iNp + vs*iNr*iNp;
+        Vtqu_prs = sp_mat(locations.t(), vValues, iNt*iNq*iNu,iNp*iNr*iNs);
+        Ntqu_prs = 1;
+        return Vtqu_prs;
+    }
+    else{
+        return Vtqu_prs;
+    }
+}
+
+sp_mat flexmat6::tqu_psr(){
+    if(Ntqu_psr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vq*iNt + vu*iNq*iNt;
+        locations.col(1) = vp + vs*iNp + vr*iNs*iNp;
+        Vtqu_psr = sp_mat(locations.t(), vValues, iNt*iNq*iNu,iNp*iNs*iNr);
+        Ntqu_psr = 1;
+        return Vtqu_psr;
+    }
+    else{
+        return Vtqu_psr;
+    }
+}
+
+sp_mat flexmat6::tqu_rps(){
+    if(Ntqu_rps == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vq*iNt + vu*iNq*iNt;
+        locations.col(1) = vr + vp*iNr + vs*iNp*iNr;
+        Vtqu_rps = sp_mat(locations.t(), vValues, iNt*iNq*iNu,iNr*iNp*iNs);
+        Ntqu_rps = 1;
+        return Vtqu_rps;
+    }
+    else{
+        return Vtqu_rps;
+    }
+}
+
+sp_mat flexmat6::tqu_rsp(){
+    if(Ntqu_rsp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vq*iNt + vu*iNq*iNt;
+        locations.col(1) = vr + vs*iNr + vp*iNs*iNr;
+        Vtqu_rsp = sp_mat(locations.t(), vValues, iNt*iNq*iNu,iNr*iNs*iNp);
+        Ntqu_rsp = 1;
+        return Vtqu_rsp;
+    }
+    else{
+        return Vtqu_rsp;
+    }
+}
+
+sp_mat flexmat6::tqu_spr(){
+    if(Ntqu_spr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vq*iNt + vu*iNq*iNt;
+        locations.col(1) = vs + vp*iNs + vr*iNp*iNs;
+        Vtqu_spr = sp_mat(locations.t(), vValues, iNt*iNq*iNu,iNs*iNp*iNr);
+        Ntqu_spr = 1;
+        return Vtqu_spr;
+    }
+    else{
+        return Vtqu_spr;
+    }
+}
+
+sp_mat flexmat6::tqu_srp(){
+    if(Ntqu_srp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vq*iNt + vu*iNq*iNt;
+        locations.col(1) = vs + vr*iNs + vp*iNr*iNs;
+        Vtqu_srp = sp_mat(locations.t(), vValues, iNt*iNq*iNu,iNs*iNr*iNp);
+        Ntqu_srp = 1;
+        return Vtqu_srp;
+    }
+    else{
+        return Vtqu_srp;
+    }
+}
+
+sp_mat flexmat6::trp_qsu(){
+    if(Ntrp_qsu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vr*iNt + vp*iNr*iNt;
+        locations.col(1) = vq + vs*iNq + vu*iNs*iNq;
+        Vtrp_qsu = sp_mat(locations.t(), vValues, iNt*iNr*iNp,iNq*iNs*iNu);
+        Ntrp_qsu = 1;
+        return Vtrp_qsu;
+    }
+    else{
+        return Vtrp_qsu;
+    }
+}
+
+sp_mat flexmat6::trp_qus(){
+    if(Ntrp_qus == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vr*iNt + vp*iNr*iNt;
+        locations.col(1) = vq + vu*iNq + vs*iNu*iNq;
+        Vtrp_qus = sp_mat(locations.t(), vValues, iNt*iNr*iNp,iNq*iNu*iNs);
+        Ntrp_qus = 1;
+        return Vtrp_qus;
+    }
+    else{
+        return Vtrp_qus;
+    }
+}
+
+sp_mat flexmat6::trp_squ(){
+    if(Ntrp_squ == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vr*iNt + vp*iNr*iNt;
+        locations.col(1) = vs + vq*iNs + vu*iNq*iNs;
+        Vtrp_squ = sp_mat(locations.t(), vValues, iNt*iNr*iNp,iNs*iNq*iNu);
+        Ntrp_squ = 1;
+        return Vtrp_squ;
+    }
+    else{
+        return Vtrp_squ;
+    }
+}
+
+sp_mat flexmat6::trp_suq(){
+    if(Ntrp_suq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vr*iNt + vp*iNr*iNt;
+        locations.col(1) = vs + vu*iNs + vq*iNu*iNs;
+        Vtrp_suq = sp_mat(locations.t(), vValues, iNt*iNr*iNp,iNs*iNu*iNq);
+        Ntrp_suq = 1;
+        return Vtrp_suq;
+    }
+    else{
+        return Vtrp_suq;
+    }
+}
+
+sp_mat flexmat6::trp_uqs(){
+    if(Ntrp_uqs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vr*iNt + vp*iNr*iNt;
+        locations.col(1) = vu + vq*iNu + vs*iNq*iNu;
+        Vtrp_uqs = sp_mat(locations.t(), vValues, iNt*iNr*iNp,iNu*iNq*iNs);
+        Ntrp_uqs = 1;
+        return Vtrp_uqs;
+    }
+    else{
+        return Vtrp_uqs;
+    }
+}
+
+sp_mat flexmat6::trp_usq(){
+    if(Ntrp_usq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vr*iNt + vp*iNr*iNt;
+        locations.col(1) = vu + vs*iNu + vq*iNs*iNu;
+        Vtrp_usq = sp_mat(locations.t(), vValues, iNt*iNr*iNp,iNu*iNs*iNq);
+        Ntrp_usq = 1;
+        return Vtrp_usq;
+    }
+    else{
+        return Vtrp_usq;
+    }
+}
+
+sp_mat flexmat6::trq_psu(){
+    if(Ntrq_psu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vr*iNt + vq*iNr*iNt;
+        locations.col(1) = vp + vs*iNp + vu*iNs*iNp;
+        Vtrq_psu = sp_mat(locations.t(), vValues, iNt*iNr*iNq,iNp*iNs*iNu);
+        Ntrq_psu = 1;
+        return Vtrq_psu;
+    }
+    else{
+        return Vtrq_psu;
+    }
+}
+
+sp_mat flexmat6::trq_pus(){
+    if(Ntrq_pus == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vr*iNt + vq*iNr*iNt;
+        locations.col(1) = vp + vu*iNp + vs*iNu*iNp;
+        Vtrq_pus = sp_mat(locations.t(), vValues, iNt*iNr*iNq,iNp*iNu*iNs);
+        Ntrq_pus = 1;
+        return Vtrq_pus;
+    }
+    else{
+        return Vtrq_pus;
+    }
+}
+
+sp_mat flexmat6::trq_spu(){
+    if(Ntrq_spu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vr*iNt + vq*iNr*iNt;
+        locations.col(1) = vs + vp*iNs + vu*iNp*iNs;
+        Vtrq_spu = sp_mat(locations.t(), vValues, iNt*iNr*iNq,iNs*iNp*iNu);
+        Ntrq_spu = 1;
+        return Vtrq_spu;
+    }
+    else{
+        return Vtrq_spu;
+    }
+}
+
+sp_mat flexmat6::trq_sup(){
+    if(Ntrq_sup == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vr*iNt + vq*iNr*iNt;
+        locations.col(1) = vs + vu*iNs + vp*iNu*iNs;
+        Vtrq_sup = sp_mat(locations.t(), vValues, iNt*iNr*iNq,iNs*iNu*iNp);
+        Ntrq_sup = 1;
+        return Vtrq_sup;
+    }
+    else{
+        return Vtrq_sup;
+    }
+}
+
+sp_mat flexmat6::trq_ups(){
+    if(Ntrq_ups == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vr*iNt + vq*iNr*iNt;
+        locations.col(1) = vu + vp*iNu + vs*iNp*iNu;
+        Vtrq_ups = sp_mat(locations.t(), vValues, iNt*iNr*iNq,iNu*iNp*iNs);
+        Ntrq_ups = 1;
+        return Vtrq_ups;
+    }
+    else{
+        return Vtrq_ups;
+    }
+}
+
+sp_mat flexmat6::trq_usp(){
+    if(Ntrq_usp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vr*iNt + vq*iNr*iNt;
+        locations.col(1) = vu + vs*iNu + vp*iNs*iNu;
+        Vtrq_usp = sp_mat(locations.t(), vValues, iNt*iNr*iNq,iNu*iNs*iNp);
+        Ntrq_usp = 1;
+        return Vtrq_usp;
+    }
+    else{
+        return Vtrq_usp;
+    }
+}
+
+sp_mat flexmat6::trs_pqu(){
+    if(Ntrs_pqu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vr*iNt + vs*iNr*iNt;
+        locations.col(1) = vp + vq*iNp + vu*iNq*iNp;
+        Vtrs_pqu = sp_mat(locations.t(), vValues, iNt*iNr*iNs,iNp*iNq*iNu);
+        Ntrs_pqu = 1;
+        return Vtrs_pqu;
+    }
+    else{
+        return Vtrs_pqu;
+    }
+}
+
+sp_mat flexmat6::trs_puq(){
+    if(Ntrs_puq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vr*iNt + vs*iNr*iNt;
+        locations.col(1) = vp + vu*iNp + vq*iNu*iNp;
+        Vtrs_puq = sp_mat(locations.t(), vValues, iNt*iNr*iNs,iNp*iNu*iNq);
+        Ntrs_puq = 1;
+        return Vtrs_puq;
+    }
+    else{
+        return Vtrs_puq;
+    }
+}
+
+sp_mat flexmat6::trs_qpu(){
+    if(Ntrs_qpu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vr*iNt + vs*iNr*iNt;
+        locations.col(1) = vq + vp*iNq + vu*iNp*iNq;
+        Vtrs_qpu = sp_mat(locations.t(), vValues, iNt*iNr*iNs,iNq*iNp*iNu);
+        Ntrs_qpu = 1;
+        return Vtrs_qpu;
+    }
+    else{
+        return Vtrs_qpu;
+    }
+}
+
+sp_mat flexmat6::trs_qup(){
+    if(Ntrs_qup == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vr*iNt + vs*iNr*iNt;
+        locations.col(1) = vq + vu*iNq + vp*iNu*iNq;
+        Vtrs_qup = sp_mat(locations.t(), vValues, iNt*iNr*iNs,iNq*iNu*iNp);
+        Ntrs_qup = 1;
+        return Vtrs_qup;
+    }
+    else{
+        return Vtrs_qup;
+    }
+}
+
+sp_mat flexmat6::trs_upq(){
+    if(Ntrs_upq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vr*iNt + vs*iNr*iNt;
+        locations.col(1) = vu + vp*iNu + vq*iNp*iNu;
+        Vtrs_upq = sp_mat(locations.t(), vValues, iNt*iNr*iNs,iNu*iNp*iNq);
+        Ntrs_upq = 1;
+        return Vtrs_upq;
+    }
+    else{
+        return Vtrs_upq;
+    }
+}
+
+sp_mat flexmat6::trs_uqp(){
+    if(Ntrs_uqp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vr*iNt + vs*iNr*iNt;
+        locations.col(1) = vu + vq*iNu + vp*iNq*iNu;
+        Vtrs_uqp = sp_mat(locations.t(), vValues, iNt*iNr*iNs,iNu*iNq*iNp);
+        Ntrs_uqp = 1;
+        return Vtrs_uqp;
+    }
+    else{
+        return Vtrs_uqp;
+    }
+}
+
+
+sp_mat flexmat6::tru_psq(){
+    if(Ntru_psq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vr*iNt + vu*iNr*iNt;
+        locations.col(1) = vp + vs*iNp + vq*iNs*iNp;
+        Vtru_psq = sp_mat(locations.t(), vValues, iNt*iNr*iNu,iNp*iNs*iNq);
+        Ntru_psq = 1;
+        return Vtru_psq;
+    }
+    else{
+        return Vtru_psq;
+    }
+}
+
+sp_mat flexmat6::tru_qps(){
+    if(Ntru_qps == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vr*iNt + vu*iNr*iNt;
+        locations.col(1) = vq + vp*iNq + vs*iNp*iNq;
+        Vtru_qps = sp_mat(locations.t(), vValues, iNt*iNr*iNu,iNq*iNp*iNs);
+        Ntru_qps = 1;
+        return Vtru_qps;
+    }
+    else{
+        return Vtru_qps;
+    }
+}
+
+sp_mat flexmat6::tru_qsp(){
+    if(Ntru_qsp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vr*iNt + vu*iNr*iNt;
+        locations.col(1) = vq + vs*iNq + vp*iNs*iNq;
+        Vtru_qsp = sp_mat(locations.t(), vValues, iNt*iNr*iNu,iNq*iNs*iNp);
+        Ntru_qsp = 1;
+        return Vtru_qsp;
+    }
+    else{
+        return Vtru_qsp;
+    }
+}
+
+sp_mat flexmat6::tru_spq(){
+    if(Ntru_spq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vr*iNt + vu*iNr*iNt;
+        locations.col(1) = vs + vp*iNs + vq*iNp*iNs;
+        Vtru_spq = sp_mat(locations.t(), vValues, iNt*iNr*iNu,iNs*iNp*iNq);
+        Ntru_spq = 1;
+        return Vtru_spq;
+    }
+    else{
+        return Vtru_spq;
+    }
+}
+
+sp_mat flexmat6::tru_sqp(){
+    if(Ntru_sqp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vr*iNt + vu*iNr*iNt;
+        locations.col(1) = vs + vq*iNs + vp*iNq*iNs;
+        Vtru_sqp = sp_mat(locations.t(), vValues, iNt*iNr*iNu,iNs*iNq*iNp);
+        Ntru_sqp = 1;
+        return Vtru_sqp;
+    }
+    else{
+        return Vtru_sqp;
+    }
+}
+
+sp_mat flexmat6::tsp_qru(){
+    if(Ntsp_qru == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vs*iNt + vp*iNs*iNt;
+        locations.col(1) = vq + vr*iNq + vu*iNr*iNq;
+        Vtsp_qru = sp_mat(locations.t(), vValues, iNt*iNs*iNp,iNq*iNr*iNu);
+        Ntsp_qru = 1;
+        return Vtsp_qru;
+    }
+    else{
+        return Vtsp_qru;
+    }
+}
+
+sp_mat flexmat6::tsp_qur(){
+    if(Ntsp_qur == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vs*iNt + vp*iNs*iNt;
+        locations.col(1) = vq + vu*iNq + vr*iNu*iNq;
+        Vtsp_qur = sp_mat(locations.t(), vValues, iNt*iNs*iNp,iNq*iNu*iNr);
+        Ntsp_qur = 1;
+        return Vtsp_qur;
+    }
+    else{
+        return Vtsp_qur;
+    }
+}
+
+sp_mat flexmat6::tsp_rqu(){
+    if(Ntsp_rqu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vs*iNt + vp*iNs*iNt;
+        locations.col(1) = vr + vq*iNr + vu*iNq*iNr;
+        Vtsp_rqu = sp_mat(locations.t(), vValues, iNt*iNs*iNp,iNr*iNq*iNu);
+        Ntsp_rqu = 1;
+        return Vtsp_rqu;
+    }
+    else{
+        return Vtsp_rqu;
+    }
+}
+
+sp_mat flexmat6::tsp_ruq(){
+    if(Ntsp_ruq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vs*iNt + vp*iNs*iNt;
+        locations.col(1) = vr + vu*iNr + vq*iNu*iNr;
+        Vtsp_ruq = sp_mat(locations.t(), vValues, iNt*iNs*iNp,iNr*iNu*iNq);
+        Ntsp_ruq = 1;
+        return Vtsp_ruq;
+    }
+    else{
+        return Vtsp_ruq;
+    }
+}
+
+sp_mat flexmat6::tsp_uqr(){
+    if(Ntsp_uqr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vs*iNt + vp*iNs*iNt;
+        locations.col(1) = vu + vq*iNu + vr*iNq*iNu;
+        Vtsp_uqr = sp_mat(locations.t(), vValues, iNt*iNs*iNp,iNu*iNq*iNr);
+        Ntsp_uqr = 1;
+        return Vtsp_uqr;
+    }
+    else{
+        return Vtsp_uqr;
+    }
+}
+
+sp_mat flexmat6::tsp_urq(){
+    if(Ntsp_urq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vs*iNt + vp*iNs*iNt;
+        locations.col(1) = vu + vr*iNu + vq*iNr*iNu;
+        Vtsp_urq = sp_mat(locations.t(), vValues, iNt*iNs*iNp,iNu*iNr*iNq);
+        Ntsp_urq = 1;
+        return Vtsp_urq;
+    }
+    else{
+        return Vtsp_urq;
+    }
+}
+
+sp_mat flexmat6::tsq_pru(){
+    if(Ntsq_pru == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vs*iNt + vq*iNs*iNt;
+        locations.col(1) = vp + vr*iNp + vu*iNr*iNp;
+        Vtsq_pru = sp_mat(locations.t(), vValues, iNt*iNs*iNq,iNp*iNr*iNu);
+        Ntsq_pru = 1;
+        return Vtsq_pru;
+    }
+    else{
+        return Vtsq_pru;
+    }
+}
+
+sp_mat flexmat6::tsq_pur(){
+    if(Ntsq_pur == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vs*iNt + vq*iNs*iNt;
+        locations.col(1) = vp + vu*iNp + vr*iNu*iNp;
+        Vtsq_pur = sp_mat(locations.t(), vValues, iNt*iNs*iNq,iNp*iNu*iNr);
+        Ntsq_pur = 1;
+        return Vtsq_pur;
+    }
+    else{
+        return Vtsq_pur;
+    }
+}
+
+sp_mat flexmat6::tsq_rpu(){
+    if(Ntsq_rpu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vs*iNt + vq*iNs*iNt;
+        locations.col(1) = vr + vp*iNr + vu*iNp*iNr;
+        Vtsq_rpu = sp_mat(locations.t(), vValues, iNt*iNs*iNq,iNr*iNp*iNu);
+        Ntsq_rpu = 1;
+        return Vtsq_rpu;
+    }
+    else{
+        return Vtsq_rpu;
+    }
+}
+
+sp_mat flexmat6::tsq_rup(){
+    if(Ntsq_rup == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vs*iNt + vq*iNs*iNt;
+        locations.col(1) = vr + vu*iNr + vp*iNu*iNr;
+        Vtsq_rup = sp_mat(locations.t(), vValues, iNt*iNs*iNq,iNr*iNu*iNp);
+        Ntsq_rup = 1;
+        return Vtsq_rup;
+    }
+    else{
+        return Vtsq_rup;
+    }
+}
+
+sp_mat flexmat6::tsq_upr(){
+    if(Ntsq_upr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vs*iNt + vq*iNs*iNt;
+        locations.col(1) = vu + vp*iNu + vr*iNp*iNu;
+        Vtsq_upr = sp_mat(locations.t(), vValues, iNt*iNs*iNq,iNu*iNp*iNr);
+        Ntsq_upr = 1;
+        return Vtsq_upr;
+    }
+    else{
+        return Vtsq_upr;
+    }
+}
+
+sp_mat flexmat6::tsq_urp(){
+    if(Ntsq_urp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vs*iNt + vq*iNs*iNt;
+        locations.col(1) = vu + vr*iNu + vp*iNr*iNu;
+        Vtsq_urp = sp_mat(locations.t(), vValues, iNt*iNs*iNq,iNu*iNr*iNp);
+        Ntsq_urp = 1;
+        return Vtsq_urp;
+    }
+    else{
+        return Vtsq_urp;
+    }
+}
+
+sp_mat flexmat6::tsr_pqu(){
+    if(Ntsr_pqu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vs*iNt + vr*iNs*iNt;
+        locations.col(1) = vp + vq*iNp + vu*iNq*iNp;
+        Vtsr_pqu = sp_mat(locations.t(), vValues, iNt*iNs*iNr,iNp*iNq*iNu);
+        Ntsr_pqu = 1;
+        return Vtsr_pqu;
+    }
+    else{
+        return Vtsr_pqu;
+    }
+}
+
+sp_mat flexmat6::tsr_puq(){
+    if(Ntsr_puq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vs*iNt + vr*iNs*iNt;
+        locations.col(1) = vp + vu*iNp + vq*iNu*iNp;
+        Vtsr_puq = sp_mat(locations.t(), vValues, iNt*iNs*iNr,iNp*iNu*iNq);
+        Ntsr_puq = 1;
+        return Vtsr_puq;
+    }
+    else{
+        return Vtsr_puq;
+    }
+}
+
+sp_mat flexmat6::tsr_qpu(){
+    if(Ntsr_qpu == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vs*iNt + vr*iNs*iNt;
+        locations.col(1) = vq + vp*iNq + vu*iNp*iNq;
+        Vtsr_qpu = sp_mat(locations.t(), vValues, iNt*iNs*iNr,iNq*iNp*iNu);
+        Ntsr_qpu = 1;
+        return Vtsr_qpu;
+    }
+    else{
+        return Vtsr_qpu;
+    }
+}
+
+sp_mat flexmat6::tsr_qup(){
+    if(Ntsr_qup == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vs*iNt + vr*iNs*iNt;
+        locations.col(1) = vq + vu*iNq + vp*iNu*iNq;
+        Vtsr_qup = sp_mat(locations.t(), vValues, iNt*iNs*iNr,iNq*iNu*iNp);
+        Ntsr_qup = 1;
+        return Vtsr_qup;
+    }
+    else{
+        return Vtsr_qup;
+    }
+}
+
+sp_mat flexmat6::tsr_upq(){
+    if(Ntsr_upq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vs*iNt + vr*iNs*iNt;
+        locations.col(1) = vu + vp*iNu + vq*iNp*iNu;
+        Vtsr_upq = sp_mat(locations.t(), vValues, iNt*iNs*iNr,iNu*iNp*iNq);
+        Ntsr_upq = 1;
+        return Vtsr_upq;
+    }
+    else{
+        return Vtsr_upq;
+    }
+}
+
+sp_mat flexmat6::tsr_uqp(){
+    if(Ntsr_uqp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vs*iNt + vr*iNs*iNt;
+        locations.col(1) = vu + vq*iNu + vp*iNq*iNu;
+        Vtsr_uqp = sp_mat(locations.t(), vValues, iNt*iNs*iNr,iNu*iNq*iNp);
+        Ntsr_uqp = 1;
+        return Vtsr_uqp;
+    }
+    else{
+        return Vtsr_uqp;
+    }
+}
+
+sp_mat flexmat6::tsu_pqr(){
+    if(Ntsu_pqr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vs*iNt + vu*iNs*iNt;
+        locations.col(1) = vp + vq*iNp + vr*iNq*iNp;
+        Vtsu_pqr = sp_mat(locations.t(), vValues, iNt*iNs*iNu,iNp*iNq*iNr);
+        Ntsu_pqr = 1;
+        return Vtsu_pqr;
+    }
+    else{
+        return Vtsu_pqr;
+    }
+}
+
+sp_mat flexmat6::tsu_prq(){
+    if(Ntsu_prq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vs*iNt + vu*iNs*iNt;
+        locations.col(1) = vp + vr*iNp + vq*iNr*iNp;
+        Vtsu_prq = sp_mat(locations.t(), vValues, iNt*iNs*iNu,iNp*iNr*iNq);
+        Ntsu_prq = 1;
+        return Vtsu_prq;
+    }
+    else{
+        return Vtsu_prq;
+    }
+}
+
+sp_mat flexmat6::tsu_qpr(){
+    if(Ntsu_qpr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vs*iNt + vu*iNs*iNt;
+        locations.col(1) = vq + vp*iNq + vr*iNp*iNq;
+        Vtsu_qpr = sp_mat(locations.t(), vValues, iNt*iNs*iNu,iNq*iNp*iNr);
+        Ntsu_qpr = 1;
+        return Vtsu_qpr;
+    }
+    else{
+        return Vtsu_qpr;
+    }
+}
+
+sp_mat flexmat6::tsu_qrp(){
+    if(Ntsu_qrp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vs*iNt + vu*iNs*iNt;
+        locations.col(1) = vq + vr*iNq + vp*iNr*iNq;
+        Vtsu_qrp = sp_mat(locations.t(), vValues, iNt*iNs*iNu,iNq*iNr*iNp);
+        Ntsu_qrp = 1;
+        return Vtsu_qrp;
+    }
+    else{
+        return Vtsu_qrp;
+    }
+}
+
+sp_mat flexmat6::tsu_rpq(){
+    if(Ntsu_rpq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vs*iNt + vu*iNs*iNt;
+        locations.col(1) = vr + vp*iNr + vq*iNp*iNr;
+        Vtsu_rpq = sp_mat(locations.t(), vValues, iNt*iNs*iNu,iNr*iNp*iNq);
+        Ntsu_rpq = 1;
+        return Vtsu_rpq;
+    }
+    else{
+        return Vtsu_rpq;
+    }
+}
+
+sp_mat flexmat6::tsu_rqp(){
+    if(Ntsu_rqp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vs*iNt + vu*iNs*iNt;
+        locations.col(1) = vr + vq*iNr + vp*iNq*iNr;
+        Vtsu_rqp = sp_mat(locations.t(), vValues, iNt*iNs*iNu,iNr*iNq*iNp);
+        Ntsu_rqp = 1;
+        return Vtsu_rqp;
+    }
+    else{
+        return Vtsu_rqp;
+    }
+}
+
+sp_mat flexmat6::tup_qrs(){
+    if(Ntup_qrs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vu*iNt + vp*iNu*iNt;
+        locations.col(1) = vq + vr*iNq + vs*iNr*iNq;
+        Vtup_qrs = sp_mat(locations.t(), vValues, iNt*iNu*iNp,iNq*iNr*iNs);
+        Ntup_qrs = 1;
+        return Vtup_qrs;
+    }
+    else{
+        return Vtup_qrs;
+    }
+}
+
+sp_mat flexmat6::tup_qsr(){
+    if(Ntup_qsr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vu*iNt + vp*iNu*iNt;
+        locations.col(1) = vq + vs*iNq + vr*iNs*iNq;
+        Vtup_qsr = sp_mat(locations.t(), vValues, iNt*iNu*iNp,iNq*iNs*iNr);
+        Ntup_qsr = 1;
+        return Vtup_qsr;
+    }
+    else{
+        return Vtup_qsr;
+    }
+}
+
+sp_mat flexmat6::tup_rqs(){
+    if(Ntup_rqs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vu*iNt + vp*iNu*iNt;
+        locations.col(1) = vr + vq*iNr + vs*iNq*iNr;
+        Vtup_rqs = sp_mat(locations.t(), vValues, iNt*iNu*iNp,iNr*iNq*iNs);
+        Ntup_rqs = 1;
+        return Vtup_rqs;
+    }
+    else{
+        return Vtup_rqs;
+    }
+}
+
+sp_mat flexmat6::tup_rsq(){
+    if(Ntup_rsq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vu*iNt + vp*iNu*iNt;
+        locations.col(1) = vr + vs*iNr + vq*iNs*iNr;
+        Vtup_rsq = sp_mat(locations.t(), vValues, iNt*iNu*iNp,iNr*iNs*iNq);
+        Ntup_rsq = 1;
+        return Vtup_rsq;
+    }
+    else{
+        return Vtup_rsq;
+    }
+}
+
+sp_mat flexmat6::tup_sqr(){
+    if(Ntup_sqr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vu*iNt + vp*iNu*iNt;
+        locations.col(1) = vs + vq*iNs + vr*iNq*iNs;
+        Vtup_sqr = sp_mat(locations.t(), vValues, iNt*iNu*iNp,iNs*iNq*iNr);
+        Ntup_sqr = 1;
+        return Vtup_sqr;
+    }
+    else{
+        return Vtup_sqr;
+    }
+}
+
+sp_mat flexmat6::tup_srq(){
+    if(Ntup_srq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vu*iNt + vp*iNu*iNt;
+        locations.col(1) = vs + vr*iNs + vq*iNr*iNs;
+        Vtup_srq = sp_mat(locations.t(), vValues, iNt*iNu*iNp,iNs*iNr*iNq);
+        Ntup_srq = 1;
+        return Vtup_srq;
+    }
+    else{
+        return Vtup_srq;
+    }
+}
+
+sp_mat flexmat6::tuq_prs(){
+    if(Ntuq_prs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vu*iNt + vq*iNu*iNt;
+        locations.col(1) = vp + vr*iNp + vs*iNr*iNp;
+        Vtuq_prs = sp_mat(locations.t(), vValues, iNt*iNu*iNq,iNp*iNr*iNs);
+        Ntuq_prs = 1;
+        return Vtuq_prs;
+    }
+    else{
+        return Vtuq_prs;
+    }
+}
+
+sp_mat flexmat6::tuq_psr(){
+    if(Ntuq_psr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vu*iNt + vq*iNu*iNt;
+        locations.col(1) = vp + vs*iNp + vr*iNs*iNp;
+        Vtuq_psr = sp_mat(locations.t(), vValues, iNt*iNu*iNq,iNp*iNs*iNr);
+        Ntuq_psr = 1;
+        return Vtuq_psr;
+    }
+    else{
+        return Vtuq_psr;
+    }
+}
+
+sp_mat flexmat6::tuq_rps(){
+    if(Ntuq_rps == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vu*iNt + vq*iNu*iNt;
+        locations.col(1) = vr + vp*iNr + vs*iNp*iNr;
+        Vtuq_rps = sp_mat(locations.t(), vValues, iNt*iNu*iNq,iNr*iNp*iNs);
+        Ntuq_rps = 1;
+        return Vtuq_rps;
+    }
+    else{
+        return Vtuq_rps;
+    }
+}
+
+sp_mat flexmat6::tuq_rsp(){
+    if(Ntuq_rsp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vu*iNt + vq*iNu*iNt;
+        locations.col(1) = vr + vs*iNr + vp*iNs*iNr;
+        Vtuq_rsp = sp_mat(locations.t(), vValues, iNt*iNu*iNq,iNr*iNs*iNp);
+        Ntuq_rsp = 1;
+        return Vtuq_rsp;
+    }
+    else{
+        return Vtuq_rsp;
+    }
+}
+
+sp_mat flexmat6::tuq_spr(){
+    if(Ntuq_spr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vu*iNt + vq*iNu*iNt;
+        locations.col(1) = vs + vp*iNs + vr*iNp*iNs;
+        Vtuq_spr = sp_mat(locations.t(), vValues, iNt*iNu*iNq,iNs*iNp*iNr);
+        Ntuq_spr = 1;
+        return Vtuq_spr;
+    }
+    else{
+        return Vtuq_spr;
+    }
+}
+
+sp_mat flexmat6::tuq_srp(){
+    if(Ntuq_srp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vu*iNt + vq*iNu*iNt;
+        locations.col(1) = vs + vr*iNs + vp*iNr*iNs;
+        Vtuq_srp = sp_mat(locations.t(), vValues, iNt*iNu*iNq,iNs*iNr*iNp);
+        Ntuq_srp = 1;
+        return Vtuq_srp;
+    }
+    else{
+        return Vtuq_srp;
+    }
+}
+
+
+
+sp_mat flexmat6::tur_psq(){
+    if(Ntur_psq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vu*iNt + vr*iNu*iNt;
+        locations.col(1) = vp + vs*iNp + vq*iNs*iNp;
+        Vtur_psq = sp_mat(locations.t(), vValues, iNt*iNu*iNr,iNp*iNs*iNq);
+        Ntur_psq = 1;
+        return Vtur_psq;
+    }
+    else{
+        return Vtur_psq;
+    }
+}
+
+sp_mat flexmat6::tur_qps(){
+    if(Ntur_qps == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vu*iNt + vr*iNu*iNt;
+        locations.col(1) = vq + vp*iNq + vs*iNp*iNq;
+        Vtur_qps = sp_mat(locations.t(), vValues, iNt*iNu*iNr,iNq*iNp*iNs);
+        Ntur_qps = 1;
+        return Vtur_qps;
+    }
+    else{
+        return Vtur_qps;
+    }
+}
+
+sp_mat flexmat6::tur_qsp(){
+    if(Ntur_qsp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vu*iNt + vr*iNu*iNt;
+        locations.col(1) = vq + vs*iNq + vp*iNs*iNq;
+        Vtur_qsp = sp_mat(locations.t(), vValues, iNt*iNu*iNr,iNq*iNs*iNp);
+        Ntur_qsp = 1;
+        return Vtur_qsp;
+    }
+    else{
+        return Vtur_qsp;
+    }
+}
+
+sp_mat flexmat6::tur_spq(){
+    if(Ntur_spq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vu*iNt + vr*iNu*iNt;
+        locations.col(1) = vs + vp*iNs + vq*iNp*iNs;
+        Vtur_spq = sp_mat(locations.t(), vValues, iNt*iNu*iNr,iNs*iNp*iNq);
+        Ntur_spq = 1;
+        return Vtur_spq;
+    }
+    else{
+        return Vtur_spq;
+    }
+}
+
+sp_mat flexmat6::tur_sqp(){
+    if(Ntur_sqp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vu*iNt + vr*iNu*iNt;
+        locations.col(1) = vs + vq*iNs + vp*iNq*iNs;
+        Vtur_sqp = sp_mat(locations.t(), vValues, iNt*iNu*iNr,iNs*iNq*iNp);
+        Ntur_sqp = 1;
+        return Vtur_sqp;
+    }
+    else{
+        return Vtur_sqp;
+    }
+}
+
+sp_mat flexmat6::tus_pqr(){
+    if(Ntus_pqr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vu*iNt + vs*iNu*iNt;
+        locations.col(1) = vp + vq*iNp + vr*iNq*iNp;
+        Vtus_pqr = sp_mat(locations.t(), vValues, iNt*iNu*iNs,iNp*iNq*iNr);
+        Ntus_pqr = 1;
+        return Vtus_pqr;
+    }
+    else{
+        return Vtus_pqr;
+    }
+}
+
+sp_mat flexmat6::tus_prq(){
+    if(Ntus_prq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vu*iNt + vs*iNu*iNt;
+        locations.col(1) = vp + vr*iNp + vq*iNr*iNp;
+        Vtus_prq = sp_mat(locations.t(), vValues, iNt*iNu*iNs,iNp*iNr*iNq);
+        Ntus_prq = 1;
+        return Vtus_prq;
+    }
+    else{
+        return Vtus_prq;
+    }
+}
+
+sp_mat flexmat6::tus_qpr(){
+    if(Ntus_qpr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vu*iNt + vs*iNu*iNt;
+        locations.col(1) = vq + vp*iNq + vr*iNp*iNq;
+        Vtus_qpr = sp_mat(locations.t(), vValues, iNt*iNu*iNs,iNq*iNp*iNr);
+        Ntus_qpr = 1;
+        return Vtus_qpr;
+    }
+    else{
+        return Vtus_qpr;
+    }
+}
+
+sp_mat flexmat6::tus_qrp(){
+    if(Ntus_qrp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vu*iNt + vs*iNu*iNt;
+        locations.col(1) = vq + vr*iNq + vp*iNr*iNq;
+        Vtus_qrp = sp_mat(locations.t(), vValues, iNt*iNu*iNs,iNq*iNr*iNp);
+        Ntus_qrp = 1;
+        return Vtus_qrp;
+    }
+    else{
+        return Vtus_qrp;
+    }
+}
+
+sp_mat flexmat6::tus_rpq(){
+    if(Ntus_rpq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vu*iNt + vs*iNu*iNt;
+        locations.col(1) = vr + vp*iNr + vq*iNp*iNr;
+        Vtus_rpq = sp_mat(locations.t(), vValues, iNt*iNu*iNs,iNr*iNp*iNq);
+        Ntus_rpq = 1;
+        return Vtus_rpq;
+    }
+    else{
+        return Vtus_rpq;
+    }
+}
+
+sp_mat flexmat6::tus_rqp(){
+    if(Ntus_rqp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vt + vu*iNt + vs*iNu*iNt;
+        locations.col(1) = vr + vq*iNr + vp*iNq*iNr;
+        Vtus_rqp = sp_mat(locations.t(), vValues, iNt*iNu*iNs,iNr*iNq*iNp);
+        Ntus_rqp = 1;
+        return Vtus_rqp;
+    }
+    else{
+        return Vtus_rqp;
+    }
+}
+
+sp_mat flexmat6::upq_rst(){
+    if(Nupq_rst == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vp*iNu + vq*iNp*iNu;
+        locations.col(1) = vr + vs*iNr + vt*iNs*iNr;
+        Vupq_rst = sp_mat(locations.t(), vValues, iNu*iNp*iNq,iNr*iNs*iNt);
+        Nupq_rst = 1;
+        return Vupq_rst;
+    }
+    else{
+        return Vupq_rst;
+    }
+}
+
+sp_mat flexmat6::upq_rts(){
+    if(Nupq_rts == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vp*iNu + vq*iNp*iNu;
+        locations.col(1) = vr + vt*iNr + vs*iNt*iNr;
+        Vupq_rts = sp_mat(locations.t(), vValues, iNu*iNp*iNq,iNr*iNt*iNs);
+        Nupq_rts = 1;
+        return Vupq_rts;
+    }
+    else{
+        return Vupq_rts;
+    }
+}
+
+sp_mat flexmat6::upq_srt(){
+    if(Nupq_srt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vp*iNu + vq*iNp*iNu;
+        locations.col(1) = vs + vr*iNs + vt*iNr*iNs;
+        Vupq_srt = sp_mat(locations.t(), vValues, iNu*iNp*iNq,iNs*iNr*iNt);
+        Nupq_srt = 1;
+        return Vupq_srt;
+    }
+    else{
+        return Vupq_srt;
+    }
+}
+
+sp_mat flexmat6::upq_str(){
+    if(Nupq_str == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vp*iNu + vq*iNp*iNu;
+        locations.col(1) = vs + vt*iNs + vr*iNt*iNs;
+        Vupq_str = sp_mat(locations.t(), vValues, iNu*iNp*iNq,iNs*iNt*iNr);
+        Nupq_str = 1;
+        return Vupq_str;
+    }
+    else{
+        return Vupq_str;
+    }
+}
+
+sp_mat flexmat6::upq_trs(){
+    if(Nupq_trs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vp*iNu + vq*iNp*iNu;
+        locations.col(1) = vt + vr*iNt + vs*iNr*iNt;
+        Vupq_trs = sp_mat(locations.t(), vValues, iNu*iNp*iNq,iNt*iNr*iNs);
+        Nupq_trs = 1;
+        return Vupq_trs;
+    }
+    else{
+        return Vupq_trs;
+    }
+}
+
+sp_mat flexmat6::upq_tsr(){
+    if(Nupq_tsr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vp*iNu + vq*iNp*iNu;
+        locations.col(1) = vt + vs*iNt + vr*iNs*iNt;
+        Vupq_tsr = sp_mat(locations.t(), vValues, iNu*iNp*iNq,iNt*iNs*iNr);
+        Nupq_tsr = 1;
+        return Vupq_tsr;
+    }
+    else{
+        return Vupq_tsr;
+    }
+}
+
+sp_mat flexmat6::upr_qst(){
+    if(Nupr_qst == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vp*iNu + vr*iNp*iNu;
+        locations.col(1) = vq + vs*iNq + vt*iNs*iNq;
+        Vupr_qst = sp_mat(locations.t(), vValues, iNu*iNp*iNr,iNq*iNs*iNt);
+        Nupr_qst = 1;
+        return Vupr_qst;
+    }
+    else{
+        return Vupr_qst;
+    }
+}
+
+sp_mat flexmat6::upr_qts(){
+    if(Nupr_qts == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vp*iNu + vr*iNp*iNu;
+        locations.col(1) = vq + vt*iNq + vs*iNt*iNq;
+        Vupr_qts = sp_mat(locations.t(), vValues, iNu*iNp*iNr,iNq*iNt*iNs);
+        Nupr_qts = 1;
+        return Vupr_qts;
+    }
+    else{
+        return Vupr_qts;
+    }
+}
+
+sp_mat flexmat6::upr_sqt(){
+    if(Nupr_sqt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vp*iNu + vr*iNp*iNu;
+        locations.col(1) = vs + vq*iNs + vt*iNq*iNs;
+        Vupr_sqt = sp_mat(locations.t(), vValues, iNu*iNp*iNr,iNs*iNq*iNt);
+        Nupr_sqt = 1;
+        return Vupr_sqt;
+    }
+    else{
+        return Vupr_sqt;
+    }
+}
+
+sp_mat flexmat6::upr_stq(){
+    if(Nupr_stq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vp*iNu + vr*iNp*iNu;
+        locations.col(1) = vs + vt*iNs + vq*iNt*iNs;
+        Vupr_stq = sp_mat(locations.t(), vValues, iNu*iNp*iNr,iNs*iNt*iNq);
+        Nupr_stq = 1;
+        return Vupr_stq;
+    }
+    else{
+        return Vupr_stq;
+    }
+}
+
+sp_mat flexmat6::upr_tqs(){
+    if(Nupr_tqs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vp*iNu + vr*iNp*iNu;
+        locations.col(1) = vt + vq*iNt + vs*iNq*iNt;
+        Vupr_tqs = sp_mat(locations.t(), vValues, iNu*iNp*iNr,iNt*iNq*iNs);
+        Nupr_tqs = 1;
+        return Vupr_tqs;
+    }
+    else{
+        return Vupr_tqs;
+    }
+}
+
+sp_mat flexmat6::upr_tsq(){
+    if(Nupr_tsq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vp*iNu + vr*iNp*iNu;
+        locations.col(1) = vt + vs*iNt + vq*iNs*iNt;
+        Vupr_tsq = sp_mat(locations.t(), vValues, iNu*iNp*iNr,iNt*iNs*iNq);
+        Nupr_tsq = 1;
+        return Vupr_tsq;
+    }
+    else{
+        return Vupr_tsq;
+    }
+}
+
+sp_mat flexmat6::ups_qrt(){
+    if(Nups_qrt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vp*iNu + vs*iNp*iNu;
+        locations.col(1) = vq + vr*iNq + vt*iNr*iNq;
+        Vups_qrt = sp_mat(locations.t(), vValues, iNu*iNp*iNs,iNq*iNr*iNt);
+        Nups_qrt = 1;
+        return Vups_qrt;
+    }
+    else{
+        return Vups_qrt;
+    }
+}
+
+sp_mat flexmat6::ups_qtr(){
+    if(Nups_qtr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vp*iNu + vs*iNp*iNu;
+        locations.col(1) = vq + vt*iNq + vr*iNt*iNq;
+        Vups_qtr = sp_mat(locations.t(), vValues, iNu*iNp*iNs,iNq*iNt*iNr);
+        Nups_qtr = 1;
+        return Vups_qtr;
+    }
+    else{
+        return Vups_qtr;
+    }
+}
+
+sp_mat flexmat6::ups_rqt(){
+    if(Nups_rqt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vp*iNu + vs*iNp*iNu;
+        locations.col(1) = vr + vq*iNr + vt*iNq*iNr;
+        Vups_rqt = sp_mat(locations.t(), vValues, iNu*iNp*iNs,iNr*iNq*iNt);
+        Nups_rqt = 1;
+        return Vups_rqt;
+    }
+    else{
+        return Vups_rqt;
+    }
+}
+
+sp_mat flexmat6::ups_rtq(){
+    if(Nups_rtq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vp*iNu + vs*iNp*iNu;
+        locations.col(1) = vr + vt*iNr + vq*iNt*iNr;
+        Vups_rtq = sp_mat(locations.t(), vValues, iNu*iNp*iNs,iNr*iNt*iNq);
+        Nups_rtq = 1;
+        return Vups_rtq;
+    }
+    else{
+        return Vups_rtq;
+    }
+}
+
+sp_mat flexmat6::ups_tqr(){
+    if(Nups_tqr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vp*iNu + vs*iNp*iNu;
+        locations.col(1) = vt + vq*iNt + vr*iNq*iNt;
+        Vups_tqr = sp_mat(locations.t(), vValues, iNu*iNp*iNs,iNt*iNq*iNr);
+        Nups_tqr = 1;
+        return Vups_tqr;
+    }
+    else{
+        return Vups_tqr;
+    }
+}
+
+sp_mat flexmat6::ups_trq(){
+    if(Nups_trq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vp*iNu + vs*iNp*iNu;
+        locations.col(1) = vt + vr*iNt + vq*iNr*iNt;
+        Vups_trq = sp_mat(locations.t(), vValues, iNu*iNp*iNs,iNt*iNr*iNq);
+        Nups_trq = 1;
+        return Vups_trq;
+    }
+    else{
+        return Vups_trq;
+    }
+}
+
+sp_mat flexmat6::upt_qrs(){
+    if(Nupt_qrs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vp*iNu + vt*iNp*iNu;
+        locations.col(1) = vq + vr*iNq + vs*iNr*iNq;
+        Vupt_qrs = sp_mat(locations.t(), vValues, iNu*iNp*iNt,iNq*iNr*iNs);
+        Nupt_qrs = 1;
+        return Vupt_qrs;
+    }
+    else{
+        return Vupt_qrs;
+    }
+}
+
+sp_mat flexmat6::upt_qsr(){
+    if(Nupt_qsr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vp*iNu + vt*iNp*iNu;
+        locations.col(1) = vq + vs*iNq + vr*iNs*iNq;
+        Vupt_qsr = sp_mat(locations.t(), vValues, iNu*iNp*iNt,iNq*iNs*iNr);
+        Nupt_qsr = 1;
+        return Vupt_qsr;
+    }
+    else{
+        return Vupt_qsr;
+    }
+}
+
+sp_mat flexmat6::upt_rqs(){
+    if(Nupt_rqs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vp*iNu + vt*iNp*iNu;
+        locations.col(1) = vr + vq*iNr + vs*iNq*iNr;
+        Vupt_rqs = sp_mat(locations.t(), vValues, iNu*iNp*iNt,iNr*iNq*iNs);
+        Nupt_rqs = 1;
+        return Vupt_rqs;
+    }
+    else{
+        return Vupt_rqs;
+    }
+}
+
+sp_mat flexmat6::upt_rsq(){
+    if(Nupt_rsq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vp*iNu + vt*iNp*iNu;
+        locations.col(1) = vr + vs*iNr + vq*iNs*iNr;
+        Vupt_rsq = sp_mat(locations.t(), vValues, iNu*iNp*iNt,iNr*iNs*iNq);
+        Nupt_rsq = 1;
+        return Vupt_rsq;
+    }
+    else{
+        return Vupt_rsq;
+    }
+}
+
+sp_mat flexmat6::upt_sqr(){
+    if(Nupt_sqr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vp*iNu + vt*iNp*iNu;
+        locations.col(1) = vs + vq*iNs + vr*iNq*iNs;
+        Vupt_sqr = sp_mat(locations.t(), vValues, iNu*iNp*iNt,iNs*iNq*iNr);
+        Nupt_sqr = 1;
+        return Vupt_sqr;
+    }
+    else{
+        return Vupt_sqr;
+    }
+}
+
+sp_mat flexmat6::upt_srq(){
+    if(Nupt_srq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vp*iNu + vt*iNp*iNu;
+        locations.col(1) = vs + vr*iNs + vq*iNr*iNs;
+        Vupt_srq = sp_mat(locations.t(), vValues, iNu*iNp*iNt,iNs*iNr*iNq);
+        Nupt_srq = 1;
+        return Vupt_srq;
+    }
+    else{
+        return Vupt_srq;
+    }
+}
+
+sp_mat flexmat6::uqp_rst(){
+    if(Nuqp_rst == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vq*iNu + vp*iNq*iNu;
+        locations.col(1) = vr + vs*iNr + vt*iNs*iNr;
+        Vuqp_rst = sp_mat(locations.t(), vValues, iNu*iNq*iNp,iNr*iNs*iNt);
+        Nuqp_rst = 1;
+        return Vuqp_rst;
+    }
+    else{
+        return Vuqp_rst;
+    }
+}
+
+sp_mat flexmat6::uqp_rts(){
+    if(Nuqp_rts == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vq*iNu + vp*iNq*iNu;
+        locations.col(1) = vr + vt*iNr + vs*iNt*iNr;
+        Vuqp_rts = sp_mat(locations.t(), vValues, iNu*iNq*iNp,iNr*iNt*iNs);
+        Nuqp_rts = 1;
+        return Vuqp_rts;
+    }
+    else{
+        return Vuqp_rts;
+    }
+}
+
+sp_mat flexmat6::uqp_srt(){
+    if(Nuqp_srt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vq*iNu + vp*iNq*iNu;
+        locations.col(1) = vs + vr*iNs + vt*iNr*iNs;
+        Vuqp_srt = sp_mat(locations.t(), vValues, iNu*iNq*iNp,iNs*iNr*iNt);
+        Nuqp_srt = 1;
+        return Vuqp_srt;
+    }
+    else{
+        return Vuqp_srt;
+    }
+}
+
+sp_mat flexmat6::uqp_str(){
+    if(Nuqp_str == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vq*iNu + vp*iNq*iNu;
+        locations.col(1) = vs + vt*iNs + vr*iNt*iNs;
+        Vuqp_str = sp_mat(locations.t(), vValues, iNu*iNq*iNp,iNs*iNt*iNr);
+        Nuqp_str = 1;
+        return Vuqp_str;
+    }
+    else{
+        return Vuqp_str;
+    }
+}
+
+sp_mat flexmat6::uqp_trs(){
+    if(Nuqp_trs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vq*iNu + vp*iNq*iNu;
+        locations.col(1) = vt + vr*iNt + vs*iNr*iNt;
+        Vuqp_trs = sp_mat(locations.t(), vValues, iNu*iNq*iNp,iNt*iNr*iNs);
+        Nuqp_trs = 1;
+        return Vuqp_trs;
+    }
+    else{
+        return Vuqp_trs;
+    }
+}
+
+sp_mat flexmat6::uqp_tsr(){
+    if(Nuqp_tsr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vq*iNu + vp*iNq*iNu;
+        locations.col(1) = vt + vs*iNt + vr*iNs*iNt;
+        Vuqp_tsr = sp_mat(locations.t(), vValues, iNu*iNq*iNp,iNt*iNs*iNr);
+        Nuqp_tsr = 1;
+        return Vuqp_tsr;
+    }
+    else{
+        return Vuqp_tsr;
+    }
+}
+
+sp_mat flexmat6::uqr_pst(){
+    if(Nuqr_pst == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vq*iNu + vr*iNq*iNu;
+        locations.col(1) = vp + vs*iNp + vt*iNs*iNp;
+        Vuqr_pst = sp_mat(locations.t(), vValues, iNu*iNq*iNr,iNp*iNs*iNt);
+        Nuqr_pst = 1;
+        return Vuqr_pst;
+    }
+    else{
+        return Vuqr_pst;
+    }
+}
+
+sp_mat flexmat6::uqr_pts(){
+    if(Nuqr_pts == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vq*iNu + vr*iNq*iNu;
+        locations.col(1) = vp + vt*iNp + vs*iNt*iNp;
+        Vuqr_pts = sp_mat(locations.t(), vValues, iNu*iNq*iNr,iNp*iNt*iNs);
+        Nuqr_pts = 1;
+        return Vuqr_pts;
+    }
+    else{
+        return Vuqr_pts;
+    }
+}
+
+sp_mat flexmat6::uqr_spt(){
+    if(Nuqr_spt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vq*iNu + vr*iNq*iNu;
+        locations.col(1) = vs + vp*iNs + vt*iNp*iNs;
+        Vuqr_spt = sp_mat(locations.t(), vValues, iNu*iNq*iNr,iNs*iNp*iNt);
+        Nuqr_spt = 1;
+        return Vuqr_spt;
+    }
+    else{
+        return Vuqr_spt;
+    }
+}
+
+
+
+sp_mat flexmat6::uqr_tps(){
+    if(Nuqr_tps == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vq*iNu + vr*iNq*iNu;
+        locations.col(1) = vt + vp*iNt + vs*iNp*iNt;
+        Vuqr_tps = sp_mat(locations.t(), vValues, iNu*iNq*iNr,iNt*iNp*iNs);
+        Nuqr_tps = 1;
+        return Vuqr_tps;
+    }
+    else{
+        return Vuqr_tps;
+    }
+}
+
+sp_mat flexmat6::uqr_tsp(){
+    if(Nuqr_tsp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vq*iNu + vr*iNq*iNu;
+        locations.col(1) = vt + vs*iNt + vp*iNs*iNt;
+        Vuqr_tsp = sp_mat(locations.t(), vValues, iNu*iNq*iNr,iNt*iNs*iNp);
+        Nuqr_tsp = 1;
+        return Vuqr_tsp;
+    }
+    else{
+        return Vuqr_tsp;
+    }
+}
+
+sp_mat flexmat6::uqs_prt(){
+    if(Nuqs_prt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vq*iNu + vs*iNq*iNu;
+        locations.col(1) = vp + vr*iNp + vt*iNr*iNp;
+        Vuqs_prt = sp_mat(locations.t(), vValues, iNu*iNq*iNs,iNp*iNr*iNt);
+        Nuqs_prt = 1;
+        return Vuqs_prt;
+    }
+    else{
+        return Vuqs_prt;
+    }
+}
+
+sp_mat flexmat6::uqs_ptr(){
+    if(Nuqs_ptr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vq*iNu + vs*iNq*iNu;
+        locations.col(1) = vp + vt*iNp + vr*iNt*iNp;
+        Vuqs_ptr = sp_mat(locations.t(), vValues, iNu*iNq*iNs,iNp*iNt*iNr);
+        Nuqs_ptr = 1;
+        return Vuqs_ptr;
+    }
+    else{
+        return Vuqs_ptr;
+    }
+}
+
+sp_mat flexmat6::uqs_rpt(){
+    if(Nuqs_rpt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vq*iNu + vs*iNq*iNu;
+        locations.col(1) = vr + vp*iNr + vt*iNp*iNr;
+        Vuqs_rpt = sp_mat(locations.t(), vValues, iNu*iNq*iNs,iNr*iNp*iNt);
+        Nuqs_rpt = 1;
+        return Vuqs_rpt;
+    }
+    else{
+        return Vuqs_rpt;
+    }
+}
+
+sp_mat flexmat6::uqs_rtp(){
+    if(Nuqs_rtp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vq*iNu + vs*iNq*iNu;
+        locations.col(1) = vr + vt*iNr + vp*iNt*iNr;
+        Vuqs_rtp = sp_mat(locations.t(), vValues, iNu*iNq*iNs,iNr*iNt*iNp);
+        Nuqs_rtp = 1;
+        return Vuqs_rtp;
+    }
+    else{
+        return Vuqs_rtp;
+    }
+}
+
+sp_mat flexmat6::uqs_tpr(){
+    if(Nuqs_tpr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vq*iNu + vs*iNq*iNu;
+        locations.col(1) = vt + vp*iNt + vr*iNp*iNt;
+        Vuqs_tpr = sp_mat(locations.t(), vValues, iNu*iNq*iNs,iNt*iNp*iNr);
+        Nuqs_tpr = 1;
+        return Vuqs_tpr;
+    }
+    else{
+        return Vuqs_tpr;
+    }
+}
+
+sp_mat flexmat6::uqs_trp(){
+    if(Nuqs_trp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vq*iNu + vs*iNq*iNu;
+        locations.col(1) = vt + vr*iNt + vp*iNr*iNt;
+        Vuqs_trp = sp_mat(locations.t(), vValues, iNu*iNq*iNs,iNt*iNr*iNp);
+        Nuqs_trp = 1;
+        return Vuqs_trp;
+    }
+    else{
+        return Vuqs_trp;
+    }
+}
+
+sp_mat flexmat6::uqt_prs(){
+    if(Nuqt_prs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vq*iNu + vt*iNq*iNu;
+        locations.col(1) = vp + vr*iNp + vs*iNr*iNp;
+        Vuqt_prs = sp_mat(locations.t(), vValues, iNu*iNq*iNt,iNp*iNr*iNs);
+        Nuqt_prs = 1;
+        return Vuqt_prs;
+    }
+    else{
+        return Vuqt_prs;
+    }
+}
+
+sp_mat flexmat6::uqt_psr(){
+    if(Nuqt_psr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vq*iNu + vt*iNq*iNu;
+        locations.col(1) = vp + vs*iNp + vr*iNs*iNp;
+        Vuqt_psr = sp_mat(locations.t(), vValues, iNu*iNq*iNt,iNp*iNs*iNr);
+        Nuqt_psr = 1;
+        return Vuqt_psr;
+    }
+    else{
+        return Vuqt_psr;
+    }
+}
+
+sp_mat flexmat6::uqt_rps(){
+    if(Nuqt_rps == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vq*iNu + vt*iNq*iNu;
+        locations.col(1) = vr + vp*iNr + vs*iNp*iNr;
+        Vuqt_rps = sp_mat(locations.t(), vValues, iNu*iNq*iNt,iNr*iNp*iNs);
+        Nuqt_rps = 1;
+        return Vuqt_rps;
+    }
+    else{
+        return Vuqt_rps;
+    }
+}
+
+sp_mat flexmat6::uqt_rsp(){
+    if(Nuqt_rsp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vq*iNu + vt*iNq*iNu;
+        locations.col(1) = vr + vs*iNr + vp*iNs*iNr;
+        Vuqt_rsp = sp_mat(locations.t(), vValues, iNu*iNq*iNt,iNr*iNs*iNp);
+        Nuqt_rsp = 1;
+        return Vuqt_rsp;
+    }
+    else{
+        return Vuqt_rsp;
+    }
+}
+
+sp_mat flexmat6::uqt_spr(){
+    if(Nuqt_spr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vq*iNu + vt*iNq*iNu;
+        locations.col(1) = vs + vp*iNs + vr*iNp*iNs;
+        Vuqt_spr = sp_mat(locations.t(), vValues, iNu*iNq*iNt,iNs*iNp*iNr);
+        Nuqt_spr = 1;
+        return Vuqt_spr;
+    }
+    else{
+        return Vuqt_spr;
+    }
+}
+
+sp_mat flexmat6::uqt_srp(){
+    if(Nuqt_srp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vq*iNu + vt*iNq*iNu;
+        locations.col(1) = vs + vr*iNs + vp*iNr*iNs;
+        Vuqt_srp = sp_mat(locations.t(), vValues, iNu*iNq*iNt,iNs*iNr*iNp);
+        Nuqt_srp = 1;
+        return Vuqt_srp;
+    }
+    else{
+        return Vuqt_srp;
+    }
+}
+
+sp_mat flexmat6::urp_qst(){
+    if(Nurp_qst == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vr*iNu + vp*iNr*iNu;
+        locations.col(1) = vq + vs*iNq + vt*iNs*iNq;
+        Vurp_qst = sp_mat(locations.t(), vValues, iNu*iNr*iNp,iNq*iNs*iNt);
+        Nurp_qst = 1;
+        return Vurp_qst;
+    }
+    else{
+        return Vurp_qst;
+    }
+}
+
+sp_mat flexmat6::urp_qts(){
+    if(Nurp_qts == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vr*iNu + vp*iNr*iNu;
+        locations.col(1) = vq + vt*iNq + vs*iNt*iNq;
+        Vurp_qts = sp_mat(locations.t(), vValues, iNu*iNr*iNp,iNq*iNt*iNs);
+        Nurp_qts = 1;
+        return Vurp_qts;
+    }
+    else{
+        return Vurp_qts;
+    }
+}
+
+sp_mat flexmat6::urp_sqt(){
+    if(Nurp_sqt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vr*iNu + vp*iNr*iNu;
+        locations.col(1) = vs + vq*iNs + vt*iNq*iNs;
+        Vurp_sqt = sp_mat(locations.t(), vValues, iNu*iNr*iNp,iNs*iNq*iNt);
+        Nurp_sqt = 1;
+        return Vurp_sqt;
+    }
+    else{
+        return Vurp_sqt;
+    }
+}
+
+sp_mat flexmat6::urp_stq(){
+    if(Nurp_stq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vr*iNu + vp*iNr*iNu;
+        locations.col(1) = vs + vt*iNs + vq*iNt*iNs;
+        Vurp_stq = sp_mat(locations.t(), vValues, iNu*iNr*iNp,iNs*iNt*iNq);
+        Nurp_stq = 1;
+        return Vurp_stq;
+    }
+    else{
+        return Vurp_stq;
+    }
+}
+
+sp_mat flexmat6::urp_tqs(){
+    if(Nurp_tqs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vr*iNu + vp*iNr*iNu;
+        locations.col(1) = vt + vq*iNt + vs*iNq*iNt;
+        Vurp_tqs = sp_mat(locations.t(), vValues, iNu*iNr*iNp,iNt*iNq*iNs);
+        Nurp_tqs = 1;
+        return Vurp_tqs;
+    }
+    else{
+        return Vurp_tqs;
+    }
+}
+
+sp_mat flexmat6::urp_tsq(){
+    if(Nurp_tsq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vr*iNu + vp*iNr*iNu;
+        locations.col(1) = vt + vs*iNt + vq*iNs*iNt;
+        Vurp_tsq = sp_mat(locations.t(), vValues, iNu*iNr*iNp,iNt*iNs*iNq);
+        Nurp_tsq = 1;
+        return Vurp_tsq;
+    }
+    else{
+        return Vurp_tsq;
+    }
+}
+
+sp_mat flexmat6::urq_pst(){
+    if(Nurq_pst == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vr*iNu + vq*iNr*iNu;
+        locations.col(1) = vp + vs*iNp + vt*iNs*iNp;
+        Vurq_pst = sp_mat(locations.t(), vValues, iNu*iNr*iNq,iNp*iNs*iNt);
+        Nurq_pst = 1;
+        return Vurq_pst;
+    }
+    else{
+        return Vurq_pst;
+    }
+}
+
+sp_mat flexmat6::urq_pts(){
+    if(Nurq_pts == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vr*iNu + vq*iNr*iNu;
+        locations.col(1) = vp + vt*iNp + vs*iNt*iNp;
+        Vurq_pts = sp_mat(locations.t(), vValues, iNu*iNr*iNq,iNp*iNt*iNs);
+        Nurq_pts = 1;
+        return Vurq_pts;
+    }
+    else{
+        return Vurq_pts;
+    }
+}
+
+sp_mat flexmat6::urq_spt(){
+    if(Nurq_spt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vr*iNu + vq*iNr*iNu;
+        locations.col(1) = vs + vp*iNs + vt*iNp*iNs;
+        Vurq_spt = sp_mat(locations.t(), vValues, iNu*iNr*iNq,iNs*iNp*iNt);
+        Nurq_spt = 1;
+        return Vurq_spt;
+    }
+    else{
+        return Vurq_spt;
+    }
+}
+
+sp_mat flexmat6::urq_stp(){
+    if(Nurq_stp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vr*iNu + vq*iNr*iNu;
+        locations.col(1) = vs + vt*iNs + vp*iNt*iNs;
+        Vurq_stp = sp_mat(locations.t(), vValues, iNu*iNr*iNq,iNs*iNt*iNp);
+        Nurq_stp = 1;
+        return Vurq_stp;
+    }
+    else{
+        return Vurq_stp;
+    }
+}
+
+sp_mat flexmat6::urq_tps(){
+    if(Nurq_tps == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vr*iNu + vq*iNr*iNu;
+        locations.col(1) = vt + vp*iNt + vs*iNp*iNt;
+        Vurq_tps = sp_mat(locations.t(), vValues, iNu*iNr*iNq,iNt*iNp*iNs);
+        Nurq_tps = 1;
+        return Vurq_tps;
+    }
+    else{
+        return Vurq_tps;
+    }
+}
+
+sp_mat flexmat6::urq_tsp(){
+    if(Nurq_tsp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vr*iNu + vq*iNr*iNu;
+        locations.col(1) = vt + vs*iNt + vp*iNs*iNt;
+        Vurq_tsp = sp_mat(locations.t(), vValues, iNu*iNr*iNq,iNt*iNs*iNp);
+        Nurq_tsp = 1;
+        return Vurq_tsp;
+    }
+    else{
+        return Vurq_tsp;
+    }
+}
+
+sp_mat flexmat6::urs_pqt(){
+    if(Nurs_pqt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vr*iNu + vs*iNr*iNu;
+        locations.col(1) = vp + vq*iNp + vt*iNq*iNp;
+        Vurs_pqt = sp_mat(locations.t(), vValues, iNu*iNr*iNs,iNp*iNq*iNt);
+        Nurs_pqt = 1;
+        return Vurs_pqt;
+    }
+    else{
+        return Vurs_pqt;
+    }
+}
+
+sp_mat flexmat6::urs_ptq(){
+    if(Nurs_ptq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vr*iNu + vs*iNr*iNu;
+        locations.col(1) = vp + vt*iNp + vq*iNt*iNp;
+        Vurs_ptq = sp_mat(locations.t(), vValues, iNu*iNr*iNs,iNp*iNt*iNq);
+        Nurs_ptq = 1;
+        return Vurs_ptq;
+    }
+    else{
+        return Vurs_ptq;
+    }
+}
+
+sp_mat flexmat6::urs_qpt(){
+    if(Nurs_qpt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vr*iNu + vs*iNr*iNu;
+        locations.col(1) = vq + vp*iNq + vt*iNp*iNq;
+        Vurs_qpt = sp_mat(locations.t(), vValues, iNu*iNr*iNs,iNq*iNp*iNt);
+        Nurs_qpt = 1;
+        return Vurs_qpt;
+    }
+    else{
+        return Vurs_qpt;
+    }
+}
+
+sp_mat flexmat6::urs_qtp(){
+    if(Nurs_qtp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vr*iNu + vs*iNr*iNu;
+        locations.col(1) = vq + vt*iNq + vp*iNt*iNq;
+        Vurs_qtp = sp_mat(locations.t(), vValues, iNu*iNr*iNs,iNq*iNt*iNp);
+        Nurs_qtp = 1;
+        return Vurs_qtp;
+    }
+    else{
+        return Vurs_qtp;
+    }
+}
+
+sp_mat flexmat6::urs_tpq(){
+    if(Nurs_tpq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vr*iNu + vs*iNr*iNu;
+        locations.col(1) = vt + vp*iNt + vq*iNp*iNt;
+        Vurs_tpq = sp_mat(locations.t(), vValues, iNu*iNr*iNs,iNt*iNp*iNq);
+        Nurs_tpq = 1;
+        return Vurs_tpq;
+    }
+    else{
+        return Vurs_tpq;
+    }
+}
+
+sp_mat flexmat6::urs_tqp(){
+    if(Nurs_tqp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vr*iNu + vs*iNr*iNu;
+        locations.col(1) = vt + vq*iNt + vp*iNq*iNt;
+        Vurs_tqp = sp_mat(locations.t(), vValues, iNu*iNr*iNs,iNt*iNq*iNp);
+        Nurs_tqp = 1;
+        return Vurs_tqp;
+    }
+    else{
+        return Vurs_tqp;
+    }
+}
+
+sp_mat flexmat6::urt_pqs(){
+    if(Nurt_pqs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vr*iNu + vt*iNr*iNu;
+        locations.col(1) = vp + vq*iNp + vs*iNq*iNp;
+        Vurt_pqs = sp_mat(locations.t(), vValues, iNu*iNr*iNt,iNp*iNq*iNs);
+        Nurt_pqs = 1;
+        return Vurt_pqs;
+    }
+    else{
+        return Vurt_pqs;
+    }
+}
+
+sp_mat flexmat6::urt_psq(){
+    if(Nurt_psq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vr*iNu + vt*iNr*iNu;
+        locations.col(1) = vp + vs*iNp + vq*iNs*iNp;
+        Vurt_psq = sp_mat(locations.t(), vValues, iNu*iNr*iNt,iNp*iNs*iNq);
+        Nurt_psq = 1;
+        return Vurt_psq;
+    }
+    else{
+        return Vurt_psq;
+    }
+}
+
+sp_mat flexmat6::urt_qps(){
+    if(Nurt_qps == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vr*iNu + vt*iNr*iNu;
+        locations.col(1) = vq + vp*iNq + vs*iNp*iNq;
+        Vurt_qps = sp_mat(locations.t(), vValues, iNu*iNr*iNt,iNq*iNp*iNs);
+        Nurt_qps = 1;
+        return Vurt_qps;
+    }
+    else{
+        return Vurt_qps;
+    }
+}
+
+sp_mat flexmat6::urt_qsp(){
+    if(Nurt_qsp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vr*iNu + vt*iNr*iNu;
+        locations.col(1) = vq + vs*iNq + vp*iNs*iNq;
+        Vurt_qsp = sp_mat(locations.t(), vValues, iNu*iNr*iNt,iNq*iNs*iNp);
+        Nurt_qsp = 1;
+        return Vurt_qsp;
+    }
+    else{
+        return Vurt_qsp;
+    }
+}
+
+sp_mat flexmat6::urt_spq(){
+    if(Nurt_spq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vr*iNu + vt*iNr*iNu;
+        locations.col(1) = vs + vp*iNs + vq*iNp*iNs;
+        Vurt_spq = sp_mat(locations.t(), vValues, iNu*iNr*iNt,iNs*iNp*iNq);
+        Nurt_spq = 1;
+        return Vurt_spq;
+    }
+    else{
+        return Vurt_spq;
+    }
+}
+
+sp_mat flexmat6::urt_sqp(){
+    if(Nurt_sqp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vr*iNu + vt*iNr*iNu;
+        locations.col(1) = vs + vq*iNs + vp*iNq*iNs;
+        Vurt_sqp = sp_mat(locations.t(), vValues, iNu*iNr*iNt,iNs*iNq*iNp);
+        Nurt_sqp = 1;
+        return Vurt_sqp;
+    }
+    else{
+        return Vurt_sqp;
+    }
+}
+
+sp_mat flexmat6::usp_qrt(){
+    if(Nusp_qrt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vs*iNu + vp*iNs*iNu;
+        locations.col(1) = vq + vr*iNq + vt*iNr*iNq;
+        Vusp_qrt = sp_mat(locations.t(), vValues, iNu*iNs*iNp,iNq*iNr*iNt);
+        Nusp_qrt = 1;
+        return Vusp_qrt;
+    }
+    else{
+        return Vusp_qrt;
+    }
+}
+
+sp_mat flexmat6::usp_qtr(){
+    if(Nusp_qtr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vs*iNu + vp*iNs*iNu;
+        locations.col(1) = vq + vt*iNq + vr*iNt*iNq;
+        Vusp_qtr = sp_mat(locations.t(), vValues, iNu*iNs*iNp,iNq*iNt*iNr);
+        Nusp_qtr = 1;
+        return Vusp_qtr;
+    }
+    else{
+        return Vusp_qtr;
+    }
+}
+
+sp_mat flexmat6::usp_rqt(){
+    if(Nusp_rqt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vs*iNu + vp*iNs*iNu;
+        locations.col(1) = vr + vq*iNr + vt*iNq*iNr;
+        Vusp_rqt = sp_mat(locations.t(), vValues, iNu*iNs*iNp,iNr*iNq*iNt);
+        Nusp_rqt = 1;
+        return Vusp_rqt;
+    }
+    else{
+        return Vusp_rqt;
+    }
+}
+
+sp_mat flexmat6::usp_rtq(){
+    if(Nusp_rtq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vs*iNu + vp*iNs*iNu;
+        locations.col(1) = vr + vt*iNr + vq*iNt*iNr;
+        Vusp_rtq = sp_mat(locations.t(), vValues, iNu*iNs*iNp,iNr*iNt*iNq);
+        Nusp_rtq = 1;
+        return Vusp_rtq;
+    }
+    else{
+        return Vusp_rtq;
+    }
+}
+
+sp_mat flexmat6::usp_tqr(){
+    if(Nusp_tqr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vs*iNu + vp*iNs*iNu;
+        locations.col(1) = vt + vq*iNt + vr*iNq*iNt;
+        Vusp_tqr = sp_mat(locations.t(), vValues, iNu*iNs*iNp,iNt*iNq*iNr);
+        Nusp_tqr = 1;
+        return Vusp_tqr;
+    }
+    else{
+        return Vusp_tqr;
+    }
+}
+
+sp_mat flexmat6::usp_trq(){
+    if(Nusp_trq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vs*iNu + vp*iNs*iNu;
+        locations.col(1) = vt + vr*iNt + vq*iNr*iNt;
+        Vusp_trq = sp_mat(locations.t(), vValues, iNu*iNs*iNp,iNt*iNr*iNq);
+        Nusp_trq = 1;
+        return Vusp_trq;
+    }
+    else{
+        return Vusp_trq;
+    }
+}
+
+sp_mat flexmat6::usq_prt(){
+    if(Nusq_prt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vs*iNu + vq*iNs*iNu;
+        locations.col(1) = vp + vr*iNp + vt*iNr*iNp;
+        Vusq_prt = sp_mat(locations.t(), vValues, iNu*iNs*iNq,iNp*iNr*iNt);
+        Nusq_prt = 1;
+        return Vusq_prt;
+    }
+    else{
+        return Vusq_prt;
+    }
+}
+
+sp_mat flexmat6::usq_ptr(){
+    if(Nusq_ptr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vs*iNu + vq*iNs*iNu;
+        locations.col(1) = vp + vt*iNp + vr*iNt*iNp;
+        Vusq_ptr = sp_mat(locations.t(), vValues, iNu*iNs*iNq,iNp*iNt*iNr);
+        Nusq_ptr = 1;
+        return Vusq_ptr;
+    }
+    else{
+        return Vusq_ptr;
+    }
+}
+
+sp_mat flexmat6::usq_rpt(){
+    if(Nusq_rpt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vs*iNu + vq*iNs*iNu;
+        locations.col(1) = vr + vp*iNr + vt*iNp*iNr;
+        Vusq_rpt = sp_mat(locations.t(), vValues, iNu*iNs*iNq,iNr*iNp*iNt);
+        Nusq_rpt = 1;
+        return Vusq_rpt;
+    }
+    else{
+        return Vusq_rpt;
+    }
+}
+
+sp_mat flexmat6::usq_rtp(){
+    if(Nusq_rtp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vs*iNu + vq*iNs*iNu;
+        locations.col(1) = vr + vt*iNr + vp*iNt*iNr;
+        Vusq_rtp = sp_mat(locations.t(), vValues, iNu*iNs*iNq,iNr*iNt*iNp);
+        Nusq_rtp = 1;
+        return Vusq_rtp;
+    }
+    else{
+        return Vusq_rtp;
+    }
+}
+
+sp_mat flexmat6::usq_tpr(){
+    if(Nusq_tpr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vs*iNu + vq*iNs*iNu;
+        locations.col(1) = vt + vp*iNt + vr*iNp*iNt;
+        Vusq_tpr = sp_mat(locations.t(), vValues, iNu*iNs*iNq,iNt*iNp*iNr);
+        Nusq_tpr = 1;
+        return Vusq_tpr;
+    }
+    else{
+        return Vusq_tpr;
+    }
+}
+
+sp_mat flexmat6::usq_trp(){
+    if(Nusq_trp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vs*iNu + vq*iNs*iNu;
+        locations.col(1) = vt + vr*iNt + vp*iNr*iNt;
+        Vusq_trp = sp_mat(locations.t(), vValues, iNu*iNs*iNq,iNt*iNr*iNp);
+        Nusq_trp = 1;
+        return Vusq_trp;
+    }
+    else{
+        return Vusq_trp;
+    }
+}
+
+sp_mat flexmat6::usr_pqt(){
+    if(Nusr_pqt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vs*iNu + vr*iNs*iNu;
+        locations.col(1) = vp + vq*iNp + vt*iNq*iNp;
+        Vusr_pqt = sp_mat(locations.t(), vValues, iNu*iNs*iNr,iNp*iNq*iNt);
+        Nusr_pqt = 1;
+        return Vusr_pqt;
+    }
+    else{
+        return Vusr_pqt;
+    }
+}
+
+sp_mat flexmat6::usr_ptq(){
+    if(Nusr_ptq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vs*iNu + vr*iNs*iNu;
+        locations.col(1) = vp + vt*iNp + vq*iNt*iNp;
+        Vusr_ptq = sp_mat(locations.t(), vValues, iNu*iNs*iNr,iNp*iNt*iNq);
+        Nusr_ptq = 1;
+        return Vusr_ptq;
+    }
+    else{
+        return Vusr_ptq;
+    }
+}
+
+sp_mat flexmat6::usr_qpt(){
+    if(Nusr_qpt == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vs*iNu + vr*iNs*iNu;
+        locations.col(1) = vq + vp*iNq + vt*iNp*iNq;
+        Vusr_qpt = sp_mat(locations.t(), vValues, iNu*iNs*iNr,iNq*iNp*iNt);
+        Nusr_qpt = 1;
+        return Vusr_qpt;
+    }
+    else{
+        return Vusr_qpt;
+    }
+}
+
+sp_mat flexmat6::usr_qtp(){
+    if(Nusr_qtp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vs*iNu + vr*iNs*iNu;
+        locations.col(1) = vq + vt*iNq + vp*iNt*iNq;
+        Vusr_qtp = sp_mat(locations.t(), vValues, iNu*iNs*iNr,iNq*iNt*iNp);
+        Nusr_qtp = 1;
+        return Vusr_qtp;
+    }
+    else{
+        return Vusr_qtp;
+    }
+}
+
+sp_mat flexmat6::usr_tpq(){
+    if(Nusr_tpq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vs*iNu + vr*iNs*iNu;
+        locations.col(1) = vt + vp*iNt + vq*iNp*iNt;
+        Vusr_tpq = sp_mat(locations.t(), vValues, iNu*iNs*iNr,iNt*iNp*iNq);
+        Nusr_tpq = 1;
+        return Vusr_tpq;
+    }
+    else{
+        return Vusr_tpq;
+    }
+}
+
+sp_mat flexmat6::usr_tqp(){
+    if(Nusr_tqp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vs*iNu + vr*iNs*iNu;
+        locations.col(1) = vt + vq*iNt + vp*iNq*iNt;
+        Vusr_tqp = sp_mat(locations.t(), vValues, iNu*iNs*iNr,iNt*iNq*iNp);
+        Nusr_tqp = 1;
+        return Vusr_tqp;
+    }
+    else{
+        return Vusr_tqp;
+    }
+}
+
+sp_mat flexmat6::ust_pqr(){
+    if(Nust_pqr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vs*iNu + vt*iNs*iNu;
+        locations.col(1) = vp + vq*iNp + vr*iNq*iNp;
+        Vust_pqr = sp_mat(locations.t(), vValues, iNu*iNs*iNt,iNp*iNq*iNr);
+        Nust_pqr = 1;
+        return Vust_pqr;
+    }
+    else{
+        return Vust_pqr;
+    }
+}
+
+sp_mat flexmat6::ust_prq(){
+    if(Nust_prq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vs*iNu + vt*iNs*iNu;
+        locations.col(1) = vp + vr*iNp + vq*iNr*iNp;
+        Vust_prq = sp_mat(locations.t(), vValues, iNu*iNs*iNt,iNp*iNr*iNq);
+        Nust_prq = 1;
+        return Vust_prq;
+    }
+    else{
+        return Vust_prq;
+    }
+}
+
+sp_mat flexmat6::ust_qpr(){
+    if(Nust_qpr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vs*iNu + vt*iNs*iNu;
+        locations.col(1) = vq + vp*iNq + vr*iNp*iNq;
+        Vust_qpr = sp_mat(locations.t(), vValues, iNu*iNs*iNt,iNq*iNp*iNr);
+        Nust_qpr = 1;
+        return Vust_qpr;
+    }
+    else{
+        return Vust_qpr;
+    }
+}
+
+sp_mat flexmat6::ust_qrp(){
+    if(Nust_qrp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vs*iNu + vt*iNs*iNu;
+        locations.col(1) = vq + vr*iNq + vp*iNr*iNq;
+        Vust_qrp = sp_mat(locations.t(), vValues, iNu*iNs*iNt,iNq*iNr*iNp);
+        Nust_qrp = 1;
+        return Vust_qrp;
+    }
+    else{
+        return Vust_qrp;
+    }
+}
+
+sp_mat flexmat6::ust_rpq(){
+    if(Nust_rpq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vs*iNu + vt*iNs*iNu;
+        locations.col(1) = vr + vp*iNr + vq*iNp*iNr;
+        Vust_rpq = sp_mat(locations.t(), vValues, iNu*iNs*iNt,iNr*iNp*iNq);
+        Nust_rpq = 1;
+        return Vust_rpq;
+    }
+    else{
+        return Vust_rpq;
+    }
+}
+
+sp_mat flexmat6::ust_rqp(){
+    if(Nust_rqp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vs*iNu + vt*iNs*iNu;
+        locations.col(1) = vr + vq*iNr + vp*iNq*iNr;
+        Vust_rqp = sp_mat(locations.t(), vValues, iNu*iNs*iNt,iNr*iNq*iNp);
+        Nust_rqp = 1;
+        return Vust_rqp;
+    }
+    else{
+        return Vust_rqp;
+    }
+}
+
+sp_mat flexmat6::utp_qrs(){
+    if(Nutp_qrs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vt*iNu + vp*iNt*iNu;
+        locations.col(1) = vq + vr*iNq + vs*iNr*iNq;
+        Vutp_qrs = sp_mat(locations.t(), vValues, iNu*iNt*iNp,iNq*iNr*iNs);
+        Nutp_qrs = 1;
+        return Vutp_qrs;
+    }
+    else{
+        return Vutp_qrs;
+    }
+}
+
+sp_mat flexmat6::utp_qsr(){
+    if(Nutp_qsr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vt*iNu + vp*iNt*iNu;
+        locations.col(1) = vq + vs*iNq + vr*iNs*iNq;
+        Vutp_qsr = sp_mat(locations.t(), vValues, iNu*iNt*iNp,iNq*iNs*iNr);
+        Nutp_qsr = 1;
+        return Vutp_qsr;
+    }
+    else{
+        return Vutp_qsr;
+    }
+}
+
+sp_mat flexmat6::utp_rqs(){
+    if(Nutp_rqs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vt*iNu + vp*iNt*iNu;
+        locations.col(1) = vr + vq*iNr + vs*iNq*iNr;
+        Vutp_rqs = sp_mat(locations.t(), vValues, iNu*iNt*iNp,iNr*iNq*iNs);
+        Nutp_rqs = 1;
+        return Vutp_rqs;
+    }
+    else{
+        return Vutp_rqs;
+    }
+}
+
+sp_mat flexmat6::utp_rsq(){
+    if(Nutp_rsq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vt*iNu + vp*iNt*iNu;
+        locations.col(1) = vr + vs*iNr + vq*iNs*iNr;
+        Vutp_rsq = sp_mat(locations.t(), vValues, iNu*iNt*iNp,iNr*iNs*iNq);
+        Nutp_rsq = 1;
+        return Vutp_rsq;
+    }
+    else{
+        return Vutp_rsq;
+    }
+}
+
+sp_mat flexmat6::utp_sqr(){
+    if(Nutp_sqr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vt*iNu + vp*iNt*iNu;
+        locations.col(1) = vs + vq*iNs + vr*iNq*iNs;
+        Vutp_sqr = sp_mat(locations.t(), vValues, iNu*iNt*iNp,iNs*iNq*iNr);
+        Nutp_sqr = 1;
+        return Vutp_sqr;
+    }
+    else{
+        return Vutp_sqr;
+    }
+}
+
+sp_mat flexmat6::utp_srq(){
+    if(Nutp_srq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vt*iNu + vp*iNt*iNu;
+        locations.col(1) = vs + vr*iNs + vq*iNr*iNs;
+        Vutp_srq = sp_mat(locations.t(), vValues, iNu*iNt*iNp,iNs*iNr*iNq);
+        Nutp_srq = 1;
+        return Vutp_srq;
+    }
+    else{
+        return Vutp_srq;
+    }
+}
+
+sp_mat flexmat6::utq_prs(){
+    if(Nutq_prs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vt*iNu + vq*iNt*iNu;
+        locations.col(1) = vp + vr*iNp + vs*iNr*iNp;
+        Vutq_prs = sp_mat(locations.t(), vValues, iNu*iNt*iNq,iNp*iNr*iNs);
+        Nutq_prs = 1;
+        return Vutq_prs;
+    }
+    else{
+        return Vutq_prs;
+    }
+}
+
+sp_mat flexmat6::utq_psr(){
+    if(Nutq_psr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vt*iNu + vq*iNt*iNu;
+        locations.col(1) = vp + vs*iNp + vr*iNs*iNp;
+        Vutq_psr = sp_mat(locations.t(), vValues, iNu*iNt*iNq,iNp*iNs*iNr);
+        Nutq_psr = 1;
+        return Vutq_psr;
+    }
+    else{
+        return Vutq_psr;
+    }
+}
+
+sp_mat flexmat6::utq_rps(){
+    if(Nutq_rps == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vt*iNu + vq*iNt*iNu;
+        locations.col(1) = vr + vp*iNr + vs*iNp*iNr;
+        Vutq_rps = sp_mat(locations.t(), vValues, iNu*iNt*iNq,iNr*iNp*iNs);
+        Nutq_rps = 1;
+        return Vutq_rps;
+    }
+    else{
+        return Vutq_rps;
+    }
+}
+
+sp_mat flexmat6::utq_rsp(){
+    if(Nutq_rsp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vt*iNu + vq*iNt*iNu;
+        locations.col(1) = vr + vs*iNr + vp*iNs*iNr;
+        Vutq_rsp = sp_mat(locations.t(), vValues, iNu*iNt*iNq,iNr*iNs*iNp);
+        Nutq_rsp = 1;
+        return Vutq_rsp;
+    }
+    else{
+        return Vutq_rsp;
+    }
+}
+
+sp_mat flexmat6::utq_spr(){
+    if(Nutq_spr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vt*iNu + vq*iNt*iNu;
+        locations.col(1) = vs + vp*iNs + vr*iNp*iNs;
+        Vutq_spr = sp_mat(locations.t(), vValues, iNu*iNt*iNq,iNs*iNp*iNr);
+        Nutq_spr = 1;
+        return Vutq_spr;
+    }
+    else{
+        return Vutq_spr;
+    }
+}
+
+sp_mat flexmat6::utq_srp(){
+    if(Nutq_srp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vt*iNu + vq*iNt*iNu;
+        locations.col(1) = vs + vr*iNs + vp*iNr*iNs;
+        Vutq_srp = sp_mat(locations.t(), vValues, iNu*iNt*iNq,iNs*iNr*iNp);
+        Nutq_srp = 1;
+        return Vutq_srp;
+    }
+    else{
+        return Vutq_srp;
+    }
+}
+
+sp_mat flexmat6::utr_pqs(){
+    if(Nutr_pqs == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vt*iNu + vr*iNt*iNu;
+        locations.col(1) = vp + vq*iNp + vs*iNq*iNp;
+        Vutr_pqs = sp_mat(locations.t(), vValues, iNu*iNt*iNr,iNp*iNq*iNs);
+        Nutr_pqs = 1;
+        return Vutr_pqs;
+    }
+    else{
+        return Vutr_pqs;
+    }
+}
+
+sp_mat flexmat6::utr_psq(){
+    if(Nutr_psq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vt*iNu + vr*iNt*iNu;
+        locations.col(1) = vp + vs*iNp + vq*iNs*iNp;
+        Vutr_psq = sp_mat(locations.t(), vValues, iNu*iNt*iNr,iNp*iNs*iNq);
+        Nutr_psq = 1;
+        return Vutr_psq;
+    }
+    else{
+        return Vutr_psq;
+    }
+}
+
+sp_mat flexmat6::utr_qps(){
+    if(Nutr_qps == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vt*iNu + vr*iNt*iNu;
+        locations.col(1) = vq + vp*iNq + vs*iNp*iNq;
+        Vutr_qps = sp_mat(locations.t(), vValues, iNu*iNt*iNr,iNq*iNp*iNs);
+        Nutr_qps = 1;
+        return Vutr_qps;
+    }
+    else{
+        return Vutr_qps;
+    }
+}
+
+sp_mat flexmat6::utr_qsp(){
+    if(Nutr_qsp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vt*iNu + vr*iNt*iNu;
+        locations.col(1) = vq + vs*iNq + vp*iNs*iNq;
+        Vutr_qsp = sp_mat(locations.t(), vValues, iNu*iNt*iNr,iNq*iNs*iNp);
+        Nutr_qsp = 1;
+        return Vutr_qsp;
+    }
+    else{
+        return Vutr_qsp;
+    }
+}
+
+sp_mat flexmat6::utr_spq(){
+    if(Nutr_spq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vt*iNu + vr*iNt*iNu;
+        locations.col(1) = vs + vp*iNs + vq*iNp*iNs;
+        Vutr_spq = sp_mat(locations.t(), vValues, iNu*iNt*iNr,iNs*iNp*iNq);
+        Nutr_spq = 1;
+        return Vutr_spq;
+    }
+    else{
+        return Vutr_spq;
+    }
+}
+
+sp_mat flexmat6::utr_sqp(){
+    if(Nutr_sqp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vt*iNu + vr*iNt*iNu;
+        locations.col(1) = vs + vq*iNs + vp*iNq*iNs;
+        Vutr_sqp = sp_mat(locations.t(), vValues, iNu*iNt*iNr,iNs*iNq*iNp);
+        Nutr_sqp = 1;
+        return Vutr_sqp;
+    }
+    else{
+        return Vutr_sqp;
+    }
+}
+
+sp_mat flexmat6::uts_pqr(){
+    if(Nuts_pqr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vt*iNu + vs*iNt*iNu;
+        locations.col(1) = vp + vq*iNp + vr*iNq*iNp;
+        Vuts_pqr = sp_mat(locations.t(), vValues, iNu*iNt*iNs,iNp*iNq*iNr);
+        Nuts_pqr = 1;
+        return Vuts_pqr;
+    }
+    else{
+        return Vuts_pqr;
+    }
+}
+
+sp_mat flexmat6::uts_prq(){
+    if(Nuts_prq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vt*iNu + vs*iNt*iNu;
+        locations.col(1) = vp + vr*iNp + vq*iNr*iNp;
+        Vuts_prq = sp_mat(locations.t(), vValues, iNu*iNt*iNs,iNp*iNr*iNq);
+        Nuts_prq = 1;
+        return Vuts_prq;
+    }
+    else{
+        return Vuts_prq;
+    }
+}
+
+sp_mat flexmat6::uts_qpr(){
+    if(Nuts_qpr == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vt*iNu + vs*iNt*iNu;
+        locations.col(1) = vq + vp*iNq + vr*iNp*iNq;
+        Vuts_qpr = sp_mat(locations.t(), vValues, iNu*iNt*iNs,iNq*iNp*iNr);
+        Nuts_qpr = 1;
+        return Vuts_qpr;
+    }
+    else{
+        return Vuts_qpr;
+    }
+}
+
+sp_mat flexmat6::uts_qrp(){
+    if(Nuts_qrp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vt*iNu + vs*iNt*iNu;
+        locations.col(1) = vq + vr*iNq + vp*iNr*iNq;
+        Vuts_qrp = sp_mat(locations.t(), vValues, iNu*iNt*iNs,iNq*iNr*iNp);
+        Nuts_qrp = 1;
+        return Vuts_qrp;
+    }
+    else{
+        return Vuts_qrp;
+    }
+}
+
+sp_mat flexmat6::uts_rpq(){
+    if(Nuts_rpq == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vt*iNu + vs*iNt*iNu;
+        locations.col(1) = vr + vp*iNr + vq*iNp*iNr;
+        Vuts_rpq = sp_mat(locations.t(), vValues, iNu*iNt*iNs,iNr*iNp*iNq);
+        Nuts_rpq = 1;
+        return Vuts_rpq;
+    }
+    else{
+        return Vuts_rpq;
+    }
+}
+
+sp_mat flexmat6::uts_rqp(){
+    if(Nuts_rqp == 0){
+        locations.set_size(vp.size(), 2);
+        locations.col(0) = vu + vt*iNu + vs*iNt*iNu;
+        locations.col(1) = vr + vq*iNr + vp*iNq*iNr;
+        Vuts_rqp = sp_mat(locations.t(), vValues, iNu*iNt*iNs,iNr*iNq*iNp);
+        Nuts_rqp = 1;
+        return Vuts_rqp;
+    }
+    else{
+        return Vuts_rqp;
+    }
+}
+
+
+

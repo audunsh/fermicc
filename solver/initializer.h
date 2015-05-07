@@ -33,6 +33,15 @@ public:
     void sVhhpp();
     void sVhpph();
 
+    //triples specifics
+    void sVppppBlock();
+    void sVhpppBlock();
+    void sVppphBlock();
+
+    void sVhphh();
+    void sVphhp();
+
+
     //support functions
     uvec append(uvec V1, uvec V2);
     vec appendvec(vec V1, vec V2);
