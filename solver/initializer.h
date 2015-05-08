@@ -38,8 +38,45 @@ public:
     void sVhpppBlock();
     void sVppphBlock();
 
-    void sVhphh();
+
+
     void sVphhp();
+
+    /*
+     * The following functionality could be replaced by blocks to save memory
+     *
+     *
+     */
+
+    //alternate, early implementation
+    void sVhppp();
+    uvec aVhppp;
+    uvec bVhppp;
+    uvec cVhppp;
+    uvec iVhppp;
+    vec vValsVhppp;
+
+    uvec aVpphp;
+    uvec bVpphp;
+    uvec cVpphp;
+    uvec iVpphp;
+    vec vValsVpphp;
+
+
+    void sVhphh();
+    uvec iVhphh;
+    uvec aVhphh;
+    uvec jVhphh;
+    uvec kVhphh;
+    vec vValsVhphh;
+
+
+    bool enable_svphhp = false;
+
+    /*
+     *
+     */
+
 
 
     //support functions

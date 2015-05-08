@@ -195,19 +195,12 @@ vec initializer::appendvec(vec V1, vec V2){
  */
 
 
-void initializer::sVhphh(){}
-void initializer::sVppphBlock(){
-
-}
-
-void initializer::sVhpppBlock(){
-    //Vhppp.set_size(iNhp, iNpp);
-
+void initializer::sVhphh(){
     //indexing rows
 
     vec IA = linspace(0,iNhp-1,iNhp);
 
-    uvec A = conv_to<uvec>::from(floor(IA/iNh)); //convert to unsigned integer indexing vector
+    uvec A = conv_to<uvec>::from(floor(IA/iNh));
     uvec I = conv_to<uvec>::from(IA) - A*iNh;
 
     ivec KIAx = bs.vKx.elem(I)+bs.vKx.elem(A+iNh);
@@ -219,9 +212,97 @@ void initializer::sVhpppBlock(){
 
     //indexing columns
 
-    vec BC = linspace(0,iNp*iNp-1,iNp*iNp); //AB
+    vec JK = linspace(0,iNh*iNh-1,iNh*iNh);
 
-    uvec C = conv_to<uvec>::from(floor(BC/iNp)); //convert to unsigned integer indexing vector
+    uvec K = conv_to<uvec>::from(floor(JK/iNh));
+    uvec J = conv_to<uvec>::from(JK) - K*iNh;
+
+    ivec KJKx = bs.vKx.elem(J+iNh)+bs.vKx.elem(K);
+    ivec KJKy = iNmax*(bs.vKy.elem(J+iNh)+bs.vKy.elem(K));
+    ivec KJKz = iNmax2*(bs.vKz.elem(J+iNh)+bs.vKz.elem(K));
+
+    ivec KJK = KJKx+KJKy+KJKz;
+    ivec KJK_unique = unique(KJK);
+
+    //consolidating rows and columns
+    ivec K_joined = join_cols<imat>(KIA_unique, KJK_unique);
+    ivec K_unique = unique(K_joined);
+
+    int iN = 0;
+    uvec Tia, Tjk;
+
+    uvec T0;// = conv_to<uvec>::from(zeros(0));
+    uvec T1;// = conv_to<uvec>::from(zeros(0));
+
+    field<uvec> TT;
+    TT.set_size(KIA_unique.size(), 2);
+
+    for(int i = 0; i < K_unique.size(); ++i){
+        vec Tia = IA.elem(find(KIA==K_unique(i)));
+        vec ONh = ones(Tia.size());
+
+        vec Tjk = JK.elem(find(KJK==K_unique(i)));
+        vec ONp = ones(Tjk.size());
+
+        if(Tia.size() != 0 && Tjk.size() != 0){
+            uvec t0 = conv_to<uvec>::from(kron(Tia, ONp));
+            uvec t1 = conv_to<uvec>::from(kron(ONh, Tjk));
+            TT(i, 0) = t0;
+            TT(i, 1) = t1;
+            iN += t0.size();
+        }
+    }
+
+    T0.set_size(iN);
+    T1.set_size(iN);
+    iN = 0;
+    for(int i = 0; i < K_unique.size(); ++i){
+        //this is the most time-consuming process in initialization
+        if(TT(i,0).size() != 0){
+            T0(span(iN, iN+TT(i,0).size()-1)) = TT(i,0);
+            T1(span(iN, iN+TT(i,1).size()-1)) = TT(i,1);
+            iN += TT(i,0).size();}
+    }
+
+
+    aVhphh = conv_to<uvec>::from(floor(T0/iNh)); //convert to unsigned integer indexing vector
+    iVhphh = conv_to<uvec>::from(T0) - aVhppp*iNh ;
+    kVhphh = conv_to<uvec>::from(floor(T1/iNh)) ; //convert to unsigned integer indexing vector
+    jVhphh = conv_to<uvec>::from(T1) - kVhphh*iNh;
+    vValsVhphh = V3(iVhphh,aVhphh+iNh,jVhphh,kVhphh);
+
+    //aVpphp = bVhppp;
+    //bVpphp = cVhppp;
+    //iVpphp = iVhppp;
+    //cVpphp = aVhppp;
+    //vValsVpphp = V3(bVhppp+iNh,cVhppp+iNh, iVhppp,aVhppp+iNh);
+}
+
+
+void initializer::sVppphBlock(){
+
+}
+
+void initializer::sVhppp(){
+    //indexing rows
+
+    vec IA = linspace(0,iNhp-1,iNhp);
+
+    uvec A = conv_to<uvec>::from(floor(IA/iNh));
+    uvec I = conv_to<uvec>::from(IA) - A*iNh;
+
+    ivec KIAx = bs.vKx.elem(I)+bs.vKx.elem(A+iNh);
+    ivec KIAy = iNmax*(bs.vKy.elem(I)+bs.vKy.elem(A+iNh));
+    ivec KIAz = iNmax2*(bs.vKz.elem(I)+bs.vKz.elem(A+iNh));
+
+    ivec KIA = KIAx+KIAy+KIAz;
+    ivec KIA_unique = unique(KIA);
+
+    //indexing columns
+
+    vec BC = linspace(0,iNp*iNp-1,iNp*iNp);
+
+    uvec C = conv_to<uvec>::from(floor(BC/iNp));
     uvec B = conv_to<uvec>::from(BC) - C*iNp;
 
     ivec KBCx = bs.vKx.elem(B+iNh)+bs.vKx.elem(C);
@@ -232,32 +313,97 @@ void initializer::sVhpppBlock(){
     ivec KBC_unique = unique(KBC);
 
     //consolidating rows and columns
-
     ivec K_joined = join_cols<imat>(KIA_unique, KBC_unique);
-
     ivec K_unique = unique(K_joined);
 
-
+    int iN = 0;
+    uvec Tia, Tbc;
 
     uvec T0;// = conv_to<uvec>::from(zeros(0));
     uvec T1;// = conv_to<uvec>::from(zeros(0));
-    T0.set_size(0);
-    T1.set_size(0);
-
 
     field<uvec> TT;
     TT.set_size(K_unique.size(), 2);
-    int iN = 0;
-    //int iN;
-    uvec Tia, Tbc;
 
     for(int i = 0; i < K_unique.size(); ++i){
+        vec Tia = IA.elem(find(KIA==K_unique(i)));
+        vec ONh = ones(Tia.size());
 
-        //vec Tia = IA.elem(find(KIA==K_unique(i)));
-        //vec ONh = ones(Tia.size()); //this needs not actually be stored
+        vec Tbc = BC.elem(find(KBC==K_unique(i)));
+        vec ONp = ones(Tbc.size());
 
-        //vec Tbc = BC.elem(find(KBC==K_unique(i)));
-        //vec ONp = ones(Tbc.size()); //neither this one
+        if(Tia.size() != 0 && Tbc.size() != 0){
+            uvec t0 = conv_to<uvec>::from(kron(Tia, ONp));
+            uvec t1 = conv_to<uvec>::from(kron(ONh, Tbc));
+            TT(i, 0) = t0;
+            TT(i, 1) = t1;
+            iN += t0.size();
+        }
+    }
+
+    T0.set_size(iN);
+    T1.set_size(iN);
+    iN = 0;
+    for(int i = 0; i < K_unique.size(); ++i){
+        //this is the most time-consuming process in initialization
+        if(TT(i,0).size() != 0){
+            T0(span(iN, iN+TT(i,0).size()-1)) = TT(i,0);
+            T1(span(iN, iN+TT(i,1).size()-1)) = TT(i,1);
+            iN += TT(i,0).size();}
+    }
+
+    aVhppp = conv_to<uvec>::from(floor(T0/iNh)); //convert to unsigned integer indexing vector
+    iVhppp = conv_to<uvec>::from(T0) - aVhppp*iNh ;
+    cVhppp = conv_to<uvec>::from(floor(T1/iNp)) ; //convert to unsigned integer indexing vector
+    bVhppp = conv_to<uvec>::from(T1) - cVhppp*iNp;
+    vValsVhppp = V3(iVhppp,aVhppp+iNh,bVhppp+iNh,cVhppp+iNh);
+
+    aVpphp = bVhppp;
+    bVpphp = cVhppp;
+    iVpphp = iVhppp;
+    cVpphp = aVhppp;
+    vValsVpphp = V3(bVhppp+iNh,cVhppp+iNh, iVhppp,aVhppp+iNh);
+}
+
+
+
+void initializer::sVhpppBlock(){
+    //indexing rows
+
+    vec IA = linspace(0,iNhp-1,iNhp);
+
+    uvec A = conv_to<uvec>::from(floor(IA/iNh));
+    uvec I = conv_to<uvec>::from(IA) - A*iNh;
+
+    ivec KIAx = bs.vKx.elem(I)+bs.vKx.elem(A+iNh);
+    ivec KIAy = iNmax*(bs.vKy.elem(I)+bs.vKy.elem(A+iNh));
+    ivec KIAz = iNmax2*(bs.vKz.elem(I)+bs.vKz.elem(A+iNh));
+
+    ivec KIA = KIAx+KIAy+KIAz;
+    ivec KIA_unique = unique(KIA);
+
+    //indexing columns
+
+    vec BC = linspace(0,iNp*iNp-1,iNp*iNp);
+
+    uvec C = conv_to<uvec>::from(floor(BC/iNp));
+    uvec B = conv_to<uvec>::from(BC) - C*iNp;
+
+    ivec KBCx = bs.vKx.elem(B+iNh)+bs.vKx.elem(C);
+    ivec KBCy = iNmax*(bs.vKy.elem(B+iNh)+bs.vKy.elem(C));
+    ivec KBCz = iNmax2*(bs.vKz.elem(B+iNh)+bs.vKz.elem(C));
+
+    ivec KBC = KBCx+KBCy+KBCz;
+    ivec KBC_unique = unique(KBC);
+
+    //consolidating rows and columns
+    ivec K_joined = join_cols<imat>(KIA_unique, KBC_unique);
+    ivec K_unique = unique(K_joined);
+
+    int iN = 0;
+    uvec Tia, Tbc;
+    bmVhppp.set_size(K_unique.size(), iNp, iNp, iNp, iNp);
+    for(int i = 0; i < K_unique.size(); ++i){
 
         Tia = find(KIA==K_unique(i));
         Tbc = find(KBC==K_unique(i));
@@ -265,12 +411,12 @@ void initializer::sVhpppBlock(){
         bmVhppp.set_block(i, I.elem(Tia), A.elem(Tia),B.elem(Tbc), C.elem(Tbc));
         iN += Tia.size();
     }
-
-
-
 }
 
-void initializer::sVphhp(){}
+void initializer::sVphhp(){
+    //this one is basically the same as hpph, with the index transformed
+    enable_svphhp = true;
+}
 
 
 /*
@@ -927,6 +1073,11 @@ void initializer::sVhpph(){
     bVhpph = conv_to<uvec>::from(T1) - jVhpph*iNp;
 
     vValsVhpph = V3(iVhpph,aVhpph+iNh,bVhpph+iNh,jVhpph);
+
+    if(enable_svphhp){
+        //generate vphhp
+
+    }
 
 
 

@@ -33,10 +33,17 @@ void blockmat::set_block(uint n, uvec pb, uvec qb, uvec rb, uvec sb){
     requests(n) = req;
 }
 
-field<uvec> blockmat::get_block(uint n){
-    //returns 4xN matrix (N = number of elements) with pqrs indices
+sp_mat blockmat::get_sparse_block(uint n){
     uint nx = p(n).size();
     uint ny = r(n).size();
+    locations.set_size(2,nx*ny);
+
+}
+
+field<uvec> blockmat::get_block(uint n){
+    //returns 4xN matrix (N = number of elements) with pqrs indices
+    //uint nx = p(n).size();
+    //uint ny = r(n).size();
     indices.clear();
     indices.set_size(5);
     indices(0) = p(n);

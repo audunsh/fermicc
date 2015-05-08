@@ -28,6 +28,8 @@ ccd::ccd(electrongas bs){
     iSetup.sVppppBlock();
 
 
+    iSetup.sVhpppBlock();
+
     cout << "[CCD]Vpppp init time:" <<  (float)(clock()- t)/CLOCKS_PER_SEC << endl;
     t = clock();
 
@@ -58,8 +60,9 @@ ccd::ccd(electrongas bs){
     vpphh.init(iSetup.vValsVpphh, iSetup.aVpphh, iSetup.bVpphh, iSetup.iVpphh, iSetup.jVpphh, iSetup.iNp, iSetup.iNp, iSetup.iNh, iSetup.iNh);
     vpphh.shed_zeros();
 
-    mat H(vpphh.pq_rs());
-    H.save("pp_v_hh2.txt", raw_ascii);
+    //mat H(vpphh.pq_rs());
+    //H.save("pp_v_hh2.txt", raw_ascii);
+
 
 
     //set up first T2-amplitudes
@@ -114,8 +117,9 @@ ccd::ccd(electrongas bs){
     for(int i = 0; i < 25; i++){
         //advance_intermediates();
         //cout << i+1 << " ";
-        advance();
         iterations += 1;
+        advance();
+
 
     }
     //cout << CCSD_SG_energy() << endl;
