@@ -18,8 +18,8 @@ class ccd_pt
 {
 public:
     //CCD with perturbative triplets
-    ccd_pt(electrongas bs);
-
+    ccd_pt(electrongas bs, double a);
+    double alpha;
 
     electrongas ebs;
     initializer iSetup;
@@ -43,6 +43,7 @@ public:
 
 
     flexmat T;
+    flexmat Tprev;
     //flexmat Vpppp();
     //flexmat Vhhpp();
 

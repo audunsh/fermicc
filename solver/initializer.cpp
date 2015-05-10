@@ -283,7 +283,7 @@ void initializer::sVhphh(){
     kVhphh = conv_to<uvec>::from(floor(T1/iNh)) ; //convert to unsigned integer indexing vector
     jVhphh = conv_to<uvec>::from(T1) - kVhphh*iNh;
     vValsVhphh = V3(iVhphh,aVhphh+iNh,jVhphh,kVhphh);
-    V3_count_nonzero(iVhphh,aVhphh+iNh,jVhphh,kVhphh);
+    //V3_count_nonzero(iVhphh,aVhphh+iNh,jVhphh,kVhphh);
     //cout << "Max " << vValsVhphh.max() << endl;
 
     //iVhhhp = jVhphh;

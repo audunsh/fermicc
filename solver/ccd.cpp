@@ -13,7 +13,8 @@
 using namespace std;
 using namespace arma;
 
-ccd::ccd(electrongas bs){
+ccd::ccd(electrongas bs, double a){
+    alpha = a; //relaxation parameter
     iterations = 0; //current number of iterations
     ebs = bs;
     iSetup = initializer(bs);
@@ -477,8 +478,15 @@ void ccd::advance(){
         cout << "Time spent on Q4:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
         t = clock();}
 
+
+    //double alpha = .5;
+    Tprev.update(T.pq_rs(), Np,Nq,Nr,Ns);
+
     T.update(vpphh.pq_rs() + .5*(L1 + L2) + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4, Np, Nq, Nr, Ns);
+    //T.update(alpha*T.pq_rs() + (1.0-alpha)*(vpphh.pq_rs() + .5*(L1 + L2) + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4), Np, Nq, Nr, Ns);
+
     T.set_amplitudes(ebs.vEnergy); //divide updated amplitides by energy denominator
+    T.update(alpha*Tprev.pq_rs() + (1.0-alpha)*T.pq_rs(), Np, Nq,Nr,Ns);
     if(timing){
         cout << "Time spent on T:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
         t = clock();}

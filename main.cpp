@@ -22,7 +22,7 @@ using namespace arma;
 int main()
 {
     electrongas fgas;
-    fgas.generate_state_list2(11.0,1.0, 14);
+    fgas.generate_state_list2(5.0,1.0, 14);
 
     //cout << "Energy per particle:" << fgas.eref(14)/14.0 << " (a.u)"  << endl;
     //cout << "[Main] Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;
@@ -32,7 +32,7 @@ int main()
 
     //ccsolve solver2(fgas);
     //solver2.CCSD_SG(2);
-    ccd_pt solver(fgas);
+    ccd_pt solver(fgas, .5);
 
     //fgas.print();
     //cout << pow(2, 2.0/3.0) << endl;

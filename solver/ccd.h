@@ -15,7 +15,8 @@ using namespace arma;
 class ccd
 {
 public:
-    ccd(electrongas bs);
+    ccd(electrongas bs, double a);
+    double alpha;
 
 
     electrongas ebs;
@@ -28,6 +29,8 @@ public:
     flexmat vpphh;
     flexmat vhpph;
     flexmat T;
+    flexmat Tprev; //for use with relaxation
+
     //flexmat Vpppp();
     //flexmat Vhhpp();
 

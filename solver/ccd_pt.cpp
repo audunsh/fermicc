@@ -16,20 +16,17 @@
 using namespace std;
 using namespace arma;
 
-ccd_pt::ccd_pt(electrongas bs){
+ccd_pt::ccd_pt(electrongas bs, double a){
+    alpha = a;  //relaxation parameter
     iterations = 0; //current number of iterations
     ebs = bs;
     iSetup = initializer(bs);
-
-
 
     //setup all interaction matrices
     iSetup.sVhhhhO();
     iSetup.sVppppBlock();
     iSetup.sVhhpp();
     iSetup.sVhpph();
-
-
 
     //convert interaction data to flexmat objects
     vhhhh.init(iSetup.vValsVhhhh, iSetup.iVhhhh, iSetup.jVhhhh, iSetup.kVhhhh, iSetup.lVhhhh, iSetup.iNh, iSetup.iNh, iSetup.iNh, iSetup.iNh);
@@ -56,19 +53,14 @@ ccd_pt::ccd_pt(electrongas bs){
     vphpp.shed_zeros();
     vhphh.shed_zeros();
 
-    vppph.shed_zeros();
+    //vppph.shed_zeros();
     vhhhp.shed_zeros();
-    //vhhhp.pqs_r()*2;
 
-    //cout << vhhhp.vValues.max() << endl;
+    //vhppp.report();
+    //vphpp.report();
 
-    vhppp.report();
-    vphpp.report();
-
-    vhphh.report();
-    vhhhp.report();
-
-
+    //vhphh.report();
+    //vhhhp.report();
 
     //set up first T2-amplitudes
     T.init(iSetup.vValsVpphh, iSetup.aVpphh, iSetup.bVpphh, iSetup.iVpphh, iSetup.jVpphh, iSetup.iNp, iSetup.iNp, iSetup.iNh, iSetup.iNh);
@@ -106,7 +98,7 @@ void ccd_pt::check_matrix_consistency(){
                         vhhpp_err += 1;
                     }
                     if(T.pq_rs()(a + b*iSetup.iNp, i + j*iSetup.iNh) != iSetup.bs.v2(a + iSetup.iNh , b+ iSetup.iNh, i,j)/(iSetup.bs.vEnergy(i) + iSetup.bs.vEnergy(j)-iSetup.bs.vEnergy(a+iSetup.iNh)-iSetup.bs.vEnergy(b+iSetup.iNh))){
-                        cout << "Found discrepancy" << T.pq_rs()(a + b*iSetup.iNp, i + j*iSetup.iNh)<< iSetup.bs.v2(a + iSetup.iNh , b+ iSetup.iNh, i,j)/(iSetup.bs.vEnergy(i) + iSetup.bs.vEnergy(j)-iSetup.bs.vEnergy(a)-iSetup.bs.vEnergy(b))<< endl;
+                        //cout << "Found discrepancy" << T.pq_rs()(a + b*iSetup.iNp, i + j*iSetup.iNh)<< iSetup.bs.v2(a + iSetup.iNh , b+ iSetup.iNh, i,j)/(iSetup.bs.vEnergy(i) + iSetup.bs.vEnergy(j)-iSetup.bs.vEnergy(a)-iSetup.bs.vEnergy(b))<< endl;
                         tpphh_err += 1;
                     }
                 }
@@ -217,6 +209,12 @@ void ccd_pt::advance(){
     int Ns = iSetup.iNh;
     bool timing = false; //time each contribution calculation and print to screen (each iteration)
 
+    // ##################################################
+    // ##                                              ##
+    // ## Calculating doubles amplitude                ##
+    // ##                                              ##
+    // ##################################################
+
     L1_dense_multiplication();
 
     L2 = T.pq_rs()*vhhhh.pq_rs();
@@ -236,14 +234,19 @@ void ccd_pt::advance(){
     fmQ4.update_as_p_qrs(T.p_srq()*vhhpp.pqr_s()*T.p_qrs(), Np, Nq, Nr, Ns); //needs realignment and permutations
     Q4 = fmQ4.pq_rs() - fmQ4.qp_rs(); //permuting elements
 
-    //Calculating perturbative triples amplitudes
+    // ##################################################
+    // ##                                              ##
+    // ## Calculating perturbative triples amplitudes  ##
+    // ##                                              ##
+    // ##################################################
 
     t2a.update_as_qru_pst(vppph.pqs_r()*T.q_prs(), Np,Np,Np,Nr,Nr,Nr);
     t2a.update_as_pqr_stu(t2a.pqr_stu()-t2a.qpr_stu()-t2a.rpq_stu()-t2a.rpq_uts()+t2a.prq_stu()+t2a.qrp_uts()-t2a.qrp_ust()+t2a.rqp_uts()+t2a.pqr_ust(), Np,Np,Np,Nr,Nr,Nr);
 
     t2b.update_as_pqs_rtu(T.pqr_s()*vhphh.p_qrs(), Np,Np,Np,Nr,Nr,Nr);
     t2b.update_as_pqr_stu(t2b.pqr_stu()-t2b.rqp_stu()-t2b.rpq_stu()-t2b.rpq_tsu()+t2b.qpr_stu()+t2b.qrp_tsu()-t2b.qrp_ust()+t2b.prq_tsu()+t2b.pqr_ust(), Np,Np,Np,Nr,Nr,Nr);
-    //T3.deinit();
+
+    //Setting up T3
     T3.update_as_pqr_stu(t2a.pqr_stu() - t2b.pqr_stu(), Np,Np,Np,Nr,Nr,Nr);
 
     //Calculating the triples contributions to T2
@@ -251,23 +254,24 @@ void ccd_pt::advance(){
     fmD10b.update(fmD10b.pq_rs() - fmD10b.qp_rs(), Np, Nq, Nr, Ns);
 
     fmD10c.update_as_pqr_s(T3.pqs_tur()*vhhhp.pqs_r(), Np,Np,Nr,Nr); //remember to permute these
-
-
-    //fmD10c.update_as_pqr_s(T3.pqs_tur()*vhphh.srp_q(), Np,Np,Nr,Nr); //remember to permute these
     fmD10c.update(fmD10c.pq_rs() - fmD10c.pq_sr(), Np,Np,Nr,Nr);
 
+    // ##################################################
+    // ##                                              ##
+    // ## Updating amplitudes                          ##
+    // ##                                              ##
+    // ##################################################
+
+    Tprev.update(T.pq_rs(), Np,Nq,Nr,Ns); //When using relaxation we need to store the previous amplitudes
+
     T.update(vpphh.pq_rs() + .5*(L1 + L2) + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4 + .5*(fmD10b.pq_rs() - fmD10c.pq_rs()), Np, Nq, Nr, Ns);
-    //T.update(vpphh.pq_rs() + .5*(L1 + L2) + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4 , Np, Nq, Nr, Ns);
-
-
     T.set_amplitudes(ebs.vEnergy); //divide updated amplitides by energy denominator
+    T.update(alpha*Tprev.pq_rs() + (1.0-alpha)*T.pq_rs(), Np, Nq,Nr,Ns);
 
-    energy();
+    energy(); //Calculate the energy
     T.shed_zeros();
     T.map_indices();
 }
-
-
 
 
 void ccd_pt::energy(){
