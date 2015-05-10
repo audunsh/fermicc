@@ -21,12 +21,15 @@ ccd_pt::ccd_pt(electrongas bs){
     ebs = bs;
     iSetup = initializer(bs);
 
+
+
     //setup all interaction matrices
     iSetup.sVhhhhO();
     iSetup.sVppppBlock();
     iSetup.sVhhpp();
     iSetup.sVhpph();
-    iSetup.sVhppp();
+
+
 
     //convert interaction data to flexmat objects
     vhhhh.init(iSetup.vValsVhhhh, iSetup.iVhhhh, iSetup.jVhhhh, iSetup.kVhhhh, iSetup.lVhhhh, iSetup.iNh, iSetup.iNh, iSetup.iNh, iSetup.iNh);
@@ -37,6 +40,34 @@ ccd_pt::ccd_pt(electrongas bs){
     vhhpp.shed_zeros();
     vpphh.init(iSetup.vValsVpphh, iSetup.aVpphh, iSetup.bVpphh, iSetup.iVpphh, iSetup.jVpphh, iSetup.iNp, iSetup.iNp, iSetup.iNh, iSetup.iNh);
     vpphh.shed_zeros();
+
+
+    //triples specific
+    iSetup.sVhppp();
+    iSetup.sVhphh();
+
+    vhppp.init(iSetup.vValsVhppp, iSetup.iVhppp, iSetup.aVhppp, iSetup.bVhppp, iSetup.cVhppp, iSetup.iNh, iSetup.iNp, iSetup.iNp, iSetup.iNp);
+    vphpp.init(-iSetup.vValsVhppp, iSetup.aVhppp, iSetup.iVhppp, iSetup.bVhppp, iSetup.cVhppp, iSetup.iNp, iSetup.iNh, iSetup.iNp, iSetup.iNp);
+
+    vhphh.init(iSetup.vValsVhphh, iSetup.iVhphh, iSetup.aVhphh, iSetup.jVhphh, iSetup.kVhphh, iSetup.iNh, iSetup.iNp, iSetup.iNh, iSetup.iNh);
+    vhhhp.init(iSetup.vValsVhhhp, iSetup.iVhhhp, iSetup.jVhhhp, iSetup.kVhhhp, iSetup.aVhhhp, iSetup.iNh, iSetup.iNh, iSetup.iNh, iSetup.iNp);
+
+    vhppp.shed_zeros();
+    vphpp.shed_zeros();
+    vhphh.shed_zeros();
+
+    vppph.shed_zeros();
+    vhhhp.shed_zeros();
+    //vhhhp.pqs_r()*2;
+
+    //cout << vhhhp.vValues.max() << endl;
+
+    vhppp.report();
+    vphpp.report();
+
+    vhphh.report();
+    vhhhp.report();
+
 
 
     //set up first T2-amplitudes
@@ -205,12 +236,30 @@ void ccd_pt::advance(){
     fmQ4.update_as_p_qrs(T.p_srq()*vhhpp.pqr_s()*T.p_qrs(), Np, Nq, Nr, Ns); //needs realignment and permutations
     Q4 = fmQ4.pq_rs() - fmQ4.qp_rs(); //permuting elements
 
-    //calculating triples contribution
-    t2a.update_as_qru_pst(vppph.pqs_r()*T.q_prs(), Na,Nb,Nc,Ni,Nj,Nk);
-    t2b.update_as_pqs_rtu(T.pqr_s()*vhphh.p_qrs(), Na,Nb,Nc,Ni,Nj,Nk);
+    //Calculating perturbative triples amplitudes
+
+    t2a.update_as_qru_pst(vppph.pqs_r()*T.q_prs(), Np,Np,Np,Nr,Nr,Nr);
+    t2a.update_as_pqr_stu(t2a.pqr_stu()-t2a.qpr_stu()-t2a.rpq_stu()-t2a.rpq_uts()+t2a.prq_stu()+t2a.qrp_uts()-t2a.qrp_ust()+t2a.rqp_uts()+t2a.pqr_ust(), Np,Np,Np,Nr,Nr,Nr);
+
+    t2b.update_as_pqs_rtu(T.pqr_s()*vhphh.p_qrs(), Np,Np,Np,Nr,Nr,Nr);
+    t2b.update_as_pqr_stu(t2b.pqr_stu()-t2b.rqp_stu()-t2b.rpq_stu()-t2b.rpq_tsu()+t2b.qpr_stu()+t2b.qrp_tsu()-t2b.qrp_ust()+t2b.prq_tsu()+t2b.pqr_ust(), Np,Np,Np,Nr,Nr,Nr);
+    //T3.deinit();
+    T3.update_as_pqr_stu(t2a.pqr_stu() - t2b.pqr_stu(), Np,Np,Np,Nr,Nr,Nr);
+
+    //Calculating the triples contributions to T2
+    fmD10b.update_as_q_rsp(vphpp.p_qrs()*T3.uqr_stp(), Np,Np,Nr,Nr);
+    fmD10b.update(fmD10b.pq_rs() - fmD10b.qp_rs(), Np, Nq, Nr, Ns);
+
+    fmD10c.update_as_pqr_s(T3.pqs_tur()*vhhhp.pqs_r(), Np,Np,Nr,Nr); //remember to permute these
 
 
-    T.update(vpphh.pq_rs() + .5*(L1 + L2) + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4, Np, Nq, Nr, Ns);
+    //fmD10c.update_as_pqr_s(T3.pqs_tur()*vhphh.srp_q(), Np,Np,Nr,Nr); //remember to permute these
+    fmD10c.update(fmD10c.pq_rs() - fmD10c.pq_sr(), Np,Np,Nr,Nr);
+
+    T.update(vpphh.pq_rs() + .5*(L1 + L2) + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4 + .5*(fmD10b.pq_rs() - fmD10c.pq_rs()), Np, Nq, Nr, Ns);
+    //T.update(vpphh.pq_rs() + .5*(L1 + L2) + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4 , Np, Nq, Nr, Ns);
+
+
     T.set_amplitudes(ebs.vEnergy); //divide updated amplitides by energy denominator
 
     energy();
@@ -235,7 +284,7 @@ void ccd_pt::energy(){
 
 
     correlation_energy = .25*C_;
-    cout << "["  << iterations  << "]" << "[CCD]Energy               :" << .25*C_ << endl;
-    cout << "["  << iterations  << "]" << "[CCD]Energy (per particle):" << .25*C_/iSetup.iNh << endl;
+    cout << "[CCD_pt]["  << iterations  << "]" << "Energy               :" << .25*C_ << endl;
+    cout << "[CCD_pt]["  << iterations  << "]" << "Energy (per particle):" << .25*C_/iSetup.iNh << endl;
 
 }

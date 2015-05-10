@@ -47,6 +47,8 @@ public:
 
     void partition(field<vec> fBlocks);
 
+    void report();
+
     void update(sp_mat spC, int Np, int Nq, int Nr, int Ns);
     vec vEnergy;
 

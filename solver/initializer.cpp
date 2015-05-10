@@ -87,6 +87,19 @@ vec initializer::V3(uvec p, uvec q, uvec r, uvec s){
     return vVals;
 }
 
+void initializer::V3_count_nonzero(uvec p, uvec q, uvec r, uvec s){
+    //Count nonzero entries in pqrs
+    uint count = 0;
+    double val;
+    for(int n = 0; n< p.size(); n++){
+        val = bs.v2(p(n), q(n), r(n), s(n));
+        if(val!=0){
+            count += 1;
+        }
+    }
+    cout << "Number of nonzero entries in config:" << count << endl;
+}
+
 vec initializer::V4(Col<u32> p, Col<u32> q, Col<u32> r, Col<u32> s){
     //Inefficient interaction calculation, not really vectorized but returns a vector
     arma::u32 nnz = p.size();
@@ -198,7 +211,7 @@ vec initializer::appendvec(vec V1, vec V2){
 void initializer::sVhphh(){
     //indexing rows
 
-    vec IA = linspace(0,iNhp-1,iNhp);
+    vec IA = linspace(0,iNh*iNp-1,iNh*iNp);
 
     uvec A = conv_to<uvec>::from(floor(IA/iNh));
     uvec I = conv_to<uvec>::from(IA) - A*iNh;
@@ -217,9 +230,9 @@ void initializer::sVhphh(){
     uvec K = conv_to<uvec>::from(floor(JK/iNh));
     uvec J = conv_to<uvec>::from(JK) - K*iNh;
 
-    ivec KJKx = bs.vKx.elem(J+iNh)+bs.vKx.elem(K);
-    ivec KJKy = iNmax*(bs.vKy.elem(J+iNh)+bs.vKy.elem(K));
-    ivec KJKz = iNmax2*(bs.vKz.elem(J+iNh)+bs.vKz.elem(K));
+    ivec KJKx = bs.vKx.elem(J)+bs.vKx.elem(K);
+    ivec KJKy = iNmax*(bs.vKy.elem(J)+bs.vKy.elem(K));
+    ivec KJKz = iNmax2*(bs.vKz.elem(J)+bs.vKz.elem(K));
 
     ivec KJK = KJKx+KJKy+KJKz;
     ivec KJK_unique = unique(KJK);
@@ -235,7 +248,7 @@ void initializer::sVhphh(){
     uvec T1;// = conv_to<uvec>::from(zeros(0));
 
     field<uvec> TT;
-    TT.set_size(KIA_unique.size(), 2);
+    TT.set_size(K_unique.size(), 2);
 
     for(int i = 0; i < K_unique.size(); ++i){
         vec Tia = IA.elem(find(KIA==K_unique(i)));
@@ -266,16 +279,25 @@ void initializer::sVhphh(){
 
 
     aVhphh = conv_to<uvec>::from(floor(T0/iNh)); //convert to unsigned integer indexing vector
-    iVhphh = conv_to<uvec>::from(T0) - aVhppp*iNh ;
+    iVhphh = conv_to<uvec>::from(T0) - aVhphh*iNh ;
     kVhphh = conv_to<uvec>::from(floor(T1/iNh)) ; //convert to unsigned integer indexing vector
     jVhphh = conv_to<uvec>::from(T1) - kVhphh*iNh;
     vValsVhphh = V3(iVhphh,aVhphh+iNh,jVhphh,kVhphh);
+    V3_count_nonzero(iVhphh,aVhphh+iNh,jVhphh,kVhphh);
+    //cout << "Max " << vValsVhphh.max() << endl;
 
-    //aVpphp = bVhppp;
-    //bVpphp = cVhppp;
-    //iVpphp = iVhppp;
-    //cVpphp = aVhppp;
-    //vValsVpphp = V3(bVhppp+iNh,cVhppp+iNh, iVhppp,aVhppp+iNh);
+    //iVhhhp = jVhphh;
+    //jVhhhp = kVhphh;
+    //kVhhhp = iVhphh;
+    //aVhhhp = aVhphh;
+
+    aVhhhp = conv_to<uvec>::from(floor(T0/iNh)); //convert to unsigned integer indexing vector
+    kVhhhp = conv_to<uvec>::from(T0) - aVhhhp*iNh ;
+    iVhhhp = conv_to<uvec>::from(floor(T1/iNh)) ; //convert to unsigned integer indexing vector
+    jVhhhp = conv_to<uvec>::from(T1) - iVhhhp*iNh;
+
+    vValsVhhhp = V3(iVhhhp,jVhhhp, kVhhhp,aVhhhp+iNh);
+
 }
 
 
@@ -286,7 +308,7 @@ void initializer::sVppphBlock(){
 void initializer::sVhppp(){
     //indexing rows
 
-    vec IA = linspace(0,iNhp-1,iNhp);
+    vec IA = linspace(0,iNh*iNp-1,iNh*iNp);
 
     uvec A = conv_to<uvec>::from(floor(IA/iNh));
     uvec I = conv_to<uvec>::from(IA) - A*iNh;
@@ -305,9 +327,9 @@ void initializer::sVhppp(){
     uvec C = conv_to<uvec>::from(floor(BC/iNp));
     uvec B = conv_to<uvec>::from(BC) - C*iNp;
 
-    ivec KBCx = bs.vKx.elem(B+iNh)+bs.vKx.elem(C);
-    ivec KBCy = iNmax*(bs.vKy.elem(B+iNh)+bs.vKy.elem(C));
-    ivec KBCz = iNmax2*(bs.vKz.elem(B+iNh)+bs.vKz.elem(C));
+    ivec KBCx = bs.vKx.elem(B+iNh)+bs.vKx.elem(C+iNh);
+    ivec KBCy = iNmax*(bs.vKy.elem(B+iNh)+bs.vKy.elem(C+iNh));
+    ivec KBCz = iNmax2*(bs.vKz.elem(B+iNh)+bs.vKz.elem(C+iNh));
 
     ivec KBC = KBCx+KBCy+KBCz;
     ivec KBC_unique = unique(KBC);
@@ -356,13 +378,25 @@ void initializer::sVhppp(){
     iVhppp = conv_to<uvec>::from(T0) - aVhppp*iNh ;
     cVhppp = conv_to<uvec>::from(floor(T1/iNp)) ; //convert to unsigned integer indexing vector
     bVhppp = conv_to<uvec>::from(T1) - cVhppp*iNp;
-    vValsVhppp = V3(iVhppp,aVhppp+iNh,bVhppp+iNh,cVhppp+iNh);
 
-    aVpphp = bVhppp;
-    bVpphp = cVhppp;
-    iVpphp = iVhppp;
-    cVpphp = aVhppp;
-    vValsVpphp = V3(bVhppp+iNh,cVhppp+iNh, iVhppp,aVhppp+iNh);
+
+
+    vValsVhppp = V3(iVhppp,aVhppp+iNh,bVhppp+iNh,cVhppp+iNh);
+    cout << vValsVhppp.size() << endl;
+    cout << vValsVhppp.max() << endl;
+    V3_count_nonzero(iVhppp,aVhppp+iNh,bVhppp+iNh,cVhppp+iNh);
+
+    //vValsVhppp.print();
+
+    //aVpphp = bVhppp;
+    //bVpphp = cVhppp;
+    //iVpphp = iVhppp;
+    //cVpphp = aVhppp;
+    cVpphp = conv_to<uvec>::from(floor(T0/iNh)); //convert to unsigned integer indexing vector
+    iVpphp = conv_to<uvec>::from(T0) - cVhppp*iNh ;
+    aVpphp = conv_to<uvec>::from(floor(T1/iNp)) ; //convert to unsigned integer indexing vector
+    bVpphp = conv_to<uvec>::from(T1) - aVhppp*iNp;
+    vValsVpphp = V3(aVpphp+iNh,bVpphp+iNh, iVpphp,cVpphp+iNh);
 }
 
 
@@ -402,13 +436,13 @@ void initializer::sVhpppBlock(){
 
     int iN = 0;
     uvec Tia, Tbc;
-    bmVhppp.set_size(K_unique.size(), iNp, iNp, iNp, iNp);
+    //bmVhppp.set_size(K_unique.size(), iNp, iNp, iNp, iNp);
     for(int i = 0; i < K_unique.size(); ++i){
 
         Tia = find(KIA==K_unique(i));
         Tbc = find(KBC==K_unique(i));
 
-        bmVhppp.set_block(i, I.elem(Tia), A.elem(Tia),B.elem(Tbc), C.elem(Tbc));
+        //bmVhppp.set_block(i, I.elem(Tia), A.elem(Tia),B.elem(Tbc), C.elem(Tbc));
         iN += Tia.size();
     }
 }

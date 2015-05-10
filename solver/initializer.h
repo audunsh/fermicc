@@ -20,6 +20,7 @@ public:
     vec V(uvec p, uvec q, uvec r, uvec s); //vectorized interactions
     vec V2(uvec t0, uvec t1); //vectorized interactions
     vec V3(uvec p, uvec q, uvec r, uvec s); //semivectorized interactions
+    void V3_count_nonzero(uvec p, uvec q, uvec r, uvec s); //count nonzero entries in config
     vec V4(Col<u32> p, Col<u32> q, Col<u32> r, Col<u32> s); //semivectorized interactions
 
     void sVpppp();
@@ -95,7 +96,7 @@ public:
 
     field<uvec> blocksVpphh;
 
-    field<uvec> blocksVhppp;
+    //field<uvec> blocksVhppp;
 
     uvec aVpppp;
     uvec bVpppp;
@@ -109,16 +110,23 @@ public:
     //Col<uword> dVpppp;
 
     blockmat bmVpppp;
-    blockmat bmVhhhh;
-    blockmat bmVpphh;
-    blockmat bmVhhpp;
-    blockmat bmVhppp;
+    //blockmat bmVhhhh;
+    //blockmat bmVpphh;
+    //blockmat bmVhhpp;
+    //blockmat bmVhppp;
 
     uvec iVhhhh;
     uvec jVhhhh;
     uvec kVhhhh;
     uvec lVhhhh;
     vec vValsVhhhh;
+
+    uvec iVhhhp;
+    uvec jVhhhp;
+    uvec kVhhhp;
+    uvec aVhhhp;
+    vec vValsVhhhp;
+
 
     uvec aVpphh;
     uvec bVpphh;

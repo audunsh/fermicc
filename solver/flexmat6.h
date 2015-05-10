@@ -39,6 +39,8 @@ public:
     void update(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu);
     vec vEnergy;
 
+    void update_as_pqr_stu(sp_mat sPC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu);
+
     //electrongas eBs;
 
 

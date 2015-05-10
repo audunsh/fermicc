@@ -22,11 +22,11 @@ using namespace arma;
 int main()
 {
     electrongas fgas;
-    fgas.generate_state_list2(3.0,1.0, 14);
+    fgas.generate_state_list2(11.0,1.0, 14);
 
     //cout << "Energy per particle:" << fgas.eref(14)/14.0 << " (a.u)"  << endl;
-    cout << "[Main] Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;
-    //cout <<setprecision(6) << "# Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;
+    //cout << "[Main] Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;
+    cout << "[Main]" << setprecision(15) << "# Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;
 
     cout << "[Main] G.Baardsens results:" << 1.9434 << endl;
 
@@ -36,6 +36,32 @@ int main()
 
     //fgas.print();
     //cout << pow(2, 2.0/3.0) << endl;
+
+
+
+    /*
+    double val = 0;
+    int count = 0;
+    int Ns = fgas.iNbstates;
+    int Nh = fgas.iNparticles;
+    for(int a = Nh; a < Ns; ++a){
+        for(int i = 0; i < Nh; ++i){
+            for(int j = 0; j < Nh; ++j){
+                for(int k = 0; k < Nh; ++k){
+                    if(fgas.v2(i,a,j,k) != 0){
+                        //cout << fgas.v2(i,a,b,c) << endl;
+                        count += 1;
+                    }
+
+                }
+            }
+        }
+    }
+    cout << "Number of nonzero entries: " << count << endl;
+    */
+
+
+
 
     /*
 

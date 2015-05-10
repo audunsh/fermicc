@@ -992,6 +992,27 @@ void flexmat6::deinit(){
 }
 
 
+void flexmat6::update_as_pqr_stu(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vr = conv_to<uvec>::from(floor( H.vT0/(iNp*iNq)));
+    vq = conv_to<uvec>::from(floor((H.vT0 - vr*iNp*iNq)/(iNp)));
+    vp = conv_to<uvec>::from(floor((H.vT0 - vq*iNp - vr*iNp*iNq)));
+    vu = conv_to<uvec>::from(floor( H.vT1/(iNs*iNt)));
+    vt = conv_to<uvec>::from(floor((H.vT1 - vu*iNs*iNt)/(iNs)));
+    vs = conv_to<uvec>::from(floor((H.vT1 - vt*iNs - vu*iNs*iNt)));
+    vValues = H.vVals;
+    deinit();
+}
+
+
+
+
 void flexmat6::update_as_qtru_ps(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
     iNp = Np;
     iNq = Nq;

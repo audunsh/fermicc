@@ -71,8 +71,8 @@ ccdt::ccdt(electrongas bs){
     vpphh.init(iSetup.vValsVpphh, iSetup.aVpphh, iSetup.bVpphh, iSetup.iVpphh, iSetup.jVpphh, iSetup.iNp, iSetup.iNp, iSetup.iNh, iSetup.iNh);
     vpphh.shed_zeros();
 
-    mat H(vpphh.pq_rs());
-    H.save("pp_v_hh2.txt", raw_ascii);
+    //mat H(vpphh.pq_rs());
+    //H.save("pp_v_hh2.txt", raw_ascii);
 
 
     //set up first T2-amplitudes
@@ -468,7 +468,6 @@ void ccdt::advance(){
         t = clock();}
 
     //Triples contributions to t2
-
     fmD10b.update_as_q_rsp(vphpp.p_qrs()*T3.uqr_stp(), Na,Nb,Ni,Nj);
     fmD10b.pq_rs() - fmD10b.qp_rs();
     fmD10c.update_as_pqr_s(T3.pqs_tur()*vhhhp.pqs_r(), Na,Nb,Ni,Nj); //remember to permute these

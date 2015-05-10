@@ -6,6 +6,7 @@
 #include <iomanip>
 #include "basis/electrongas.h"
 #include "solver/flexmat.h"
+#include "solver/flexmat6.h"
 #include "solver/initializer.h"
 #include "solver/unpack_sp_mat.h"
 
@@ -29,6 +30,18 @@ public:
     flexmat vhhpp;
     flexmat vpphh;
     flexmat vhpph;
+    flexmat vhphh;
+    flexmat vppph;
+    flexmat vhppp;
+
+
+
+    flexmat vphpp;
+    flexmat vhhhp;
+
+
+
+
     flexmat T;
     //flexmat Vpppp();
     //flexmat Vhhpp();
@@ -48,6 +61,11 @@ public:
     flexmat fmL3, fmQ1, fmQ2, fmQ3, fmQ4;
 
     flexmat fmI1, fmI2, fmI3, fmI4, fmI2temp, fmI3temp; //intermediates for CCD terms
+
+    flexmat fmD10b, fmD10c;
+
+
+    flexmat6 T3, t2a, t2b;
 
     double correlation_energy;
 
