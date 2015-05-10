@@ -14,6 +14,13 @@ using namespace std;
 using namespace arma;
 
 ccd::ccd(electrongas bs, double a){
+
+    // ##################################################
+    // ##                                              ##
+    // ## CCD, initialization                          ##
+    // ##                                              ##
+    // ##################################################
+
     alpha = a; //relaxation parameter
     iterations = 0; //current number of iterations
     ebs = bs;
@@ -130,6 +137,12 @@ ccd::ccd(electrongas bs, double a){
 }
 
 void ccd::check_matrix_consistency(){
+    // ##################################################
+    // ##                                              ##
+    // ## Matrix consistency test, debugging function  ##
+    // ##                                              ##
+    // ##################################################
+
     //Check that all elements in matrices correspond to the interaction given in the basis
     //NOTE: This is a time consuming process, especially for large basis sets
 
@@ -167,6 +180,14 @@ void ccd::check_matrix_consistency(){
 }
 
 void ccd::L1_dense_multiplication(){
+    // #######################################################
+    // ##                                                   ##
+    // ##  Calculate diagrams containing pppp interactions  ##
+    // ##  Limit memory usage, calculate terms on the fly   ##
+    // ##  Further optimization of this routine is possible ##
+    // ##                                                   ##
+    // #######################################################
+
     L1.clear();
 
 
@@ -202,18 +223,12 @@ void ccd::L1_dense_multiplication(){
             //Interaction below has already passed d(k_p+k_q, k_r + k_s) && m_p==m_r && m_q == m_s
             //val = iSetup.bs.v2(a+Nh,b+Nh);
             val = iSetup.bs.v2(a+Nh,b+Nh,a+Nh,b+Nh);
-
-
             V(p,p) = val;
-
-
             //Interaction below has already passed d(k_p+k_q, k_r + k_s)
             for(uint q = p+1; q<Na; ++q){
                 c = stream(2)(q);
                 d = stream(3)(q);
-
                 val = iSetup.bs.v2(a+Nh,b+Nh,c+Nh,d+Nh); //create separate function here
-
                 V(p,q) = val;
                 V(q,p) = val;
             }
@@ -439,9 +454,6 @@ void ccd::advance(){
     if(timing){
         cout << "Time spent on L1:" << (clock() - (float)t)/CLOCKS_PER_SEC << endl;
         t = clock();}
-
-    //make a little section here and insert block diagonal replacement
-
 
     L2 = T.pq_rs()*vhhhh.pq_rs();
     if(timing){

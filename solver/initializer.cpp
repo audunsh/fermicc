@@ -382,9 +382,9 @@ void initializer::sVhppp(){
 
 
     vValsVhppp = V3(iVhppp,aVhppp+iNh,bVhppp+iNh,cVhppp+iNh);
-    cout << vValsVhppp.size() << endl;
-    cout << vValsVhppp.max() << endl;
-    V3_count_nonzero(iVhppp,aVhppp+iNh,bVhppp+iNh,cVhppp+iNh);
+    //cout << vValsVhppp.size() << endl;
+    //cout << vValsVhppp.max() << endl;
+    //V3_count_nonzero(iVhppp,aVhppp+iNh,bVhppp+iNh,cVhppp+iNh);
 
     //vValsVhppp.print();
 

@@ -11,6 +11,19 @@ flexmat6::flexmat6()
 {
 }
 
+void flexmat6::report(){
+    cout << "#################################" << endl;
+    cout << "## Flexmat report                " << endl;
+    cout << "## vp:" << vp.size() << "/" << vp.max() << endl;
+    cout << "## vq:" << vq.size() << "/" << vq.max() << endl;
+    cout << "## vr:" << vr.size() << "/" << vr.max() << endl;
+    cout << "## vs:" << vs.size() << "/" << vs.max() << endl;
+    cout << "## vt:" << vt.size() << "/" << vt.max() << endl;
+    cout << "## vu:" << vu.size() << "/" << vu.max() << endl;
+    cout << "## vvals:" << vValues.size() << "/" << vValues.max() << endl;
+    cout << "#################################" << endl;
+}
+
 void flexmat6::init(vec values, uvec p, uvec q, uvec r, uvec s, uvec t, uvec u, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
     iNp = Np;
     iNq = Nq;

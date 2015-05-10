@@ -17,6 +17,12 @@ using namespace std;
 using namespace arma;
 
 ccd_pt::ccd_pt(electrongas bs, double a){
+    // ##################################################
+    // ##                                              ##
+    // ## CCDT-1(perturbative triples), initialization ##
+    // ##                                              ##
+    // ##################################################
+
     alpha = a;  //relaxation parameter
     iterations = 0; //current number of iterations
     ebs = bs;
@@ -52,15 +58,7 @@ ccd_pt::ccd_pt(electrongas bs, double a){
     vhppp.shed_zeros();
     vphpp.shed_zeros();
     vhphh.shed_zeros();
-
-    //vppph.shed_zeros();
     vhhhp.shed_zeros();
-
-    //vhppp.report();
-    //vphpp.report();
-
-    //vhphh.report();
-    //vhhhp.report();
 
     //set up first T2-amplitudes
     T.init(iSetup.vValsVpphh, iSetup.aVpphh, iSetup.bVpphh, iSetup.iVpphh, iSetup.jVpphh, iSetup.iNp, iSetup.iNp, iSetup.iNh, iSetup.iNh);
@@ -78,7 +76,13 @@ ccd_pt::ccd_pt(electrongas bs, double a){
 }
 
 void ccd_pt::check_matrix_consistency(){
-    //Check that all elements in matrices correspond to the interaction given in the basis
+    // ##################################################
+    // ##                                              ##
+    // ## Matrix consistency test, debugging function  ##
+    // ##                                              ##
+    // ##################################################
+
+    //This function checks that all elements in matrices correspond to the interaction given in the basis
     //NOTE: This is a time consuming process, especially for large basis sets
 
     int vpphh_err = 0;
@@ -110,7 +114,15 @@ void ccd_pt::check_matrix_consistency(){
     cout << "Found " << tpphh_err << " inconsistent elements in thhpp." << endl;
 }
 
-void ccd_pt::L1_dense_multiplication(){
+void ccd_pt::L1_dense_multiplication(){    
+    // #######################################################
+    // ##                                                   ##
+    // ##  Calculate diagrams containing pppp interactions  ##
+    // ##  Limit memory usage, calculate terms on the fly   ##
+    // ##  Further optimization of this routine is possible ##
+    // ##                                                   ##
+    // #######################################################
+
     L1.clear();
 
     uint N = iSetup.bmVpppp.uN; //number of blocks
@@ -141,20 +153,13 @@ void ccd_pt::L1_dense_multiplication(){
             b = stream(1)(p);
             //NOTE: Actually going through the kroenecker deltas here, possible to skip many tests in the interaction p==r, q==s
             //Interaction below has already passed d(k_p+k_q, k_r + k_s) && m_p==m_r && m_q == m_s
-            //val = iSetup.bs.v2(a+Nh,b+Nh);
             val = iSetup.bs.v2(a+Nh,b+Nh,a+Nh,b+Nh);
-
-
             V(p,p) = val;
-
-
             //Interaction below has already passed d(k_p+k_q, k_r + k_s)
             for(uint q = p+1; q<Na; ++q){
                 c = stream(2)(q);
                 d = stream(3)(q);
-
                 val = iSetup.bs.v2(a+Nh,b+Nh,c+Nh,d+Nh); //create separate function here
-
                 V(p,q) = val;
                 V(q,p) = val;
             }
@@ -163,13 +168,9 @@ void ccd_pt::L1_dense_multiplication(){
         //perform multiplication and cast to sparse matrix L1;
         Ttemp = T.rows_dense(stream(4)); //load only elements in row
         tempStorage = V*Ttemp;
-
         int N_elems = T.MCols.size()*stream(4).size();
         umat locations(2, N_elems);
         vec values(N_elems);
-
-
-
         uint count = 0;
         for(uint p = 0; p<stream(4).size(); ++p ){
             for(uint q = 0; q<T.MCols.size(); ++q ){
@@ -179,7 +180,6 @@ void ccd_pt::L1_dense_multiplication(){
                 count += 1;
             }
         }
-
 
         fmLocations(i) = locations;
         fvValues(i) = values;
@@ -215,23 +215,23 @@ void ccd_pt::advance(){
     // ##                                              ##
     // ##################################################
 
-    L1_dense_multiplication();
+    L1_dense_multiplication(); //The pp-pp diagram, given special treatment to limit memory usage
 
     L2 = T.pq_rs()*vhhhh.pq_rs();
 
     fmL3.update(vhpph.sq_rp()*T.qs_pr(), Ns, Nq, Np, Nr);
-    L3 = fmL3.rq_sp() - fmL3.qr_sp() -fmL3.rq_ps() +fmL3.qr_ps();
+    L3 = fmL3.rq_sp() - fmL3.qr_sp() -fmL3.rq_ps() +fmL3.qr_ps(); //permuting elements
 
     fmQ1.update(T.rs_pq()*vhhpp.rs_pq()*T.rs_pq(), Nr, Ns, Np,Nq);
     Q1 = fmQ1.rs_pq();
 
-    fmQ2.update(T.pr_qs()*vhhpp.rp_qs()*T.sq_pr(), Np, Nr, Nq, Ns); //needs realignment and permutations
+    fmQ2.update(T.pr_qs()*vhhpp.rp_qs()*T.sq_pr(), Np, Nr, Nq, Ns);
     Q2 = fmQ2.pr_qs()-fmQ2.pr_sq(); //permuting elements
 
-    fmQ3.update_as_r_pqs((T.r_sqp()*vhhpp.prs_q())*T.r_pqs(), Np, Nq, Nr, Ns); //needs realignment and permutations
+    fmQ3.update_as_r_pqs((T.r_sqp()*vhhpp.prs_q())*T.r_pqs(), Np, Nq, Nr, Ns);
     Q3 = fmQ3.pq_rs() - fmQ3.pq_sr(); //permuting elements
 
-    fmQ4.update_as_p_qrs(T.p_srq()*vhhpp.pqr_s()*T.p_qrs(), Np, Nq, Nr, Ns); //needs realignment and permutations
+    fmQ4.update_as_p_qrs(T.p_srq()*vhhpp.pqr_s()*T.p_qrs(), Np, Nq, Nr, Ns);
     Q4 = fmQ4.pq_rs() - fmQ4.qp_rs(); //permuting elements
 
     // ##################################################
@@ -275,17 +275,18 @@ void ccd_pt::advance(){
 
 
 void ccd_pt::energy(){
-    //Calculate the ground state energy
+    // ##################################################
+    // ##                                              ##
+    // ## Calculate Correlation Energy                 ##
+    // ##                                              ##
+    // ##################################################
+
     sp_mat cv = vhhpp.pq_rs() * T.pq_rs();
-    //mat vhhpp2(vhhpp.pq_rs());
-    //mat tpphh2(T.pq_rs());
-    //mat Cv = vhhpp2*tpphh2;
     mat Cv(cv); //this is inefficient: does not utilize sp_mat functionality, one possibility through unpack_sp_mat
     double C_ = 0;
     for(int i = 0; i<Cv.n_cols; i++){
         C_+= Cv(i,i);
     }
-
 
     correlation_energy = .25*C_;
     cout << "[CCD_pt]["  << iterations  << "]" << "Energy               :" << .25*C_ << endl;

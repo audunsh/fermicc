@@ -30,6 +30,7 @@ public:
     ivec all_columns;
 
 
+    void report();
     void shed_zeros();
 
     void set_amplitudes(vec Energy);

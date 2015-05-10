@@ -17,8 +17,9 @@ using namespace arma;
 class ccdt
 {
 public:
-    ccdt(electrongas bs);
-
+    //CCD with perturbative triplets
+    ccdt(electrongas bs, double a);
+    double alpha;
 
     electrongas ebs;
     initializer iSetup;
@@ -29,43 +30,50 @@ public:
     flexmat vhhpp;
     flexmat vpphh;
     flexmat vhpph;
-
-    //triples specific interactions
-    flexmat vphhp;
+    flexmat vhphh;
     flexmat vppph;
     flexmat vhppp;
-    flexmat vhphh;
-    flexmat vhhhp;
+
+
+
     flexmat vphpp;
-    flexmat vhhph;
+    flexmat vhhhp;
 
-    //amplitudes
+
+
+
     flexmat T;
-    flexmat6 T3;
+    flexmat Tprev;
+    //flexmat Vpppp();
+    //flexmat Vhhpp();
 
-
+    //flexmat Vpphh();
+    //flexmat Vhpph();
+    //flexmat T();
     void advance();
-    void advance_intermediates(); //advance using intermediates
-    void L1_block_multiplication(); //block ladder calculation
     void L1_dense_multiplication(); //block ladder calculation
 
-    sp_mat t2t2_block_multiplication(sp_mat spT1, blockmat bmV, sp_mat spT2);
-
-
     void check_matrix_consistency();
+
+
 
     void energy();
 
     //The diagrams contributing to the CCD energy
     sp_mat L1, L2, L3, Q1, Q2, Q3, Q4;
-    flexmat fmL3, fmQ1, fmQ2, fmQ3, fmQ4, fmD10b, fmD10c;
-    flexmat6 t2t3a, t2t3b,t2t3c,t2t3d,t2t3e,t2t3f,t2t3g, t2t2b,t2t2c,t2t2d, t3b,t3c,t2a,t2b;
-
+    flexmat fmL3, fmQ1, fmQ2, fmQ3, fmQ4;
 
     flexmat fmI1, fmI2, fmI3, fmI4, fmI2temp, fmI3temp; //intermediates for CCD terms
 
-    double CCSD_SG_energy();
+    flexmat fmD10b, fmD10c;
+
+
+    flexmat6 T3, T3prev;
+    flexmat6 t2t3a, t2t3b,t2t3c,t2t3d,t2t3e,t2t3f,t2t3g, t2t2b,t2t2c,t2t2d, t3b,t3c,t2a,t2b;
+
     double correlation_energy;
+
+    int iterations;
 
 
 };
