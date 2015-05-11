@@ -65,6 +65,10 @@ ccdt::ccdt(electrongas bs, double a){
     T.set_amplitudes(bs.vEnergy);
     T.map_indices();
 
+
+    sp_mat Y;
+    T3.update_as_pqr_stu(Y, iSetup.iNp, iSetup.iNp, iSetup.iNp, iSetup.iNh, iSetup.iNh, iSetup.iNh);
+
     //check_matrix_consistency();
     energy();
     for(int i = 0; i < 25; i++){
@@ -122,6 +126,9 @@ void ccdt::L1_dense_multiplication(){
     // ##                                                   ##
     // #######################################################
 
+
+
+
     L1.clear();
 
     uint N = iSetup.bmVpppp.uN; //number of blocks
@@ -132,19 +139,29 @@ void ccdt::L1_dense_multiplication(){
     vec vals;
     umat coo;
     uint a,b,c,d, Na;
-    uint total_elements = 0; //total number of elements calculated;
+    uint total_elements_L1 = 0; //total number of elements calculated;
+    uint total_elements_t3a = 0; //total number of elements calculated;
 
-    mat tempStorage, Ttemp;
+
+    mat L1_tempStorage, L1_Ttemp;
+    mat t3a_tempStorage, t3a_Ttemp;
+
     double val;
 
-    field<umat> fmLocations(N);
-    field<vec> fvValues(N);
+    field<umat> fmLocations_L1(N);
+    field<vec> fvValues_L1(N);
+
+    field<umat> fmLocations_t3a(N);
+    field<vec> fvValues_t3a(N);
 
     mat V;
 
     for(uint i = 0; i < N; ++i){
+        // #############################################
+        // ##   Iteration over each block in vhpppp   ##
+        // #############################################
         V.clear();
-        stream = iSetup.bmVpppp.get_block(i); //get current block
+        stream = iSetup.bmVpppp.get_block(i); //get indices in current block
         Na = stream(0).size();
         V.set_size(Na, Na);
         for(uint p = 0; p<Na; ++p){
@@ -163,10 +180,12 @@ void ccdt::L1_dense_multiplication(){
                 V(q,p) = val;
             }
         }
-
-        //perform multiplication and cast to sparse matrix L1;
-        Ttemp = T.rows_dense(stream(4)); //load only elements in row
-        tempStorage = V*Ttemp;
+        // ################################################
+        // ##   Fetch corresponding rows in amplitudes   ##
+        // ##   Perform dense multiplication    (L1)     ##
+        // ################################################
+        L1_Ttemp = T.rows_dense(stream(4)); //load only elements in row, keep
+        L1_tempStorage = V*L1_Ttemp; //dense multiplication
         int N_elems = T.MCols.size()*stream(4).size();
         umat locations(2, N_elems);
         vec values(N_elems);
@@ -175,28 +194,79 @@ void ccdt::L1_dense_multiplication(){
             for(uint q = 0; q<T.MCols.size(); ++q ){
                 locations(0, count) = stream(4)(p);
                 locations(1, count) = T.MCols(q);
-                values(count) = tempStorage(p,q);
+                values(count) = L1_tempStorage(p,q);
                 count += 1;
             }
         }
+        // #################################
+        // ##   Store partial results     ##
+        // #################################
+        fmLocations_L1(i) = locations;
+        fvValues_L1(i) = values;
+        total_elements_L1 += count;
 
-        fmLocations(i) = locations;
-        fvValues(i) = values;
-        total_elements += count;
+        // ################################################
+        // ##   Fetch corresponding rows in amplitudes   ##
+        // ##   Perform dense multiplication    (t3a)    ##
+        // ################################################
+        t3a_Ttemp = T3.rows_dense(stream(4)); //load only elements in row, keep
+        t3a_tempStorage = V*t3a_Ttemp; //dense multiplication
+        N_elems = T3.MCols.size()*stream(4).size();
+        locations.set_size(2, N_elems);
+        values.set_size(N_elems);
+        count = 0;
+        for(uint p = 0; p<stream(4).size(); ++p ){
+            for(uint q = 0; q<T3.MCols.size(); ++q ){
+                locations(0, count) = stream(4)(p);
+                locations(1, count) = T3.MCols(q);
+                values(count) = t3a_tempStorage(p,q);
+                count += 1;
+            }
+        }
+        // #################################
+        // ##   Store partial results(t3a)##
+        // #################################
+        fmLocations_t3a(i) = locations;
+        fvValues_t3a(i) = values;
+        total_elements_t3a += count;
     }
-    //create sparse L1 from each block
-    umat mCOO(2, total_elements);
-    vec vData(total_elements);
+    // #########################
+    // ## construct diagram L1##
+    // #########################
+
+    umat mCOO(2, total_elements_L1);
+    vec vData(total_elements_L1);
     int iCount=0;
     for(uint i = 0; i < N; ++i){
-        for(uint j = 0; j < fvValues(i).size(); ++j){
-            mCOO(0, iCount) = fmLocations(i)(0,j);
-            mCOO(1, iCount) = fmLocations(i)(1,j);
-            vData(iCount) = fvValues(i)(j);
+        for(uint j = 0; j < fvValues_L1(i).size(); ++j){
+            mCOO(0, iCount) = fmLocations_L1(i)(0,j);
+            mCOO(1, iCount) = fmLocations_L1(i)(1,j);
+            vData(iCount) = fvValues_L1(i)(j);
             iCount += 1;
         }
     }
     L1 = sp_mat(mCOO, vData, iSetup.iNp*iSetup.iNp,iSetup.iNh*iSetup.iNh);
+
+    // ###########################
+    // ## construct diagram t3a ##
+    // ###########################
+
+    mCOO.set_size(2, total_elements_t3a);
+    vData.set_size(total_elements_t3a);
+    iCount=0;
+    for(uint i = 0; i < N; ++i){
+        for(uint j = 0; j < fvValues_t3a(i).size(); ++j){
+            mCOO(0, iCount) = fmLocations_t3a(i)(0,j);
+            mCOO(1, iCount) = fmLocations_t3a(i)(1,j);
+            vData(iCount) = fvValues_t3a(i)(j);
+            iCount += 1;
+        }
+    }
+    t3a.update_as_pqr_stu(sp_mat(mCOO, vData, iSetup.iNp*iSetup.iNp*iSetup.iNp,iSetup.iNh*iSetup.iNh*iSetup.iNh), iSetup.iNp,iSetup.iNp,iSetup.iNp,iSetup.iNh,iSetup.iNh,iSetup.iNh);
+
+
+
+
 }
 
 
@@ -214,6 +284,8 @@ void ccdt::advance(){
     // ##                                              ##
     // ##################################################
 
+    //T3.shed_zeros();
+    T3.map_indices();
     L1_dense_multiplication(); //The pp-pp diagram, given special treatment to limit memory usage
 
     L2 = T.pq_rs()*vhhhh.pq_rs();
@@ -253,15 +325,15 @@ void ccdt::advance(){
     // ##  Linear t3 terms    ##
     // #########################
 
+    //t3a_dense_multiplication();
     //t3a.update_as_pq_rstu(vpppp.pq_rs()∗T3.pq_rstu()); //Note that this will probably be replaced by a block implementation.
     //t3a.pqr_stu()-t3a.rqp_stu()-t3a.rpq_stu()
 
     //t3b.update_as_pqru_st(T3.pqrs_tu()*vphhp.pq_rs(), Np,Np,Np,Nr,Nr,Nr);
-    t3b.update_as_pqru_st(T3.pqrs_tu()*vhpph.qp_sr(), Np,Np,Np,Nr,Nr,Nr); //replaced interaction (symmetries)
+    t3b.update_as_pqru_st(T3.pqrs_tu()*vhhhh.pq_rs(), Np,Np,Np,Nr,Nr,Nr); //replaced interaction (symmetries)
     t3b.update_as_pqr_stu(t3b.pqr_stu()-t3b.pqr_sut()-t3b.pqr_tus(), Np, Np, Np, Nr, Nr, Nr);
 
-    //t3c.update_as_ps_qrtu(vphhp.pr_qs()*T3.sp_qrtu(), Np,Np,Np,Nr,Nr,Nr);
-    t3c.update_as_ps_qrtu(vhpph.pr_qs()*T3.sp_qrtu(), Np,Np,Np,Nr,Nr,Nr); //replaced interaction
+    t3c.update_as_ps_qrtu(vhpph.pr_qs()*T3.sp_qrtu(), Np,Np,Np,Nr,Nr,Nr);
     t3c.update_as_pqr_stu(t3c.pqr_stu()-t3c.qpr_stu()-t3c.rpq_stu()-t3c.rpq_tsu()+t3c.prq_stu()+t3c.qrp_tsu()-t3c.qrp_ust()+t3c.rqp_tsu()+t3c.pqr_ust(), Np, Np, Np, Nr, Nr, Nr);
 
     // #########################
@@ -337,9 +409,9 @@ void ccdt::advance(){
     energy(); //Calculate the energy
     T.shed_zeros();
     T.map_indices();
-    T3.shed_zeros();
-    T3.map_indices();
-    T3.report();
+    //T3.shed_zeros();
+    //T3.map_indices();
+    //T3.report();
 
 }
 
@@ -359,7 +431,7 @@ void ccdt::energy(){
     }
 
     correlation_energy = .25*C_;
-    cout << "[CCD_pt]["  << iterations  << "]" << "Energy               :" << .25*C_ << endl;
-    cout << "[CCD_pt]["  << iterations  << "]" << "Energy (per particle):" << .25*C_/iSetup.iNh << endl;
+    cout << "[CCDT]["  << iterations  << "]" << "Energy               :" << .25*C_ << endl;
+    cout << "[CCDT]["  << iterations  << "]" << "Energy (per particle):" << .25*C_/iSetup.iNh << endl;
 
 }

@@ -43,6 +43,10 @@ void flexmat6::init(vec values, uvec p, uvec q, uvec r, uvec s, uvec t, uvec u, 
     cols_i = conv_to<uvec>::from(vs + vt*iNs + vu*iNs*iNt);
     rows_i = conv_to<uvec>::from(vp + vq*iNp + vr*iNp*iNq);
 
+
+    //cols_i_pq_rstu = conv_to<uvec>::from(vr + vs*iNr + vt*iNr*iNs + vu*iNr*iNs*iNt);
+    //rows_i_pq_rstu = conv_to<uvec>::from(vp + vq*iNp);
+
     int sz = iNs*iNt*iNu; //number of columns in total
     col_ptrs.set_size(sz); //used in mapping
     for(uint i = 0; i<sz; ++i){
@@ -52,34 +56,39 @@ void flexmat6::init(vec values, uvec p, uvec q, uvec r, uvec s, uvec t, uvec u, 
 
 void flexmat6::map_indices(){
     //map out which indices correspond to which rows
-    uvec cols = conv_to<uvec>::from(vs + vt*iNs + vu*iNs*iNt);
-    uvec rows = conv_to<uvec>::from(vp + vq*iNp + vr*iNp*iNq);
+    //uvec cols = conv_to<uvec>::from(vs + vt*iNs + vu*iNs*iNt);
+    //uvec rows = conv_to<uvec>::from(vp + vq*iNp + vr*iNp*iNq);
 
-    row_lengths = conv_to<uvec>::from(zeros(iNp*iNq*iNr));
-    row_indices.set_size(iNp*iNq*iNr);
-    col_lengths = conv_to<uvec>::from(zeros(iNs*iNt*iNu));
-    col_indices.set_size(iNs*iNt*iNu);
+    uvec cols = conv_to<uvec>::from(vr + vs*iNr + vt*iNr*iNs + vu*iNr*iNs*iNt);
+    uvec rows = conv_to<uvec>::from(vp + vq*iNp);
+
+
+
+    row_lengths = conv_to<uvec>::from(zeros(iNp*iNq));
+    row_indices.set_size(iNp*iNq);
+    col_lengths = conv_to<uvec>::from(zeros(iNr*iNs*iNt*iNu));
+    col_indices.set_size(iNr*iNs*iNt*iNu);
     uint i_max = vValues.size();
 
     for(uint i = 0; i<i_max;++i){
         row_lengths(rows(i)) += 1;
         col_lengths(cols(i)) += 1;
     }
-    i_max = iNp*iNq*iNr; //number of rows
+    i_max = iNp*iNq; //number of rows
     uint j, j_max;
     for(uint i = 0; i < i_max; ++i){
         //j_max = row_lengths(i);
         row_indices(i).set_size(row_lengths(i));
     }
-    i_max = iNs*iNt*iNu; //number of cols
+    i_max = iNr*iNs*iNt*iNu; //number of cols
     for(uint i = 0; i < i_max; ++i){
         //j_max = row_lengths(i);
         col_indices(i).set_size(col_lengths(i));
     }
 
 
-    uvec row_count = conv_to<uvec>::from(zeros(iNp*iNq*iNr));
-    uvec col_count = conv_to<uvec>::from(zeros(iNs*iNt*iNu));
+    uvec row_count = conv_to<uvec>::from(zeros(iNp*iNq));
+    uvec col_count = conv_to<uvec>::from(zeros(iNr*iNs*iNt*iNu));
 
     i_max = vValues.size();
     uint ri, ci; //row i and col i
@@ -114,6 +123,7 @@ mat flexmat6::rows_dense(uvec urows){
     //1. find longest row
     uint blocksize = 0; //number of columns in block
     uint n_cols = 0; //total number of column indices
+    //cout << row_lengths <<endl;
     for(uint i = 0; i<urows.size(); ++i){
         n_cols += row_lengths(urows(i));
         //cout << "Updating blocksize:" << row_lengths(urows(i)) << endl;
@@ -2010,7 +2020,7 @@ sp_mat flexmat6::sp_qrtu(){
         locations.set_size(vp.size(), 2);
         locations.col(1) = vq + vr*iNq + vt*iNr*iNq + vu*iNt*iNr*iNq;
         locations.col(0) = vs + vp*iNs;
-        Vsp_qrtu = sp_mat(locations.t(), vValues, iNs*iNp*iNq*iNr,iNt*iNu);
+        Vsp_qrtu = sp_mat(locations.t(), vValues, iNs*iNp,iNq*iNr*iNt*iNu);
         Nsp_qrtu = 1;
         return Vsp_qrtu;
     }

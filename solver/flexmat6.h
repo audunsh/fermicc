@@ -25,6 +25,9 @@ public:
     uvec col_lengths;
     uvec cols_i;
     uvec rows_i;
+    uvec cols_i_pq_rstu;
+    uvec rows_i_pq_rstu;
+
     ivec col_ptrs;
     ivec MCols; //mapping for the columns of the dense block
     ivec all_columns;
