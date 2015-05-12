@@ -49,6 +49,13 @@ void flexmat::init(vec values, uvec p, uvec q, uvec r, uvec s, int Np, int Nq, i
 
 }
 
+double flexmat::intensity(){
+    // ####################################
+    // ## A measure of diagram intensity ##
+    // ####################################
+    return sum(abs(vValues));
+}
+
 void flexmat::map_indices(){
     //map out which indices correspond to which rows
     uvec cols = conv_to<uvec>::from(vr + vs*iNr);

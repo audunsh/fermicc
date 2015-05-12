@@ -1,5 +1,5 @@
-#ifndef CCDT_H
-#define CCDT_H
+#ifndef CCDT_MP_H
+#define CCDT_MP_H
 
 #define ARMA_64BIT_WORD
 #include <armadillo>
@@ -14,11 +14,11 @@ using namespace std;
 using namespace arma;
 
 
-class ccdt
+class ccdt_mp
 {
 public:
     //CCD with perturbative triplets
-    ccdt(electrongas bs, double a);
+    ccdt_mp(electrongas bs, double a);
     double alpha;
 
     electrongas ebs;
@@ -81,4 +81,4 @@ public:
 
 };
 
-#endif // CCDT_H
+#endif // CCDT_MP_H

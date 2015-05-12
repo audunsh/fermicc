@@ -24,6 +24,13 @@ void flexmat6::report(){
     cout << "#################################" << endl;
 }
 
+double flexmat6::intensity(){
+    // ####################################
+    // ## A measure of diagram intensity ##
+    // ####################################
+    return sum(abs(vValues));
+}
+
 void flexmat6::init(vec values, uvec p, uvec q, uvec r, uvec s, uvec t, uvec u, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
     iNp = Np;
     iNq = Nq;
@@ -40,14 +47,14 @@ void flexmat6::init(vec values, uvec p, uvec q, uvec r, uvec s, uvec t, uvec u, 
     vt = t;
     vu = u;
 
-    cols_i = conv_to<uvec>::from(vs + vt*iNs + vu*iNs*iNt);
-    rows_i = conv_to<uvec>::from(vp + vq*iNp + vr*iNp*iNq);
+    //cols_i = conv_to<uvec>::from(vs + vt*iNs + vu*iNs*iNt);
+    //rows_i = conv_to<uvec>::from(vp + vq*iNp + vr*iNp*iNq);
 
 
-    //cols_i_pq_rstu = conv_to<uvec>::from(vr + vs*iNr + vt*iNr*iNs + vu*iNr*iNs*iNt);
-    //rows_i_pq_rstu = conv_to<uvec>::from(vp + vq*iNp);
+    cols_i = conv_to<uvec>::from(vr + vs*iNr + vt*iNr*iNs + vu*iNr*iNs*iNt);
+    rows_i = conv_to<uvec>::from(vp + vq*iNp);
 
-    int sz = iNs*iNt*iNu; //number of columns in total
+    int sz = iNr*iNs*iNt*iNu; //number of columns in total
     col_ptrs.set_size(sz); //used in mapping
     for(uint i = 0; i<sz; ++i){
         col_ptrs(i) = -1;
@@ -61,8 +68,6 @@ void flexmat6::map_indices(){
 
     uvec cols = conv_to<uvec>::from(vr + vs*iNr + vt*iNr*iNs + vu*iNr*iNs*iNt);
     uvec rows = conv_to<uvec>::from(vp + vq*iNp);
-
-
 
     row_lengths = conv_to<uvec>::from(zeros(iNp*iNq));
     row_indices.set_size(iNp*iNq);
@@ -222,6 +227,8 @@ void flexmat6::set_amplitudes(vec Energy){
     vq = vq.elem(nnz);
     vr = vr.elem(nnz);
     vs = vs.elem(nnz);
+    vt = vt.elem(nnz);
+    vu = vu.elem(nnz);
     vValues = vValues.elem(nnz);
 }
 
@@ -233,12 +240,26 @@ void flexmat6::shed_zeros(){
     vq = vq.elem(nnz);
     vr = vr.elem(nnz);
     vs = vs.elem(nnz);
+    vt = vt.elem(nnz);
+    vu = vu.elem(nnz);
+
+
     vValues = vValues.elem(nnz);
 
+    /*
     cols_i = conv_to<uvec>::from(vs + vt*iNs + vu*iNs*iNt);
     rows_i = conv_to<uvec>::from(vp + vq*iNp + vr*iNp*iNq);
 
     int sz = iNs*iNt*iNu; //number of columns in total
+    col_ptrs.set_size(sz); //used in mapping
+    for(uint i = 0; i<sz; ++i){
+        col_ptrs(i) = -1;
+    }*/
+
+    cols_i = conv_to<uvec>::from(vr + vs*iNr + vt*iNr*iNs + vu*iNr*iNs*iNt);
+    rows_i = conv_to<uvec>::from(vp + vq*iNp);
+
+    int sz = iNr*iNs*iNt*iNu; //number of columns in total
     col_ptrs.set_size(sz); //used in mapping
     for(uint i = 0; i<sz; ++i){
         col_ptrs(i) = -1;

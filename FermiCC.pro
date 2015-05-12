@@ -9,6 +9,11 @@ release {
     #QMAKE_CXXFLAGS_RELEASE += -O3
 }
 
+#if using openmp
+QMAKE_CXXFLAGS+= -fopenmp
+QMAKE_LFLAGS +=  -fopenmp
+
+
 SOURCES += main.cpp \
     basis/electrongas.cpp \
     solver/ccsolve.cpp \
@@ -19,7 +24,8 @@ SOURCES += main.cpp \
     solver/blockmat.cpp \
     solver/flexmat6.cpp \
     solver/ccdt.cpp \
-    solver/ccd_pt.cpp
+    solver/ccd_pt.cpp \
+    solver/ccdt_mp.cpp
 
 include(deployment.pri)
 qtcAddDeployment()
@@ -34,7 +40,8 @@ HEADERS += \
     solver/blockmat.h \
     solver/flexmat6.h \
     solver/ccdt.h \
-    solver/ccd_pt.h
+    solver/ccd_pt.h \
+    solver/ccdt_mp.h
 
 LIBS += -larmadillo -lblas -llapack
 

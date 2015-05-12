@@ -41,6 +41,8 @@ public:
     ivec all_columns;
 
 
+    double intensity();
+
     void shed_zeros();
 
     void set_amplitudes(vec Energy);

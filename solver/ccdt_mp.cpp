@@ -1,4 +1,4 @@
-#include "ccdt.h"
+#include "ccdt_mp.h"
 #define ARMA_64BIT_WORD
 #include <armadillo>
 #include "solver/flexmat.h"
@@ -9,16 +9,19 @@
 #include "solver/unpack_sp_mat.h"
 #include <time.h>
 
+#include<omp.h>
+
 //#include <eigen/Eigen/Dense>
 //#include <eigen/Eigen/Sparse>
 
 using namespace std;
 using namespace arma;
 
-ccdt::ccdt(electrongas bs, double a){
+ccdt_mp::ccdt_mp(electrongas bs, double a){
     // ##################################################
     // ##                                              ##
     // ## CCDT-1(perturbative triples), initialization ##
+    // ## Using OpenMP                                 ##
     // ##                                              ##
     // ##################################################
 
@@ -28,10 +31,19 @@ ccdt::ccdt(electrongas bs, double a){
     iSetup = initializer(bs);
 
     //setup all interaction matrices
-    iSetup.sVhhhhO();
-    iSetup.sVppppBlock();
-    iSetup.sVhhpp();
-    iSetup.sVhpph();
+    #pragma omp parallel  num_threads(4)
+    {
+        if(omp_get_thread_num()==0){
+            iSetup.sVhhhhO();
+            iSetup.sVppppBlock();
+        }
+        if(omp_get_thread_num()==1){
+            iSetup.sVhhpp();
+        }
+        if(omp_get_thread_num()==2){
+            iSetup.sVhpph();
+        }
+    }
 
     //convert interaction data to flexmat objects
     vhhhh.init(iSetup.vValsVhhhh, iSetup.iVhhhh, iSetup.jVhhhh, iSetup.kVhhhh, iSetup.lVhhhh, iSetup.iNh, iSetup.iNh, iSetup.iNh, iSetup.iNh);
@@ -79,7 +91,7 @@ ccdt::ccdt(electrongas bs, double a){
 
 }
 
-void ccdt::check_matrix_consistency(){
+void ccdt_mp::check_matrix_consistency(){
     // ##################################################
     // ##                                              ##
     // ## Matrix consistency test, debugging function  ##
@@ -118,7 +130,7 @@ void ccdt::check_matrix_consistency(){
     cout << "Found " << tpphh_err << " inconsistent elements in thhpp." << endl;
 }
 
-void ccdt::L1_dense_multiplication(){
+void ccdt_mp::L1_dense_multiplication(){
     // #######################################################
     // ##                                                   ##
     // ##  Calculate diagrams containing pppp interactions  ##
@@ -271,7 +283,7 @@ void ccdt::L1_dense_multiplication(){
 }
 
 
-void ccdt::advance(){
+void ccdt_mp::advance(){
     //advance the solution one step
     int Np = iSetup.iNp;
     int Nq = iSetup.iNp;
@@ -452,7 +464,7 @@ void ccdt::advance(){
 }
 
 
-void ccdt::energy(){
+void ccdt_mp::energy(){
     // ##################################################
     // ##                                              ##
     // ## Calculate Correlation Energy                 ##

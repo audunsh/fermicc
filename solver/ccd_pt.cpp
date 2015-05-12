@@ -67,11 +67,67 @@ ccd_pt::ccd_pt(electrongas bs, double a){
     T.map_indices();
 
     //check_matrix_consistency();
+
+    mat spectrogram(11,25);
     energy();
     for(int i = 0; i < 25; i++){
+        spectrogram.col(i) = spectrum();
         iterations += 1;
         advance();
     }
+    spectrogram.save("spectrogram.txt", raw_ascii);
+
+}
+
+vec ccd_pt::spectrum(){
+    // #################################################
+    // ##  Generates a spectrum of current amplitudes ##
+    // #################################################
+
+    // #################################################
+    // ## The following diagrams contribute to T2:
+    // ## L1
+    // ## L2
+    // ## L3
+    // ## Q1
+    // ## Q2
+    // ## Q3
+    // ## Q4
+    // ## D10b
+    // ## D10c
+    // ## The following diagrams contribute to T3:
+    // ## t2a
+    // ## t2b
+    // ##################################################
+
+    int Np = iSetup.iNp;
+    int Nh = iSetup.iNh;
+    vec spec(11);
+
+    spectemp.update(L1, Np, Np, Nh, Nh);
+    spec(0) = .5*spectemp.intensity();
+    spectemp.update(L2, Np, Np, Nh, Nh);
+    spec(1) = .5*spectemp.intensity();
+    spectemp.update(L3, Np, Np, Nh, Nh);
+    spec(2) = spectemp.intensity();
+
+    spectemp.update(Q1, Np, Np, Nh, Nh);
+    spec(3) = .25*spectemp.intensity();
+    spectemp.update(Q2, Np, Np, Nh, Nh);
+    spec(4) = spectemp.intensity();
+    spectemp.update(Q3, Np, Np, Nh, Nh);
+    spec(5) = .5*spectemp.intensity();
+    spectemp.update(Q4, Np, Np, Nh, Nh);
+    spec(6) = .5*spectemp.intensity();
+
+    spec(7) = .5*fmD10b.intensity();
+    spec(8) = .5*fmD10c.intensity();
+
+    spec(9) = t2a.intensity();
+    spec(10) = t2b.intensity();
+    return spec;
+
+
 
 }
 
@@ -241,13 +297,15 @@ void ccd_pt::advance(){
     // ##################################################
 
     t2a.update_as_qru_pst(vppph.pqs_r()*T.q_prs(), Np,Np,Np,Nr,Nr,Nr);
-    t2a.update_as_pqr_stu(t2a.pqr_stu()-t2a.qpr_stu()-t2a.rpq_stu()-t2a.rpq_uts()+t2a.prq_stu()+t2a.qrp_uts()-t2a.qrp_ust()+t2a.rqp_uts()+t2a.pqr_ust(), Np,Np,Np,Nr,Nr,Nr);
+    //t2a.update_as_pqr_stu(t2a.pqr_stu()-t2a.qpr_stu()-t2a.rpq_stu()-t2a.rpq_uts()+t2a.prq_stu()+t2a.qrp_uts()-t2a.qrp_ust()+t2a.rqp_uts()+t2a.pqr_ust(), Np,Np,Np,Nr,Nr,Nr);
+    t2a.update_as_pqr_stu(t2a.pqr_stu()-t2a.pqr_uts()-t2a.pqr_sut()-t2a.qpr_stu()+t2a.qpr_uts()+t2a.qpr_sut()-t2a.rqp_stu()+t2a.rqp_uts()+t2a.rqp_sut(), Np, Np, Np, Nr,Nr,Nr);
 
     t2b.update_as_pqs_rtu(T.pqr_s()*vhphh.p_qrs(), Np,Np,Np,Nr,Nr,Nr);
     t2b.update_as_pqr_stu(t2b.pqr_stu()-t2b.rqp_stu()-t2b.rpq_stu()-t2b.rpq_tsu()+t2b.qpr_stu()+t2b.qrp_tsu()-t2b.qrp_ust()+t2b.prq_tsu()+t2b.pqr_ust(), Np,Np,Np,Nr,Nr,Nr);
 
     //Setting up T3
     T3.update_as_pqr_stu(t2a.pqr_stu() - t2b.pqr_stu(), Np,Np,Np,Nr,Nr,Nr);
+    T3.set_amplitudes(ebs.vEnergy);
 
     //Calculating the triples contributions to T2
     fmD10b.update_as_q_rsp(vphpp.p_qrs()*T3.uqr_stp(), Np,Np,Nr,Nr);

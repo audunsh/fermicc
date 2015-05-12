@@ -20,6 +20,7 @@ public:
     //CCD with perturbative triplets
     ccd_pt(electrongas bs, double a);
     double alpha;
+    vec spectrum(); //generate a spectrum of the current diagrams
 
     electrongas ebs;
     initializer iSetup;
@@ -64,6 +65,7 @@ public:
     flexmat fmI1, fmI2, fmI3, fmI4, fmI2temp, fmI3temp; //intermediates for CCD terms
 
     flexmat fmD10b, fmD10c;
+    flexmat spectemp;
 
 
     flexmat6 T3, t2a, t2b;

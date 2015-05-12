@@ -32,6 +32,7 @@ public:
     ivec MCols; //mapping for the columns of the dense block
     ivec all_columns;
 
+    double intensity();
 
     void report();
     void shed_zeros();
