@@ -117,6 +117,94 @@ void flexmat::partition(field<vec> fBlocks){
 
 }
 
+mat flexmat::rows_dense_mp(uvec urows, ivec &mcols){
+    //returns a dense matrix with the rows (truncated in the columns containing zeros)
+    //First row contains column indices in the full matrix
+    //identify unique columns
+
+    //1. find longest row
+    uint blocksize = 0; //number of columns in block
+    uint n_cols = 0; //total number of column indices
+    for(uint i = 0; i<urows.size(); ++i){
+        n_cols += row_lengths(urows(i));
+        //cout << "Updating blocksize:" << row_lengths(urows(i)) << endl;
+        if(row_lengths(urows(i))>blocksize){
+
+            blocksize = row_lengths(urows(i));
+        }
+    }
+
+    field<mat> Mret(2);
+    ivec col_ptrs2 = col_ptrs;
+    //2. set up M(rows.size()+1, longest row)
+    //MCols.clear();
+    ivec MCols(blocksize);
+
+
+    //ivec MCols(blocksize);
+    for(uint i = 0; i < blocksize; ++i){
+        MCols(i) = -1;
+    }
+
+    //find all unique column indices
+    ivec all_columns(n_cols);
+    //all_columns.set_size(n_cols);
+    uint c = 0; //counter
+    //uint elements_in_current_row;
+    uint current_col, current_row, current_ind;
+    for(uint i = 0; i < urows.size(); ++i){
+        current_row = urows(i);
+        //element_in_row = row_lengths(current_row);
+        for(uint j = 0; j< row_lengths(current_row); ++j){
+            current_ind = row_indices(current_row)(j); //index to element in COO rep.
+            all_columns(c) = cols_i(current_ind);
+            c+=1;
+        }
+    }
+    MCols = unique(all_columns);
+
+    //map all unique indices in col_ptrs
+    for(uint i = 0; i < MCols.size(); ++i){
+        col_ptrs2(MCols(i)) = i;
+        //now: col_ptrs(current_col) is the index of the current dense block
+        //this makes it possible to cast all elements to a dense matrix, and afterwards cast them back
+    }
+
+
+
+    //3. assign M(0, :) = unique indices
+
+    //Cast all elements to a dense matrix
+    mat M(urows.size(), blocksize);
+    //mat M;
+    //M.randn(urows.size(), blocksize);
+    //cout << urows.size() << " " << blocksize << " " << n_cols << endl;
+
+
+    uint found = 0;
+
+    for(uint i = 0; i < urows.size(); ++i){
+        current_row = urows(i);
+        for(uint j = 0; j< row_lengths(current_row); ++j){
+            current_ind = row_indices(current_row)(j); //index to element in COO rep.
+            current_col = cols_i(current_ind);
+            M(i, col_ptrs2(current_col)) = vValues(current_ind);
+            //M(i,  0) = 0; //vValues(current_ind); //Why does this line cause a segmentation fault?!
+        }
+    }
+
+
+    //reset col_ptrs for next block
+    //for(uint i = 0; i < MCols.size(); ++i){
+    //    col_ptrs(MCols(i)) = -1;
+    //}
+    //Mret(0) = M;
+    mcols = MCols;
+
+
+    return M;
+}
+
 mat flexmat::rows_dense(uvec urows){
     //returns a dense matrix with the rows (truncated in the columns containing zeros)
     //First row contains column indices in the full matrix
@@ -207,14 +295,13 @@ void flexmat::set_amplitudes(vec Energy){
     //Divide all values by corresponding energy (used only on amplitudes)
 
    vEnergy = Energy;
-   /*
+
    vec vEa = vEnergy.elem(vp + iNr);
    vec vEb = vEnergy.elem(vq + iNr);
    vec vEi = vEnergy.elem(vr);
    vec vEj = vEnergy.elem(vs);
    vValues = vValues/(vEi + vEj - vEa - vEb);
-   */
-
+   /*
    for(int i = 0; i < vValues.size(); ++i){
        //cout << vp.size() << endl;
        //cout << vEnergy(vp(i)) << endl;
@@ -222,6 +309,7 @@ void flexmat::set_amplitudes(vec Energy){
 
        vValues(i) = vValues(i)/(vEnergy(vr(i)) + vEnergy(vs(i)) - vEnergy(vp(i)+iNr) - vEnergy(vq(i)+iNr));
    }
+   */
 
 }
 

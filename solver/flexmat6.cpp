@@ -220,7 +220,9 @@ void flexmat6::set_amplitudes(vec Energy){
     vec vEk = vEnergy.elem(vu);
 
     vValues = vValues/(vEi + vEj + vEk - vEa - vEb - vEc);
+    //vValues = vValues/-(vEi + vEj + vEk - vEa - vEb - vEc);
 
+    /*
     uvec nnz = find(vValues!= 0);
     //cout << nnz.size() << " " << vValues.size() << endl;
     vp = vp.elem(nnz);
@@ -230,6 +232,7 @@ void flexmat6::set_amplitudes(vec Energy){
     vt = vt.elem(nnz);
     vu = vu.elem(nnz);
     vValues = vValues.elem(nnz);
+    */
 }
 
 void flexmat6::shed_zeros(){

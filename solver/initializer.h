@@ -26,6 +26,9 @@ public:
     void sVpppp();
     void sVppppO();
     void sVppppBlock();
+    void sVppppBlock_mp();
+
+
 
     void sVhhhh();
     void sVhhhhO();

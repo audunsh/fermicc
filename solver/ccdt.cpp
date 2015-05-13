@@ -332,7 +332,8 @@ void ccdt::advance(){
     t3b.update_as_pqru_st(T3.pqrs_tu()*vhhhh.pq_rs(), Np,Np,Np,Nr,Nr,Nr); //replaced interaction (symmetries)
     t3b.update_as_pqr_stu(t3b.pqr_stu()-t3b.pqr_sut()-t3b.pqr_tus(), Np, Np, Np, Nr, Nr, Nr);
 
-    t3c.update_as_ps_qrtu(vhpph.pr_qs()*T3.sp_qrtu(), Np,Np,Np,Nr,Nr,Nr);
+    //t3c.update_as_ps_qrtu(vhpph.pr_qs()*T3.sp_qrtu(), Np,Np,Np,Nr,Nr,Nr);
+    t3c.update_as_ps_qrtu(vhpph.qs_pr()*T3.sp_qrtu(), Np,Np,Np,Nr,Nr,Nr);
     t3c.update_as_pqr_stu(t3c.pqr_stu()-t3c.qpr_stu()-t3c.rpq_stu()-t3c.rpq_tsu()+t3c.prq_stu()+t3c.qrp_tsu()-t3c.qrp_ust()+t3c.rqp_tsu()+t3c.pqr_ust(), Np, Np, Np, Nr, Nr, Nr);
 
     // #########################
@@ -375,9 +376,12 @@ void ccdt::advance(){
     //(T.pr_sq()*vhppp.pr_qs())
     //t2t2b.pqr_stu()-t2t2b.qpr_stu()-t2t2b.rpq_stu()-t2t2b.rpq_tsu()+t2t2b.prq_stu()+t2t2b.qrp_tsu()-t2t2b.qrp_ust()+t2t2b.rqp_tsu()+t2t2b.pqr_ust()
 
-    fmt2temp.update(T.rs_pq()*vhppp.rs_pq(), Nr, Nr, Np, Np);
+    //this one fails
+    //fmt2temp.update(T.rs_pq()*vhppp.rs_pq(), Nr, Nr, Np, Np); //original
+    //t2t2c.update_as_tur_pqs(fmt2temp.rsp_q()*T.s_pqr(), Np,Np,Np,Nr,Nr,Nr); //check this one later!!!!
 
-    t2t2c.update_as_tur_pqs(fmt2temp.rsp_q()*T.s_pqr(), Np,Np,Np,Nr,Nr,Nr); //check this one later!!!!
+    fmt2temp.update(T.rs_pq()*vhppp.rs_pq(), Nr, Nr, Nr, Np);
+    t2t2c.update_as_tur_pqs(fmt2temp.pqs_r()*T.s_pqr(), Np,Np,Np,Nr,Nr,Nr); //check this one later!!!!
     t2t2c.update_as_pqr_stu(t2t2c.pqr_stu()-t2t2c.rqp_stu()-t2t2c.rpq_stu()-t2t2c.rpq_tsu()+t2t2c.qpr_stu()+t2t2c.qrp_tsu()-t2t2c.qrp_ust()+t2t2c.prq_tsu()+t2t2c.pqr_ust(), Np, Np, Np, Nr, Nr, Nr);
 
 
@@ -396,7 +400,7 @@ void ccdt::advance(){
 
     sp_mat t3_temp = t2a.pqr_stu() - t2b.pqr_stu(); //CCDT-1 contribution
 
-    /*
+
     // These diagrams seems to be working fine
     t3_temp += t2t3a.pqr_stu();
     t3_temp -= .5*t2t3b.pqr_stu();
@@ -406,20 +410,21 @@ void ccdt::advance(){
     t3_temp += .25*t2t3f.pqr_stu();
     t3_temp += .25*t2t3g.pqr_stu();
 
-    */
-    //Unsure about these
-    //t3_temp += t2t2b.pqr_stu();
-    //t3_temp -= .5*t2t2c.pqr_stu();
-    //t3_temp += .5*t2t2d.pqr_stu();
 
-    //t3_temp += .5*t3a.pqr_stu();
-    //t3_temp += .5*t3b.pqr_stu();
-    //t3_temp += t3c.pqr_stu();
+    t3_temp += t2t2b.pqr_stu();
+    t3_temp -= .5*t2t2c.pqr_stu(); //this one caused errors
+    t3_temp += .5*t2t2d.pqr_stu();
 
+    t3_temp += .5*t3a.pqr_stu(); //this is performed blockwise
+    t3_temp += .5*t3b.pqr_stu();
+    t3_temp += t3c.pqr_stu(); //this one currently crashes the calculations
+
+    //T3.report();
     T3.update_as_pqr_stu(t3_temp, Np,Np,Np,Nr,Nr,Nr);
-    T3.set_amplitudes(-ebs.vEnergy);
+    T3.set_amplitudes(ebs.vEnergy);
     //T3.shed_zeros();
     //T3.map_indices();
+    //T3.report();
 
     //Calculating the triples contributions to T2
     fmD10b.update_as_q_rsp(vphpp.p_qrs()*T3.uqr_stp(), Np,Np,Nr,Nr);
@@ -436,7 +441,7 @@ void ccdt::advance(){
 
     Tprev.update(T.pq_rs(), Np,Nq,Nr,Ns); //When using relaxation we need to store the previous amplitudes
 
-    T.update(vpphh.pq_rs() + .5*(L1 + L2) + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4 + .5*(fmD10b.pq_rs() - fmD10c.pq_rs()), Np, Nq, Nr, Ns);
+    T.update(vpphh.pq_rs() + .5*(L1 + L2) + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4 - .5*(fmD10b.pq_rs() - fmD10c.pq_rs()), Np, Nq, Nr, Ns);
     T.set_amplitudes(ebs.vEnergy); //divide updated amplitides by energy denominator
     T.update(alpha*Tprev.pq_rs() + (1.0-alpha)*T.pq_rs(), Np, Nq,Nr,Ns);
 

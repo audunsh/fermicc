@@ -44,6 +44,8 @@ field<uvec> blockmat::get_block(uint n){
     //returns 4xN matrix (N = number of elements) with pqrs indices
     //uint nx = p(n).size();
     //uint ny = r(n).size();
+    field<uvec> indx(5);
+    /*
     indices.clear();
     indices.set_size(5);
     indices(0) = p(n);
@@ -52,4 +54,12 @@ field<uvec> blockmat::get_block(uint n){
     indices(3) = s(n);
     indices(4) = requests(n);
     return indices;
+    */
+
+    indx(0) = p(n);
+    indx(1) = q(n);
+    indx(2) = r(n);
+    indx(3) = s(n);
+    indx(4) = requests(n);
+    return indx;
 }

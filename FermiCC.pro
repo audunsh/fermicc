@@ -25,7 +25,8 @@ SOURCES += main.cpp \
     solver/flexmat6.cpp \
     solver/ccdt.cpp \
     solver/ccd_pt.cpp \
-    solver/ccdt_mp.cpp
+    solver/ccdt_mp.cpp \
+    solver/ccd_mp.cpp
 
 include(deployment.pri)
 qtcAddDeployment()
@@ -41,7 +42,8 @@ HEADERS += \
     solver/flexmat6.h \
     solver/ccdt.h \
     solver/ccd_pt.h \
-    solver/ccdt_mp.h
+    solver/ccdt_mp.h \
+    solver/ccd_mp.h
 
 LIBS += -larmadillo -lblas -llapack
 

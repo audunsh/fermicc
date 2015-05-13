@@ -12,9 +12,8 @@
 #include "solver/flexmat.h"
 #include "solver/ccd_pt.h"
 #include "solver/ccdt.h"
-
-
-
+#include "solver/ccdt_mp.h"
+#include "solver/ccd_mp.h"
 
 using namespace std;
 using namespace arma;
@@ -23,7 +22,7 @@ using namespace arma;
 int main()
 {
     electrongas fgas;
-    fgas.generate_state_list2(5.0,1.0, 14);
+    fgas.generate_state_list2(3.0,1.0, 14);
 
     //cout << "Energy per particle:" << fgas.eref(14)/14.0 << " (a.u)"  << endl;
     //cout << "[Main] Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;
@@ -33,7 +32,7 @@ int main()
 
     //ccsolve solver2(fgas);
     //solver2.CCSD_SG(2);
-    ccd_pt solver(fgas, .5);
+    ccdt solver(fgas, .5);
 
     //fgas.print();
     //cout << pow(2, 2.0/3.0) << endl;
@@ -49,7 +48,7 @@ int main()
         for(int i = 0; i < Nh; ++i){
             for(int j = 0; j < Nh; ++j){
                 for(int k = 0; k < Nh; ++k){
-                    if(fgas.v2(i,a,j,k) != 0){
+                    if(fgas.v2(i,a,j,k) != fgas.v2(j,k,i,a)){
                         //cout << fgas.v2(i,a,b,c) << endl;
                         count += 1;
                     }
@@ -58,8 +57,9 @@ int main()
             }
         }
     }
-    cout << "Number of nonzero entries: " << count << endl;
+    cout << "Number of discrepancies: " << count << endl;
     */
+
 
 
 

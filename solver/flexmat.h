@@ -40,7 +40,7 @@ public:
     ivec MCols; //mapping for the columns of the dense block
     ivec all_columns;
 
-
+    mat rows_dense_mp(uvec urows, ivec &mcols);
     double intensity();
 
     void shed_zeros();

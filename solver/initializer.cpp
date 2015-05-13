@@ -609,6 +609,41 @@ void initializer::sVppppO(){
 
 }
 
+void initializer::sVppppBlock_mp(){
+    //Block interaction (store only blocks)
+    vec AB = linspace(0,iNp2-1,iNp2);
+    uvec B = conv_to<uvec>::from(floor(AB/iNp)); //convert to unsigned integer indexing vector
+    uvec A = conv_to<uvec>::from(AB) - B*iNp;
+
+
+    //Setting up a vector containint a unique integer identifier for K + M_s
+    ivec KABx = bs.vKx.elem(A+iNh)+bs.vKx.elem(B+iNh);
+    ivec KABy = iNmax*(bs.vKy.elem(A+iNh)+bs.vKy.elem(B+iNh));
+    ivec KABz = iNmax2*(bs.vKz.elem(A+iNh)+bs.vKz.elem(B+iNh));
+    ivec KABms = iNmax*iNmax2*(bs.vMs(A+iNh) + bs.vMs(B + iNh));
+
+    ivec KAB = KABx+KABy+KABz + KABms;
+    ivec KAB_unique = unique(KAB);
+
+    field<uvec> TT;
+    TT.set_size(KAB_unique.size(), 2);
+    u32 iN = 0;
+    vec T, O;
+    //uvec tT;
+    uvec t0, t1;
+
+
+    bmVpppp.set_size(KAB_unique.size(), iNp, iNp, iNp, iNp);
+
+    #pragma omp parallel for
+    for(uint i = 0; i < KAB_unique.size(); ++i){
+        //locating non-zero regions where K_a + K_b = K_c + K_d
+        //T = conv_to<vec>::from(find(KAB==KAB_unique(i))); //Is it possible to make this vector "shrink" as more indices is identified?
+        uvec tT = find(KAB==KAB_unique(i));
+        bmVpppp.set_block(i, A.elem(tT), B.elem(tT),A.elem(tT), B.elem(tT));
+    }
+}
+
 
 void initializer::sVppppBlock(){
     //Block interaction (store only blocks)
@@ -635,6 +670,7 @@ void initializer::sVppppBlock(){
 
 
     bmVpppp.set_size(KAB_unique.size(), iNp, iNp, iNp, iNp);
+
 
     for(uint i = 0; i < KAB_unique.size(); ++i){
         //locating non-zero regions where K_a + K_b = K_c + K_d
