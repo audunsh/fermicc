@@ -127,9 +127,6 @@ void ccdt::L1_dense_multiplication(){
     // ##                                                   ##
     // #######################################################
 
-
-
-
     L1.clear();
 
     uint N = iSetup.bmVpppp.uN; //number of blocks
@@ -264,10 +261,6 @@ void ccdt::L1_dense_multiplication(){
         }
     }
     t3a.update_as_pqr_stu(sp_mat(mCOO, vData, iSetup.iNp*iSetup.iNp*iSetup.iNp,iSetup.iNh*iSetup.iNh*iSetup.iNh), iSetup.iNp,iSetup.iNp,iSetup.iNp,iSetup.iNh,iSetup.iNh,iSetup.iNh);
-
-
-
-
 }
 
 
@@ -309,6 +302,8 @@ void ccdt::advance(){
     // ## Calculating full triples amplitudes          ##
     // ##                                              ##
     // ##################################################
+
+    // To do: restructure the progression of this part, so that a minimum of terms needs to be stored.
 
     // #########################
     // ##   Linear t2 terms   ##
@@ -420,6 +415,8 @@ void ccdt::advance(){
     energy(); //Calculate the energy
     T.shed_zeros();
     T.map_indices();
+    //T3.shed_zeros();
+    //T3.map_indices();
 }
 
 
