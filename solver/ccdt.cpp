@@ -278,7 +278,7 @@ void ccdt::advance(){
     // ##                                              ##
     // ##################################################
 
-    L1_dense_multiplication(); //The pp-pp diagram, given special treatment to limit memory usage
+    L1_dense_multiplication(); //The pp-pp diagrama, given special treatment to limit memory usage
 
     L2 = T.pq_rs()*vhhhh.pq_rs();
 
@@ -339,7 +339,7 @@ void ccdt::advance(){
     t2t3c.update_as_pqr_stu(t2t3c.pqr_stu()-t2t3c.qpr_stu()-t2t3c.rpq_stu(), Np, Np, Np, Nr, Nr, Nr);
 
     t2t3d.update_as_qru_pst(T3.pru_stq()*vhhpp.pqs_r()*T.q_prs(), Np, Np, Np, Nr, Nr, Nr);
-    t2t3c.update_as_pqr_stu(t2t3d.pqr_stu()-t2t3d.qpr_stu()-t2t3d.rpq_stu()-t2t3d.rpq_sut()+t2t3d.prq_stu()+t2t3d.qrp_sut()-t2t3d.qrp_tus()+t2t3d.rqp_sut()+t2t3d.pqr_tus(), Np, Np, Np, Nr, Nr, Nr);
+    t2t3d.update_as_pqr_stu(t2t3d.pqr_stu()-t2t3d.qpr_stu()-t2t3d.rpq_stu()-t2t3d.rpq_sut()+t2t3d.prq_stu()+t2t3d.qrp_sut()-t2t3d.qrp_tus()+t2t3d.rqp_sut()+t2t3d.pqr_tus(), Np, Np, Np, Nr, Nr, Nr);
 
     t2t3e.update_as_tru_pqs(T3.sru_tpq()*vhhpp.qrs_p()*T.s_pqr(), Np, Np, Np, Nr, Nr, Nr);
     t2t3e.update_as_pqr_stu(t2t3e.pqr_stu()-t2t3e.rqp_stu()-t2t3e.rpq_stu()-t2t3e.rpq_tsu()+t2t3e.qpr_stu()+t2t3e.qrp_tsu()-t2t3e.qrp_ust()+t2t3e.prq_tsu()+t2t3e.pqr_ust(), Np, Np, Np, Nr, Nr, Nr);

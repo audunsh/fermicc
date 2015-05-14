@@ -1,6 +1,5 @@
 #ifndef CCDT_MP_H
 #define CCDT_MP_H
-
 #define ARMA_64BIT_WORD
 #include <armadillo>
 #include <iomanip>
@@ -34,13 +33,8 @@ public:
     flexmat vppph;
     flexmat vhppp;
 
-
-
     flexmat vphpp;
     flexmat vhhhp;
-
-
-
 
     flexmat T;
     flexmat Tprev;
@@ -69,7 +63,6 @@ public:
     flexmat fmD10b, fmD10c;
 
     flexmat fmt2temp;
-
 
     flexmat6 T3, T3prev;
     flexmat6 t2t3a, t2t3b,t2t3c,t2t3d,t2t3e,t2t3f,t2t3g, t2t2b,t2t2c,t2t2d, t3a, t3b,t3c,t2a,t2b;

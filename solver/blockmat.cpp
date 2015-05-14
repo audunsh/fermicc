@@ -33,11 +33,27 @@ void blockmat::set_block(uint n, uvec pb, uvec qb, uvec rb, uvec sb){
     requests(n) = req;
 }
 
-sp_mat blockmat::get_sparse_block(uint n){
+umat blockmat::get_sparse_block(uint n){
+    // #################################################
+    // ## Returns a sparse initializer without values ##
+    // #################################################
     uint nx = p(n).size();
     uint ny = r(n).size();
-    locations.set_size(2,nx*ny);
 
+    umat mCOO(4,nx*ny);
+    /*
+    uvec up = conv_to<uvec>::from(kron(ones(ny), p(n)));
+    uvec uq = conv_to<uvec>::from(kron(ones(ny), q(n)));
+
+    uvec ur = conv_to<uvec>::from(kron(r(n),ones(nx)));
+    uvec us = conv_to<uvec>::from(kron(s(n),ones(nx)));
+
+    mCOO.col(0) = up;
+    mCOO.col(1) = uq;
+    mCOO.col(2) = ur;
+    mCOO.col(3) = us;
+    */
+    return mCOO;
 }
 
 field<uvec> blockmat::get_block(uint n){

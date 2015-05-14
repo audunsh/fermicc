@@ -378,7 +378,7 @@ void ccd::L1_block_multiplication(){
         //locations.col(1) = stream(2) + Np*stream(3);
         t0 = clock();
 
-        L1part = sp_mat(coo, vals, Np2,Np2); //this is what slows down the calculation: is it possible to rearrange the elements somehow? (in column increasing order?)
+        L1part = sp_mat(coo, vals, Np2,Np2); // is it possible to rearrange the elements somehow? (in column increasing order?)
         //L1part = sp_mat(Np2,Np2); //this is what slows down the calculation: is it possible to rearrange the elements somehow? (in column increasing order?)
         ts += (clock()-t0);
         t0 = clock();

@@ -7,9 +7,8 @@
 #include "basis/electrongas.h"
 #include "solver/initializer.h"
 #include "solver/unpack_sp_mat.h"
+#include <omp.h>
 #include <time.h>
-
-#include<omp.h>
 
 //#include <eigen/Eigen/Dense>
 //#include <eigen/Eigen/Sparse>
@@ -20,8 +19,7 @@ using namespace arma;
 ccdt_mp::ccdt_mp(electrongas bs, double a){
     // ##################################################
     // ##                                              ##
-    // ## CCDT-1(perturbative triples), initialization ##
-    // ## Using OpenMP                                 ##
+    // ## Full CCDT, initialization                    ##
     // ##                                              ##
     // ##################################################
 
@@ -31,23 +29,10 @@ ccdt_mp::ccdt_mp(electrongas bs, double a){
     iSetup = initializer(bs);
 
     //setup all interaction matrices
-    #pragma omp parallel  num_threads(4)
-    {
-        if(omp_get_thread_num()==0){
-            iSetup.sVhhhhO();
-            iSetup.sVppppBlock();
-        }
-        if(omp_get_thread_num()==1){
-            iSetup.sVhhpp();
-        }
-        if(omp_get_thread_num()==2){
-            iSetup.sVhpph();
-            iSetup.sVhphh();
-        }
-        if(omp_get_thread_num()==3){
-            iSetup.sVhppp();
-        }
-    }
+    iSetup.sVhhhhO();
+    iSetup.sVppppBlock();
+    iSetup.sVhhpp();
+    iSetup.sVhpph();
 
     //convert interaction data to flexmat objects
     vhhhh.init(iSetup.vValsVhhhh, iSetup.iVhhhh, iSetup.jVhhhh, iSetup.kVhhhh, iSetup.lVhhhh, iSetup.iNh, iSetup.iNh, iSetup.iNh, iSetup.iNh);
@@ -61,8 +46,8 @@ ccdt_mp::ccdt_mp(electrongas bs, double a){
 
 
     //triples specific
-
-
+    iSetup.sVhppp();
+    iSetup.sVhphh();
 
     vhppp.init(iSetup.vValsVhppp, iSetup.iVhppp, iSetup.aVhppp, iSetup.bVhppp, iSetup.cVhppp, iSetup.iNh, iSetup.iNp, iSetup.iNp, iSetup.iNp);
     vphpp.init(-iSetup.vValsVhppp, iSetup.aVhppp, iSetup.iVhppp, iSetup.bVhppp, iSetup.cVhppp, iSetup.iNp, iSetup.iNh, iSetup.iNp, iSetup.iNp);
@@ -143,9 +128,6 @@ void ccdt_mp::L1_dense_multiplication(){
     // ##                                                   ##
     // #######################################################
 
-
-
-
     L1.clear();
 
     uint N = iSetup.bmVpppp.uN; //number of blocks
@@ -172,6 +154,7 @@ void ccdt_mp::L1_dense_multiplication(){
     field<vec> fvValues_t3a(N);
 
     mat V;
+
     for(uint i = 0; i < N; ++i){
         // #############################################
         // ##   Iteration over each block in vhpppp   ##
@@ -200,7 +183,6 @@ void ccdt_mp::L1_dense_multiplication(){
         // ##   Fetch corresponding rows in amplitudes   ##
         // ##   Perform dense multiplication    (L1)     ##
         // ################################################
-
         L1_Ttemp = T.rows_dense(stream(4)); //load only elements in row, keep
         L1_tempStorage = V*L1_Ttemp; //dense multiplication
         int N_elems = T.MCols.size()*stream(4).size();
@@ -280,10 +262,6 @@ void ccdt_mp::L1_dense_multiplication(){
         }
     }
     t3a.update_as_pqr_stu(sp_mat(mCOO, vData, iSetup.iNp*iSetup.iNp*iSetup.iNp,iSetup.iNh*iSetup.iNh*iSetup.iNh), iSetup.iNp,iSetup.iNp,iSetup.iNp,iSetup.iNh,iSetup.iNh,iSetup.iNh);
-
-
-
-
 }
 
 
@@ -293,165 +271,165 @@ void ccdt_mp::advance(){
     int Nq = iSetup.iNp;
     int Nr = iSetup.iNh;
     int Ns = iSetup.iNh;
-    bool timing = false; //time each contribution calculation and print to screen (each iteration)
-    clock_t t;
+    bool timing = true; //time each contribution calculation and print to screen (each iteration)
+
+    double tm = omp_get_wtime();
+
     // ##################################################
     // ##                                              ##
     // ## Calculating doubles amplitude                ##
     // ##                                              ##
     // ##################################################
-    #pragma omp parallel  num_threads(4)
-    {
-    if(omp_get_thread_num()==0){
-        t = clock();
-        L1_dense_multiplication(); //The pp-pp diagram, given special treatment to limit memory usage
 
-        L2 = T.pq_rs()*vhhhh.pq_rs();
+    L1_dense_multiplication(); //The pp-pp diagrama, given special treatment to limit memory usage
 
-        fmL3.update(vhpph.sq_rp()*T.qs_pr(), Ns, Nq, Np, Nr);
-        L3 = fmL3.rq_sp() - fmL3.qr_sp() -fmL3.rq_ps() +fmL3.qr_ps(); //permuting elements
+    L2 = T.pq_rs()*vhhhh.pq_rs();
 
-        fmQ1.update(T.rs_pq()*vhhpp.rs_pq()*T.rs_pq(), Nr, Ns, Np,Nq);
-        Q1 = fmQ1.rs_pq();
+    fmL3.update(vhpph.sq_rp()*T.qs_pr(), Ns, Nq, Np, Nr);
+    L3 = fmL3.rq_sp() - fmL3.qr_sp() -fmL3.rq_ps() +fmL3.qr_ps(); //permuting elements
 
-        fmQ2.update(T.pr_qs()*vhhpp.rp_qs()*T.sq_pr(), Np, Nr, Nq, Ns);
-        Q2 = fmQ2.pr_qs()-fmQ2.pr_sq(); //permuting elements
+    fmQ1.update(T.rs_pq()*vhhpp.rs_pq()*T.rs_pq(), Nr, Ns, Np,Nq);
+    Q1 = fmQ1.rs_pq();
 
-        fmQ3.update_as_r_pqs((T.r_sqp()*vhhpp.prs_q())*T.r_pqs(), Np, Nq, Nr, Ns);
-        Q3 = fmQ3.pq_rs() - fmQ3.pq_sr(); //permuting elements
+    fmQ2.update(T.pr_qs()*vhhpp.rp_qs()*T.sq_pr(), Np, Nr, Nq, Ns);
+    Q2 = fmQ2.pr_qs()-fmQ2.pr_sq(); //permuting elements
 
-        fmQ4.update_as_p_qrs(T.p_srq()*vhhpp.pqr_s()*T.p_qrs(), Np, Nq, Nr, Ns);
-        Q4 = fmQ4.pq_rs() - fmQ4.qp_rs(); //permuting elements
+    fmQ3.update_as_r_pqs((T.r_sqp()*vhhpp.prs_q())*T.r_pqs(), Np, Nq, Nr, Ns);
+    Q3 = fmQ3.pq_rs() - fmQ3.pq_sr(); //permuting elements
 
+    fmQ4.update_as_p_qrs(T.p_srq()*vhhpp.pqr_s()*T.p_qrs(), Np, Nq, Nr, Ns);
+    Q4 = fmQ4.pq_rs() - fmQ4.qp_rs(); //permuting elements
+
+    if(timing){
+        cout << "Doubles + Ladders:" << tm-omp_get_wtime() << endl;
+        tm = omp_get_wtime();
     }
+
     // ##################################################
     // ##                                              ##
     // ## Calculating full triples amplitudes          ##
     // ##                                              ##
     // ##################################################
 
+    // To do: restructure the progression of this part, so that a minimum of terms needs to be stored.
+
     // #########################
     // ##   Linear t2 terms   ##
     // #########################
-    if(omp_get_thread_num()==1){
-        t = clock();
-        t2a.update_as_qru_pst(vppph.pqs_r()*T.q_prs(), Np,Np,Np,Nr,Nr,Nr);
-        t2a.update_as_pqr_stu(t2a.pqr_stu()-t2a.qpr_stu()-t2a.rpq_stu()-t2a.rpq_uts()+t2a.prq_stu()+t2a.qrp_uts()-t2a.qrp_ust()+t2a.rqp_uts()+t2a.pqr_ust(), Np,Np,Np,Nr,Nr,Nr);
-    }
-    if(omp_get_thread_num()==2){
-        t = clock();
-        t2b.update_as_pqs_rtu(T.pqr_s()*vhphh.p_qrs(), Np,Np,Np,Nr,Nr,Nr);
-        t2b.update_as_pqr_stu(t2b.pqr_stu()-t2b.rqp_stu()-t2b.rpq_stu()-t2b.rpq_tsu()+t2b.qpr_stu()+t2b.qrp_tsu()-t2b.qrp_ust()+t2b.prq_tsu()+t2b.pqr_ust(), Np,Np,Np,Nr,Nr,Nr);
-    }
-    if(omp_get_thread_num()==3){
-        // #########################
-        // ##  Linear t3 terms    ##
-        // #########################
 
-        //t3a_dense_multiplication();
-        //t3a.update_as_pq_rstu(vpppp.pq_rs()∗T3.pq_rstu()); //Note that this will probably be replaced by a block implementation.
-        //t3a.pqr_stu()-t3a.rqp_stu()-t3a.rpq_stu()
-        t = clock();
-        //t3b.update_as_pqru_st(T3.pqrs_tu()*vphhp.pq_rs(), Np,Np,Np,Nr,Nr,Nr);
-        t3b.update_as_pqru_st(T3.pqrs_tu()*vhhhh.pq_rs(), Np,Np,Np,Nr,Nr,Nr); //replaced interaction (symmetries)
-        t3b.update_as_pqr_stu(t3b.pqr_stu()-t3b.pqr_sut()-t3b.pqr_tus(), Np, Np, Np, Nr, Nr, Nr);
-    }
-    if(omp_get_thread_num()==0){
-        t3c.update_as_ps_qrtu(vhpph.pr_qs()*T3.sp_qrtu(), Np,Np,Np,Nr,Nr,Nr);
-        t3c.update_as_pqr_stu(t3c.pqr_stu()-t3c.qpr_stu()-t3c.rpq_stu()-t3c.rpq_tsu()+t3c.prq_stu()+t3c.qrp_tsu()-t3c.qrp_ust()+t3c.rqp_tsu()+t3c.pqr_ust(), Np, Np, Np, Nr, Nr, Nr);
+    t2a.update_as_qru_pst(vppph.pqs_r()*T.q_prs(), Np,Np,Np,Nr,Nr,Nr);
+    t2a.update_as_pqr_stu(t2a.pqr_stu()-t2a.qpr_stu()-t2a.rpq_stu()-t2a.rpq_uts()+t2a.prq_stu()+t2a.qrp_uts()-t2a.qrp_ust()+t2a.rqp_uts()+t2a.pqr_ust(), Np,Np,Np,Nr,Nr,Nr);
 
+    t2b.update_as_pqs_rtu(T.pqr_s()*vhphh.p_qrs(), Np,Np,Np,Nr,Nr,Nr);
+    t2b.update_as_pqr_stu(t2b.pqr_stu()-t2b.rqp_stu()-t2b.rpq_stu()-t2b.rpq_tsu()+t2b.qpr_stu()+t2b.qrp_tsu()-t2b.qrp_ust()+t2b.prq_tsu()+t2b.pqr_ust(), Np,Np,Np,Nr,Nr,Nr);
+
+    if(timing){
+        cout << "Linear t2 terms:" << tm-omp_get_wtime() << endl;
+        tm = omp_get_wtime();
     }
+
+    // #########################
+    // ##  Linear t3 terms    ##
+    // #########################
+
+    t3b.update_as_pqru_st(T3.pqrs_tu()*vhhhh.pq_rs(), Np,Np,Np,Nr,Nr,Nr); //replaced interaction (symmetries)
+    t3b.update_as_pqr_stu(t3b.pqr_stu()-t3b.pqr_sut()-t3b.pqr_tus(), Np, Np, Np, Nr, Nr, Nr);
+
+    t3c.update_as_ps_qrtu(vhpph.qs_pr()*T3.sp_qrtu(), Np,Np,Np,Nr,Nr,Nr);
+    t3c.update_as_pqr_stu(t3c.pqr_stu()-t3c.qpr_stu()-t3c.rpq_stu()-t3c.rpq_tsu()+t3c.prq_stu()+t3c.qrp_tsu()-t3c.qrp_ust()+t3c.rqp_tsu()+t3c.pqr_ust(), Np, Np, Np, Nr, Nr, Nr);
+
+    if(timing){
+        cout << "Linear t3 terms:" << tm-omp_get_wtime() << endl;
+        tm = omp_get_wtime();
+    }
+
     // #########################
     // ## Mixed t2*t3 terms   ##
     // #########################
-    if(omp_get_thread_num()==1){
-        t = clock();
-        t2t3a.update_as_qtru_ps(T3.qtru_sp()*vhhpp.qs_pr()*T.sq_pr(), Np, Np, Np, Nr, Nr, Nr );
-        t2t3a.update_as_pqr_stu(t2t3a.pqr_stu()-t2t3a.qpr_stu()-t2t3a.rpq_stu()-t2t3a.rpq_tsu()+t2t3a.prq_stu()+t2t3a.qrp_tsu()-t2t3a.qrp_ust()+t2t3a.rqp_tsu()+t2t3a.pqr_ust(), Np, Np, Np, Nr, Nr, Nr);
-    }
-    if(omp_get_thread_num()==2){
-        t2t3b.update_as_pqtru_s(T3.pqtru_s()*vhhpp.q_prs()*T.rpq_s(), Np, Np, Np, Nr, Nr, Nr);
-        t2t3b.update_as_pqr_stu(t2t3b.pqr_stu()-t2t3b.pqr_tsu()-t2t3b.pqr_ust(), Np, Np, Np, Nr, Nr, Nr);
-    }
-    if(omp_get_thread_num()==3){
-        t2t3c.update_as_sqtru_p(T3.sqtru_p()*vhhpp.s_pqr()*T.rsp_q(), Np, Np, Np, Nr, Nr, Nr);
-        t2t3c.update_as_pqr_stu(t2t3c.pqr_stu()-t2t3c.qpr_stu()-t2t3c.rpq_stu(), Np, Np, Np, Nr, Nr, Nr);
-    }
-    if(omp_get_thread_num()==0){
-        t2t3d.update_as_qru_pst(T3.pru_stq()*vhhpp.pqs_r()*T.q_prs(), Np, Np, Np, Nr, Nr, Nr);
-        t2t3c.update_as_pqr_stu(t2t3d.pqr_stu()-t2t3d.qpr_stu()-t2t3d.rpq_stu()-t2t3d.rpq_sut()+t2t3d.prq_stu()+t2t3d.qrp_sut()-t2t3d.qrp_tus()+t2t3d.rqp_sut()+t2t3d.pqr_tus(), Np, Np, Np, Nr, Nr, Nr);
-    }
-    if(omp_get_thread_num()==1){
-        t2t3e.update_as_tru_pqs(T3.sru_tpq()*vhhpp.qrs_p()*T.s_pqr(), Np, Np, Np, Nr, Nr, Nr);
-        t2t3e.update_as_pqr_stu(t2t3e.pqr_stu()-t2t3e.rqp_stu()-t2t3e.rpq_stu()-t2t3e.rpq_tsu()+t2t3e.qpr_stu()+t2t3e.qrp_tsu()-t2t3e.qrp_ust()+t2t3e.prq_tsu()+t2t3e.pqr_ust(), Np, Np, Np, Nr, Nr, Nr);
-    }
-    if(omp_get_thread_num()==2){
-        t2t3f.update_as_pqru_st(T3.pqru_st()*vhhpp.pq_rs()*T.pq_rs(), Np, Np, Np, Nr, Nr, Nr);
-        t2t3f.update_as_pqr_stu(t2t3f.pqr_stu()-t2t3f.pqr_uts()-t2t3f.pqr_ust(), Np, Np, Np, Nr, Nr, Nr);
-    }
-    if(omp_get_thread_num()==3){
-        t2t3g.update_as_stru_pq(T3.stru_pq()*vhhpp.rs_pq()*T.rs_pq(), Np, Np, Np, Nr, Nr, Nr);
-        t2t3g.update_as_pqr_stu(t2t3g.pqr_stu()-t2t3g.rqp_stu()-t2t3g.rpq_stu(), Np, Np, Np, Nr, Nr, Nr);
 
-        // #########################
-        // ##  Quadratic t2 terms ##
-        // #########################
-
-        // These terms need special treatment due to lines exciting out of the interaction
-        // Possible implementation: (t2.xx_xx()*v.xx_xx()).xx_xx()*t2.xx_xx();
+    if(timing){
+        cout << "Linear t3 terms:" << tm-omp_get_wtime() << endl;
+        tm = omp_get_wtime();
     }
-    if(omp_get_thread_num()==0){
-        fmt2temp.update(T.pr_sq()*vhppp.pr_qs(), Np, Nr, Np, Np);
-        t2t2b.update_as_psq_rtu(fmt2temp.pqr_s()*T.p_qrs(), Np,Np,Np,Nr,Nr,Nr);
-        t2t2b.update_as_pqr_stu(t2t2b.pqr_stu()-t2t2b.qpr_stu()-t2t2b.rpq_stu()-t2t2b.rpq_tsu()+t2t2b.prq_stu()+t2t2b.qrp_tsu()-t2t2b.qrp_ust()+t2t2b.rqp_tsu()+t2t2b.pqr_ust(), Np,Np,Np,Nr,Nr,Nr);
+    t2t3a.update_as_qtru_ps(T3.qtru_sp()*vhhpp.qs_pr()*T.sq_pr(), Np, Np, Np, Nr, Nr, Nr );
+    t2t3a.update_as_pqr_stu(t2t3a.pqr_stu()-t2t3a.qpr_stu()-t2t3a.rpq_stu()-t2t3a.rpq_tsu()+t2t3a.prq_stu()+t2t3a.qrp_tsu()-t2t3a.qrp_ust()+t2t3a.rqp_tsu()+t2t3a.pqr_ust(), Np, Np, Np, Nr, Nr, Nr);
 
-        //t2t2b.update_as_psq_rtu(T.pr_sq()*vhppp.pr_qs()*T.p_qrs(), Np,Np,Np,Nr,Nr,Nr);
-        //(T.pr_sq()*vhppp.pr_qs())
-        //t2t2b.pqr_stu()-t2t2b.qpr_stu()-t2t2b.rpq_stu()-t2t2b.rpq_tsu()+t2t2b.prq_stu()+t2t2b.qrp_tsu()-t2t2b.qrp_ust()+t2t2b.rqp_tsu()+t2t2b.pqr_ust()
+    if(timing){
+        cout << "Mixed t2t3a:" << tm-omp_get_wtime() << endl;
+        tm = omp_get_wtime();
     }
-    if(omp_get_thread_num()==1){
-        fmt2temp.update(T.rs_pq()*vhppp.rs_pq(), Nr, Nr, Np, Np);
+    t2t3b.update_as_pqtru_s(T3.pqtru_s()*(vhhpp.q_prs()*T.rpq_s()), Np, Np, Np, Nr, Nr, Nr);
+    t2t3b.update_as_pqr_stu(t2t3b.pqr_stu()-t2t3b.pqr_tsu()-t2t3b.pqr_ust(), Np, Np, Np, Nr, Nr, Nr);
 
-        t2t2c.update_as_tur_pqs(fmt2temp.rsp_q()*T.s_pqr(), Np,Np,Np,Nr,Nr,Nr); //check this one later!!!!
-        t2t2c.update_as_pqr_stu(t2t2c.pqr_stu()-t2t2c.rqp_stu()-t2t2c.rpq_stu()-t2t2c.rpq_tsu()+t2t2c.qpr_stu()+t2t2c.qrp_tsu()-t2t2c.qrp_ust()+t2t2c.prq_tsu()+t2t2c.pqr_ust(), Np, Np, Np, Nr, Nr, Nr);
+    if(timing){
+        cout << "Mixed t2t3b:" << tm-omp_get_wtime() << endl;
+        tm = omp_get_wtime();
+    }
+    t2t3c.update_as_sqtru_p(T3.sqtru_p()*(vhhpp.s_pqr()*T.rsp_q()), Np, Np, Np, Nr, Nr, Nr);
+    t2t3c.update_as_pqr_stu(t2t3c.pqr_stu()-t2t3c.qpr_stu()-t2t3c.rpq_stu(), Np, Np, Np, Nr, Nr, Nr);
 
+    if(timing){
+        cout << "Mixed t2t3c:" << tm-omp_get_wtime() << endl;
+        tm = omp_get_wtime();
+    }
+    t2t3d.update_as_qru_pst(T3.pru_stq()*vhhpp.pqs_r()*T.q_prs(), Np, Np, Np, Nr, Nr, Nr);
+    t2t3d.update_as_pqr_stu(t2t3d.pqr_stu()-t2t3d.qpr_stu()-t2t3d.rpq_stu()-t2t3d.rpq_sut()+t2t3d.prq_stu()+t2t3d.qrp_sut()-t2t3d.qrp_tus()+t2t3d.rqp_sut()+t2t3d.pqr_tus(), Np, Np, Np, Nr, Nr, Nr);
 
-        //t2t2c.update_as_tur_pqs(T.rs_pq()*vhppp.rs_pq()*T.s_pqr(), Np,Np,Np,Nr,Nr,Nr);
-        //t2t2c.pqr_stu()-t2t2c.rqp_stu()-t2t2c.rpq_stu()-t2t2c.rpq_tsu()+t2t2c.qpr_stu()+t2t2c.qrp_tsu()-t2t2c.qrp_ust()+t2t2c.prq_tsu()+t2t2c.pqr_ust();
+    if(timing){
+        cout << "Mixed t2t3d:" << tm-omp_get_wtime() << endl;
+        tm = omp_get_wtime();
     }
-    if(omp_get_thread_num()==2){
-        //fmt2temp.update(T.pq_rs()*vhhph.pq_rs(), Np, Np, Nr, Nr);
-        fmt2temp.update(T.pq_rs()*vhhhp.pq_sr(), Np, Np, Np, Nr);
-        t2t2d.update_as_qru_pst(fmt2temp.pqs_r()*T.q_prs(), Np,Np,Np,Nr,Nr,Nr);
-        t2t2d.update_as_pqr_stu(t2t2d.pqr_stu()-t2t2d.qpr_stu()-t2t2d.rpq_stu()-t2t2d.rpq_uts()+t2t2d.prq_stu()+t2t2d.qrp_uts()-t2t2d.qrp_ust()+t2t2d.rqp_uts()+t2t2d.pqr_ust(), Np, Np, Np, Nr, Nr, Nr);
+    t2t3e.update_as_tru_pqs((T3.sru_tpq()*vhhpp.qrs_p())*T.s_pqr(), Np, Np, Np, Nr, Nr, Nr);
+    t2t3e.update_as_pqr_stu(t2t3e.pqr_stu()-t2t3e.rqp_stu()-t2t3e.rpq_stu()-t2t3e.rpq_tsu()+t2t3e.qpr_stu()+t2t3e.qrp_tsu()-t2t3e.qrp_ust()+t2t3e.prq_tsu()+t2t3e.pqr_ust(), Np, Np, Np, Nr, Nr, Nr);
 
+    if(timing){
+        cout << "Mixed t2t3e:" << tm-omp_get_wtime() << endl;
+        tm = omp_get_wtime();
     }
+    t2t3f.update_as_pqru_st(T3.pqru_st()*vhhpp.pq_rs()*T.pq_rs(), Np, Np, Np, Nr, Nr, Nr);
+    t2t3f.update_as_pqr_stu(t2t3f.pqr_stu()-t2t3f.pqr_uts()-t2t3f.pqr_ust(), Np, Np, Np, Nr, Nr, Nr);
 
-    //outputting computational time on each cpu
+    if(timing){
+        cout << "Mixed t2t3f:" << tm-omp_get_wtime() << endl;
+        tm = omp_get_wtime();
+    }
+    t2t3g.update_as_stru_pq(T3.stru_pq()*vhhpp.rs_pq()*T.rs_pq(), Np, Np, Np, Nr, Nr, Nr);
+    t2t3g.update_as_pqr_stu(t2t3g.pqr_stu()-t2t3g.rqp_stu()-t2t3g.rpq_stu(), Np, Np, Np, Nr, Nr, Nr);
 
-    if(omp_get_thread_num()==0){
-        cout << omp_get_thread_num() <<" " << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+    if(timing){
+        cout << "Mixed t2t3g:" << tm-omp_get_wtime() << endl;
+        tm = omp_get_wtime();
     }
-    if(omp_get_thread_num()==1){
-        cout << omp_get_thread_num() <<" " << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
-    }
-    if(omp_get_thread_num()==2){
-        cout << omp_get_thread_num() <<" " << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
-    }
-    if(omp_get_thread_num()==3){
-        cout << omp_get_thread_num() <<" " << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
-    }
-    }
-
 
     // #########################
-    // ##  Setting up T3      ##
+    // ##  Quadratic t2 terms ##
+    // #########################
+
+    // These terms need special treatment due to lines exciting out of the interaction
+
+    fmt2temp.update(T.pr_sq()*vhppp.pr_qs(), Np, Nr, Np, Np);
+    t2t2b.update_as_psq_rtu(fmt2temp.pqr_s()*T.p_qrs(), Np,Np,Np,Nr,Nr,Nr);
+    t2t2b.update_as_pqr_stu(t2t2b.pqr_stu()-t2t2b.qpr_stu()-t2t2b.rpq_stu()-t2t2b.rpq_tsu()+t2t2b.prq_stu()+t2t2b.qrp_tsu()-t2t2b.qrp_ust()+t2t2b.rqp_tsu()+t2t2b.pqr_ust(), Np,Np,Np,Nr,Nr,Nr);
+
+    fmt2temp.update(T.rs_pq()*vhppp.rs_pq(), Nr, Nr, Nr, Np);
+    t2t2c.update_as_tur_pqs(fmt2temp.pqs_r()*T.s_pqr(), Np,Np,Np,Nr,Nr,Nr); //check this one later!!!!
+    t2t2c.update_as_pqr_stu(t2t2c.pqr_stu()-t2t2c.rqp_stu()-t2t2c.rpq_stu()-t2t2c.rpq_tsu()+t2t2c.qpr_stu()+t2t2c.qrp_tsu()-t2t2c.qrp_ust()+t2t2c.prq_tsu()+t2t2c.pqr_ust(), Np, Np, Np, Nr, Nr, Nr);
+
+    fmt2temp.update(T.pq_rs()*vhhhp.pq_sr(), Np, Np, Np, Nr);
+    t2t2d.update_as_qru_pst(fmt2temp.pqs_r()*T.q_prs(), Np,Np,Np,Nr,Nr,Nr);
+    t2t2d.update_as_pqr_stu(t2t2d.pqr_stu()-t2t2d.qpr_stu()-t2t2d.rpq_stu()-t2t2d.rpq_uts()+t2t2d.prq_stu()+t2t2d.qrp_uts()-t2t2d.qrp_ust()+t2t2d.rqp_uts()+t2t2d.pqr_ust(), Np, Np, Np, Nr, Nr, Nr);
+
+    if(timing){
+        cout << "Quadratic t2 terms:" << tm-omp_get_wtime() << endl;
+        tm = omp_get_wtime();
+    }
+
+    // #########################
+    // ##  Updating t3        ##
     // #########################
 
     sp_mat t3_temp = t2a.pqr_stu() - t2b.pqr_stu(); //CCDT-1 contribution
 
-    /*
-    // These diagrams seems to be working fine
     t3_temp += t2t3a.pqr_stu();
     t3_temp -= .5*t2t3b.pqr_stu();
     t3_temp -= .5*t2t3c.pqr_stu();
@@ -460,20 +438,23 @@ void ccdt_mp::advance(){
     t3_temp += .25*t2t3f.pqr_stu();
     t3_temp += .25*t2t3g.pqr_stu();
 
-    */
-    //Unsure about these
-    //t3_temp += t2t2b.pqr_stu();
-    //t3_temp -= .5*t2t2c.pqr_stu();
-    //t3_temp += .5*t2t2d.pqr_stu();
+    t3_temp += t2t2b.pqr_stu();
+    t3_temp -= .5*t2t2c.pqr_stu(); // (*)
+    t3_temp += .5*t2t2d.pqr_stu();
 
-    //t3_temp += .5*t3a.pqr_stu();
-    //t3_temp += .5*t3b.pqr_stu();
-    //t3_temp += t3c.pqr_stu();
+    t3_temp += .5*t3a.pqr_stu();
+    t3_temp += .5*t3b.pqr_stu();
+    t3_temp += t3c.pqr_stu();      // (*)
+
+    //Some terms (*) have been errorprone at earlier stages of the code. They should work in the current version.
 
     T3.update_as_pqr_stu(t3_temp, Np,Np,Np,Nr,Nr,Nr);
-    T3.set_amplitudes(-ebs.vEnergy);
-    //T3.shed_zeros();
-    //T3.map_indices();
+    T3.set_amplitudes(ebs.vEnergy); //divide by energy denominator
+
+    if(timing){
+        cout << "Updating t3:" << tm-omp_get_wtime() << endl;
+        tm = omp_get_wtime();
+    }
 
     //Calculating the triples contributions to T2
     fmD10b.update_as_q_rsp(vphpp.p_qrs()*T3.uqr_stp(), Np,Np,Nr,Nr);
@@ -482,27 +463,23 @@ void ccdt_mp::advance(){
     fmD10c.update_as_pqr_s(T3.pqs_tur()*vhhhp.pqs_r(), Np,Np,Nr,Nr); //remember to permute these
     fmD10c.update(fmD10c.pq_rs() - fmD10c.pq_sr(), Np,Np,Nr,Nr);
 
-    // ##################################################
-    // ##                                              ##
-    // ## Updating amplitudes                          ##
-    // ##                                              ##
-    // ##################################################
+    // #########################
+    // ##  Updating t2        ##
+    // #########################
 
     Tprev.update(T.pq_rs(), Np,Nq,Nr,Ns); //When using relaxation we need to store the previous amplitudes
 
-    T.update(vpphh.pq_rs() + .5*(L1 + L2) + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4 + .5*(fmD10b.pq_rs() - fmD10c.pq_rs()), Np, Nq, Nr, Ns);
+    T.update(vpphh.pq_rs() + .5*(L1 + L2) + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4 - .5*(fmD10b.pq_rs() - fmD10c.pq_rs()), Np, Nq, Nr, Ns);
     T.set_amplitudes(ebs.vEnergy); //divide updated amplitides by energy denominator
     T.update(alpha*Tprev.pq_rs() + (1.0-alpha)*T.pq_rs(), Np, Nq,Nr,Ns);
 
     energy(); //Calculate the energy
     T.shed_zeros();
     T.map_indices();
-
-
-    //T3.shed_zeros();
-    //T3.map_indices();
-    //T3.report();
-
+    if(timing){
+        cout << "Updating t2:" << tm-omp_get_wtime() << endl;
+        tm = omp_get_wtime();
+    }
 }
 
 

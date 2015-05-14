@@ -32,7 +32,7 @@ int main()
 
     //ccsolve solver2(fgas);
     //solver2.CCSD_SG(2);
-    ccdt solver(fgas, .5);
+    ccdt_mp solver(fgas, .5);
 
     //fgas.print();
     //cout << pow(2, 2.0/3.0) << endl;

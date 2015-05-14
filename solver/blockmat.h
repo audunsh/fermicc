@@ -15,7 +15,7 @@ public:
     blockmat();
     void set_size(uint N, uint Np, uint Nq, uint Nr, uint Ns);
     void set_block(uint n, uvec pb, uvec qb, uvec rb, uvec sb);
-    sp_mat get_sparse_block(uint n);
+    umat get_sparse_block(uint n);
     field<uvec> get_block(uint n);
 
 
