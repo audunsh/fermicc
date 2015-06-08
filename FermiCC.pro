@@ -26,7 +26,9 @@ SOURCES += main.cpp \
     solver/ccdt.cpp \
     solver/ccd_pt.cpp \
     solver/ccdt_mp.cpp \
-    solver/ccd_mp.cpp
+    solver/ccd_mp.cpp \
+    solver/blockmap.cpp \
+    solver/amplitude.cpp
 
 include(deployment.pri)
 qtcAddDeployment()
@@ -43,7 +45,9 @@ HEADERS += \
     solver/ccdt.h \
     solver/ccd_pt.h \
     solver/ccdt_mp.h \
-    solver/ccd_mp.h
+    solver/ccd_mp.h \
+    solver/blockmap.h \
+    solver/amplitude.h
 
 LIBS += -larmadillo -lblas -llapack
 

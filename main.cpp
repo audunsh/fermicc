@@ -14,6 +14,7 @@
 #include "solver/ccdt.h"
 #include "solver/ccdt_mp.h"
 #include "solver/ccd_mp.h"
+#include "solver/amplitude.h"
 
 using namespace std;
 using namespace arma;
@@ -30,9 +31,14 @@ int main()
 
     cout << "[Main]G.Baardsens results:" << 1.9434 << endl;
 
+    amplitude t2(fgas, 1);
+    int a = t2.to(2,3,4,76);
+    cout << a << endl;
+    cout << t2.from(a) << endl;
+
     //ccsolve solver2(fgas);
     //solver2.CCSD_SG(2);
-    ccdt_mp solver(fgas, .5);
+    //ccd solver(fgas, .5);
 
     //fgas.print();
     //cout << pow(2, 2.0/3.0) << endl;
