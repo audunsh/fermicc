@@ -13,16 +13,20 @@ public:
     amplitude(electrongas bs, int n_configs);
 
     //internal functions
-    int to(int p, int q, int r, int s);  //compressed index
-    ivec from(int i); //expanded index
+    uint to(uint p, uint q, uint r, uint s);  //compressed index
+    uvec from(uint i); //expanded index
+    ivec intersect1d(ivec A, ivec B);
 
     //element related functions
+
     void zeros(); //zero out all elements
     void init_amplitudes(); //initialize as amplitude
     void divide_energy(); //divide all elements by corresponding energy (for amplitudes)
 
     //index related functions
-    uvec unpack(vec vStream, imat imOrder, umat umDimension); //unpack a disorganized sequence of indices
+    field<uvec> unpack(uvec vStream, imat imOrder); //unpack a disorganized sequence of indices
+    uvec unpack_uvec(uint vStream, imat imOrder);
+
 
     //external functions
     void map_regions(imat L, imat R); //map all regions defined by L == R
@@ -34,13 +38,15 @@ public:
     //Block storage
     int k_step;   //stepsize for identifying unique regions
     vec vElements; //element storage
-    field<umat> fmBlocks; //block of indices
-    field<vec> fvConfigs; //configuration in quantum numbers of each block
+    //field<umat> fmBlocks; //block of indices
+    field<field <umat> > fmBlocks;
+    field<ivec> fvConfigs; //configuration in quantum numbers of each block
     uvec blocklengths;  //number of blocks in each configuration
-    field<mat> fmOrdering; //the ordering of each configuration
+    field<imat> fmOrdering; //the ordering of each configuration
     uvec uvSize; //particle-hole organization
     int iNconfigs;
     int Np, Nh;
+    uint uiCurrent_block;
 
 
     electrongas eBs;

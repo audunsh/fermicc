@@ -18,6 +18,7 @@ public:
     double v2(int p, int q, int r, int s);
     double v3(int p, int q, int r, int s); //skip momentum kroenecker k_p + k_q == k_r + k_s
     double v4(int p, int q); //for the case <pq||pq>
+    ivec unique(uvec p);
 
     void print();
 
@@ -43,6 +44,7 @@ public:
     double dPrefactor2;
     double mu;
     int iNparticles;
+    int k_step;
 
     double pi = 4*atan(1);
     //double pi = 3.1415;

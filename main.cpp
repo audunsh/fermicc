@@ -32,9 +32,35 @@ int main()
     cout << "[Main]G.Baardsens results:" << 1.9434 << endl;
 
     amplitude t2(fgas, 1);
-    int a = t2.to(2,3,4,76);
+    uint a = t2.to(2,3,4,76);
     cout << a << endl;
     cout << t2.from(a) << endl;
+
+    uvec AB = conv_to<uvec>::from(linspace(0,t2.Np*t2.Np-1,t2.Np*t2.Np));
+    //AB.print();
+    imat L(2,3);
+    imat R(2,3);
+    L(0,0) = 0;
+    L(0,1) = 1;
+    L(0,2) = 0;
+    L(1,0) = 1;
+    L(1,1) = 1;
+    L(1,2) = 0;
+
+    R(0,0) = 0;
+    R(0,1) = 1;
+    R(0,2) = 0;
+    R(1,0) = 1;
+    R(1,1) = 1;
+    R(1,2) = 0;
+
+    t2.map_regions(L,R);
+    field<field<uvec> > test;
+
+    //field<uvec> ab = t2.unpack(AB, dim);
+    //ab.print();
+    //ab.print();
+
 
     //ccsolve solver2(fgas);
     //solver2.CCSD_SG(2);

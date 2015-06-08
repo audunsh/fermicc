@@ -100,6 +100,13 @@ void electrongas::generate_state_list2(int Ne, double rs, int Np){
         energy_integer += 1;
     }
     cout << "#Electrongas: number of states:" << nStates << endl;
+    k_step = 2*vKx.max()+3;
+
+
+}
+
+ivec electrongas::unique(uvec p){
+    return vKx.elem(p) + vKy.elem(p)*k_step + vKz.elem(p)*k_step*k_step + vMs.elem(p)*k_step*k_step*k_step;
 }
 
 void electrongas::generate_state_list(int Ne, double rs, int Np){
