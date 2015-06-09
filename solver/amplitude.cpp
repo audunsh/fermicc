@@ -212,17 +212,18 @@ void amplitude::map_regions(imat L, imat R){
         uvec pqrs(4);
         uvec tElements(Nx*Ny);
         umat tBlockmap(Nx*Ny, 3);
+        uint index;
         for(int nx = 0; nx < Nx; nx++){
             for(int ny = 0; ny < Ny; ny++){
                 uvec lhs = unpack_uvec(row(nx), L);
                 uvec rhs = unpack_uvec(col(ny), R);
                 for(uint j = 0; j<lhs.n_elem; ++j){
-                    pqrs(L(i,0)) = lhs(i);
+                    pqrs(L(j,0)) = lhs(j);
                 }
                 for(uint j = 0; j<rhs.n_elem; ++j){
-                    pqrs(R(i,0)) = rhs(i);
+                    pqrs(R(j,0)) = rhs(j);
                 }
-                uint index = to(pqrs(0), pqrs(1), pqrs(2), pqrs(3));
+                index = to(pqrs(0), pqrs(1), pqrs(2), pqrs(3));
 
                 tElements(nx*Ny + ny) = index;
                 tBlockmap(nx*Ny + ny, 0) = i;
@@ -232,7 +233,8 @@ void amplitude::map_regions(imat L, imat R){
             }
         }
         fmBlocks(uiCurrent_block)(i) = block;
-        block.print();
+        //block.print();
+        cout << i << endl;
 
 
 
