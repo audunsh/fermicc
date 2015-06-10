@@ -22,6 +22,7 @@ public:
     void zeros(); //zero out all elements
     void init_amplitudes(); //initialize as amplitude
     void divide_energy(); //divide all elements by corresponding energy (for amplitudes)
+    void print_block_maximum();
 
     //index related functions
     field<uvec> unpack(uvec vStream, imat imOrder); //unpack a disorganized sequence of indices
@@ -39,6 +40,7 @@ public:
     //Block storage
     int k_step;   //stepsize for identifying unique regions
     vec vElements; //element storage
+    vec vEnergies;
     uvec uvElements; //element storage (prior to initialization)
     //field<umat> fmBlocks; //block of indices
     field<field <umat> > fmBlocks;

@@ -34,15 +34,35 @@ amplitude::amplitude(electrongas bs, int n_configs)
 // ##                                              ##
 // ##################################################
 
-void amplitude::zeros(){} //zero out all elements
+void amplitude::zeros(){
+    vElements *= 0;
+} //zero out all elements
+
 void amplitude::init_amplitudes(){
+    vElements.set_size(uvElements.n_rows);
+    vEnergies.set_size(uvElements.n_rows);
     for(uint i= 0; i<uvElements.n_rows; ++i){
         uvec p = from(uvElements(i));
-        cout << p(0) <<  " " << p(1) << " " << p(2) << " " << p(3) << " "<< endl;
+        //cout << p(0) <<  " " << p(1) << " " << p(2) << " " << p(3) << " "<< endl;
+        vElements(i) = eBs.v2(p(0)+Nh,p(1)+Nh,p(2),p(3));
+        //double v = eBs.vEnergy(p(2))+ eBs.vEnergy(p(3));
+        vEnergies(i) = eBs.vEnergy(p(2)) + eBs.vEnergy(p(3))-eBs.vEnergy(p(0)+Nh)-eBs.vEnergy(p(1)+Nh);
     }
-
 } //initialize as amplitude
-void amplitude::divide_energy(){} //divide all elements by corresponding energy (for amplitudes)
+
+void amplitude::divide_energy(){
+    for(uint i= 0; i<uvElements.n_rows; ++i){
+        vElements(i) /= vEnergies(i);
+    }
+} //divide all elements by corresponding energy (for amplitudes)
+
+void amplitude::print_block_maximum(){
+    //debugging function
+    for(uint i = 0; i < blocklengths(0); ++i){
+        getblock(0, i).print();
+        cout << endl;
+    }
+}
 
 // ##################################################
 // ##                                              ##
@@ -161,7 +181,7 @@ void amplitude::map(ivec left, ivec right){
             L(i,2) = 0;
         }
     }
-    L.print();
+    //L.print();
 
     imat R(right.n_rows,3);
     for(uint i = 0; i<right.n_rows; ++i){
@@ -179,7 +199,7 @@ void amplitude::map(ivec left, ivec right){
             R(i,2) = 0;
         }
     }
-    R.print();
+    //R.print();
     map_regions(L,R);
 
 }
@@ -386,10 +406,7 @@ void amplitude::map_regions(imat L, imat R){
             tN += 1;
         }
         uvElements = join_cols<umat>(uvElements, remaining);
-        //uvElements = append(uvElements, remaining);
     }
-
-    //uvElements.print();
 
 
     //lock and load
@@ -408,6 +425,11 @@ void amplitude::map_regions(imat L, imat R){
 
 
 ivec amplitude::match_config(int u, ivec ivConfig){} //retrieve all
-mat amplitude::getblock(int u, int i){}
+mat amplitude::getblock(int u, int i){
+    //umat block = fmBlocks(u)(i);
+    mat block = vElements.elem(fmBlocks(u)(i));
+    block.reshape(fmBlocks(u)(i).n_rows, fmBlocks(u)(i).n_cols);
+    return block;
+}
 mat amplitude::setblock(int u, int i, mat mBlock){}
 mat amplitude::addblock(int u, int i, mat mBlock){}
