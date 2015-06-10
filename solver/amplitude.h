@@ -29,6 +29,7 @@ public:
 
 
     //external functions
+    void map(ivec left, ivec right); //simpler interface to map_regions
     void map_regions(imat L, imat R); //map all regions defined by L == R
     ivec match_config(int u, ivec ivConfig); //retrieve all
     mat getblock(int u, int i);
@@ -38,6 +39,7 @@ public:
     //Block storage
     int k_step;   //stepsize for identifying unique regions
     vec vElements; //element storage
+    uvec uvElements; //element storage (prior to initialization)
     //field<umat> fmBlocks; //block of indices
     field<field <umat> > fmBlocks;
     field<ivec> fvConfigs; //configuration in quantum numbers of each block

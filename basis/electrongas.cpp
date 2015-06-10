@@ -101,6 +101,7 @@ void electrongas::generate_state_list2(int Ne, double rs, int Np){
     }
     cout << "#Electrongas: number of states:" << nStates << endl;
     k_step = 2*vKx.max()+3;
+    //k_step = 20*Nmax + 3;
 
 
 }
