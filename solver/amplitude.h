@@ -22,7 +22,7 @@ public:
 
     void zeros(); //zero out all elements
     void init_amplitudes(); //initialize as amplitude
-    void init_interaction();
+    void init_interaction(ivec shift);
     void divide_energy(); //divide all elements by corresponding energy (for amplitudes)
     void print_block_maximum();
 

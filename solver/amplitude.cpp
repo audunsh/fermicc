@@ -56,14 +56,14 @@ void amplitude::init_amplitudes(){
     }
 } //initialize as amplitude
 
-void amplitude::init_interaction(){
+void amplitude::init_interaction(ivec shift){
     //imat L(2,3);
     //imat R(2,3);
 
-    ivec l0 = {0,1,0};
-    ivec l1 = {1,1,0};
-    ivec r0 = {2,1,Nh};
-    ivec r1 = {3,1,Nh};
+    ivec l0 = {0,1,shift(0)};
+    ivec l1 = {1,1,shift(1)};
+    ivec r0 = {2,1,shift(2)};
+    ivec r1 = {3,1,shift(3)};
 
     imat L = join_rows(l0,l1);
     imat R = join_rows(r0,r1);

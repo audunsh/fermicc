@@ -5,6 +5,8 @@
 
 #include "basis/electrongas.h"
 #include "solver/amplitude.h"
+#include "solver/blockmap.h"
+
 #include <time.h>
 
 using namespace std;
@@ -42,6 +44,7 @@ public:
 
     amplitude t2;
     amplitude vhhpp;
+    blockmap v0;
 
 };
 

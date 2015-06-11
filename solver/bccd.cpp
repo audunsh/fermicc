@@ -22,12 +22,15 @@ bccd::bccd(electrongas fgas)
 void bccd::init(){
     amplitude tt2(eBs, 3, {Np, Np, Nh, Nh});
     amplitude tvhhpp(eBs, 3, {Nh,Nh,Np,Np});
+    blockmap vv(eBs, 3, {Nh,Nh,Np,Np});
+    v0 = vv;
+    v0.init_interaction({0,0,Nh,Nh});
     t2 = tt2;
     vhhpp = tvhhpp;
     t2.map({1,2}, {3,4});
     //vhhpp.map({1,2}, {3,4});
     t2.init_amplitudes();
-    vhhpp.init_interaction();
+    vhhpp.init_interaction({0,0,Nh,Nh});
     t2.divide_energy();
 
 }
@@ -61,25 +64,19 @@ umat bccd::intersect_blocks(amplitude a, uint na, amplitude b, uint nb){
 double bccd::energy(){
     //uint n = t2.blocklengths(0);
     double e = 0;
-    umat c = intersect_blocks(t2,0,vhhpp,0);
+    umat c = intersect_blocks(t2,0,vhhpp,0); //this should be calculated prior to function calls (efficiency)
     for(uint i = 0; i < c.n_rows; ++i){
-        //cout << vhhpp.fvConfigs(0)(c(i,1)) << " " << t2.fvConfigs(0)(c(i,0)) << endl;
         mat block = vhhpp.getblock(0, c(i,1))*t2.getblock(0,c(i,0));
-
+        cout << "--------------" << endl;
         vhhpp.getblock(0, c(i,1)).print();
         cout << endl;
-        t2.getblock(0,c(i,0)).print();
-        cout << "......................................"<< endl;
+        v0.getblock(0, c(i,1)).print();
 
-        //block.print();
+
         vec en = block.diag();
-        //en.print();
-        //cout << en.n_rows << endl << endl;
         for(uint j = 0; j< en.n_rows; ++j){
             e += en(j);
         }
-        //e += accu(vhhpp.getblock(0,  c(i,1))*t2.getblock(0, c(i,0)));
-        //e += sum((vhhpp.getblock(0, i)*t2.getblock(0,i)).diag());
     }
     return .25*e;
 }
