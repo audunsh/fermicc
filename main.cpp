@@ -15,6 +15,7 @@
 #include "solver/ccdt_mp.h"
 #include "solver/ccd_mp.h"
 #include "solver/amplitude.h"
+#include "solver/bccd.h"
 
 using namespace std;
 using namespace arma;
@@ -31,14 +32,27 @@ int main()
 
     cout << "[Main]G.Baardsens results:" << 1.9434 << endl;
 
-    amplitude t2(fgas, 3);
+    bccd solver(fgas);
+
+
+
+    /*
+    uint Np = fgas.iNbstates-fgas.iNparticles; //conflicting notation here
+    uint Nh = fgas.iNparticles;
+    amplitude t2(fgas, 3, {Np, Np, Nh, Nh});
+    amplitude vhhpp(fgas, 3, {Nh,Nh, Np,Np});
+
+
     t2.map({1,2},{3,4}); //indices refer to Np Np Nh Nh
+    vhhpp.map({1,2},{3,4});
+
     cout << t2.uvElements.n_rows << endl;
     t2.init_amplitudes();
     t2.divide_energy();
     t2.print_block_maximum();
     //t2.vElements.print();
 
+    */
     //field<field<uvec> > test;
 
     //field<uvec> ab = t2.unpack(AB, R);

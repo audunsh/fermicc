@@ -10,7 +10,8 @@ using namespace arma;
 class amplitude
 {
 public:
-    amplitude(electrongas bs, int n_configs);
+    amplitude();
+    amplitude(electrongas bs, int n_configs, uvec size);
 
     //internal functions
     uint to(uint p, uint q, uint r, uint s);  //compressed index
@@ -21,6 +22,7 @@ public:
 
     void zeros(); //zero out all elements
     void init_amplitudes(); //initialize as amplitude
+    void init_interaction();
     void divide_energy(); //divide all elements by corresponding energy (for amplitudes)
     void print_block_maximum();
 

@@ -6,8 +6,9 @@
 using namespace std;
 using namespace arma;
 
+amplitude::amplitude(){}
 
-amplitude::amplitude(electrongas bs, int n_configs)
+amplitude::amplitude(electrongas bs, int n_configs, uvec size)
 {
     eBs = bs;
     k_step = 2*eBs.vKx.max()+3; //stepsize for identifying unique regions
@@ -21,11 +22,16 @@ amplitude::amplitude(electrongas bs, int n_configs)
     Np = eBs.iNbstates-eBs.iNparticles; //conflicting naming here
     Nh = eBs.iNparticles;
 
+    uvSize = size; //true state configurations (Np, Np, Nh, Nh) or (Np, Np, Np, Nh, Nh, Nh) (or similar)
+
+    /*
+
     uvSize.set_size(4); //particle-hole organization
     uvSize(0) = Np; //rows
     uvSize(1) = Np;
     uvSize(2) = Nh; //columns
     uvSize(3) = Nh;
+    */
 }
 
 // ##################################################
@@ -49,6 +55,29 @@ void amplitude::init_amplitudes(){
         vEnergies(i) = eBs.vEnergy(p(2)) + eBs.vEnergy(p(3))-eBs.vEnergy(p(0)+Nh)-eBs.vEnergy(p(1)+Nh);
     }
 } //initialize as amplitude
+
+void amplitude::init_interaction(){
+    //imat L(2,3);
+    //imat R(2,3);
+
+    ivec l0 = {0,1,0};
+    ivec l1 = {1,1,0};
+    ivec r0 = {2,1,Nh};
+    ivec r1 = {3,1,Nh};
+
+    imat L = join_rows(l0,l1);
+    imat R = join_rows(r0,r1);
+    L.print();
+    map_regions(L.t(), R.t());
+
+
+    vElements.set_size(uvElements.n_rows);
+    for(uint i= 0; i<uvElements.n_rows; ++i){
+        uvec p = from(uvElements(i));
+        //cout << p(0) <<  " " << p(1) << " " << p(2) << " " << p(3) << " "<< endl;
+        vElements(i) = eBs.v2(p(0),p(1),p(2)+Nh,p(3)+Nh);
+    }
+}
 
 void amplitude::divide_energy(){
     for(uint i= 0; i<uvElements.n_rows; ++i){
@@ -166,6 +195,7 @@ uvec amplitude::from(uint i){
 
 void amplitude::map(ivec left, ivec right){
     imat L(left.n_rows,3);
+    left.print();
     for(uint i = 0; i<left.n_rows; ++i){
         L(i,0) =abs(left(i)) - 1;
         if(left(i)<0){
@@ -210,10 +240,10 @@ void amplitude::map_regions(imat L, imat R){
     // ###########################################################
     // ## Counting number of rows and columns in representation ##
     // ###########################################################
-    int iNrows = 1;
-    int iNcols = 1;
+    uint iNrows = 1;
+    uint iNcols = 1;
+
     for(int i = 0; i<L.n_rows; ++i){
-        //cout << L(i,0) << endl;
         iNrows *= uvSize(L(i,0));
     }
     for(int i = 0; i<R.n_rows; ++i){
@@ -223,13 +253,15 @@ void amplitude::map_regions(imat L, imat R){
     // #########################################
     // ## Extract and organize actual indices ##
     // #########################################
-    uvec rows = conv_to<uvec>::from(linspace(0,iNrows-1, iNrows));
+    //uvec rows = conv_to<uvec>::from(linspace(0,iNrows-1, iNrows));
+
+    uvec rows = linspace<uvec>(0,iNrows-1, iNrows);
+
     uvec cols = conv_to<uvec>::from(linspace(0,iNcols-1, iNcols));
 
     field<uvec> left = unpack(rows, L);
     field<uvec> right = unpack(cols, R);
-    //left.print();
-    //cout << "rows:" << left.n_rows << endl;
+
 
     field<uvec> PQRS(4);
     for(int i = 0; i< left.n_rows; ++i){
@@ -264,12 +296,6 @@ void amplitude::map_regions(imat L, imat R){
     ivec unique_L = unique(LHS);
     ivec unique_R = unique(RHS);
     ivec K_unique = intersect1d(unique_L, unique_R);
-    //cout <<"K_unique: " << endl;
-    //K_unique.print();
-    //unique_R.print();
-
-    //ivec LHS_RHS = join_cols<imat>(RHS, LHS);
-    //ivec K_unique = unique(LHS_RHS);
 
     uint uiN = K_unique.n_elem;
 

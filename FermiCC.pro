@@ -12,8 +12,9 @@ release {
 #if using openmp
 QMAKE_CXXFLAGS+= -fopenmp
 QMAKE_LFLAGS +=  -fopenmp
+QMAKE_CXXFLAGS += -std=c++11
 
-CONFIG += c++11
+#CONFIG += c++11
 
 SOURCES += main.cpp \
     basis/electrongas.cpp \
@@ -29,7 +30,8 @@ SOURCES += main.cpp \
     solver/ccdt_mp.cpp \
     solver/ccd_mp.cpp \
     solver/blockmap.cpp \
-    solver/amplitude.cpp
+    solver/amplitude.cpp \
+    solver/bccd.cpp
 
 include(deployment.pri)
 qtcAddDeployment()
@@ -48,7 +50,8 @@ HEADERS += \
     solver/ccdt_mp.h \
     solver/ccd_mp.h \
     solver/blockmap.h \
-    solver/amplitude.h
+    solver/amplitude.h \
+    solver/bccd.h
 
 LIBS += -larmadillo -lblas -llapack
 
