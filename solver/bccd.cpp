@@ -16,26 +16,39 @@ bccd::bccd(electrongas fgas)
     Np = fgas.iNbstates-fgas.iNparticles;
     Nh = fgas.iNparticles; //conflicting naming here
     init();
-    cout << "Energy:" << energy() << endl;
+
+    //compare();
+    cout << "[BCCD]Energy:" << energy() << endl;
 }
 
 void bccd::init(){
     amplitude tt2(eBs, 3, {Np, Np, Nh, Nh});
-    amplitude tvhhpp(eBs, 3, {Nh,Nh,Np,Np});
+    blockmap tvhhpp(eBs, 3, {Nh,Nh,Np,Np});
+
+    blockmap tvpphh(eBs, 3, {Np, Np, Nh, Nh});
+    vpphh = tvpphh;
+    vpphh.init_interaction({Nh,Nh,0,0});
+
+
     blockmap vv(eBs, 3, {Nh,Nh,Np,Np});
     v0 = vv;
     v0.init_interaction({0,0,Nh,Nh});
+
     t2 = tt2;
-    vhhpp = tvhhpp;
     t2.map({1,2}, {3,4});
     //vhhpp.map({1,2}, {3,4});
     t2.init_amplitudes();
-    vhhpp.init_interaction({0,0,Nh,Nh});
+
     t2.divide_energy();
+
+
+    vhhpp = tvhhpp;
+    vhhpp.init_interaction({0,0,Nh,Nh});
+
 
 }
 
-umat bccd::intersect_blocks(amplitude a, uint na, amplitude b, uint nb){
+umat bccd::intersect_blocks(amplitude a, uint na, blockmap b, uint nb){
     // ############################################
     // ## Find corresponding blocks in a and b   ##
     // ############################################
@@ -61,16 +74,27 @@ umat bccd::intersect_blocks(amplitude a, uint na, amplitude b, uint nb){
     return intersection;
 }
 
+void bccd::compare(){
+    for(uint i = 0; i < t2.blocklengths(0); ++i){
+        t2.getblock(0,i).print();
+        cout << endl;
+        vpphh.getblock(0,i).print();
+        //t2.getblock(0,c(i,0)).print();
+        cout << endl;
+        cout << endl;
+    }
+}
+
 double bccd::energy(){
     //uint n = t2.blocklengths(0);
     double e = 0;
     umat c = intersect_blocks(t2,0,vhhpp,0); //this should be calculated prior to function calls (efficiency)
     for(uint i = 0; i < c.n_rows; ++i){
         mat block = vhhpp.getblock(0, c(i,1))*t2.getblock(0,c(i,0));
-        cout << "--------------" << endl;
-        vhhpp.getblock(0, c(i,1)).print();
-        cout << endl;
-        v0.getblock(0, c(i,1)).print();
+        //cout << "--------------" << endl;
+        //vpphh.getblock(0, c(i,1)).print();
+        //cout << endl;
+        //t2.getblock(0, c(i,1)).print();
 
 
         vec en = block.diag();

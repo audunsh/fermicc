@@ -35,7 +35,6 @@ int main()
     bccd solver(fgas);
 
 
-
     /*
     uint Np = fgas.iNbstates-fgas.iNparticles; //conflicting notation here
     uint Nh = fgas.iNparticles;

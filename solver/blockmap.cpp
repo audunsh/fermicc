@@ -14,7 +14,12 @@ blockmap::blockmap(electrongas bs, int n_configs, uvec size)
     k_step = 2*eBs.vKx.max()+3; //stepsize for identifying unique regions
     iNconfigs = n_configs;
     fmBlocks.set_size(iNconfigs); //block of indices
-    fmBlockz.set_size(n_configs);
+
+    fmBlockz.set_size(iNconfigs);
+
+    fuvRows.set_size(iNconfigs);
+    fuvCols.set_size(iNconfigs);
+
     fvConfigs.set_size(iNconfigs); //configuration in quantum numbers of each block
     blocklengths.set_size(iNconfigs);  //number of blocks in each configuration
     fmOrdering.set_size(iNconfigs,2); //the ordering of each configuration
@@ -46,7 +51,7 @@ void blockmap::init_interaction(ivec shift){
 
     imat L = join_rows(l0,l1);
     imat R = join_rows(r0,r1);
-    L.print();
+    //L.print();
     map_regions(L.t(), R.t());
 }
 
@@ -272,6 +277,9 @@ void blockmap::map_regions(imat L, imat R){
     fvConfigs(uiCurrent_block) = K_unique; //ordering
     //fmBlocks(uiCurrent_block).set_size(uiN);
     fmBlockz(uiCurrent_block).set_size(uiN,2);
+    fuvCols(uiCurrent_block).set_size(uiN);
+    fuvRows(uiCurrent_block).set_size(uiN);
+
 
     field<uvec> tempElements(uiN);
     field<uvec> tempBlockmap1(uiN);
@@ -287,9 +295,19 @@ void blockmap::map_regions(imat L, imat R){
         uvec col = cols.elem(find(RHS==K_unique(i)));
         //srow.print();
 
-        fmBlockz(uiCurrent_block)(i,0) = rows;
-        fmBlockz(uiCurrent_block)(i,1) = cols;
+        fmBlockz(uiCurrent_block)(i,0) = row;
+        fmBlockz(uiCurrent_block)(i,1) = col;
+
+        fuvRows(uiCurrent_block)(i) = row;
+        fuvCols(uiCurrent_block)(i) = col;
+
+        //int Nx = row.n_rows;
+        //int Ny = col.n_rows;
+        //cout << Nx << " " << Ny  << endl;
+        //cout << fuvRows(uiCurrent_block)(i).n_rows << " " << Ny  << endl;
     }
+
+    //}
         /*
 
 
@@ -468,6 +486,7 @@ mat blockmap::getblock(int u, int i){
             block(nx, ny) = eBs.v2(pqrs(0), pqrs(1), pqrs(2), pqrs(3)); //remember to add in the needed shifts
         }
     }
+    //cout << Nx << " " << Ny << " " << endl; //" " << K_unique(i) << endl;
     return block;
 
 }

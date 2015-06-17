@@ -45,6 +45,10 @@ public:
     //field<umat> fmBlocks; //block of indices
     field<field <umat> > fmBlocks;
     field<field <uvec> > fmBlockz;
+
+    field<field <uvec> > fuvRows;
+    field<field <uvec> > fuvCols;
+
     field<ivec> fvConfigs; //configuration in quantum numbers of each block
     uvec blocklengths;  //number of blocks in each configuration
     field<imat> fmOrdering; //the ordering of each configuration

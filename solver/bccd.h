@@ -29,8 +29,9 @@ public:
     void init(); //initialize all amplitudes and interactions
     void advance(); //perform one advancement of the solution
     void solve(); //iterate until solution converges
+    void compare();
     bool unconverged(); //convergence test - returns true while unconverged
-    umat intersect_blocks(amplitude a, uint na, amplitude b, uint nb);
+    umat intersect_blocks(amplitude a, uint na, blockmap b, uint nb);
 
 
 
@@ -43,7 +44,8 @@ public:
     //amplitudes and interactions
 
     amplitude t2;
-    amplitude vhhpp;
+    blockmap vhhpp;
+    blockmap vpphh;
     blockmap v0;
 
 };
