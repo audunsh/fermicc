@@ -19,34 +19,158 @@ bccd::bccd(electrongas fgas)
 
     //compare();
     cout << "[BCCD]Energy:" << energy() << endl;
+    solve(10);
 }
 
+
+
 void bccd::init(){
-    amplitude tt2(eBs, 3, {Np, Np, Nh, Nh});
+    // ############################################
+    // ## Initializing the needed configurations ##
+    // ############################################
+
+
+    //T2 amplitude
+
+    amplitude tt2(eBs, 6, {Np, Np, Nh, Nh});
+    t2 = tt2;
+    t2.map({1,2}, {3,4});
+    t2.map({2,-4},{-1,3}); //for use in L3 (1)
+    //t2.map({-4,2}, {-1,3}); //for use in L3 update (2)
+
+    t2.init_amplitudes();
+    t2.divide_energy();
+
+    //amplitude tt3(eBs, 6, {Np, Np, Nh, Nh});
+
+    //next amplitude
+    t2n = t2;
+    t2n.zeros();
+
+    //Temporary amplitude storage for permutations
+    t2temp = tt2;
+    t2temp.map({1,2},{3,4}); //ab ij (0)
+    t2temp.map({2,1},{3,4}); //ba ij (1)
+    t2temp.map({1,2},{4,3}); //ab ji (2)
+    t2temp.map({2,1},{4,3}); //ba ji (3)
+
+    t2temp.map({-4,2}, {-1,3}); //for use in L3 update (4)
+    t2temp.init_amplitudes();
+    t2temp.zeros();
+
+    //t2n.map({1,2}, {3,4});
+    //t2n.init_amplitudes();
+
+
+    //Vhhpp
     blockmap tvhhpp(eBs, 3, {Nh,Nh,Np,Np});
-
-    blockmap tvpphh(eBs, 3, {Np, Np, Nh, Nh});
-    vpphh = tvpphh;
-    vpphh.init_interaction({Nh,Nh,0,0});
-
+    vhhpp = tvhhpp;
+    vhhpp.init_interaction({0,0,Nh,Nh});
 
     blockmap vv(eBs, 3, {Nh,Nh,Np,Np});
     v0 = vv;
     v0.init_interaction({0,0,Nh,Nh});
 
-    t2 = tt2;
-    t2.map({1,2}, {3,4});
-    //vhhpp.map({1,2}, {3,4});
-    t2.init_amplitudes();
+    //Vpphh
+    blockmap tvpphh(eBs, 3, {Np, Np, Nh, Nh});
+    vpphh = tvpphh;
+    vpphh.init_interaction({Nh,Nh,0,0});
 
-    t2.divide_energy();
+    //Vpppp
+    blockmap tvpppp(eBs, 3, {Np, Np, Np, Np});
+    vpppp = tvpppp;
+    vpppp.init_interaction({Nh,Nh,Nh,Nh});
 
+    //Vhhhh
+    blockmap tvhhhh(eBs, 3, {Nh, Nh, Nh, Nh});
+    vhhhh = tvhhhh;
+    vhhhh.init_interaction({0,0,0,0});
 
-    vhhpp = tvhhpp;
-    vhhpp.init_interaction({0,0,Nh,Nh});
+    //Vhpph
+    blockmap tvhpph(eBs, 3, {Nh, Np, Np, Nh});
+    vhpph = tvhpph;
+    //vhpph.init_interaction({0,Nh,Nh,0});
+    vhpph.map({-4,2},{3,-1}); //for use in L3 (0)
 
 
 }
+
+void bccd::solve(uint Nt){
+    // ############################################
+    // ## Solve Nt steps                         ##
+    // ############################################
+
+    //set up needed vectors of corresponding blocks in contractions (intersecting configurations)
+    umat vpppp_t2 = intersect_blocks(t2,0,vpppp,0);
+    umat vpphh_t2 = intersect_blocks(t2,0,vpphh,0);
+    umat vhhhh_t2 = intersect_blocks(t2,0,vhhhh,0);
+    umat vhpph_L3 = intersect_blocks(t2,1,vhpph,0);
+
+    t2n.zeros(); //zero out next amplitudes
+
+    for(uint t = 0; t < Nt; ++t){
+        // ############################################
+        // ## Reset next amplitude                   ##
+        // ############################################
+
+        t2n.zeros();
+        for(uint i = 0; i < vpphh_t2.n_rows; ++i){
+            mat block = vpphh.getblock(0,vpphh_t2(i,1));
+            t2n.addblock(0,vpphh_t2(i,0), block);
+        }
+
+        // ############################################
+        // ## Calculate L1                           ##
+        // ############################################
+        for(uint i = 0; i < vpppp_t2.n_rows; ++i){
+            mat block = 0*.5*vpppp.getblock(0,vpppp_t2(i,1))*t2.getblock(0,vpppp_t2(i,0));
+            //t2n.addblock(0,vpppp_t2(i,0), block);
+        }
+
+        // ############################################
+        // ## Calculate L2                           ##
+        // ############################################
+        for(uint i = 0; i < vhhhh_t2.n_rows; ++i){
+            mat block = .5*t2.getblock(0,vhhhh_t2(i,0))*vhhhh.getblock(0,vhhhh_t2(i,1));
+            //t2n.addblock(0,vhhhh_t2(i,0), block);
+        }
+
+        // ############################################
+        // ## Calculate L3                           ##
+        // ############################################
+        // vhpph*t2 ---
+        //fmL3.update(vhpph.sq_rp()*T.qs_pr(), Ns, Nq, Np, Nr);
+        //L3 = fmL3.rq_sp() - fmL3.qr_sp() -fmL3.rq_ps() +fmL3.qr_ps();
+        t2temp.zeros();
+        for(uint i = 0; i < vhpph_L3.n_rows; ++i){
+            mat block = vhpph.getblock(0,vhpph_L3(i,1))*t2.getblock(1,vhpph_L3(i,0));
+            t2temp.addblock(4,i,block);
+        }
+        //permute L3
+        for(uint i = 0; i < t2temp.fvConfigs(0).n_rows; ++i){
+            mat block = t2temp.getblock(0,i) - t2temp.getblock(1,i)- t2temp.getblock(2,i)+t2temp.getblock(3,i);
+            t2n.addblock(0,i,block);
+        }
+
+
+
+
+        t2n.divide_energy();
+        t2 = t2n;
+        cout << "[BCCD][" << t << "]Energy:" << energy() << endl;
+    }
+
+
+    //for(uint i = 0; i < vpphh_t2.n_rows; ++i){
+    //    t2n.addblock(0,vpppp_t2(i,1), vpphh.getblock(0,vpphh_t2(i,0)));
+    //}
+
+
+
+
+
+}
+
 
 umat bccd::intersect_blocks(amplitude a, uint na, blockmap b, uint nb){
     // ############################################
@@ -79,7 +203,6 @@ void bccd::compare(){
         t2.getblock(0,i).print();
         cout << endl;
         vpphh.getblock(0,i).print();
-        //t2.getblock(0,c(i,0)).print();
         cout << endl;
         cout << endl;
     }
@@ -91,12 +214,6 @@ double bccd::energy(){
     umat c = intersect_blocks(t2,0,vhhpp,0); //this should be calculated prior to function calls (efficiency)
     for(uint i = 0; i < c.n_rows; ++i){
         mat block = vhhpp.getblock(0, c(i,1))*t2.getblock(0,c(i,0));
-        //cout << "--------------" << endl;
-        //vpphh.getblock(0, c(i,1)).print();
-        //cout << endl;
-        //t2.getblock(0, c(i,1)).print();
-
-
         vec en = block.diag();
         for(uint j = 0; j< en.n_rows; ++j){
             e += en(j);

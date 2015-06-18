@@ -40,6 +40,8 @@ blockmap::blockmap(electrongas bs, int n_configs, uvec size)
     */
 }
 
+
+
 void blockmap::init_interaction(ivec shift){
     //imat L(2,3);
     //imat R(2,3);
@@ -165,7 +167,7 @@ uvec blockmap::from(uint i){
 
 void blockmap::map(ivec left, ivec right){
     imat L(left.n_rows,3);
-    left.print();
+    //left.print();
     for(uint i = 0; i<left.n_rows; ++i){
         L(i,0) =abs(left(i)) - 1;
         if(left(i)<0){
@@ -174,14 +176,16 @@ void blockmap::map(ivec left, ivec right){
         else{
             L(i,1) = 1;
         }
-        if(abs(left(i))<=2){
+
+
+
+        if(uvSize(abs(left(i))-1)==Np){
             L(i,2) = Nh;
         }
         else{
             L(i,2) = 0;
         }
     }
-    //L.print();
 
     imat R(right.n_rows,3);
     for(uint i = 0; i<right.n_rows; ++i){
@@ -192,14 +196,13 @@ void blockmap::map(ivec left, ivec right){
         else{
             R(i,1) = 1;
         }
-        if(abs(right(i))<=2){
+        if(uvSize(abs(right(i))-1)==Np){
             R(i,2) = Nh;
         }
         else{
             R(i,2) = 0;
         }
     }
-    //R.print();
     map_regions(L,R);
 
 }

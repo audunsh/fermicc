@@ -24,7 +24,7 @@ using namespace arma;
 int main()
 {
     electrongas fgas;
-    fgas.generate_state_list2(3.0,1.0, 14);
+    fgas.generate_state_list2(6.0,1.0, 14);
 
     //cout << "Energy per particle:" << fgas.eref(14)/14.0 << " (a.u)"  << endl;
     //cout << "[Main] Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;
@@ -35,6 +35,9 @@ int main()
     bccd solver(fgas);
 
 
+    //mat test = { {1,2,3}, {1,2,3} };
+    //mat C = { {1, 3, 5}, {2, 4, 6} };
+    //C.print();
     /*
     uint Np = fgas.iNbstates-fgas.iNparticles; //conflicting notation here
     uint Nh = fgas.iNparticles;

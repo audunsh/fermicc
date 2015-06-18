@@ -67,7 +67,7 @@ void amplitude::init_interaction(ivec shift){
 
     imat L = join_rows(l0,l1);
     imat R = join_rows(r0,r1);
-    L.print();
+    //L.print();
     map_regions(L.t(), R.t());
 
 
@@ -195,7 +195,7 @@ uvec amplitude::from(uint i){
 
 void amplitude::map(ivec left, ivec right){
     imat L(left.n_rows,3);
-    left.print();
+    //left.print();
     for(uint i = 0; i<left.n_rows; ++i){
         L(i,0) =abs(left(i)) - 1;
         if(left(i)<0){
@@ -457,5 +457,28 @@ mat amplitude::getblock(int u, int i){
     block.reshape(fmBlocks(u)(i).n_rows, fmBlocks(u)(i).n_cols);
     return block;
 }
-mat amplitude::setblock(int u, int i, mat mBlock){}
-mat amplitude::addblock(int u, int i, mat mBlock){}
+void amplitude::setblock(int u, int i, mat mBlock){
+    vElements.elem(fmBlocks(u)(i)) = vectorise(mBlock);
+}
+
+void amplitude::addblock(int u, int i, mat mBlock){
+    //vectorise(mBlock);
+    //cout << mBlock.size() << endl;
+    //fmBlocks(u)(i).print();
+    //cout << endl;
+    //cout <<vElements.n_elem <<endl;
+    //cout << endl;
+    //vElements.elem(fmBlocks(u)(i)).print();
+    //cout << endl;
+    //mBlock.print();
+
+    //cout << endl;
+    //cout << endl;
+
+    //vec elems = vElements.elem(fmBlocks(u)(i));
+    //cout << elems.n_elem << endl;
+    //cout << vElements.elem(fmBlocks(u)(i)).n_elem << endl;
+    //vectorise(mBlock).print();
+
+    vElements.elem(fmBlocks(u)(i)) += vectorise(mBlock);
+}
