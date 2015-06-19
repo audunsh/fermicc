@@ -36,6 +36,7 @@ void bccd::init(){
     t2 = tt2;
     t2.map({1,2}, {3,4});
     t2.map({2,-4},{-1,3}); //for use in L3 (1)
+    //t3.map({},{});
     //t2.map({-4,2}, {-1,3}); //for use in L3 update (2)
 
     t2.init_amplitudes();
@@ -106,6 +107,10 @@ void bccd::solve(uint Nt){
     umat vhhhh_t2 = intersect_blocks(t2,0,vhhhh,0);
     umat vhpph_L3 = intersect_blocks(t2,1,vhpph,0);
 
+    //quadratic terms
+    umat Q1config = intersect_blocks_triple(t2,0,vhhpp,0,t2,0); //this is actually not neccessary to map out, they already align nicely by construction
+
+
     t2n.zeros(); //zero out next amplitudes
 
     for(uint t = 0; t < Nt; ++t){
@@ -149,9 +154,20 @@ void bccd::solve(uint Nt){
         //permute L3
         for(uint i = 0; i < t2temp.fvConfigs(0).n_rows; ++i){
             mat block = t2temp.getblock(0,i) - t2temp.getblock(1,i)- t2temp.getblock(2,i)+t2temp.getblock(3,i);
-            t2n.addblock(0,i,block);
+            //t2n.addblock(0,i,block);
         }
 
+        // ############################################
+        // ## Calculate Q1                           ##
+        // ############################################
+        for(uint i = 0; i < Q1config.n_rows; ++i){
+            t2.getblock(0,Q1config(i,0)).print();
+            //vhhpp.getblock(0,Q1config(i,1)).print();
+            mat block = t2.getblock(0,Q1config(i,0))*(vhhpp.getblock(0,Q1config(i,1))*t2.getblock(0,Q1config(i,2)));
+            //block.print();
+            cout << endl;
+            t2n.addblock(0,Q1config(i,0),block);
+        }
 
 
 
@@ -171,6 +187,42 @@ void bccd::solve(uint Nt){
 
 }
 
+
+umat bccd::intersect_blocks_triple(amplitude a, uint na, blockmap b, uint nb, amplitude c, uint nc){
+    // #############################################
+    // ## Find corresponding blocks in a, b and c ##
+    // #############################################
+    umat tintersection(a.blocklengths(na), 3);
+    uint counter = 0;
+    for(uint n1 = 0; n1 < a.blocklengths(na); ++n1){
+        int ac = a.fvConfigs(na)(n1);
+        for(uint n2 = 0; n2 < b.blocklengths(nb); ++n2){
+            int bc = b.fvConfigs(nb)(n2);
+
+            if(bc == ac){
+                //found intersecting configuration
+                for(uint n3 = 0; n3 < c.blocklengths(nc); ++n3){
+                    if(c.fvConfigs(nc)(n3) == ac){
+                        //found intersecting configuration
+                        tintersection(counter, 0) = n1;
+                        tintersection(counter, 1) = n2;
+                        tintersection(counter, 2) = n3;
+                        counter +=1;
+                    }
+                }
+            }
+        }
+    }
+    //Flatten intersection
+    umat intersection(counter-1, 3);
+    for(uint n = 0; n < counter; ++n){
+        intersection(n, 0) = tintersection(n,0);
+        intersection(n, 1) = tintersection(n,1);
+        intersection(n, 2) = tintersection(n,3);
+
+    }
+    return intersection;
+}
 
 umat bccd::intersect_blocks(amplitude a, uint na, blockmap b, uint nb){
     // ############################################

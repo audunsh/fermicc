@@ -33,6 +33,7 @@ public:
     void compare();
     bool unconverged(); //convergence test - returns true while unconverged
     umat intersect_blocks(amplitude a, uint na, blockmap b, uint nb);
+    umat intersect_blocks_triple(amplitude a, uint na, blockmap b, uint nb, amplitude c, uint nc);
 
 
     //internal objects and parameters
