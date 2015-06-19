@@ -32,10 +32,18 @@ void bccd::init(){
 
     //T2 amplitude
 
-    amplitude tt2(eBs, 6, {Np, Np, Nh, Nh});
+    amplitude tt2(eBs, 8, {Np, Np, Nh, Nh});
     t2 = tt2;
     t2.map({1,2}, {3,4});
     t2.map({2,-4},{-1,3}); //for use in L3 (1)
+
+    t2.map({1,-3},{4,-2}); //for use in Q2 (2)
+    t2.map({-4,2},{-1,3}); //for use in Q2 (3)
+
+    t2.map({1,2,-4},{3});  //for use in Q3 (4)
+    //t2.map({-4,2,1},{3});  //for use in Q3 (5)
+
+
     //t3.map({},{});
     //t2.map({-4,2}, {-1,3}); //for use in L3 update (2)
 
@@ -55,7 +63,11 @@ void bccd::init(){
     t2temp.map({1,2},{4,3}); //ab ji (2)
     t2temp.map({2,1},{4,3}); //ba ji (3)
 
+    //the input configurations
     t2temp.map({-4,2}, {-1,3}); //for use in L3 update (4)
+    t2temp.map({1,-3}, {-2,4}); //for use ni Q2 update (5)
+    //t2temp.map({1,2,-4}, {3});  //for use in Q3 update (6)
+
     t2temp.init_amplitudes();
     t2temp.zeros();
 
@@ -64,9 +76,12 @@ void bccd::init(){
 
 
     //Vhhpp
-    blockmap tvhhpp(eBs, 3, {Nh,Nh,Np,Np});
+    blockmap tvhhpp(eBs, 4, {Nh,Nh,Np,Np});
     vhhpp = tvhhpp;
     vhhpp.init_interaction({0,0,Nh,Nh});
+    vhhpp.map({1,-3},{-2,4}); //for use in Q2 (1)
+    //vhhpp.map({2},{-1,3,4});  //for use in Q3 (2)
+
 
     blockmap vv(eBs, 3, {Nh,Nh,Np,Np});
     v0 = vv;
@@ -109,7 +124,10 @@ void bccd::solve(uint Nt){
 
     //quadratic terms
     umat Q1config = intersect_blocks_triple(t2,0,vhhpp,0,t2,0); //this is actually not neccessary to map out, they already align nicely by construction
+    umat Q2config = intersect_blocks_triple(t2,2,vhhpp,1,t2,3);
+    //umat Q3config = intersect_blocks_triple(t2,4,vhhpp,2,t2,5);
 
+    //Q1config.print();
 
     t2n.zeros(); //zero out next amplitudes
 
@@ -161,13 +179,38 @@ void bccd::solve(uint Nt){
         // ## Calculate Q1                           ##
         // ############################################
         for(uint i = 0; i < Q1config.n_rows; ++i){
-            t2.getblock(0,Q1config(i,0)).print();
-            //vhhpp.getblock(0,Q1config(i,1)).print();
-            mat block = t2.getblock(0,Q1config(i,0))*(vhhpp.getblock(0,Q1config(i,1))*t2.getblock(0,Q1config(i,2)));
-            //block.print();
-            cout << endl;
-            t2n.addblock(0,Q1config(i,0),block);
+            mat block = .25*t2.getblock(0,Q1config(i,0))*(vhhpp.getblock(0,Q1config(i,1))*t2.getblock(0,Q1config(i,2)));
+            //t2n.addblock(0,Q1config(i,0),block);
         }
+
+
+        // ############################################
+        // ## Calculate Q2                           ##
+        // ############################################
+        t2temp.zeros();
+        for(uint i = 0; i < Q2config.n_rows; ++i){
+            mat block = t2.getblock(2,Q2config(i,0))*(vhhpp.getblock(1,Q2config(i,1))*t2.getblock(3,Q2config(i,2)));
+            t2temp.addblock(5,Q2config(i,0),block);
+        }
+        for(uint i = 0; i < t2temp.fvConfigs(0).n_rows; ++i){
+            mat block = t2temp.getblock(0,i) - t2temp.getblock(2,i);
+            //t2n.addblock(0,i,block);
+        }
+
+        // ############################################
+        // ## Calculate Q3                           ##
+        // ############################################
+        /*
+        t2temp.zeros();
+        for(uint i = 0; i < Q3config.n_rows; ++i){
+            mat block = t2.getblock(4,Q3config(i,0))*(vhhpp.getblock(2,Q3config(i,1))*t2.getblock(5,Q3config(i,2)));
+            t2temp.addblock(6,Q3config(i,0),block);
+        }
+        for(uint i = 0; i < t2temp.fvConfigs(0).n_rows; ++i){
+            mat block = t2temp.getblock(0,i) - t2temp.getblock(1,i);
+            //t2n.addblock(0,i,block);
+        }
+        */
 
 
 
@@ -195,7 +238,10 @@ umat bccd::intersect_blocks_triple(amplitude a, uint na, blockmap b, uint nb, am
     umat tintersection(a.blocklengths(na), 3);
     uint counter = 0;
     for(uint n1 = 0; n1 < a.blocklengths(na); ++n1){
+
         int ac = a.fvConfigs(na)(n1);
+
+
         for(uint n2 = 0; n2 < b.blocklengths(nb); ++n2){
             int bc = b.fvConfigs(nb)(n2);
 
@@ -218,7 +264,7 @@ umat bccd::intersect_blocks_triple(amplitude a, uint na, blockmap b, uint nb, am
     for(uint n = 0; n < counter; ++n){
         intersection(n, 0) = tintersection(n,0);
         intersection(n, 1) = tintersection(n,1);
-        intersection(n, 2) = tintersection(n,3);
+        intersection(n, 2) = tintersection(n,2);
 
     }
     return intersection;
