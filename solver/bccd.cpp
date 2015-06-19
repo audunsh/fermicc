@@ -40,7 +40,7 @@ void bccd::init(){
     t2.map({1,-3},{4,-2}); //for use in Q2 (2)
     t2.map({-4,2},{-1,3}); //for use in Q2 (3)
 
-    t2.map({1,2,-4},{3});  //for use in Q3 (4)
+    //t2.map({1,2,-4},{3});  //for use in Q3 (4)
     //t2.map({-4,2,1},{3});  //for use in Q3 (5)
 
 
@@ -50,14 +50,14 @@ void bccd::init(){
     t2.init_amplitudes();
     t2.divide_energy();
 
-    //amplitude tt3(eBs, 6, {Np, Np, Nh, Nh});
+    amplitude tt3(eBs, 8, {Np, Np, Nh, Nh});
 
     //next amplitude
     t2n = t2;
     t2n.zeros();
 
     //Temporary amplitude storage for permutations
-    t2temp = tt2;
+    t2temp = tt3;
     t2temp.map({1,2},{3,4}); //ab ij (0)
     t2temp.map({2,1},{3,4}); //ba ij (1)
     t2temp.map({1,2},{4,3}); //ab ji (2)
@@ -80,7 +80,7 @@ void bccd::init(){
     vhhpp = tvhhpp;
     vhhpp.init_interaction({0,0,Nh,Nh});
     vhhpp.map({1,-3},{-2,4}); //for use in Q2 (1)
-    //vhhpp.map({2},{-1,3,4});  //for use in Q3 (2)
+    vhhpp.map({2},{-1,3,4});  //for use in Q3 (2)
 
 
     blockmap vv(eBs, 3, {Nh,Nh,Np,Np});
