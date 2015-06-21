@@ -44,6 +44,10 @@ void bccd::init(){
     t2.map({1,2,-4},{3});  //for use in Q3 (4)
     t2.map({-4,2,1},{3});  //for use in Q3 (5)
 
+    t2.map({1},{4,3,-2});  //for use in Q4 (6)
+    t2.map({1},{-2,4,3});  //for use in Q4 (7)
+
+
 
     //t3.map({},{});
     //t2.map({-4,2}, {-1,3}); //for use in L3 update (2)
@@ -64,6 +68,11 @@ void bccd::init(){
 
     t2n.map({1,2,-4},{3});  //for use in Q3 (4)
     t2n.map({-4,2,1},{3});  //for use in Q3 (5)
+
+    t2n.map({1},{4,3,-2});  //for use in Q4 (6)
+    t2n.map({1},{-2,4,3});  //for use in Q4 (7)
+
+
     t2n.init_amplitudes();
     t2n.zeros();
 
@@ -79,6 +88,9 @@ void bccd::init(){
     t2temp.map({-4,2}, {-1,3}); //for use in L3 update (4)
     t2temp.map({1,-3}, {-2,4}); //for use ni Q2 update (5)
     t2temp.map({1,2,-4}, {3});  //for use in Q3 update (6)
+    t2temp.map({1}, {-2,4,3});  //for use in Q4 update (7)
+
+
 
     t2temp.init_amplitudes();
     t2temp.zeros();
@@ -95,6 +107,8 @@ void bccd::init(){
     vhhpp.init_interaction({0,0,Nh,Nh});
     vhhpp.map({1,-3},{-2,4}); //for use in Q2 (1)
     vhhpp.map({2},{-1,3,4});  //for use in Q3 (2)
+    vhhpp.map({1,2,-4},{3});  //for use in Q4 (3)
+
 
 
     //blockmap vv(eBs, 3, {Nh,Nh,Np,Np});
@@ -145,6 +159,7 @@ void bccd::solve(uint Nt){
     umat Q1config = intersect_blocks_triple(t2,0,vhhpp,0,t2,0); //this is actually not neccessary to map out, they already align nicely by construction
     umat Q2config = intersect_blocks_triple(t2,2,vhhpp,1,t2,3);
     umat Q3config = intersect_blocks_triple(t2,4,vhhpp,2,t2,5);
+    umat Q4config = intersect_blocks_triple(t2,6,vhhpp,3,t2,7);
 
     //Q1config.print();
 
@@ -165,8 +180,8 @@ void bccd::solve(uint Nt){
         // ## Calculate L1                           ##
         // ############################################
         for(uint i = 0; i < vpppp_t2.n_rows; ++i){
-            mat block = 0*.5*vpppp.getblock(0,vpppp_t2(i,1))*t2.getblock(0,vpppp_t2(i,0));
-            //t2n.addblock(0,vpppp_t2(i,0), block);
+            mat block = .5*vpppp.getblock(0,vpppp_t2(i,1))*t2.getblock(0,vpppp_t2(i,0));
+            t2n.addblock(0,vpppp_t2(i,0), block);
         }
 
         // ############################################
@@ -174,7 +189,7 @@ void bccd::solve(uint Nt){
         // ############################################
         for(uint i = 0; i < vhhhh_t2.n_rows; ++i){
             mat block = .5*t2.getblock(0,vhhhh_t2(i,0))*vhhhh.getblock(0,vhhhh_t2(i,1));
-            //t2n.addblock(0,vhhhh_t2(i,0), block);
+            t2n.addblock(0,vhhhh_t2(i,0), block);
         }
 
         // ############################################
@@ -191,7 +206,7 @@ void bccd::solve(uint Nt){
         //permute L3
         for(uint i = 0; i < t2temp.fvConfigs(0).n_rows; ++i){
             mat block = t2temp.getblock(0,i) - t2temp.getblock(1,i)- t2temp.getblock(2,i)+t2temp.getblock(3,i);
-            //t2n.addblock(0,i,block);
+            t2n.addblock(0,i,block);
         }
 
         // ############################################
@@ -199,7 +214,7 @@ void bccd::solve(uint Nt){
         // ############################################
         for(uint i = 0; i < Q1config.n_rows; ++i){
             mat block = .25*t2.getblock(0,Q1config(i,0))*(vhhpp.getblock(0,Q1config(i,1))*t2.getblock(0,Q1config(i,2)));
-            //t2n.addblock(0,Q1config(i,0),block);
+            t2n.addblock(0,Q1config(i,0),block);
         }
 
 
@@ -213,24 +228,38 @@ void bccd::solve(uint Nt){
         }
         for(uint i = 0; i < t2temp.fvConfigs(0).n_rows; ++i){
             mat block = t2temp.getblock(0,i) - t2temp.getblock(2,i);
-            //t2n.addblock(0,i,block);
+            t2n.addblock(0,i,block);
         }
 
         // ############################################
         // ## Calculate Q3                           ##
         // ############################################
-
-
+        //fmQ3.update_as_r_pqs((T.r_sqp()*vhhpp.prs_q())*T.r_pqs(), Np, Nq, Nr, Ns); //needs realignment and permutations
+        //Q3 = fmQ3.pq_rs() - fmQ3.pq_sr(); //permuting elements
         t2temp.zeros();
         for(uint i = 0; i < Q3config.n_rows; ++i){
             mat block = t2.getblock(4,Q3config(i,0))*(vhhpp.getblock(2,Q3config(i,1))*t2.getblock(5,Q3config(i,2)));
             t2temp.addblock(6,Q3config(i,0),block);
         }
         for(uint i = 0; i < t2temp.fvConfigs(0).n_rows; ++i){
-            mat block = t2temp.getblock(0,i) - t2temp.getblock(1,i);
+            mat block = -.5*(t2temp.getblock(0,i) - t2temp.getblock(2,i)); //* done to keep in line with equations (inefficient)
             t2n.addblock(0,i,block);
         }
 
+        // ############################################
+        // ## Calculate Q4                           ##
+        // ############################################
+        //fmQ4.update_as_p_qrs(T.p_srq()*vhhpp.pqr_s()*T.p_qrs(), Np, Nq, Nr, Ns); //needs realignment and permutations
+        //Q4 = fmQ4.pq_rs() - fmQ4.qp_rs(); //permuting elements
+        t2temp.zeros();
+        for(uint i = 0; i < Q4config.n_rows; ++i){
+            mat block = t2.getblock(6,Q4config(i,0))*(vhhpp.getblock(3,Q4config(i,1))*t2.getblock(7,Q4config(i,2)));
+            t2temp.addblock(7,Q4config(i,2),block);
+        }
+        for(uint i = 0; i < t2temp.fvConfigs(0).n_rows; ++i){
+            mat block = .5*(t2temp.getblock(0,i) - t2temp.getblock(1,i)); //* done to keep in line with equations (inefficient)
+            t2n.addblock(0,i,block);
+        }
 
 
 
