@@ -24,7 +24,7 @@ using namespace arma;
 int main()
 {
     electrongas fgas;
-    fgas.generate_state_list2(6.0,1.0, 14);
+    fgas.generate_state_list2(3.0,1.0, 14);
 
     //cout << "Energy per particle:" << fgas.eref(14)/14.0 << " (a.u)"  << endl;
     //cout << "[Main] Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;
@@ -38,23 +38,76 @@ int main()
     //mat test = { {1,2,3}, {1,2,3} };
     //mat C = { {1, 3, 5}, {2, 4, 6} };
     //C.print();
+
+
     /*
     uint Np = fgas.iNbstates-fgas.iNparticles; //conflicting notation here
     uint Nh = fgas.iNparticles;
-    amplitude t2(fgas, 3, {Np, Np, Nh, Nh});
-    amplitude vhhpp(fgas, 3, {Nh,Nh, Np,Np});
+    amplitude t2(fgas, 8, {Np, Np, Nh, Nh});
+
+    //next amplitude
 
 
-    t2.map({1,2},{3,4}); //indices refer to Np Np Nh Nh
-    vhhpp.map({1,2},{3,4});
+    //Temporary amplitude storage for permutations
+    amplitude t2temp = t2;
+    t2temp.map({1,2},{3,4}); //ab ij (0)
 
-    cout << t2.uvElements.n_rows << endl;
+    t2temp.map({2,1},{3,4}); //ba ij (1)
+    t2temp.map({1,2},{4,3}); //ab ji (2)
+    t2temp.map({2,1},{4,3}); //ba ji (3)
+
+    //the input configurations
+    t2temp.map({-4,2}, {-1,3}); //for use in L3 update (4)
+    t2temp.map({1,-3}, {-2,4}); //for use ni Q2 update (5)
+    t2temp.map({1,2,-4}, {3});  //for use in Q3 update (6)
+
+
+
+    t2.map({1,2},{3,4}); //ab ij (0)
+    t2.map({2,1},{3,4}); //ba ij (1)
+    t2.map({1,2},{4,3}); //ab ji (2)
+    t2.map({2,1},{4,3}); //ba ji (3)
+
+    //the input configurations
+    t2.map({-4,2}, {-1,3}); //for use in L3 update (4)
+    t2.map({1,-3}, {-2,4}); //for use ni Q2 update (5)
+    t2.map({1}, {3,4,-2});  //for use in Q3 update (6)
     t2.init_amplitudes();
     t2.divide_energy();
-    t2.print_block_maximum();
+
+    t2temp.init_amplitudes();
+    t2temp.divide_energy();
+    t2temp.zeros();
+    for(uint i = 0; i<t2temp.blocklengths(5); ++i){
+        t2temp.getblock(5,i).print();
+        cout << endl;
+    }
+    */
+
+
+
+
+    /*
+
+    uint i = 2;
+    t2temp.getblock(0,i).print();
+    cout << endl;
+    t2temp.getblock(1,i).print();
+    cout << endl;
+    t2temp.getblock(2,i).print();
+    cout << endl;
+    t2temp.getblock(3,i).print();
+    cout << endl;
+    t2temp.getblock(4,i).print();
+    cout << endl;
+    t2temp.getblock(5,i).print();
+    cout << endl;
+    t2temp.getblock(6,i).print();
+    */
+
+
     //t2.vElements.print();
 
-    */
     //field<field<uvec> > test;
 
     //field<uvec> ab = t2.unpack(AB, R);

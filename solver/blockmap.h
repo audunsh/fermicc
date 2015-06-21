@@ -12,6 +12,7 @@ class blockmap
 public:
     blockmap();
     blockmap(electrongas bs, int n_configs, uvec size);
+    void init(electrongas bs, int n_configs, uvec size);
 
     //internal functions
     uint to(uint p, uint q, uint r, uint s);  //compressed index
@@ -34,8 +35,8 @@ public:
     void map_regions(imat L, imat R); //map all regions defined by L == R
     ivec match_config(int u, ivec ivConfig); //retrieve all
     mat getblock(int u, int i);
-    mat setblock(int u, int i, mat mBlock);
-    mat addblock(int u, int i, mat mBlock);
+    void setblock(int u, int i, mat mBlock);
+    void addblock(int u, int i, mat mBlock);
 
     //Block storage
     int k_step;   //stepsize for identifying unique regions

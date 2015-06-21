@@ -8,6 +8,37 @@ using namespace arma;
 
 blockmap::blockmap(){}
 
+void blockmap::init(electrongas bs, int n_configs, uvec size){
+    eBs = bs;
+    k_step = 2*eBs.vKx.max()+3; //stepsize for identifying unique regions
+    iNconfigs = n_configs;
+    fmBlocks.set_size(iNconfigs); //block of indices
+
+    fmBlockz.set_size(iNconfigs);
+
+    fuvRows.set_size(iNconfigs);
+    fuvCols.set_size(iNconfigs);
+
+    fvConfigs.set_size(iNconfigs); //configuration in quantum numbers of each block
+    blocklengths.set_size(iNconfigs);  //number of blocks in each configuration
+    fmOrdering.set_size(iNconfigs,2); //the ordering of each configuration
+    uiCurrent_block = 0;
+
+    Np = eBs.iNbstates-eBs.iNparticles; //conflicting naming here
+    Nh = eBs.iNparticles;
+
+    uvSize = size; //true state configurations (Np, Np, Nh, Nh) or (Np, Np, Np, Nh, Nh, Nh) (or similar)
+
+    /*
+
+    uvSize.set_size(4); //particle-hole organization
+    uvSize(0) = Np; //rows
+    uvSize(1) = Np;
+    uvSize(2) = Nh; //columns
+    uvSize(3) = Nh;
+    */
+}
+
 blockmap::blockmap(electrongas bs, int n_configs, uvec size)
 {
     eBs = bs;
@@ -253,9 +284,15 @@ void blockmap::map_regions(imat L, imat R){
     // ## assign nonambiguous integer to each bra and ket config ##
     // ############################################################
     ivec LHS(iNrows); // = conv_to<ivec>::from(zeros(iNrows));
+    for(uint i = 0; i < iNrows; ++i){
+        LHS(i) = 0;
+    }
     ivec RHS(iNcols); // = conv_to<ivec>::from(zeros(iNcols));
-    LHS*=0;
-    RHS*=0;
+    for(uint i = 0; i < iNcols; ++i){
+        RHS(i) = 0;
+    }
+    //LHS*=0;
+    //RHS*=0;
     //cout << L.n_rows << " " << L.n_cols << " " << L.n_elem << endl;
     for(int i = 0; i<L.n_rows; ++i){
         LHS += eBs.unique(PQRS(L(i,0))+L(i,2))*L(i,1);
@@ -464,7 +501,7 @@ mat blockmap::getblock(int u, int i){
 
     int Nx = row.n_rows;
     int Ny = col.n_rows;
-    //cout << Nx << " " << Ny << " " << " " << K_unique(i) << endl;
+    //cout << Nx << " " << Ny << " " << endl; //" " << K_unique(i) << endl;
     mat block(Nx,Ny);
 
 
@@ -493,5 +530,5 @@ mat blockmap::getblock(int u, int i){
     return block;
 
 }
-mat blockmap::setblock(int u, int i, mat mBlock){}
-mat blockmap::addblock(int u, int i, mat mBlock){}
+void blockmap::setblock(int u, int i, mat mBlock){}
+void blockmap::addblock(int u, int i, mat mBlock){}

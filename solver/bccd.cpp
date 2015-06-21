@@ -32,16 +32,17 @@ void bccd::init(){
 
     //T2 amplitude
 
-    amplitude tt2(eBs, 8, {Np, Np, Nh, Nh});
-    t2 = tt2;
+    //amplitude tt2(eBs, 8, {Np, Np, Nh, Nh});
+    t2.init(eBs, 8, {Np, Np, Nh, Nh});
+    //t2 = tt2;
     t2.map({1,2}, {3,4});
     t2.map({2,-4},{-1,3}); //for use in L3 (1)
 
     t2.map({1,-3},{4,-2}); //for use in Q2 (2)
     t2.map({-4,2},{-1,3}); //for use in Q2 (3)
 
-    //t2.map({1,2,-4},{3});  //for use in Q3 (4)
-    //t2.map({-4,2,1},{3});  //for use in Q3 (5)
+    t2.map({1,2,-4},{3});  //for use in Q3 (4)
+    t2.map({-4,2,1},{3});  //for use in Q3 (5)
 
 
     //t3.map({},{});
@@ -50,14 +51,25 @@ void bccd::init(){
     t2.init_amplitudes();
     t2.divide_energy();
 
-    amplitude tt3(eBs, 8, {Np, Np, Nh, Nh});
+    //amplitude tt3(eBs, 8, {Np, Np, Nh, Nh});
 
     //next amplitude
-    t2n = t2;
+    //t2n = t2;
+    t2n.init(eBs, 8, {Np, Np, Nh, Nh});
+    t2n.map({1,2}, {3,4});
+    t2n.map({2,-4},{-1,3}); //for use in L3 (1)
+
+    t2n.map({1,-3},{4,-2}); //for use in Q2 (2)
+    t2n.map({-4,2},{-1,3}); //for use in Q2 (3)
+
+    t2n.map({1,2,-4},{3});  //for use in Q3 (4)
+    t2n.map({-4,2,1},{3});  //for use in Q3 (5)
+    t2n.init_amplitudes();
     t2n.zeros();
 
     //Temporary amplitude storage for permutations
-    t2temp = tt3;
+    //t2temp = tt3;
+    t2temp.init(eBs, 8, {Np, Np, Nh, Nh});
     t2temp.map({1,2},{3,4}); //ab ij (0)
     t2temp.map({2,1},{3,4}); //ba ij (1)
     t2temp.map({1,2},{4,3}); //ab ji (2)
@@ -66,7 +78,7 @@ void bccd::init(){
     //the input configurations
     t2temp.map({-4,2}, {-1,3}); //for use in L3 update (4)
     t2temp.map({1,-3}, {-2,4}); //for use ni Q2 update (5)
-    //t2temp.map({1,2,-4}, {3});  //for use in Q3 update (6)
+    t2temp.map({1,2,-4}, {3});  //for use in Q3 update (6)
 
     t2temp.init_amplitudes();
     t2temp.zeros();
@@ -76,35 +88,42 @@ void bccd::init(){
 
 
     //Vhhpp
-    blockmap tvhhpp(eBs, 4, {Nh,Nh,Np,Np});
-    vhhpp = tvhhpp;
+    //blockmap tvhhpp(eBs, 4, {Nh,Nh,Np,Np});
+    //vhhpp = tvhhpp;
+
+    vhhpp.init(eBs, 4, {Nh,Nh,Np,Np});
     vhhpp.init_interaction({0,0,Nh,Nh});
     vhhpp.map({1,-3},{-2,4}); //for use in Q2 (1)
     vhhpp.map({2},{-1,3,4});  //for use in Q3 (2)
 
 
-    blockmap vv(eBs, 3, {Nh,Nh,Np,Np});
-    v0 = vv;
+    //blockmap vv(eBs, 3, {Nh,Nh,Np,Np});
+    //v0 = vv;
+    v0.init(eBs, 3, {Nh,Nh,Np,Np});
     v0.init_interaction({0,0,Nh,Nh});
 
     //Vpphh
-    blockmap tvpphh(eBs, 3, {Np, Np, Nh, Nh});
-    vpphh = tvpphh;
+    //blockmap tvpphh(eBs, 3, {Np, Np, Nh, Nh});
+    //vpphh = tvpphh;
+    vpphh.init(eBs, 3, {Np, Np, Nh, Nh});
     vpphh.init_interaction({Nh,Nh,0,0});
 
     //Vpppp
-    blockmap tvpppp(eBs, 3, {Np, Np, Np, Np});
-    vpppp = tvpppp;
+    //blockmap tvpppp(eBs, 3, {Np, Np, Np, Np});
+    //vpppp = tvpppp;
+    vpppp.init(eBs, 3, {Np, Np, Np, Np});
     vpppp.init_interaction({Nh,Nh,Nh,Nh});
 
     //Vhhhh
-    blockmap tvhhhh(eBs, 3, {Nh, Nh, Nh, Nh});
-    vhhhh = tvhhhh;
+    //blockmap tvhhhh(eBs, 3, {Nh, Nh, Nh, Nh});
+    //vhhhh = tvhhhh;
+    vhhhh.init(eBs, 3, {Nh, Nh, Nh, Nh});
     vhhhh.init_interaction({0,0,0,0});
 
     //Vhpph
-    blockmap tvhpph(eBs, 3, {Nh, Np, Np, Nh});
-    vhpph = tvhpph;
+    //blockmap tvhpph(eBs, 3, {Nh, Np, Np, Nh});
+    //vhpph = tvhpph;
+    vhpph.init(eBs, 3, {Nh, Np, Np, Nh});
     //vhpph.init_interaction({0,Nh,Nh,0});
     vhpph.map({-4,2},{3,-1}); //for use in L3 (0)
 
@@ -125,7 +144,7 @@ void bccd::solve(uint Nt){
     //quadratic terms
     umat Q1config = intersect_blocks_triple(t2,0,vhhpp,0,t2,0); //this is actually not neccessary to map out, they already align nicely by construction
     umat Q2config = intersect_blocks_triple(t2,2,vhhpp,1,t2,3);
-    //umat Q3config = intersect_blocks_triple(t2,4,vhhpp,2,t2,5);
+    umat Q3config = intersect_blocks_triple(t2,4,vhhpp,2,t2,5);
 
     //Q1config.print();
 
@@ -200,7 +219,8 @@ void bccd::solve(uint Nt){
         // ############################################
         // ## Calculate Q3                           ##
         // ############################################
-        /*
+
+
         t2temp.zeros();
         for(uint i = 0; i < Q3config.n_rows; ++i){
             mat block = t2.getblock(4,Q3config(i,0))*(vhhpp.getblock(2,Q3config(i,1))*t2.getblock(5,Q3config(i,2)));
@@ -208,9 +228,10 @@ void bccd::solve(uint Nt){
         }
         for(uint i = 0; i < t2temp.fvConfigs(0).n_rows; ++i){
             mat block = t2temp.getblock(0,i) - t2temp.getblock(1,i);
-            //t2n.addblock(0,i,block);
+            t2n.addblock(0,i,block);
         }
-        */
+
+
 
 
 
@@ -260,7 +281,8 @@ umat bccd::intersect_blocks_triple(amplitude a, uint na, blockmap b, uint nb, am
         }
     }
     //Flatten intersection
-    umat intersection(counter-1, 3);
+    //umat intersection(counter-1, 3);
+    umat intersection(counter, 3);
     for(uint n = 0; n < counter; ++n){
         intersection(n, 0) = tintersection(n,0);
         intersection(n, 1) = tintersection(n,1);
@@ -288,7 +310,9 @@ umat bccd::intersect_blocks(amplitude a, uint na, blockmap b, uint nb){
         }
     }
     //Flatten intersection
-    umat intersection(counter-1, 2);
+    //cout << "Counter:" << counter << endl;
+    //umat intersection(counter-1, 2);
+    umat intersection(counter, 2); //changed this to avoid valgrind:invalid write of size 8
     for(uint n = 0; n < counter; ++n){
         intersection(n, 0) = tintersection(n,0);
         intersection(n, 1) = tintersection(n,1);

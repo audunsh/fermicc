@@ -34,6 +34,31 @@ amplitude::amplitude(electrongas bs, int n_configs, uvec size)
     */
 }
 
+void amplitude::init(electrongas bs, int n_configs, uvec size){
+    eBs = bs;
+    k_step = 2*eBs.vKx.max()+3; //stepsize for identifying unique regions
+    iNconfigs = n_configs;
+    fmBlocks.set_size(iNconfigs); //block of indices
+    fvConfigs.set_size(iNconfigs); //configuration in quantum numbers of each block
+    blocklengths.set_size(iNconfigs);  //number of blocks in each configuration
+    fmOrdering.set_size(iNconfigs); //the ordering of each configuration
+    uiCurrent_block = 0;
+
+    Np = eBs.iNbstates-eBs.iNparticles; //conflicting naming here
+    Nh = eBs.iNparticles;
+
+    uvSize = size; //true state configurations (Np, Np, Nh, Nh) or (Np, Np, Np, Nh, Nh, Nh) (or similar)
+
+    /*
+
+    uvSize.set_size(4); //particle-hole organization
+    uvSize(0) = Np; //rows
+    uvSize(1) = Np;
+    uvSize(2) = Nh; //columns
+    uvSize(3) = Nh;
+    */
+}
+
 // ##################################################
 // ##                                              ##
 // ## Element related functions                    ##
@@ -276,9 +301,22 @@ void amplitude::map_regions(imat L, imat R){
     // ## assign nonambiguous integer to each bra and ket config ##
     // ############################################################
     ivec LHS(iNrows); // = conv_to<ivec>::from(zeros(iNrows));
+    for(int i = 0; i<iNrows;++i){
+        LHS(i) = 0;
+    }
+    //ivec LHS = conv_to<ivec>::from(zeros(iNrows));
+
     ivec RHS(iNcols); // = conv_to<ivec>::from(zeros(iNcols));
-    LHS*=0;
-    RHS*=0;
+    for(int i = 0; i<iNcols;++i){
+        RHS(i) = 0;
+    }
+
+    //LHS*=0;
+    //RHS*=0;
+    //ivec LHS = zeros<int> (iNrows);
+    //cout << iNrows << " " << iNcols << endl;
+
+
     //cout << L.n_rows << " " << L.n_cols << " " << L.n_elem << endl;
     for(int i = 0; i<L.n_rows; ++i){
         LHS += eBs.unique(PQRS(L(i,0))+L(i,2))*L(i,1);
@@ -293,6 +331,8 @@ void amplitude::map_regions(imat L, imat R){
     // ####################################################################
     // ## Iterate over unique combinations, retain blocks where RHS==LHS ##
     // ####################################################################
+    //LHS.print();
+    //cout << LHS.n_elem << endl << endl;
     ivec unique_L = unique(LHS);
     ivec unique_R = unique(RHS);
     ivec K_unique = intersect1d(unique_L, unique_R);
