@@ -19,6 +19,8 @@ void blockmap::init(electrongas bs, int n_configs, uvec size){
     fuvRows.set_size(iNconfigs);
     fuvCols.set_size(iNconfigs);
 
+
+
     fvConfigs.set_size(iNconfigs); //configuration in quantum numbers of each block
     blocklengths.set_size(iNconfigs);  //number of blocks in each configuration
     fmOrdering.set_size(iNconfigs,2); //the ordering of each configuration
@@ -319,6 +321,8 @@ void blockmap::map_regions(imat L, imat R){
     fmBlockz(uiCurrent_block).set_size(uiN,2);
     fuvCols(uiCurrent_block).set_size(uiN);
     fuvRows(uiCurrent_block).set_size(uiN);
+
+
 
 
     field<uvec> tempElements(uiN);
