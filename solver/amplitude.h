@@ -36,7 +36,7 @@ public:
     //external functions
     void map(ivec left, ivec right); //simpler interface to map_regions
     void map_regions(imat L, imat R); //map all regions defined by L == R
-    ivec match_config(int u, ivec ivConfig); //retrieve all
+
     mat getblock(int u, int i);
     void setblock(int u, int i, mat mBlock);
     void addblock(int u, int i, mat mBlock);

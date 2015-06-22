@@ -130,10 +130,10 @@ ivec amplitude::intersect1d(ivec A, ivec B){
     // ###################################################
     ivec ret(A.n_rows);
     uint counter = 0;
-    for(int i = 0; i < A.n_rows; ++i){
+    for(uint i = 0; i < A.n_rows; ++i){
         int a = A(i);
 
-        for(int j = 0; j < B.n_rows; ++j){
+        for(uint j = 0; j < B.n_rows; ++j){
             if(B(j) == a){
                 ret(counter) = a;
                 counter += 1;
@@ -143,7 +143,7 @@ ivec amplitude::intersect1d(ivec A, ivec B){
 
     }
     ivec ret2(counter);
-    for(int i = 0; i < counter; ++i){
+    for(uint i = 0; i < counter; ++i){
         ret2(i) = ret(i);
     }
     return ret2;
@@ -162,9 +162,9 @@ field<uvec> amplitude::unpack(uvec vStream, imat imOrder){
         M(iMsize - i-2) = mn;
     }
     field<uvec> indices(imOrder.n_rows);
-    for(int i = 0; i < imOrder.n_rows; ++i){
+    for(uint i = 0; i < imOrder.n_rows; ++i){
         uvec P = vStream;
-        for(int e = 0; e<i; ++e){
+        for(uint e = 0; e<i; ++e){
             P -= indices(imOrder.n_rows-e-1)*M(e+1);
         }
 
@@ -187,9 +187,9 @@ uvec amplitude::unpack_uvec(uint vStream, imat imOrder){
         M(iMsize - i-2) = mn;
     }
     uvec indices(imOrder.n_rows);
-    for(int i = 0; i < imOrder.n_rows; ++i){
+    for(uint i = 0; i < imOrder.n_rows; ++i){
         uint P = vStream;
-        for(int e = 0; e<i; ++e){
+        for(uint e = 0; e<i; ++e){
             P -= indices(imOrder.n_rows - e - 1)*M(e+1);
         }
         indices(imOrder.n_rows - i - 1) = floor(P/M(i+1));
@@ -268,10 +268,10 @@ void amplitude::map_regions(imat L, imat R){
     uint iNrows = 1;
     uint iNcols = 1;
 
-    for(int i = 0; i<L.n_rows; ++i){
+    for(uint i = 0; i<L.n_rows; ++i){
         iNrows *= uvSize(L(i,0));
     }
-    for(int i = 0; i<R.n_rows; ++i){
+    for(uint i = 0; i<R.n_rows; ++i){
         iNcols *= uvSize(R(i,0));
     }
 
@@ -281,18 +281,19 @@ void amplitude::map_regions(imat L, imat R){
     //uvec rows = conv_to<uvec>::from(linspace(0,iNrows-1, iNrows));
 
     uvec rows = linspace<uvec>(0,iNrows-1, iNrows);
+    uvec cols = linspace<uvec>(0,iNcols-1, iNcols);
 
-    uvec cols = conv_to<uvec>::from(linspace(0,iNcols-1, iNcols));
+    //uvec cols = conv_to<uvec>::from(linspace(0,iNcols-1, iNcols));
 
     field<uvec> left = unpack(rows, L);
     field<uvec> right = unpack(cols, R);
 
 
     field<uvec> PQRS(4);
-    for(int i = 0; i< left.n_rows; ++i){
+    for(uint i = 0; i< left.n_rows; ++i){
         PQRS(L(i,0)) = left(i);
     }
-    for(int i = 0; i< right.n_rows; ++i){
+    for(uint i = 0; i< right.n_rows; ++i){
         PQRS(R(i,0)) = right(i);
     }
     //PQRS.print();
@@ -301,13 +302,13 @@ void amplitude::map_regions(imat L, imat R){
     // ## assign nonambiguous integer to each bra and ket config ##
     // ############################################################
     ivec LHS(iNrows); // = conv_to<ivec>::from(zeros(iNrows));
-    for(int i = 0; i<iNrows;++i){
+    for(uint i = 0; i<iNrows;++i){
         LHS(i) = 0;
     }
     //ivec LHS = conv_to<ivec>::from(zeros(iNrows));
 
     ivec RHS(iNcols); // = conv_to<ivec>::from(zeros(iNcols));
-    for(int i = 0; i<iNcols;++i){
+    for(uint i = 0; i<iNcols;++i){
         RHS(i) = 0;
     }
 
@@ -318,11 +319,11 @@ void amplitude::map_regions(imat L, imat R){
 
 
     //cout << L.n_rows << " " << L.n_cols << " " << L.n_elem << endl;
-    for(int i = 0; i<L.n_rows; ++i){
+    for(uint i = 0; i<L.n_rows; ++i){
         LHS += eBs.unique(PQRS(L(i,0))+L(i,2))*L(i,1);
         //LHS += eBs.unique(PQRS(L(i,0)));
     }
-    for(int i = 0; i<R.n_rows; ++i){
+    for(uint i = 0; i<R.n_rows; ++i){
         RHS += eBs.unique(PQRS(R(i,0))+R(i,2))*R(i,1);
     }
     //cout << LHS.n_rows << endl;
@@ -490,7 +491,6 @@ void amplitude::map_regions(imat L, imat R){
 } //map all regions defined by L == R
 
 
-ivec amplitude::match_config(int u, ivec ivConfig){} //retrieve all
 mat amplitude::getblock(int u, int i){
     //umat block = fmBlocks(u)(i);
     mat block = vElements.elem(fmBlocks(u)(i));
