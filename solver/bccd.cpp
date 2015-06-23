@@ -5,6 +5,7 @@
 #include "basis/electrongas.h"
 #include "solver/amplitude.h"
 #include <time.h>
+#include <omp.h>
 
 using namespace std;
 using namespace arma;
@@ -19,7 +20,7 @@ bccd::bccd(electrongas fgas)
 
     //compare();
     cout << "[BCCD]Energy:" << energy() << endl;
-    //solve(10);
+    solve(1);
 }
 
 
@@ -29,7 +30,8 @@ void bccd::init(){
     // ## Initializing the needed configurations ##
     // ############################################
 
-
+    clock_t t;
+    t = clock();
     //T2 amplitude
 
     //amplitude tt2(eBs, 8, {Np, Np, Nh, Nh});
@@ -47,7 +49,8 @@ void bccd::init(){
     t2.map({1},{4,3,-2});  //for use in Q4 (6)
     t2.map({1},{-2,4,3});  //for use in Q4 (7)
 
-
+    cout << "1:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+    t = clock();
 
     //t3.map({},{});
     //t2.map({-4,2}, {-1,3}); //for use in L3 update (2)
@@ -58,7 +61,8 @@ void bccd::init(){
     //amplitude tt3(eBs, 8, {Np, Np, Nh, Nh});
 
     //next amplitude
-    //t2n = t2;
+    t2n = t2;
+    /*
     t2n.init(eBs, 8, {Np, Np, Nh, Nh});
     t2n.map({1,2}, {3,4});
     t2n.map({2,-4},{-1,3}); //for use in L3 (1)
@@ -74,8 +78,10 @@ void bccd::init(){
 
 
     t2n.init_amplitudes();
+    */
     t2n.zeros();
-
+    cout << "2:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+    t = clock();
     //Temporary amplitude storage for permutations
     //t2temp = tt3;
     t2temp.init(eBs, 8, {Np, Np, Nh, Nh});
@@ -94,7 +100,8 @@ void bccd::init(){
 
     t2temp.init_amplitudes();
     t2temp.zeros();
-
+    cout << "3:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+    t = clock();
     //t2n.map({1,2}, {3,4});
     //t2n.init_amplitudes();
 
@@ -109,7 +116,8 @@ void bccd::init(){
     vhhpp.map({2},{-1,3,4});  //for use in Q3 (2)
     vhhpp.map({1,2,-4},{3});  //for use in Q4 (3)
 
-
+    cout << "4:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+    t = clock();
 
     //blockmap vv(eBs, 3, {Nh,Nh,Np,Np});
     //v0 = vv;
@@ -121,26 +129,32 @@ void bccd::init(){
     //vpphh = tvpphh;
     vpphh.init(eBs, 3, {Np, Np, Nh, Nh});
     vpphh.init_interaction({Nh,Nh,0,0});
+    cout << "5:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+    t = clock();
 
-    //Vpppp
-    //blockmap tvpppp(eBs, 3, {Np, Np, Np, Np});
-    //vpppp = tvpppp;
+
     vpppp.init(eBs, 3, {Np, Np, Np, Np});
-    vpppp.init_interaction({Nh,Nh,Nh,Nh});
+    //vpppp.init_interaction({Nh,Nh,Nh,Nh});
+    vpppp.map_vpppp();
+    cout << "6:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+    t = clock();
+
 
     //Vhhhh
     //blockmap tvhhhh(eBs, 3, {Nh, Nh, Nh, Nh});
     //vhhhh = tvhhhh;
     vhhhh.init(eBs, 3, {Nh, Nh, Nh, Nh});
     vhhhh.init_interaction({0,0,0,0});
-
+    cout << "7:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+    t = clock();
     //Vhpph
     //blockmap tvhpph(eBs, 3, {Nh, Np, Np, Nh});
     //vhpph = tvhpph;
     vhpph.init(eBs, 3, {Nh, Np, Np, Nh});
     //vhpph.init_interaction({0,Nh,Nh,0});
     vhpph.map({-4,2},{3,-1}); //for use in L3 (0)
-
+    cout << "8:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+    t = clock();
 
 }
 
@@ -164,8 +178,9 @@ void bccd::solve(uint Nt){
     //Q1config.print();
 
     t2n.zeros(); //zero out next amplitudes
-
+    clock_t t1;
     for(uint t = 0; t < Nt; ++t){
+        t1 = clock();
         // ############################################
         // ## Reset next amplitude                   ##
         // ############################################
@@ -180,9 +195,12 @@ void bccd::solve(uint Nt){
         // ## Calculate L1                           ##
         // ############################################
         for(uint i = 0; i < vpppp_t2.n_rows; ++i){
-            mat block = .5*vpppp.getblock(0,vpppp_t2(i,1))*t2.getblock(0,vpppp_t2(i,0));
+            //mat block = .5*vpppp.getblock(0,vpppp_t2(i,1))*t2.getblock(0,vpppp_t2(i,0));
+            mat block = .5*vpppp.getblock_vpppp(0,vpppp_t2(i,1))*t2.getblock(0,vpppp_t2(i,0));
             t2n.addblock(0,vpppp_t2(i,0), block);
         }
+        cout << "0:" << (float)(clock()-t1)/CLOCKS_PER_SEC << endl;
+        t1 = clock();
 
         // ############################################
         // ## Calculate L2                           ##
@@ -266,7 +284,10 @@ void bccd::solve(uint Nt){
 
         t2n.divide_energy();
         t2 = t2n;
+        cout << "1:" << (float)(clock()-t1)/CLOCKS_PER_SEC << endl;
+        t1 = clock();
         cout << "[BCCD][" << t << "]Energy:" << energy() << endl;
+        cout << "2:" << (float)(clock()-t1)/CLOCKS_PER_SEC << endl;
     }
 
 

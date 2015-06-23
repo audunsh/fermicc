@@ -463,7 +463,8 @@ void amplitude::map_regions(imat L, imat R){
     }
 
 
-    if(all_resolved != true){
+    //if(all_resolved != true){
+    if(tempN<tempL){
         uvec remaining(tempL-tempN);
         uint tN = 0;
         while(tempN<tempL){
@@ -472,6 +473,8 @@ void amplitude::map_regions(imat L, imat R){
             tempN += 1;
             tN += 1;
         }
+
+        //cout << tempL << " "<< tempN << " " << remaining.n_elem << " " << uvElements.n_elem << endl;
         uvElements = join_cols<umat>(uvElements, remaining);
     }
 

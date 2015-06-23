@@ -244,8 +244,8 @@ void blockmap::map_vpppp(){
     // ###########################################################
     // ## Special care given to the ladder term                 ##
     // ###########################################################
-    fmOrdering(uiCurrent_block,0) = L;
-    fmOrdering(uiCurrent_block,1) = R;
+    //fmOrdering(uiCurrent_block,0) = L;
+    //fmOrdering(uiCurrent_block,1) = R;
 
     uint iNp = uvSize(0);
     uint iNp2 = uvSize(0)*uvSize(0);
@@ -254,7 +254,7 @@ void blockmap::map_vpppp(){
     uvec B = conv_to<uvec>::from(floor(AB/iNp)); //convert to unsigned integer indexing vector
     uvec A = conv_to<uvec>::from(AB) - B*iNp;
 
-    ivec KAB = eBs.unique(A+Nh) + eBs.uniqe(B+Nh);
+    ivec KAB = eBs.unique(A+Nh) + eBs.unique(B+Nh);
 
     ivec K_unique = unique(KAB);
 
@@ -275,13 +275,18 @@ void blockmap::map_vpppp(){
     //uint tempElementsSize = 0;
 
     for(uint i = 0; i<uiN; ++i){
-        uvec row = AB.elem(find(KAB==K_unique(i)));
 
-        fmBlockz(uiCurrent_block)(i,0) = row;
-        fmBlockz(uiCurrent_block)(i,1) = row;
+        uvec ind = find(KAB==K_unique(i));
+        uvec a = A.elem(ind);
+        uvec b = B.elem(ind);
 
+
+        fmBlockz(uiCurrent_block)(i,0) = a; //reusing the framework here, naming does not matter
+        fmBlockz(uiCurrent_block)(i,1) = b;
+        /*
         fuvRows(uiCurrent_block)(i) = row;
         fuvCols(uiCurrent_block)(i) = row;
+        */
 
 
     }
@@ -409,6 +414,37 @@ void blockmap::map_regions(imat L, imat R){
 } //map all regions defined by L == R
 
 mat blockmap::getblock_vpppp(int u, int i){
+    uvec a = fmBlockz(u)(i,0);
+    uvec b = fmBlockz(u)(i,1);
+    int Nx = a.n_rows;
+    //cout << Nx << " " << sqrt(Nx+1) << " " ;
+    //a.print();
+    //cout << endl;
+    //b.print();
+    //cout << endl << endl;
+    mat block(Nx,Nx);
+    double val;
+    uint ax, bx, ay, by;
+    for(uint nx = 0; nx<Nx; ++nx){
+        ax = a(nx) +Nh;
+        bx = b(nx) +Nh;
+        // aaaa abab baba abba baab
+
+
+        block(nx,nx) = eBs.v3(ax, bx, ax, bx);
+
+
+        for(uint ny = nx; ny<Nx; ++ny){
+            ay = a(ny) +Nh;
+            by = b(ny) +Nh;
+            val = eBs.v3(ax, bx, ay, by);
+            block(nx,ny) = val;
+            block(ny,nx) = val;
+        }
+    }
+
+    return block;
+
 
 }
 
@@ -448,7 +484,7 @@ mat blockmap::getblock(int u, int i){
                 }
             }
             //index = to(pqrs(0), pqrs(1), pqrs(2), pqrs(3));
-            block(nx, ny) = eBs.v2(pqrs(0), pqrs(1), pqrs(2), pqrs(3)); //remember to add in the needed shifts
+            block(nx, ny) = eBs.v3(pqrs(0), pqrs(1), pqrs(2), pqrs(3)); //remember to add in the needed shifts
         }
     }
     //cout << Nx << " " << Ny << " " << endl; //" " << K_unique(i) << endl;

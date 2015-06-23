@@ -33,6 +33,7 @@ public:
     //external functions
     void map(ivec left, ivec right); //simpler interface to map_regions
     void map_regions(imat L, imat R); //map all regions defined by L == R
+    void map_vpppp();
 
     mat getblock(int u, int i);
     mat getblock_vpppp(int u, int i);
