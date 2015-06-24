@@ -493,7 +493,7 @@ void ccdt_mp::energy(){
     sp_mat cv = vhhpp.pq_rs() * T.pq_rs();
     mat Cv(cv); //this is inefficient: does not utilize sp_mat functionality, one possibility through unpack_sp_mat
     double C_ = 0;
-    for(int i = 0; i<Cv.n_cols; i++){
+    for(uint i = 0; i<Cv.n_cols; i++){
         C_+= Cv(i,i);
     }
 

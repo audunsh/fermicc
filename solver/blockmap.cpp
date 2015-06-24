@@ -416,7 +416,7 @@ void blockmap::map_regions(imat L, imat R){
 mat blockmap::getblock_vpppp(int u, int i){
     uvec a = fmBlockz(u)(i,0);
     uvec b = fmBlockz(u)(i,1);
-    int Nx = a.n_rows;
+    uint Nx = a.n_rows;
     //cout << Nx << " " << sqrt(Nx+1) << " " ;
     //a.print();
     //cout << endl;

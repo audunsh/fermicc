@@ -43,6 +43,8 @@ public:
 
     //amplitudes and interactions
 
+    amplitude t3;
+
     amplitude t2;
     amplitude t2temp; //used for permutations
     amplitude t2n; //next

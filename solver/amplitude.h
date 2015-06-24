@@ -53,11 +53,23 @@ public:
     field<imat> fmOrdering; //the ordering of each configuration
     uvec uvSize; //particle-hole organization
     int iNconfigs;
-    int Np, Nh;
+    uint Np, Nh;
     uint uiCurrent_block;
 
 
     electrongas eBs;
+
+    //t3 amplitude related
+    uint n0,n1,n2,n3,n4,n5;
+    void make_t3();
+    uint to6(uint p, uint q, uint r, uint s, uint t, uint u);
+    uvec from6(uint i);
+    void map_regions6(imat L, imat R);
+    void map6(ivec left, ivec right);
+
+    //debugging and optimization
+    umat getraw(int u, int i);
+
 
 
 

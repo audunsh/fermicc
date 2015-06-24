@@ -54,7 +54,7 @@ void flexmat6::init(vec values, uvec p, uvec q, uvec r, uvec s, uvec t, uvec u, 
     cols_i = conv_to<uvec>::from(vr + vs*iNr + vt*iNr*iNs + vu*iNr*iNs*iNt);
     rows_i = conv_to<uvec>::from(vp + vq*iNp);
 
-    int sz = iNr*iNs*iNt*iNu; //number of columns in total
+    uint sz = iNr*iNs*iNt*iNu; //number of columns in total
     col_ptrs.set_size(sz); //used in mapping
     for(uint i = 0; i<sz; ++i){
         col_ptrs(i) = -1;
@@ -262,7 +262,7 @@ void flexmat6::shed_zeros(){
     cols_i = conv_to<uvec>::from(vr + vs*iNr + vt*iNr*iNs + vu*iNr*iNs*iNt);
     rows_i = conv_to<uvec>::from(vp + vq*iNp);
 
-    int sz = iNr*iNs*iNt*iNu; //number of columns in total
+    uint sz = iNr*iNs*iNt*iNu; //number of columns in total
     col_ptrs.set_size(sz); //used in mapping
     for(uint i = 0; i<sz; ++i){
         col_ptrs(i) = -1;

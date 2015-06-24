@@ -1010,7 +1010,7 @@ void initializer::sVhhpp(){
     T1.set_size(iN);
     iN = 0;
     int j;
-    for(int i = 0; i < K_unique.size(); ++i){
+    for(uint i = 0; i < K_unique.size(); ++i){
         //this is the most time-consuming process in initialization of Vhhpp
         if(TT(i,0).size() != 0){
             T0(span(iN, iN+TT(i,0).size()-1)) = TT(i,0);

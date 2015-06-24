@@ -41,7 +41,7 @@ void flexmat::init(vec values, uvec p, uvec q, uvec r, uvec s, int Np, int Nq, i
     cols_i = conv_to<uvec>::from(vr + vs*iNr);
     rows_i = conv_to<uvec>::from(vp + vq*iNp);
 
-    int sz = Nr*Ns;
+    uint sz = Nr*Ns;
     col_ptrs.set_size(sz); //used in mapping the values, probably inefficient
     for(uint i = 0; i<sz; ++i){
         col_ptrs(i) = -1;
@@ -329,7 +329,7 @@ void flexmat::shed_zeros(){
     cols_i = conv_to<uvec>::from(vr + vs*iNr);
     rows_i = conv_to<uvec>::from(vp + vq*iNp);
 
-    int sz = iNr*iNs;
+    uint sz = iNr*iNs;
     col_ptrs.set_size(sz); //used in mapping the values, probably inefficient
     for(uint i = 0; i<sz; ++i){
         col_ptrs(i) = -1;

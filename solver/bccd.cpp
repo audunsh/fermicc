@@ -32,6 +32,14 @@ void bccd::init(){
 
     clock_t t;
     t = clock();
+    //t3.init(eBs, 2, {Np, Np, Np, Nh, Nh, Nh});
+    //t3.make_t3();
+    //t3.map6({1,2,3},{4,5,6});
+
+
+
+    cout << "0:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+    t = clock();
     //T2 amplitude
 
     //amplitude tt2(eBs, 8, {Np, Np, Nh, Nh});
@@ -49,6 +57,26 @@ void bccd::init(){
     t2.map({1},{4,3,-2});  //for use in Q4 (6)
     t2.map({1},{-2,4,3});  //for use in Q4 (7)
 
+    /*
+    t2.getraw(0,5).print();
+    cout << endl;
+    t2.getraw(1,5).print();
+    cout << endl;
+    t2.getraw(2,5).print();
+    cout << endl;
+    t2.getraw(3,5).print();
+    cout << endl;
+    t2.getraw(4,5).print();
+    cout << endl;
+    t2.getraw(5,5).print();
+    cout << endl;
+    t2.getraw(6,5).print();
+    cout << endl;
+    t2.getraw(7,5).print();
+    cout << endl;
+    */
+
+
     cout << "1:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
     t = clock();
 
@@ -57,6 +85,9 @@ void bccd::init(){
 
     t2.init_amplitudes();
     t2.divide_energy();
+    vec nz = unique(t2.vElements);
+    cout << nz.n_elem << endl;
+
 
     //amplitude tt3(eBs, 8, {Np, Np, Nh, Nh});
 

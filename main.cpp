@@ -24,13 +24,19 @@ using namespace arma;
 int main()
 {
     electrongas fgas;
-    fgas.generate_state_list2(5.0,1.0, 14);
+    fgas.generate_state_list2(3.0,1.0, 14);
 
     //cout << "Energy per particle:" << fgas.eref(14)/14.0 << " (a.u)"  << endl;
     //cout << "[Main] Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;
     cout << "[Main]" << setprecision(8) << "Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;
 
     cout << "[Main]G.Baardsens results:" << 1.9434 << endl;
+
+
+    uint Np = fgas.iNbstates-fgas.iNparticles; //conflicting notation here
+    uint Nh = fgas.iNparticles;
+
+    //vec amptest = zeros(Np*Np*Np*Nh*Nh*Nh);
 
     bccd solver(fgas);
 
