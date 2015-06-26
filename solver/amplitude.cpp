@@ -332,6 +332,114 @@ void amplitude::map(ivec left, ivec right){
 
 }
 
+field<uvec> amplitude::blocksort(ivec LHS, ivec K_unique){
+    uvec l_sorted = sort_index(LHS);
+    bool adv = false;
+
+    //LHS.elem(l_sorted).print();
+    //cout << endl;
+
+    uint lc = 0;
+    uint i = 0;
+    uint uiN = K_unique.n_rows;
+    uint uiS = l_sorted.n_rows;
+
+    int C = K_unique(i);
+    uvec row(100000);
+    uint nx = 0;
+    int l_c= LHS(l_sorted(lc));
+    field<uvec> tempRows(uiN);
+
+    //first: align C and l_c
+    //while(l_c<C){
+    //    lc += 1;
+    //    l_c = LHS(l_sorted(lc));
+    //}
+
+
+    //align counters
+    while(l_c<C){
+        lc += 1;
+        l_c = LHS(l_sorted(lc));
+    }
+
+    //want to find row indices where LHS == k_config(i)
+    //now: l_c == C
+    bool br = false;
+    bool row_collect = false;
+    while(lc < uiS){
+        l_c = LHS(l_sorted(lc));
+
+        if(l_c == C){
+            row(nx) = l_sorted(lc);
+            nx += 1;
+            row_collect = true;
+        }
+
+        //if row is complete
+        else{
+            if(row_collect){
+                tempRows(i) = sort(row(span(0,nx-1)));
+                lc -= 1;
+                i += 1;
+                nx = 0;
+                C = K_unique(i);
+                row_collect = false;
+            }
+        }
+
+
+        lc += 1;
+        //cout << l_c - C << endl;
+    }
+
+
+    /*
+    while(i<uiN){
+        //while(l_c<C){
+        //    lc += 1;
+        //    l_c = LHS(l_sorted(lc));
+        //}
+
+
+        l_c = LHS(l_sorted(lc));
+
+        adv = true;
+
+        if(l_c == C){
+            //add row index to block i
+            row(nx) = l_sorted(lc);
+            nx += 1;
+
+            adv = false;
+        }
+        //lc += 1;
+
+
+        if(adv){
+            //advance to next uniquely defined block
+            //append row to field
+            tempRows(i) = row(span(0,nx)); //.print();
+            //cout << endl;
+            //cout << endl;
+            i+=1;
+            C = K_unique(i);
+            nx = 0;
+            //align l_c
+
+            //l_c = LHS(l_sorted(lc));
+            //while(l_c<C){
+            //    lc += 1;
+            //    l_c = LHS(l_sorted(lc));
+            //}
+
+        }
+    }*/
+
+    return tempRows;
+
+}
+
 void amplitude::map_regions6(imat L, imat R){
 
 
@@ -424,11 +532,23 @@ void amplitude::map_regions6(imat L, imat R){
 
     uint tempElementsSize = 0;
 
+    clock_t t0;
+
+    t0 = clock();
+    //experiment, trying to speed up initialization
+    field<uvec> tempRows = blocksort(LHS, K_unique);
+    field<uvec> tempCols = blocksort(RHS, K_unique);
+    cout << " First method:" << (float)(clock()-t0)/CLOCKS_PER_SEC << endl;
+    t0 = clock();
+
+
     for(uint i = 0; i<uiN; ++i){
         //uvec indx = find(LHS==K_unique(i));
         //LHS.elem(indx).print();
-        uvec row = rows.elem(find(LHS==K_unique(i)));
-        uvec col = cols.elem(find(RHS==K_unique(i)));
+        //uvec row = rows.elem(find(LHS==K_unique(i)));
+        //uvec col = cols.elem(find(RHS==K_unique(i)));
+        uvec row = tempRows(i);
+        uvec col = tempCols(i);
         //srow.print();
         int Nx = row.n_rows;
         int Ny = col.n_rows;
@@ -471,7 +591,8 @@ void amplitude::map_regions6(imat L, imat R){
         //cout << i << endl;
     }
     //fmBlocks(uiCurrent_block)(3).print();
-
+    cout << "Second method:" << (float)(clock()-t0)/CLOCKS_PER_SEC << endl;
+    t0 = clock();
 
     // ####################################################################
     // ## Flatten tempElements and tempBlockmap                          ##
@@ -658,11 +779,22 @@ void amplitude::map_regions(imat L, imat R){
 
     uint tempElementsSize = 0;
 
+
+    field<uvec> tempRows = blocksort(LHS, K_unique);
+    field<uvec> tempCols = blocksort(RHS, K_unique);
     for(uint i = 0; i<uiN; ++i){
         //uvec indx = find(LHS==K_unique(i));
         //LHS.elem(indx).print();
-        uvec row = rows.elem(find(LHS==K_unique(i)));
-        uvec col = cols.elem(find(RHS==K_unique(i)));
+        //uvec row = rows.elem(find(LHS==K_unique(i)));
+        //uvec col = cols.elem(find(RHS==K_unique(i)));
+
+        uvec row = tempRows(i);
+        uvec col = tempCols(i);
+        //cout << "row:" << endl;
+        //row.print();
+        //cout << "r1:" << endl;
+        //row1.print();
+
         //srow.print();
         int Nx = row.n_rows;
         int Ny = col.n_rows;
@@ -788,16 +920,6 @@ void amplitude::map_regions(imat L, imat R){
 
     //lock and load
     uiCurrent_block += 1;
-
-
-
-
-
-
-
-
-
-
 } //map all regions defined by L == R
 
 
@@ -837,4 +959,19 @@ void amplitude::addblock(int u, int i, mat mBlock){
     //vectorise(mBlock).print();
 
     vElements.elem(fmBlocks(u)(i)) += vectorise(mBlock);
+}
+
+
+void amplitude::compress(){
+    //store only unique amplitude values
+    //experimental functionality
+
+    //this will probably not work (why?)
+    //do instead: - treat each set of blocks distinctly, especially first set is easily compressible (store only first element in row)
+    vec uniqueElements = unique(vElements);
+    uvec tempind;
+    for(uint i = 0; i < uniqueElements.n_rows; ++i){
+        tempind = find(vElements==uniqueElements(i));
+
+    }
 }

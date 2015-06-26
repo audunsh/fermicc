@@ -53,6 +53,12 @@ public:
     blockmap vhpph;
     blockmap vpphh;
     blockmap vhhhh;
+
+    //for the triples
+    blockmap vppph;
+    blockmap vhphh;
+
+
     blockmap v0;
 
 };

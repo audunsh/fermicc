@@ -28,6 +28,7 @@ public:
     void divide_energy(); //divide all elements by corresponding energy (for amplitudes)
     void print_block_maximum();
 
+
     //index related functions
     field<uvec> unpack(uvec vStream, imat imOrder); //unpack a disorganized sequence of indices
     uvec unpack_uvec(uint vStream, imat imOrder);
@@ -36,6 +37,7 @@ public:
     //external functions
     void map(ivec left, ivec right); //simpler interface to map_regions
     void map_regions(imat L, imat R); //map all regions defined by L == R
+    field<uvec> blocksort(ivec LHS, ivec K_unique);
 
     mat getblock(int u, int i);
     void setblock(int u, int i, mat mBlock);
@@ -69,6 +71,7 @@ public:
 
     //debugging and optimization
     umat getraw(int u, int i);
+    void compress();
 
 
 

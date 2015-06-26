@@ -393,8 +393,8 @@ void blockmap::map_regions(imat L, imat R){
         fmBlockz(uiCurrent_block)(i,0) = row;
         fmBlockz(uiCurrent_block)(i,1) = col;
 
-        fuvRows(uiCurrent_block)(i) = row;
-        fuvCols(uiCurrent_block)(i) = col;
+        //fuvRows(uiCurrent_block)(i) = row;
+        //fuvCols(uiCurrent_block)(i) = col;
 
 
     }

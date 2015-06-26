@@ -20,7 +20,7 @@ bccd::bccd(electrongas fgas)
 
     //compare();
     cout << "[BCCD]Energy:" << energy() << endl;
-    solve(1);
+    //solve(10);
 }
 
 
@@ -187,6 +187,34 @@ void bccd::init(){
     cout << "8:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
     t = clock();
 
+    // #############################################
+    // ## Perturbative triples setup              ##
+    // #############################################
+    if(true){
+        vhphh.init(eBs, 3, {Nh, Np, Nh, Nh});
+        vhphh.map({1,2,-4},{3});
+        cout << "Number of vhphh:" << vhphh.blocklengths(0) << endl;
+
+
+        vppph.init(eBs, 3, {Np, Np, Np, Nh});
+        cout << Np*Np*Np << endl;
+        vppph.map({1,2,-3},{4});
+        cout << "Number of vppph:" << vppph.blocklengths(0) << endl;
+
+
+
+        //t3.init(eBs, 2, {Np, Np, Np, Nh, Nh, Nh});
+        //t3.make_t3();
+        //t3.map6({1,2,3},{4,5,6});
+
+
+
+
+
+
+
+    }
+
 }
 
 void bccd::solve(uint Nt){
@@ -215,7 +243,9 @@ void bccd::solve(uint Nt){
         // ############################################
         // ## Reset next amplitude                   ##
         // ############################################
-
+        //vec uni = unique(t2.vElements);
+        //cout << uni.n_rows << endl;
+        //uni.print();
         t2n.zeros();
         for(uint i = 0; i < vpphh_t2.n_rows; ++i){
             mat block = vpphh.getblock(0,vpphh_t2(i,1));
