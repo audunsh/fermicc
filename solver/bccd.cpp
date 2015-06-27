@@ -20,7 +20,7 @@ bccd::bccd(electrongas fgas)
 
     //compare();
     cout << "[BCCD]Energy:" << energy() << endl;
-    //solve(10);
+    solve(30);
 }
 
 
@@ -190,7 +190,7 @@ void bccd::init(){
     // #############################################
     // ## Perturbative triples setup              ##
     // #############################################
-    if(true){
+    if(false){
         vhphh.init(eBs, 3, {Nh, Np, Nh, Nh});
         vhphh.map({1,2,-4},{3});
         cout << "Number of vhphh:" << vhphh.blocklengths(0) << endl;
@@ -280,6 +280,10 @@ void bccd::solve(uint Nt){
         t2temp.zeros();
         for(uint i = 0; i < vhpph_L3.n_rows; ++i){
             mat block = vhpph.getblock(0,vhpph_L3(i,1))*t2.getblock(1,vhpph_L3(i,0));
+            //block.print();
+            //cout << endl;
+            //t2temp.getraw(4,i).print();
+            //cout << endl;
             t2temp.addblock(4,i,block);
         }
         //permute L3
@@ -317,6 +321,9 @@ void bccd::solve(uint Nt){
         //Q3 = fmQ3.pq_rs() - fmQ3.pq_sr(); //permuting elements
         t2temp.zeros();
         for(uint i = 0; i < Q3config.n_rows; ++i){
+            //t2.getblock(4,Q3config(i,0)).print();
+            //vhhpp.getblock(2,Q3config(i,1)).print();
+            //t2.getblock(5,Q3config(i,2)).print();
             mat block = t2.getblock(4,Q3config(i,0))*(vhhpp.getblock(2,Q3config(i,1))*t2.getblock(5,Q3config(i,2)));
             t2temp.addblock(6,Q3config(i,0),block);
         }

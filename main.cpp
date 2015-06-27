@@ -40,6 +40,11 @@ int main()
 
     bccd solver(fgas);
 
+
+    //blockmap t2;
+    //t2.init(fgas, 2, {Np,Np,Nh,Nh});
+    //t2.map({1,2},{3,4});
+
     //ccsolve solver2(fgas);
     //solver2.CCSD_SG(2);
     //ccd_pt solver(fgas, .5);

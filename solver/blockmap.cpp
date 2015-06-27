@@ -240,13 +240,279 @@ void blockmap::map(ivec left, ivec right){
 
 }
 
+field<uvec> blockmap::blocksort_symmetric(ivec K_unique){
+    //find blocks in array of the dimensionality Np*Np
+
+    //begin by assembling LHS
+    uint Ndim = Np*(Np+1)/2;
+    ivec LHS(Ndim);
+    uvec A(Ndim);
+    uvec B(Ndim);
+    uint ncount = 0;
+    for(uint a = 0; a< Np; ++a){
+        for(uint b= 0; b<=a; ++b){
+            //LHS(ncount) = eBs.unique(a) + eBs.unique(b);
+            A(ncount) = a;
+            B(ncount) = b;
+            ncount += 1;
+        }
+    }
+    LHS = eBs.unique(A + Nh) + eBs.unique(B+ Nh);
+    if(K_unique.n_rows == 0){
+        K_unique = intersect1d(K_unique, unique(LHS));
+    }
+
+
+    uvec l_sorted = sort_index(LHS);
+    //uvec l_sorted = linspace<uvec>(0,Ndim-1, Ndim);
+    bool adv = false;
+
+    uint lc = 0;
+    uint i = 0;
+    uint uiN = K_unique.n_rows;
+    uint uiS = l_sorted.n_rows;
+
+    int C = K_unique(i);
+
+    uint nx = 0;
+    int l_c= LHS(l_sorted(lc));
+    field<uvec> tempRows(uiN);
+    //tempRows(uiN) = K_unique;
+    //tempRows(0).set_size(uiN);
+    //tempRows(1).set_size(uiN);
+
+    //align counters
+    while(l_c<C){
+        lc += 1;
+        l_c = LHS(l_sorted(lc));
+    }
+
+    //want to find row indices where LHS == k_config(i)
+    //now: l_c == C
+    bool br = false;
+    bool row_collect = false;
+    int ll_c = l_c;
+    uint a;
+    uint b;
+    uint l_sorted_lc;
+    uvec row_a(1000000);
+    //uvec row_b(1000000);
+
+    while(lc < uiS){
+        l_sorted_lc = l_sorted(lc);
+        l_c = LHS(l_sorted_lc);
+
+        if(l_c == C){
+            a = A(l_sorted_lc);
+            b = B(l_sorted_lc);
+            //the locations a + b*Np and b + a*Np (in the full array) are now identified to have LHS == C, belonging to the block
+
+            row_a(nx) = a + b*Np;
+            //row_b(nx) = b;
+            if(a!=b){
+                nx += 1;
+                row_a(nx) = b + a*Np;
+                //row_b(nx) = a;
+            }
+            //row(nx) = l_sorted(lc);
+            nx += 1;
+            row_collect = true;
+        }
+
+        //if row is complete
+        else{
+            if(row_collect){
+                //uvec r = sort(row(span(0,nx-1)));
+                tempRows(i) = sort(row_a(span(0,nx-1)));
+                //tempRows(1)(i) = row_b(span(0,nx-1));
+                lc -= 1;
+                i += 1;
+                nx = 0;
+                C = K_unique(i);
+                row_collect = false;
+            }
+        }
+
+        //cout << row_a(0) << endl;
+
+        lc += 1;
+        //cout << l_c - C << endl;
+    }
+
+    //collect final block
+    tempRows(i) = sort(row_a(span(0,nx-1)));
+    //tempRows(1)(i) = row_b(span(0,nx-1));
+
+
+    return tempRows;
+
+}
+
+field<uvec> blockmap::blocksort(ivec LHS, ivec K_unique){
+    uvec l_sorted = sort_index(LHS);
+    bool adv = false;
+
+    uint lc = 0;
+    uint i = 0;
+    uint uiN = K_unique.n_rows;
+    uint uiS = l_sorted.n_rows;
+
+    int C = K_unique(i);
+    uvec row(1000000);
+    uint nx = 0;
+    int l_c= LHS(l_sorted(lc));
+    field<uvec> tempRows(uiN);
+
+    //align counters
+    while(l_c<C){
+        lc += 1;
+        l_c = LHS(l_sorted(lc));
+    }
+
+    //want to find row indices where LHS == k_config(i)
+    //now: l_c == C
+    bool row_collect = false;
+    int ll_c = l_c;
+
+    while(lc < uiS){
+        l_c = LHS(l_sorted(lc));
+
+        if(l_c == C){
+            row(nx) = l_sorted(lc);
+            nx += 1;
+            row_collect = true;
+        }
+
+        //if row is complete
+        else{
+            if(row_collect){
+                tempRows(i) = sort(row(span(0,nx-1)));
+                lc -= 1;
+                i += 1;
+                nx = 0;
+                C = K_unique(i);
+                row_collect = false;
+            }
+        }
+
+
+        lc += 1;
+        //cout << l_c - C << endl;
+    }
+
+
+    return tempRows;
+
+}
+
 void blockmap::map_vpppp(){
     // ###########################################################
     // ## Special care given to the ladder term                 ##
     // ###########################################################
+    //begin by assembling LHS
+    uint Ndim = Np*(Np+1)/2;
+    ivec LHS(Ndim);
+    uvec A(Ndim);
+    uvec B(Ndim);
+    uint ncount = 0;
+    for(uint a = 0; a< Np; ++a){
+        for(uint b= 0; b<=a; ++b){
+            //LHS(ncount) = eBs.unique(a) + eBs.unique(b);
+            A(ncount) = a;
+            B(ncount) = b;
+            ncount += 1;
+        }
+    }
+    LHS = eBs.unique(A + Nh) + eBs.unique(B+ Nh);
+    ivec K_unique = unique(LHS);
+
+
+    uvec l_sorted = sort_index(LHS);
+    //uvec l_sorted = linspace<uvec>(0,Ndim-1, Ndim);
+    bool adv = false;
+
+    uint lc = 0;
+    uint i = 0;
+    uint uiN = K_unique.n_rows;
+    uint uiS = l_sorted.n_rows;
+
+    int C = K_unique(i);
+
+    uint nx = 0;
+    int l_c= LHS(l_sorted(lc));
+    field<uvec> tempRows(uiN);
+    //tempRows(uiN) = K_unique;
+    //tempRows(0).set_size(uiN);
+    //tempRows(1).set_size(uiN);
+
+    //align counters
+    while(l_c<C){
+        lc += 1;
+        l_c = LHS(l_sorted(lc));
+    }
+
+    //want to find row indices where LHS == k_config(i)
+    //now: l_c == C
+    bool br = false;
+    bool row_collect = false;
+    int ll_c = l_c;
+    uint a;
+    uint b;
+    uint l_sorted_lc;
+    uvec row_a(1000000);
+    //uvec row_b(1000000);
+
+    while(lc < uiS){
+        l_sorted_lc = l_sorted(lc);
+        l_c = LHS(l_sorted_lc);
+
+        if(l_c == C){
+            a = A(l_sorted_lc);
+            b = B(l_sorted_lc);
+            //the locations a + b*Np and b + a*Np (in the full array) are now identified to have LHS == C, belonging to the block
+
+            row_a(nx) = a + b*Np;
+            //row_b(nx) = b;
+            if(a!=b){
+                nx += 1;
+                row_a(nx) = b + a*Np;
+                //row_b(nx) = a;
+            }
+            //row(nx) = l_sorted(lc);
+            nx += 1;
+            row_collect = true;
+        }
+
+        //if row is complete
+        else{
+            if(row_collect){
+                //uvec r = sort(row(span(0,nx-1)));
+                tempRows(i) = sort(row_a(span(0,nx-1)));
+                //tempRows(1)(i) = row_b(span(0,nx-1));
+                lc -= 1;
+                i += 1;
+                nx = 0;
+                C = K_unique(i);
+                row_collect = false;
+            }
+        }
+
+        //cout << row_a(0) << endl;
+
+        lc += 1;
+        //cout << l_c - C << endl;
+    }
+
+    //collect final block
+    tempRows(i) = sort(row_a(span(0,nx-1)));
+
+
+
+
     //fmOrdering(uiCurrent_block,0) = L;
     //fmOrdering(uiCurrent_block,1) = R;
 
+    /*
     uint iNp = uvSize(0);
     uint iNp2 = uvSize(0)*uvSize(0);
     vec AB = linspace(0,iNp2-1,iNp2);
@@ -256,9 +522,13 @@ void blockmap::map_vpppp(){
 
     ivec KAB = eBs.unique(A+Nh) + eBs.unique(B+Nh);
 
-    ivec K_unique = unique(KAB);
 
-    uint uiN = K_unique.n_elem;
+    ivec K_unique = unique(KAB);
+    */
+    //field<uvec> tempRows = blocksort_symmetric({});
+    //K_unique = tempRows(tempRows.n_rows);
+    //uiN = len(K_unique);
+    //uint uiN = K_unique.n_elem;
 
     blocklengths(uiCurrent_block) = uiN; //number of blocks in config
     fvConfigs(uiCurrent_block) = K_unique; //ordering
@@ -273,20 +543,38 @@ void blockmap::map_vpppp(){
     //field<uvec> tempBlockmap3(uiN);
 
     //uint tempElementsSize = 0;
+    //field<uvec> tempRows = blocksort_symmetric({});
 
+    //field
     for(uint i = 0; i<uiN; ++i){
-
+        /*
         uvec ind = find(KAB==K_unique(i));
         uvec a = A.elem(ind);
         uvec b = B.elem(ind);
-
-
-        fmBlockz(uiCurrent_block)(i,0) = a; //reusing the framework here, naming does not matter
-        fmBlockz(uiCurrent_block)(i,1) = b;
-        /*
-        fuvRows(uiCurrent_block)(i) = row;
-        fuvCols(uiCurrent_block)(i) = row;
+        cout << "a:"<<endl;
+        a.print();
+        cout << endl;
+        //b.print();
+        cout << endl;
         */
+        uvec i2 = tempRows(i);
+        uvec uvB = floor(i2/Np); //convert to unsigned integer indexing vector
+        uvec uvA = i2 - uvB*Np;
+        //uvA.print();
+
+        //ai.print();
+        //cout << endl;
+
+
+        fmBlockz(uiCurrent_block)(i,0) = uvA; //reusing the framework here, naming does not matter
+        fmBlockz(uiCurrent_block)(i,1) = uvB;
+
+        //fmBlockz(uiCurrent_block)(i,0) = tempRows(0)(i); //reusing the framework here, naming does not matter
+        //fmBlockz(uiCurrent_block)(i,1) = tempRows(1)(i);
+
+
+        //fuvRows(uiCurrent_block)(i) = row;
+        //fuvCols(uiCurrent_block)(i) = row;
 
 
     }
@@ -361,6 +649,7 @@ void blockmap::map_regions(imat L, imat R){
         RHS += eBs.unique(PQRS(R(i,0))+R(i,2))*R(i,1);
     }
 
+    //LHS.print();
 
     // ####################################################################
     // ## Iterate over unique combinations, retain blocks where RHS==LHS ##
@@ -386,12 +675,19 @@ void blockmap::map_regions(imat L, imat R){
 
     //uint tempElementsSize = 0;
 
+    field<uvec> tempRow = blocksort(LHS, K_unique);
+    field<uvec> tempCol = blocksort(RHS, K_unique);
+
+
     for(uint i = 0; i<uiN; ++i){
         uvec row = rows.elem(find(LHS==K_unique(i)));
         uvec col = cols.elem(find(RHS==K_unique(i)));
 
         fmBlockz(uiCurrent_block)(i,0) = row;
         fmBlockz(uiCurrent_block)(i,1) = col;
+
+        //fmBlockz(uiCurrent_block)(i,0) = tempRow(i);
+        //fmBlockz(uiCurrent_block)(i,1) = tempCol(i);
 
         //fuvRows(uiCurrent_block)(i) = row;
         //fuvCols(uiCurrent_block)(i) = col;

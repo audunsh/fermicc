@@ -333,7 +333,7 @@ void amplitude::map(ivec left, ivec right){
 }
 
 field<uvec> amplitude::blocksort(ivec LHS, ivec K_unique){
-    uvec l_sorted = sort_index(LHS);
+    uvec l_sorted = sort_index(LHS); //most time is spent doing this -- maybe we should reorganize the items so they are sorted all along?
     bool adv = false;
 
     //LHS.elem(l_sorted).print();
@@ -780,16 +780,18 @@ void amplitude::map_regions(imat L, imat R){
     uint tempElementsSize = 0;
 
 
-    field<uvec> tempRows = blocksort(LHS, K_unique);
-    field<uvec> tempCols = blocksort(RHS, K_unique);
+    //field<uvec> tempRows = blocksort(LHS, K_unique);
+    //field<uvec> tempCols = blocksort(RHS, K_unique);
     for(uint i = 0; i<uiN; ++i){
-        //uvec indx = find(LHS==K_unique(i));
+        uvec indx = find(LHS==K_unique(i));
         //LHS.elem(indx).print();
-        //uvec row = rows.elem(find(LHS==K_unique(i)));
-        //uvec col = cols.elem(find(RHS==K_unique(i)));
+        uvec row = rows.elem(find(LHS==K_unique(i)));
+        uvec col = cols.elem(find(RHS==K_unique(i)));
 
-        uvec row = tempRows(i);
-        uvec col = tempCols(i);
+        //uvec row = tempRows(i);
+        //uvec col = tempCols(i);
+
+
         //cout << "row:" << endl;
         //row.print();
         //cout << "r1:" << endl;

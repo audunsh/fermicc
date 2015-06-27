@@ -108,6 +108,7 @@ void electrongas::generate_state_list2(int Ne, double rs, int Np){
 
 ivec electrongas::unique(uvec p){
     return vKx.elem(p) + vKy.elem(p)*k_step + vKz.elem(p)*k_step*k_step + vMs.elem(p)*k_step*k_step*k_step;
+    //return k_step*k_step*k_step*k_step + vKx.elem(p)*k_step*k_step*k_step + vKy.elem(p)*k_step*k_step + vKz.elem(p)*k_step + vMs.elem(p);
 }
 
 void electrongas::generate_state_list(int Ne, double rs, int Np){

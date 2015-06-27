@@ -29,6 +29,7 @@ public:
     field<uvec> unpack(uvec vStream, imat imOrder); //unpack a disorganized sequence of indices
     uvec unpack_uvec(uint vStream, imat imOrder);
     field<uvec> blocksort(ivec LHS, ivec K_unique);
+    field<uvec> blocksort_symmetric(ivec K_unique);
 
 
     //external functions
