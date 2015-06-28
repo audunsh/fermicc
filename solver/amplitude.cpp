@@ -72,6 +72,7 @@ void amplitude::zeros(){
 void amplitude::init_amplitudes(){
     vElements.set_size(uvElements.n_rows);
     vEnergies.set_size(uvElements.n_rows);
+    //uvElements.print(); //could we maybe retrieve these "on the fly" ? (would mean to locate blocks "on the fly")
     for(uint i= 0; i<uvElements.n_rows; ++i){
         uvec p = from(uvElements(i));
         //cout << p(0) <<  " " << p(1) << " " << p(2) << " " << p(3) << " "<< endl;
@@ -831,9 +832,9 @@ void amplitude::map_regions(imat L, imat R){
         }
         fmBlocks(uiCurrent_block)(i) = block;
         tempElements(i) = tElements;
-        tempBlockmap1(i) = tBlockmap1;
-        tempBlockmap2(i) = tBlockmap2;
-        tempBlockmap3(i) = tBlockmap3;
+        tempBlockmap1(i) = tBlockmap1; //block that element belongs to
+        tempBlockmap2(i) = tBlockmap2; //row of element
+        tempBlockmap3(i) = tBlockmap3; //column of element
 
         //block.print();
         //cout << i << endl;

@@ -20,7 +20,7 @@ bccd::bccd(electrongas fgas)
 
     //compare();
     cout << "[BCCD]Energy:" << energy() << endl;
-    solve(30);
+    solve(10);
 }
 
 
@@ -29,6 +29,8 @@ void bccd::init(){
     // ############################################
     // ## Initializing the needed configurations ##
     // ############################################
+
+    bool pert_triples = false;
 
     clock_t t;
     t = clock();
@@ -115,7 +117,7 @@ void bccd::init(){
     t = clock();
     //Temporary amplitude storage for permutations
     //t2temp = tt3;
-    t2temp.init(eBs, 8, {Np, Np, Nh, Nh});
+    t2temp.init(eBs, 9, {Np, Np, Nh, Nh});
     t2temp.map({1,2},{3,4}); //ab ij (0)
     t2temp.map({2,1},{3,4}); //ba ij (1)
     t2temp.map({1,2},{4,3}); //ab ji (2)
@@ -126,6 +128,11 @@ void bccd::init(){
     t2temp.map({1,-3}, {-2,4}); //for use ni Q2 update (5)
     t2temp.map({1,2,-4}, {3});  //for use in Q3 update (6)
     t2temp.map({1}, {-2,4,3});  //for use in Q4 update (7)
+    if(pert_triples){
+        t2temp.map({2}, {3,4,-1});  //for use in D10b update (8)
+        t2temp.map({1,2,-3}, {4});  //for use in D10c update (9)
+    }
+
 
 
 
@@ -203,9 +210,14 @@ void bccd::init(){
 
 
 
-        //t3.init(eBs, 2, {Np, Np, Np, Nh, Nh, Nh});
-        //t3.make_t3();
-        //t3.map6({1,2,3},{4,5,6});
+        t3.init(eBs, 3, {Np, Np, Np, Nh, Nh, Nh});
+        t3.make_t3();
+        t3.map6({1,2,3}, {4,5,6});
+        t3.map6({-6,2,3}, {4,5,-1}); //for use in d10b (0)
+        t3.map6({1,2,-4}, {5,6,-3}); //for use in d10c (1)
+
+
+
 
 
 
@@ -238,8 +250,9 @@ void bccd::solve(uint Nt){
 
     t2n.zeros(); //zero out next amplitudes
     clock_t t1;
+    uint nthreads = 3;
     for(uint t = 0; t < Nt; ++t){
-        t1 = clock();
+        //t1 = clock();
         // ############################################
         // ## Reset next amplitude                   ##
         // ############################################
@@ -247,6 +260,7 @@ void bccd::solve(uint Nt){
         //cout << uni.n_rows << endl;
         //uni.print();
         t2n.zeros();
+        //#pragma omp parallel  num_threads(nthreads)
         for(uint i = 0; i < vpphh_t2.n_rows; ++i){
             mat block = vpphh.getblock(0,vpphh_t2(i,1));
             t2n.addblock(0,vpphh_t2(i,0), block);
@@ -255,17 +269,19 @@ void bccd::solve(uint Nt){
         // ############################################
         // ## Calculate L1                           ##
         // ############################################
+        //#pragma omp parallel  num_threads(nthreads)
         for(uint i = 0; i < vpppp_t2.n_rows; ++i){
             //mat block = .5*vpppp.getblock(0,vpppp_t2(i,1))*t2.getblock(0,vpppp_t2(i,0));
             mat block = .5*vpppp.getblock_vpppp(0,vpppp_t2(i,1))*t2.getblock(0,vpppp_t2(i,0));
             t2n.addblock(0,vpppp_t2(i,0), block);
         }
-        cout << "0:" << (float)(clock()-t1)/CLOCKS_PER_SEC << endl;
-        t1 = clock();
+        //cout << "0:" << (float)(clock()-t1)/CLOCKS_PER_SEC << endl;
+        //t1 = clock();
 
         // ############################################
         // ## Calculate L2                           ##
         // ############################################
+        //#pragma omp parallel  num_threads(nthreads)
         for(uint i = 0; i < vhhhh_t2.n_rows; ++i){
             mat block = .5*t2.getblock(0,vhhhh_t2(i,0))*vhhhh.getblock(0,vhhhh_t2(i,1));
             t2n.addblock(0,vhhhh_t2(i,0), block);
@@ -278,6 +294,7 @@ void bccd::solve(uint Nt){
         //fmL3.update(vhpph.sq_rp()*T.qs_pr(), Ns, Nq, Np, Nr);
         //L3 = fmL3.rq_sp() - fmL3.qr_sp() -fmL3.rq_ps() +fmL3.qr_ps();
         t2temp.zeros();
+        //#pragma omp parallel  num_threads(nthreads)
         for(uint i = 0; i < vhpph_L3.n_rows; ++i){
             mat block = vhpph.getblock(0,vhpph_L3(i,1))*t2.getblock(1,vhpph_L3(i,0));
             //block.print();
@@ -287,6 +304,7 @@ void bccd::solve(uint Nt){
             t2temp.addblock(4,i,block);
         }
         //permute L3
+        //#pragma omp parallel  num_threads(nthreads)
         for(uint i = 0; i < t2temp.fvConfigs(0).n_rows; ++i){
             mat block = t2temp.getblock(0,i) - t2temp.getblock(1,i)- t2temp.getblock(2,i)+t2temp.getblock(3,i);
             t2n.addblock(0,i,block);
@@ -295,6 +313,7 @@ void bccd::solve(uint Nt){
         // ############################################
         // ## Calculate Q1                           ##
         // ############################################
+        //#pragma omp parallel  num_threads(nthreads)
         for(uint i = 0; i < Q1config.n_rows; ++i){
             mat block = .25*t2.getblock(0,Q1config(i,0))*(vhhpp.getblock(0,Q1config(i,1))*t2.getblock(0,Q1config(i,2)));
             t2n.addblock(0,Q1config(i,0),block);
@@ -305,10 +324,12 @@ void bccd::solve(uint Nt){
         // ## Calculate Q2                           ##
         // ############################################
         t2temp.zeros();
+        //#pragma omp parallel  num_threads(nthreads)
         for(uint i = 0; i < Q2config.n_rows; ++i){
             mat block = t2.getblock(2,Q2config(i,0))*(vhhpp.getblock(1,Q2config(i,1))*t2.getblock(3,Q2config(i,2)));
             t2temp.addblock(5,Q2config(i,0),block);
         }
+        //#pragma omp parallel  num_threads(nthreads)
         for(uint i = 0; i < t2temp.fvConfigs(0).n_rows; ++i){
             mat block = t2temp.getblock(0,i) - t2temp.getblock(2,i);
             t2n.addblock(0,i,block);
@@ -320,6 +341,7 @@ void bccd::solve(uint Nt){
         //fmQ3.update_as_r_pqs((T.r_sqp()*vhhpp.prs_q())*T.r_pqs(), Np, Nq, Nr, Ns); //needs realignment and permutations
         //Q3 = fmQ3.pq_rs() - fmQ3.pq_sr(); //permuting elements
         t2temp.zeros();
+        //#pragma omp parallel  num_threads(nthreads)
         for(uint i = 0; i < Q3config.n_rows; ++i){
             //t2.getblock(4,Q3config(i,0)).print();
             //vhhpp.getblock(2,Q3config(i,1)).print();
@@ -327,6 +349,7 @@ void bccd::solve(uint Nt){
             mat block = t2.getblock(4,Q3config(i,0))*(vhhpp.getblock(2,Q3config(i,1))*t2.getblock(5,Q3config(i,2)));
             t2temp.addblock(6,Q3config(i,0),block);
         }
+        //#pragma omp parallel  num_threads(nthreads)
         for(uint i = 0; i < t2temp.fvConfigs(0).n_rows; ++i){
             mat block = -.5*(t2temp.getblock(0,i) - t2temp.getblock(2,i)); //* done to keep in line with equations (inefficient)
             t2n.addblock(0,i,block);
@@ -338,10 +361,12 @@ void bccd::solve(uint Nt){
         //fmQ4.update_as_p_qrs(T.p_srq()*vhhpp.pqr_s()*T.p_qrs(), Np, Nq, Nr, Ns); //needs realignment and permutations
         //Q4 = fmQ4.pq_rs() - fmQ4.qp_rs(); //permuting elements
         t2temp.zeros();
+        //#pragma omp parallel  num_threads(nthreads)
         for(uint i = 0; i < Q4config.n_rows; ++i){
             mat block = t2.getblock(6,Q4config(i,0))*(vhhpp.getblock(3,Q4config(i,1))*t2.getblock(7,Q4config(i,2)));
             t2temp.addblock(7,Q4config(i,2),block);
         }
+        //#pragma omp parallel  num_threads(nthreads)
         for(uint i = 0; i < t2temp.fvConfigs(0).n_rows; ++i){
             mat block = .5*(t2temp.getblock(0,i) - t2temp.getblock(1,i)); //* done to keep in line with equations (inefficient)
             t2n.addblock(0,i,block);
@@ -352,10 +377,10 @@ void bccd::solve(uint Nt){
 
         t2n.divide_energy();
         t2 = t2n;
-        cout << "1:" << (float)(clock()-t1)/CLOCKS_PER_SEC << endl;
-        t1 = clock();
+        //cout << "1:" << (float)(clock()-t1)/CLOCKS_PER_SEC << endl;
+        //t1 = clock();
         cout << "[BCCD][" << t << "]Energy:" << energy() << endl;
-        cout << "2:" << (float)(clock()-t1)/CLOCKS_PER_SEC << endl;
+        //cout << "2:" << (float)(clock()-t1)/CLOCKS_PER_SEC << endl;
     }
 
 

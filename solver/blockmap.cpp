@@ -587,6 +587,133 @@ void blockmap::map_vpppp(){
 
 }
 
+
+void blockmap::map_vppph(){
+    // ###########################################################
+    // ## Special care given to the vppph                       ##
+    // ###########################################################
+    //begin by assembling LHS
+    uint Ndim = Np*(Np+1)*(Np+2)/6;
+    ivec LHS(Ndim);
+    uvec An(Ndim);
+    uvec Bn(Ndim);
+    uvec Cn(Ndim);
+
+    uint ncount = 0;
+    for(uint a = 0; a< Np; ++a){
+        for(uint b= 0; b<=a; ++b){
+            for(uint c= 0; c<=b; ++c){
+                An(ncount) = a;
+                Bn(ncount) = b;
+                Cn(ncount) = c;
+                ncount += 1;
+            }
+        }
+    }
+    LHS = eBs.unique(An + Nh) + eBs.unique(Bn+ Nh) - eBs.unique(Cn + Nh); //notice the minus
+    ivec K_unique = unique(LHS);
+
+    ivec RHS = eBs.unique(linspace<uvec>(0,Nh-1, Nh));
+    K_unique = intersect1d(unique(RHS), K_unique); //the unique overlaps where preservation of quantum numbers occur
+
+    uvec l_sorted = sort_index(LHS);
+    //uvec l_sorted = linspace<uvec>(0,Ndim-1, Ndim);
+    bool adv = false;
+
+    uint lc = 0;
+    uint i = 0;
+    uint uiN = K_unique.n_rows;
+    uint uiS = l_sorted.n_rows;
+
+    int C = K_unique(i);
+
+    uint nx = 0;
+    int l_c= LHS(l_sorted(lc));
+    field<uvec> tempRows(uiN);
+    //tempRows(uiN) = K_unique;
+    //tempRows(0).set_size(uiN);
+    //tempRows(1).set_size(uiN);
+
+    //align counters
+    while(l_c<C){
+        lc += 1;
+        l_c = LHS(l_sorted(lc));
+    }
+
+    //want to find row indices where LHS == k_config(i)
+    //now: l_c == C
+    bool br = false;
+    bool row_collect = false;
+    int ll_c = l_c;
+    uint a;
+    uint b;
+    uint c;
+    uint l_sorted_lc;
+    uvec row_a(1000000);
+    //uvec row_b(1000000);
+
+    while(lc < uiS){
+        l_sorted_lc = l_sorted(lc);
+        l_c = LHS(l_sorted_lc);
+
+        if(l_c == C){
+            a = An(l_sorted_lc);
+            b = Bn(l_sorted_lc);
+            c = Cn(l_sorted_lc);
+            //the locations a + b*Np and b + a*Np (in the full array) are now identified to have LHS == C, belonging to the block
+
+            row_a(nx) = a + b*Np + c*Np*Np;
+
+            //row_b(nx) = b;
+            if(a!=b){
+                nx += 1;
+                row_a(nx) = b + a*Np + c*Np*Np;
+
+                //row_b(nx) = a;
+            }
+            //row(nx) = l_sorted(lc);
+            nx += 1;
+            row_collect = true;
+        }
+
+        //if row is complete
+        else{
+            if(row_collect){
+                //uvec r = sort(row(span(0,nx-1)));
+                tempRows(i) = sort(row_a(span(0,nx-1)));
+                //tempRows(1)(i) = row_b(span(0,nx-1));
+                lc -= 1;
+                i += 1;
+                nx = 0;
+                C = K_unique(i);
+                row_collect = false;
+            }
+        }
+        lc += 1;
+    }
+
+    //collect final block
+    tempRows(i) = sort(row_a(span(0,nx-1)));
+
+    blocklengths(uiCurrent_block) = uiN; //number of blocks in config
+    fvConfigs(uiCurrent_block) = K_unique; //ordering
+    //fmBlocks(uiCurrent_block).set_size(uiN);
+    fmBlockz(uiCurrent_block).set_size(uiN,2);
+    fuvCols(uiCurrent_block).set_size(uiN);
+    fuvRows(uiCurrent_block).set_size(uiN);
+    for(uint i = 0; i<uiN; ++i){
+        uvec i2 = tempRows(i);
+        uvec uvB = floor(i2/Np); //convert to unsigned integer indexing vector
+        uvec uvA = i2 - uvB*Np;
+        fmBlockz(uiCurrent_block)(i,0) = uvA; //reusing the framework here, naming does not matter
+        fmBlockz(uiCurrent_block)(i,1) = uvB;
+    }
+
+    //lock and load
+    uiCurrent_block += 1;
+}
+
+
 void blockmap::map_regions(imat L, imat R){
 
     fmOrdering(uiCurrent_block,0) = L;
