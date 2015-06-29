@@ -70,6 +70,19 @@ public:
 
 
 
+    field<ivec> pp();
+    field<ivec> ppp();
+    field<ivec> ph();
+    field<ivec> hp();
+    field<ivec> hh();
+
+    field<uvec> partition(ivec LHS, ivec K_unique);
+    field<uvec> partition_pp(field<ivec> LHS, ivec K_unique);
+    field<uvec> partition_ppp(field<ivec> LHS, ivec K_unique);
+
+
+
+
 };
 
 #endif // BLOCKMAP_H

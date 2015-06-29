@@ -409,6 +409,8 @@ void blockmap::map_vpppp(){
     // ###########################################################
     // ## Special care given to the ladder term                 ##
     // ###########################################################
+
+    /*
     //begin by assembling LHS
     uint Ndim = Np*(Np+1)/2;
     ivec LHS(Ndim);
@@ -505,6 +507,7 @@ void blockmap::map_vpppp(){
 
     //collect final block
     tempRows(i) = sort(row_a(span(0,nx-1)));
+    */
 
 
 
@@ -530,6 +533,13 @@ void blockmap::map_vpppp(){
     //uiN = len(K_unique);
     //uint uiN = K_unique.n_elem;
 
+
+
+    field<ivec> lhs = pp();
+    ivec K_unique = unique(lhs(2));
+    uint uiN = K_unique.n_rows;
+    field<uvec> tempRows = partition_pp(lhs, unique(lhs(2)));
+
     blocklengths(uiCurrent_block) = uiN; //number of blocks in config
     fvConfigs(uiCurrent_block) = K_unique; //ordering
     //fmBlocks(uiCurrent_block).set_size(uiN);
@@ -546,6 +556,10 @@ void blockmap::map_vpppp(){
     //field<uvec> tempRows = blocksort_symmetric({});
 
     //field
+    //field<ivec> lhs = pp();
+    //tempRows = partition_pp(lhs, unique(lhs(2)));
+
+
     for(uint i = 0; i<uiN; ++i){
         /*
         uvec ind = find(KAB==K_unique(i));
@@ -915,3 +929,344 @@ mat blockmap::getblock(int u, int i){
 
 }
 
+// ###########################################
+// ##
+// ##  SEQUENCES OF ROWS/COLUMNS
+// ##
+// ############################################
+
+field<ivec> blockmap::pp(){
+    //return a "compacted" particle particle unique indexvector
+
+    //length of "compacted" vector
+    uint N = Np*(Np+1)/2;
+
+    //indices
+    ivec a(N);
+    ivec b(N);
+    uint count = 0;
+    for(int na = 0; na<Np; ++na){
+        for(int nb = 0; nb<na+1; ++nb){
+            a(count) = na;
+            b(count) = nb;
+            count += 1;
+        }
+    }
+
+    ivec Kab = eBs.unique(conv_to<uvec>::from(a) +Nh) + eBs.unique(conv_to<uvec>::from(b)+Nh);
+
+    field<ivec> ppmap(3);
+    ppmap(0) = a;
+    ppmap(1) = b;
+    ppmap(2) = Kab;
+    return ppmap;
+    }
+
+field<ivec> blockmap::ppp(){
+    //return a "compacted" particle particle particle unique indexvector
+    //length of "compacted" vector
+    uint N = Np*(Np+1)*(Np+2)/6;
+    //indices
+    ivec a(N);
+    ivec b(N);
+    ivec c(N);
+    uint count = 0;
+    for(int na = 0; na<Np; ++na){
+        for(int nb = 0; nb<na+1; ++nb){
+            for(int nc = 0; nc<nb+1; ++nc){
+                a(count) = na;
+                b(count) = nb;
+                c(count) = nc;
+                count += 1;
+            }
+        }
+    }
+    ivec Kabc = eBs.unique(conv_to<uvec>::from(a) +Nh) + eBs.unique(conv_to<uvec>::from(b)+Nh) + eBs.unique(conv_to<uvec>::from(c) +Nh);
+
+    field<ivec> pppmap(4);
+    pppmap(0) = a;
+    pppmap(1) = b;
+    pppmap(2) = c;
+    pppmap(3) = Kabc;
+    return pppmap;
+    }
+
+field<ivec> blockmap::hh(){
+    //noncompacted
+    ivec h = linspace<ivec>(0,Nh-1,Nh);
+    field<ivec> hhmap(3);
+    hhmap(0) = kron(ones<ivec>(Nh), h);
+    hhmap(1) = kron(h, ones<ivec>(Nh));
+    hhmap(2) = eBs.unique(conv_to<uvec>::from(hhmap(0))) + eBs.unique(conv_to<uvec>::from(hhmap(1)));
+    return hhmap;
+}
+
+
+field<ivec> blockmap::hp(){
+    ivec h = linspace<ivec>(0,Nh-1,Nh);
+    ivec p = linspace<ivec>(0,Np-1,Np);
+    field<ivec> hhmap(3);
+    hhmap(0) = kron(h, ones<ivec>(Np));
+    hhmap(1) = kron(ones<ivec>(Nh), p);
+    hhmap(2) = eBs.unique(conv_to<uvec>::from(hhmap(0))) + eBs.unique(conv_to<uvec>::from(hhmap(1))+Nh);
+    return hhmap;
+}
+
+field<ivec> blockmap::ph(){
+    ivec h = linspace<ivec>(0,Nh-1,Nh);
+    ivec p = linspace<ivec>(0,Np-1,Np);
+    field<ivec> hhmap(3);
+    hhmap(0) = kron(p, ones<ivec>(Nh));
+    hhmap(1) = kron(ones<ivec>(Np), h);
+    hhmap(2) = eBs.unique(conv_to<uvec>::from(hhmap(0))+Nh) + eBs.unique(conv_to<uvec>::from(hhmap(1)));
+    return hhmap;
+}
+
+field<uvec> blockmap::partition(ivec LHS, ivec K_unique){
+    //identify i blocks of LHS where LHS==K(i)
+    //Note that by "blocks", we actually means indices corresponding to preserved quantum numbers
+    uvec l_sorted = sort_index(LHS);
+    //bool adv = false;
+
+    uint lc = 0;
+    uint i = 0;
+    uint uiN = K_unique.n_rows;
+    uint uiS = l_sorted.n_rows;
+
+    int C = K_unique(i);
+    uvec row(1000000); //arbitrarily large number (biggest possible block)
+    uint nx = 0;
+    int l_c= LHS(l_sorted(lc));
+    field<uvec> tempRows(uiN);
+
+    //align counters
+    while(l_c<C){
+        lc += 1;
+        l_c = LHS(l_sorted(lc));
+    }
+
+    //want to find row indices where LHS == k_config(i)
+    //now: l_c == C
+    bool row_collect = false;
+    //int ll_c = l_c;
+
+    while(lc < uiS){
+        l_c = LHS(l_sorted(lc));
+
+        //if element belongs to block
+        if(l_c == C){
+            //collect element
+            row(nx) = l_sorted(lc);
+            nx += 1;
+            row_collect = true;
+        }
+        //if row is complete
+        else{
+            //if row contains elements
+            if(row_collect){
+                //collect block
+                tempRows(i) = sort(row(span(0,nx-1)));
+                lc -= 1;
+                i += 1;
+                nx = 0;
+                C = K_unique(i);
+                row_collect = false;
+            }
+        }
+
+
+        lc += 1;
+        //cout << l_c - C << endl;
+    }
+
+
+    return tempRows;
+
+}
+
+
+field<uvec> blockmap::partition_pp(field<ivec> LHS, ivec K_unique){
+    //partition particle-particle rows into blocks with preserved quantum numbers
+    uvec l_sorted = sort_index(LHS(2));
+    //bool adv = false;
+
+    uint lc = 0;
+    uint i = 0;
+    uint uiN = K_unique.n_rows;
+    uint uiS = l_sorted.n_rows;
+
+    int C = K_unique(i);
+
+    uint nx = 0;
+    int l_c= LHS(2)(l_sorted(lc));
+    field<uvec> tempRows(uiN);
+    //tempRows(uiN) = K_unique;
+    //tempRows(0).set_size(uiN);
+    //tempRows(1).set_size(uiN);
+
+    //align counters
+    while(l_c<C){
+        lc += 1;
+        l_c = LHS(2)(l_sorted(lc));
+    }
+
+    //want to find row indices where LHS == k_config(i)
+    //now: l_c == C
+    //bool br = false;
+    bool row_collect = false;
+    //int ll_c = l_c;
+    uint a;
+    uint b;
+    //uint c;
+    uint l_sorted_lc;
+    uvec row(1000000);
+    //uvec row_b(1000000);
+
+
+    uvec Na = conv_to<uvec>::from(LHS(0));
+    uvec Nb = conv_to<uvec>::from(LHS(1));
+
+    while(lc < uiS){
+        l_sorted_lc = l_sorted(lc);
+        l_c = LHS(2)(l_sorted_lc);
+
+        if(l_c == C){
+            a = Na(l_sorted_lc);
+            b = Nb(l_sorted_lc);
+            //c = Cn(l_sorted_lc);
+            //the locations a + b*Np and b + a*Np (in the full array) are now identified to have LHS == C, belonging to the block
+
+            row(nx) = a + b*Np;
+
+            //row_b(nx) = b;
+            if(a!=b){
+                nx += 1;
+                row(nx) = b + a*Np;
+
+                //row_b(nx) = a;
+            }
+            //row(nx) = l_sorted(lc);
+            nx += 1;
+            row_collect = true;
+        }
+
+        //if row is complete
+        else{
+            if(row_collect){
+                //uvec r = sort(row(span(0,nx-1)));
+                tempRows(i) = sort(row(span(0,nx-1)));
+                //tempRows(1)(i) = row_b(span(0,nx-1));
+                lc -= 1;
+                i += 1;
+                nx = 0;
+                C = K_unique(i);
+                row_collect = false;
+            }
+        }
+        lc += 1;
+    }
+
+    //collect final block
+    tempRows(i) = sort(row(span(0,nx-1)));
+    return tempRows;
+}
+
+field<uvec> blockmap::partition_ppp(field<ivec> LHS, ivec K_unique){
+    //partition particle-particle rows into blocks with preserved quantum numbers
+    uvec l_sorted = sort_index(LHS(3));
+    //bool adv = false;
+
+    uint lc = 0;
+    uint i = 0;
+    uint uiN = K_unique.n_rows;
+    uint uiS = l_sorted.n_rows;
+
+    int C = K_unique(i);
+
+    uint nx = 0;
+    int l_c= LHS(3)(l_sorted(lc));
+    field<uvec> tempRows(uiN);
+    //tempRows(uiN) = K_unique;
+    //tempRows(0).set_size(uiN);
+    //tempRows(1).set_size(uiN);
+
+    //align counters
+    while(l_c<C){
+        lc += 1;
+        l_c = LHS(3)(l_sorted(lc));
+    }
+
+    //want to find row indices where LHS == k_config(i)
+    //now: l_c == C
+    //bool br = false;
+    bool row_collect = false;
+    //int ll_c = l_c;
+    uint p,q,r;
+
+    uint l_sorted_lc;
+    uvec row(1000000);
+    //uvec row_b(1000000);
+
+
+    uvec Na = conv_to<uvec>::from(LHS(0));
+    uvec Nb = conv_to<uvec>::from(LHS(1));
+    uvec Nc = conv_to<uvec>::from(LHS(2));
+
+    uint Np2 =Np*Np;
+    while(lc < uiS){
+        l_sorted_lc = l_sorted(lc);
+        l_c = LHS(3)(l_sorted_lc);
+
+        if(l_c == C){
+            p = Na(l_sorted_lc);
+            q = Nb(l_sorted_lc);
+            r = Nc(l_sorted_lc);
+            //the locations a + b*Np and b + a*Np (in the full array) are now identified to have LHS == C, belonging to the block
+            row(nx) = p + q*Np + r*Np2;
+            nx += 1;
+            if(r!=q){
+                row(nx) = p + r*Np + q*Np2;
+                nx += 1;
+                if(p!=q){
+                    row(nx) = q + p*Np + r*Np2;
+                    nx += 1;
+                    row(nx) = q + r*Np + p*Np2;
+                    nx += 1;
+                    //it follows that p!=r, so
+                    row(nx) = r + p*Np + q*Np2;
+                    nx += 1;
+                    row(nx) = r + q*Np + p*Np2;
+                    nx += 1;
+                }
+            }
+            else{
+                if(p!=q){
+                    row(nx) = q + p*Np + r*Np2;
+                    nx += 1;
+                }
+                if(p!=r){
+                    row(nx) = r + q*Np + p*Np2;
+                    nx += 1;
+                }
+            }
+            row_collect = true;
+        }
+
+        //if row is complete
+        else{
+            if(row_collect){
+                tempRows(i) = sort(row(span(0,nx-1)));
+                lc -= 1;
+                i += 1;
+                nx = 0;
+                C = K_unique(i);
+                row_collect = false;
+            }
+        }
+        lc += 1;
+    }
+
+    //collect final block
+    tempRows(i) = sort(row(span(0,nx-1)));
+    return tempRows;
+}
