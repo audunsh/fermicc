@@ -17,6 +17,7 @@ amplitude::amplitude(electrongas bs, int n_configs, uvec size)
     fvConfigs.set_size(iNconfigs); //configuration in quantum numbers of each block
     blocklengths.set_size(iNconfigs);  //number of blocks in each configuration
     fmOrdering.set_size(iNconfigs); //the ordering of each configuration
+    permutative_ordering.set_size(iNconfigs);
     uiCurrent_block = 0;
 
     Np = eBs.iNbstates-eBs.iNparticles; //conflicting naming here
@@ -43,6 +44,8 @@ void amplitude::init(electrongas bs, int n_configs, uvec size){
     blocklengths.set_size(iNconfigs);  //number of blocks in each configuration
     fmOrdering.set_size(iNconfigs); //the ordering of each configuration
     uiCurrent_block = 0;
+
+    permutative_ordering.set_size(iNconfigs);
 
     Np = eBs.iNbstates-eBs.iNparticles; //conflicting naming here
     Nh = eBs.iNparticles;
@@ -334,6 +337,11 @@ void amplitude::map(ivec left, ivec right){
 }
 
 field<uvec> amplitude::blocksort(ivec LHS, ivec K_unique){
+    // #####################################################
+    // ## Sort indices of LHS into corresponding blocks   ##
+    // #####################################################
+
+
     uvec l_sorted = sort_index(LHS); //most time is spent doing this -- maybe we should reorganize the items so they are sorted all along?
     bool adv = false;
 
@@ -351,11 +359,6 @@ field<uvec> amplitude::blocksort(ivec LHS, ivec K_unique){
     int l_c= LHS(l_sorted(lc));
     field<uvec> tempRows(uiN);
 
-    //first: align C and l_c
-    //while(l_c<C){
-    //    lc += 1;
-    //    l_c = LHS(l_sorted(lc));
-    //}
 
 
     //align counters
@@ -393,50 +396,6 @@ field<uvec> amplitude::blocksort(ivec LHS, ivec K_unique){
         lc += 1;
         //cout << l_c - C << endl;
     }
-
-
-    /*
-    while(i<uiN){
-        //while(l_c<C){
-        //    lc += 1;
-        //    l_c = LHS(l_sorted(lc));
-        //}
-
-
-        l_c = LHS(l_sorted(lc));
-
-        adv = true;
-
-        if(l_c == C){
-            //add row index to block i
-            row(nx) = l_sorted(lc);
-            nx += 1;
-
-            adv = false;
-        }
-        //lc += 1;
-
-
-        if(adv){
-            //advance to next uniquely defined block
-            //append row to field
-            tempRows(i) = row(span(0,nx)); //.print();
-            //cout << endl;
-            //cout << endl;
-            i+=1;
-            C = K_unique(i);
-            nx = 0;
-            //align l_c
-
-            //l_c = LHS(l_sorted(lc));
-            //while(l_c<C){
-            //    lc += 1;
-            //    l_c = LHS(l_sorted(lc));
-            //}
-
-        }
-    }*/
-
     return tempRows;
 
 }
@@ -687,6 +646,86 @@ void amplitude::map_regions6(imat L, imat R){
 
 
 } //map all regions defined by L == R
+
+
+void amplitude::map_t3_permutations(){
+    // ###################################################################
+    // ## Set up amplitude as t3temp with index permutations in blocks  ##
+    // ###################################################################
+
+    //Basically, we set up the standard amplitude sorting as abc-ijk, but store dimensions of each block so we ,may easily permute them later
+    field<ivec> abc = ppp({1,1,1});
+    field<ivec> ijk = hhh();
+
+    ivec K_unique = intersect1d(unique(abc(3)), unique(ijk(3)));
+    field<uvec> tempRows = partition_ppp(abc, K_unique);
+    field<uvec> tempCols = partition(ijk(3), K_unique);
+    uvec row;
+    uvec col;
+    uvec a,b,c;
+    uvec i,j,k;
+
+    permutative_ordering.set_size(K_unique.n_rows);
+    /*
+
+    for(uint n = 0; n <K_unique.n_rows; ++n){
+        uvec dim(6);
+        row = tempRows(n);
+        col = tempCols(n);
+
+
+        c = floor(row/(Np*Np));
+        b = floor((row - c*Np*Np)/Np);
+        a = row-c*Np*Np-b*Np;
+
+        uvec bac = b + a*Np + c*Np*Np;
+        uvec cba = c + b*Np + a*Np*Np;
+
+        k = floor(col/(Nh*Nh));
+        j = floor((col - k*Nh*Nh)/Nh);
+        i = col-k*Nh*Nh-j*Nh;
+
+        uvec jik = j + i*Nh + k*Nh*Nh;
+        uvec kji = k + j*Nh + i*Nh*Nh;
+
+        ivec perm_bac(row.n_rows);
+        ivec perm_cba(row.n_rows);
+
+        ivec perm_jik(col.n_rows);
+        ivec perm_kji(col.n_rows);
+
+        for(uint ni = 0; ni < row.n_rows; ++ni){
+            for(uint nj = 0; nj < row.n_rows; ++nj){
+                if(row(ni) == bac(nj)){
+                    perm_bac(nj) = ni;
+                }
+                if(row(ni) == cba(nj)){
+                    perm_cba(nj) = ni;
+                }
+            }
+        }
+
+        for(uint ni = 0; ni < col.n_rows; ++ni){
+            for(uint nj = 0; nj < col.n_rows; ++nj){
+                if(col(ni) == jik(nj)){
+                    perm_jik(nj) = ni;
+                }
+                if(col(ni) == kji(nj)){
+                    perm_kji(nj) = ni;
+                }
+            }
+        }
+
+
+
+
+
+    }
+    */
+
+
+
+}
 
 void amplitude::map_regions(imat L, imat R){
 
@@ -977,4 +1016,527 @@ void amplitude::compress(){
         tempind = find(vElements==uniqueElements(i));
 
     }
+}
+
+
+// ###########################################
+// ##
+// ##  SEQUENCES OF ROWS/COLUMNS
+// ##
+// ############################################
+
+field<ivec> amplitude::pp(){
+    //return a "compacted" particle particle unique indexvector
+
+    //length of "compacted" vector
+    uint N = Np*(Np+1)/2;
+
+    //indices
+    ivec a(N);
+    ivec b(N);
+    uint count = 0;
+    for(int na = 0; na<Np; ++na){
+        for(int nb = 0; nb<na+1; ++nb){
+            a(count) = na;
+            b(count) = nb;
+            count += 1;
+        }
+    }
+
+    ivec Kab = eBs.unique(conv_to<uvec>::from(a) +Nh) + eBs.unique(conv_to<uvec>::from(b)+Nh);
+
+    field<ivec> ppmap(3);
+    ppmap(0) = a;
+    ppmap(1) = b;
+    ppmap(2) = Kab;
+    return ppmap;
+    }
+
+field<ivec> amplitude::ppp(ivec signs){
+    //return a "compacted" particle particle particle unique indexvector
+    //length of "compacted" vector
+    uint N = Np*(Np+1)*(Np+2)/6;
+    //indices
+    ivec a(N);
+    ivec b(N);
+    ivec c(N);
+    uint count = 0;
+    for(int na = 0; na<Np; ++na){
+        for(int nb = 0; nb<na+1; ++nb){
+            for(int nc = 0; nc<nb+1; ++nc){
+                a(count) = na;
+                b(count) = nb;
+                c(count) = nc;
+                count += 1;
+            }
+        }
+    }
+    ivec Kabc = signs(0)*eBs.unique(conv_to<uvec>::from(a) +Nh) + signs(1)*eBs.unique(conv_to<uvec>::from(b)+Nh) + signs(2)*eBs.unique(conv_to<uvec>::from(c) +Nh);
+
+    field<ivec> pppmap(4);
+    pppmap(0) = a;
+    pppmap(1) = b;
+    pppmap(2) = c;
+    pppmap(3) = Kabc;
+    return pppmap;
+}
+
+field<ivec> amplitude::hpp(){
+    //return a "compacted" particle particle particle unique indexvector
+    //length of "compacted" vector
+    uint N = Nh*Np*(Np+1)/2;
+    //indices
+    ivec i(N);
+    ivec a(N);
+    ivec b(N);
+    uint count = 0;
+    for(int ni = 0; ni<Nh; ++ni){
+        for(int na = 0; na<Np; ++na){
+            for(int nb = 0; nb<na+1; ++nb){
+                i(count) = ni;
+                a(count) = na;
+                b(count) = nb;
+                count += 1;
+            }
+        }
+    }
+    ivec Kiab = eBs.unique(conv_to<uvec>::from(i)) + eBs.unique(conv_to<uvec>::from(a)+Nh) + eBs.unique(conv_to<uvec>::from(b) +Nh);
+    field<ivec> pppmap(4);
+    pppmap(0) = i;
+    pppmap(1) = a;
+    pppmap(2) = b;
+    pppmap(3) = Kiab;
+    return pppmap;
+}
+
+field<ivec> amplitude::php(){
+    //return a "compacted" particle particle particle unique indexvector
+    //length of "compacted" vector
+    uint N = Nh*Np*(Np+1)/2;
+    //indices
+    ivec a(N);
+    ivec i(N);
+    ivec b(N);
+    uint count = 0;
+    for(int na = 0; na<Np; ++na){
+        for(int ni = 0; ni<Nh; ++ni){
+            for(int nb = 0; nb<na+1; ++nb){
+                i(count) = ni;
+                a(count) = na;
+                b(count) = nb;
+                count += 1;
+            }
+        }
+    }
+    ivec Kaib = eBs.unique(conv_to<uvec>::from(i)) + eBs.unique(conv_to<uvec>::from(a)+Nh) + eBs.unique(conv_to<uvec>::from(b) +Nh);
+
+    field<ivec> pppmap(4);
+    pppmap(0) = a;
+    pppmap(1) = i;
+    pppmap(2) = b;
+    pppmap(3) = Kaib;
+    return pppmap;
+}
+
+field<ivec> amplitude::pph(){
+    //return a "compacted" particle particle particle unique indexvector
+    //length of "compacted" vector
+    uint N = Nh*Np*(Np+1)/2;
+    //indices
+    ivec i(N);
+    ivec a(N);
+    ivec b(N);
+    uint count = 0;
+    for(int na = 0; na<Np; ++na){
+        for(int nb = 0; nb<na+1; ++nb){
+            for(int ni = 0; ni<Nh; ++ni){
+                i(count) = ni;
+                a(count) = na;
+                b(count) = nb;
+                count += 1;
+            }
+        }
+    }
+    ivec Kabi = eBs.unique(conv_to<uvec>::from(i)) + eBs.unique(conv_to<uvec>::from(a)+Nh) + eBs.unique(conv_to<uvec>::from(b) +Nh);
+
+    field<ivec> pppmap(4);
+    pppmap(0) = a;
+    pppmap(1) = b;
+    pppmap(2) = i;
+    pppmap(3) = Kabi;
+    return pppmap;
+}
+
+field<ivec> amplitude::hh(){
+    //noncompacted
+    ivec h = linspace<ivec>(0,Nh-1,Nh);
+    field<ivec> hhmap(3);
+    hhmap(0) = kron(ones<ivec>(Nh), h);
+    hhmap(1) = kron(h, ones<ivec>(Nh));
+    hhmap(2) = eBs.unique(conv_to<uvec>::from(hhmap(0))) + eBs.unique(conv_to<uvec>::from(hhmap(1)));
+    return hhmap;
+}
+
+field<ivec> amplitude::hhh(){
+    //noncompacted
+    ivec h = linspace<ivec>(0,Nh*Nh*Nh-1,Nh*Nh*Nh);
+    field<ivec> hhhmap(4);
+
+    hhhmap(2) = conv_to<ivec>::from(floor(h/(Nh*Nh))); //k
+    hhhmap(1) = conv_to<ivec>::from(floor(((h - hhhmap(2)*Nh*Nh))/Nh));
+    hhhmap(0) = conv_to<ivec>::from(h - hhhmap(2)*Nh*Nh - hhhmap(1)*Nh);
+
+    hhhmap(3) = eBs.unique(conv_to<uvec>::from(hhhmap(0))) + eBs.unique(conv_to<uvec>::from(hhhmap(1)))+eBs.unique(conv_to<uvec>::from(hhhmap(2)));
+    return hhhmap;
+}
+
+
+field<ivec> amplitude::hp(){
+    ivec h = linspace<ivec>(0,Nh-1,Nh);
+    ivec p = linspace<ivec>(0,Np-1,Np);
+    field<ivec> hhmap(3);
+    hhmap(0) = kron(h, ones<ivec>(Np));
+    hhmap(1) = kron(ones<ivec>(Nh), p);
+    hhmap(2) = eBs.unique(conv_to<uvec>::from(hhmap(0))) + eBs.unique(conv_to<uvec>::from(hhmap(1))+Nh);
+    return hhmap;
+}
+
+field<ivec> amplitude::ph(){
+    ivec h = linspace<ivec>(0,Nh-1,Nh);
+    ivec p = linspace<ivec>(0,Np-1,Np);
+    field<ivec> hhmap(3);
+    hhmap(0) = kron(p, ones<ivec>(Nh));
+    hhmap(1) = kron(ones<ivec>(Np), h);
+    hhmap(2) = eBs.unique(conv_to<uvec>::from(hhmap(0))+Nh) + eBs.unique(conv_to<uvec>::from(hhmap(1)));
+    return hhmap;
+}
+
+field<uvec> amplitude::partition(ivec LHS, ivec K_unique){
+    //identify i blocks of LHS where LHS==K(i)
+    //Note that by "blocks", we actually means indices corresponding to preserved quantum numbers
+    uvec l_sorted = sort_index(LHS);
+    //bool adv = false;
+
+    uint lc = 0;
+    uint i = 0;
+    uint uiN = K_unique.n_rows;
+    uint uiS = l_sorted.n_rows;
+
+    int C = K_unique(i);
+    uvec row(1000000); //arbitrarily large number (biggest possible block)
+    uint nx = 0;
+    int l_c= LHS(l_sorted(lc));
+    field<uvec> tempRows(uiN);
+
+    //align counters
+    while(l_c<C){
+        lc += 1;
+        l_c = LHS(l_sorted(lc));
+    }
+
+    //want to find row indices where LHS == k_config(i)
+    //now: l_c == C
+    bool row_collect = false;
+    //int ll_c = l_c;
+
+    while(lc < uiS){
+        l_c = LHS(l_sorted(lc));
+
+        //if element belongs to block
+        if(l_c == C){
+            //collect element
+            row(nx) = l_sorted(lc);
+            nx += 1;
+            row_collect = true;
+        }
+        //if row is complete
+        else{
+            //if row contains elements
+            if(row_collect){
+                //collect block
+                tempRows(i) = sort(row(span(0,nx-1)));
+                lc -= 1;
+                i += 1;
+                nx = 0;
+                C = K_unique(i);
+                row_collect = false;
+            }
+        }
+
+
+        lc += 1;
+        //cout << l_c - C << endl;
+    }
+
+
+    return tempRows;
+
+}
+
+
+field<uvec> amplitude::partition_pp(field<ivec> LHS, ivec K_unique){
+    //partition particle-particle rows into blocks with preserved quantum numbers
+    uvec l_sorted = sort_index(LHS(2));
+    //bool adv = false;
+
+    uint lc = 0;
+    uint i = 0;
+    uint uiN = K_unique.n_rows;
+    uint uiS = l_sorted.n_rows;
+
+    int C = K_unique(i);
+
+    uint nx = 0;
+    int l_c= LHS(2)(l_sorted(lc));
+    field<uvec> tempRows(uiN);
+    //tempRows(uiN) = K_unique;
+    //tempRows(0).set_size(uiN);
+    //tempRows(1).set_size(uiN);
+
+    //align counters
+    while(l_c<C){
+        lc += 1;
+        l_c = LHS(2)(l_sorted(lc));
+    }
+
+    //want to find row indices where LHS == k_config(i)
+    //now: l_c == C
+    //bool br = false;
+    bool row_collect = false;
+    //int ll_c = l_c;
+    uint a;
+    uint b;
+    //uint c;
+    uint l_sorted_lc;
+    uvec row(1000000);
+    //uvec row_b(1000000);
+
+
+    uvec Na = conv_to<uvec>::from(LHS(0));
+    uvec Nb = conv_to<uvec>::from(LHS(1));
+
+    while(lc < uiS){
+        l_sorted_lc = l_sorted(lc);
+        l_c = LHS(2)(l_sorted_lc);
+
+        if(l_c == C){
+            a = Na(l_sorted_lc);
+            b = Nb(l_sorted_lc);
+            //c = Cn(l_sorted_lc);
+            //the locations a + b*Np and b + a*Np (in the full array) are now identified to have LHS == C, belonging to the block
+
+            row(nx) = a + b*Np;
+
+            //row_b(nx) = b;
+            if(a!=b){
+                nx += 1;
+                row(nx) = b + a*Np;
+
+                //row_b(nx) = a;
+            }
+            //row(nx) = l_sorted(lc);
+            nx += 1;
+            row_collect = true;
+        }
+
+        //if row is complete
+        else{
+            if(row_collect){
+                //uvec r = sort(row(span(0,nx-1)));
+                tempRows(i) = sort(row(span(0,nx-1)));
+                //tempRows(1)(i) = row_b(span(0,nx-1));
+                lc -= 1;
+                i += 1;
+                nx = 0;
+                C = K_unique(i);
+                row_collect = false;
+            }
+        }
+        lc += 1;
+    }
+
+    //collect final block
+    tempRows(i) = sort(row(span(0,nx-1)));
+    return tempRows;
+}
+
+field<uvec> amplitude::partition_ppp(field<ivec> LHS, ivec K_unique){
+    //partition particle-particle rows into blocks with preserved quantum numbers
+    uvec l_sorted = sort_index(LHS(3));
+    //bool adv = false;
+
+    uint lc = 0;
+    uint i = 0;
+    uint uiN = K_unique.n_rows;
+    uint uiS = l_sorted.n_rows;
+
+    int C = K_unique(i);
+
+    uint nx = 0;
+    int l_c= LHS(3)(l_sorted(lc));
+    field<uvec> tempRows(uiN);
+    //tempRows(uiN) = K_unique;
+    //tempRows(0).set_size(uiN);
+    //tempRows(1).set_size(uiN);
+
+    //align counters
+    while(l_c<C){
+        lc += 1;
+        l_c = LHS(3)(l_sorted(lc));
+    }
+
+    //want to find row indices where LHS == k_config(i)
+    //now: l_c == C
+    //bool br = false;
+    bool row_collect = false;
+    //int ll_c = l_c;
+    uint p,q,r;
+
+    uint l_sorted_lc;
+    uvec row(1000000);
+    //uvec row_b(1000000);
+
+
+    uvec Na = conv_to<uvec>::from(LHS(0));
+    uvec Nb = conv_to<uvec>::from(LHS(1));
+    uvec Nc = conv_to<uvec>::from(LHS(2));
+
+    uint Np2 =Np*Np;
+    while(lc < uiS){
+        l_sorted_lc = l_sorted(lc);
+        l_c = LHS(3)(l_sorted_lc);
+
+        if(l_c == C){
+            p = Na(l_sorted_lc);
+            q = Nb(l_sorted_lc);
+            r = Nc(l_sorted_lc);
+            //the locations a + b*Np and b + a*Np (in the full array) are now identified to have LHS == C, belonging to the block
+            row(nx) = p + q*Np + r*Np2;
+            nx += 1;
+            if(r!=q){
+                row(nx) = p + r*Np + q*Np2;
+                nx += 1;
+                if(p!=q){
+                    row(nx) = q + p*Np + r*Np2;
+                    nx += 1;
+                    row(nx) = q + r*Np + p*Np2;
+                    nx += 1;
+                    //it follows that p!=r, so
+                    row(nx) = r + p*Np + q*Np2;
+                    nx += 1;
+                    row(nx) = r + q*Np + p*Np2;
+                    nx += 1;
+                }
+            }
+            else{
+                if(p!=q){
+                    row(nx) = q + p*Np + r*Np2;
+                    nx += 1;
+                }
+                if(p!=r){
+                    row(nx) = r + q*Np + p*Np2;
+                    nx += 1;
+                }
+            }
+            row_collect = true;
+        }
+
+        //if row is complete
+        else{
+            if(row_collect){
+                tempRows(i) = sort(row(span(0,nx-1)));
+                lc -= 1;
+                i += 1;
+                nx = 0;
+                C = K_unique(i);
+                row_collect = false;
+            }
+        }
+        lc += 1;
+    }
+
+    //collect final block
+    //tempRows(i) = sort(row(span(0,nx-1))); //is this needed?
+    return tempRows;
+}
+
+field<uvec> amplitude::partition_hpp(field<ivec> LHS, ivec K_unique){
+    //partition particle-particle rows into blocks with preserved quantum numbers
+    uvec l_sorted = sort_index(LHS(3));
+    //bool adv = false;
+
+    int Nhp = Np*Nh;
+
+    uint lc = 0;
+    uint i = 0;
+    uint uiN = K_unique.n_rows;
+    uint uiS = l_sorted.n_rows;
+
+    int C = K_unique(i);
+
+    uint nx = 0;
+    int l_c= LHS(3)(l_sorted(lc));
+    field<uvec> tempRows(uiN);
+    //tempRows(uiN) = K_unique;
+    //tempRows(0).set_size(uiN);
+    //tempRows(1).set_size(uiN);
+
+    //align counters
+    while(l_c<C){
+        lc += 1;
+        l_c = LHS(3)(l_sorted(lc));
+    }
+
+    //want to find row indices where LHS == k_config(i)
+    //now: l_c == C
+    //bool br = false;
+    bool row_collect = false;
+    //int ll_c = l_c;
+    uint p,q,r;
+
+    uint l_sorted_lc;
+    uvec row(1000000);
+    //uvec row_b(1000000);
+
+
+    uvec Ni = conv_to<uvec>::from(LHS(0));
+    uvec Na = conv_to<uvec>::from(LHS(1));
+    uvec Nb = conv_to<uvec>::from(LHS(2));
+
+    uint Np2 =Np*Np;
+    while(lc < uiS){
+        l_sorted_lc = l_sorted(lc);
+        l_c = LHS(3)(l_sorted_lc);
+
+        if(l_c == C){
+            p = Ni(l_sorted_lc);
+            q = Na(l_sorted_lc);
+            r = Nb(l_sorted_lc);
+            //the locations a + b*Np and b + a*Np (in the full array) are now identified to have LHS == C, belonging to the block
+            row(nx) = p + q*Nh + r*Nhp;
+            nx += 1;
+            if(r!=q){
+                row(nx) = p + r*Nh + q*Nhp;
+                nx += 1;
+            }
+            row_collect = true;
+        }
+
+        //if row is complete
+        else{
+            if(row_collect){
+                tempRows(i) = sort(row(span(0,nx-1)));
+                lc -= 1;
+                i += 1;
+                nx = 0;
+                C = K_unique(i);
+                row_collect = false;
+            }
+        }
+        lc += 1;
+    }
+
+    //collect final block
+    tempRows(i) = sort(row(span(0,nx-1)));
+    return tempRows;
 }

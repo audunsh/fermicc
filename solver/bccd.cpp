@@ -202,13 +202,10 @@ void bccd::init(){
         vhphh.map({1,2,-4},{3});
         cout << "Number of vhphh:" << vhphh.blocklengths(0) << endl;
 
-
         vppph.init(eBs, 3, {Np, Np, Np, Nh});
         cout << Np*Np*Np << endl;
         vppph.map({1,2,-3},{4});
         cout << "Number of vppph:" << vppph.blocklengths(0) << endl;
-
-
 
         t3.init(eBs, 3, {Np, Np, Np, Nh, Nh, Nh});
         t3.make_t3();
@@ -216,11 +213,12 @@ void bccd::init(){
         t3.map6({-6,2,3}, {4,5,-1}); //for use in d10b (0)
         t3.map6({1,2,-4}, {5,6,-3}); //for use in d10c (1)
 
-
-
-
-
-
+        t3temp.init(eBs, 7, {Np,Np,Np,Nh,Nh,Nh});
+        t3temp.map6({1,2,3},{4,5,6});  //
+        t3temp.map6({2,1,3},{4,5,6});  //P(ab)
+        t3temp.map6({3,2,1},{4,5,6});  //P(ac)
+        t3temp.map6({1,2,3},{5,4,6});  //p(ij)
+        t3temp.map6({1,2,3},{6,5,4});  //P(ik)
 
 
 

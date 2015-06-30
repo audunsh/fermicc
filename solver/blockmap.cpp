@@ -410,130 +410,6 @@ void blockmap::map_vpppp(){
     // ## Special care given to the ladder term                 ##
     // ###########################################################
 
-    /*
-    //begin by assembling LHS
-    uint Ndim = Np*(Np+1)/2;
-    ivec LHS(Ndim);
-    uvec A(Ndim);
-    uvec B(Ndim);
-    uint ncount = 0;
-    for(uint a = 0; a< Np; ++a){
-        for(uint b= 0; b<=a; ++b){
-            //LHS(ncount) = eBs.unique(a) + eBs.unique(b);
-            A(ncount) = a;
-            B(ncount) = b;
-            ncount += 1;
-        }
-    }
-    LHS = eBs.unique(A + Nh) + eBs.unique(B+ Nh);
-    ivec K_unique = unique(LHS);
-
-
-    uvec l_sorted = sort_index(LHS);
-    //uvec l_sorted = linspace<uvec>(0,Ndim-1, Ndim);
-    bool adv = false;
-
-    uint lc = 0;
-    uint i = 0;
-    uint uiN = K_unique.n_rows;
-    uint uiS = l_sorted.n_rows;
-
-    int C = K_unique(i);
-
-    uint nx = 0;
-    int l_c= LHS(l_sorted(lc));
-    field<uvec> tempRows(uiN);
-    //tempRows(uiN) = K_unique;
-    //tempRows(0).set_size(uiN);
-    //tempRows(1).set_size(uiN);
-
-    //align counters
-    while(l_c<C){
-        lc += 1;
-        l_c = LHS(l_sorted(lc));
-    }
-
-    //want to find row indices where LHS == k_config(i)
-    //now: l_c == C
-    bool br = false;
-    bool row_collect = false;
-    int ll_c = l_c;
-    uint a;
-    uint b;
-    uint l_sorted_lc;
-    uvec row_a(1000000);
-    //uvec row_b(1000000);
-
-    while(lc < uiS){
-        l_sorted_lc = l_sorted(lc);
-        l_c = LHS(l_sorted_lc);
-
-        if(l_c == C){
-            a = A(l_sorted_lc);
-            b = B(l_sorted_lc);
-            //the locations a + b*Np and b + a*Np (in the full array) are now identified to have LHS == C, belonging to the block
-
-            row_a(nx) = a + b*Np;
-            //row_b(nx) = b;
-            if(a!=b){
-                nx += 1;
-                row_a(nx) = b + a*Np;
-                //row_b(nx) = a;
-            }
-            //row(nx) = l_sorted(lc);
-            nx += 1;
-            row_collect = true;
-        }
-
-        //if row is complete
-        else{
-            if(row_collect){
-                //uvec r = sort(row(span(0,nx-1)));
-                tempRows(i) = sort(row_a(span(0,nx-1)));
-                //tempRows(1)(i) = row_b(span(0,nx-1));
-                lc -= 1;
-                i += 1;
-                nx = 0;
-                C = K_unique(i);
-                row_collect = false;
-            }
-        }
-
-        //cout << row_a(0) << endl;
-
-        lc += 1;
-        //cout << l_c - C << endl;
-    }
-
-    //collect final block
-    tempRows(i) = sort(row_a(span(0,nx-1)));
-    */
-
-
-
-
-    //fmOrdering(uiCurrent_block,0) = L;
-    //fmOrdering(uiCurrent_block,1) = R;
-
-    /*
-    uint iNp = uvSize(0);
-    uint iNp2 = uvSize(0)*uvSize(0);
-    vec AB = linspace(0,iNp2-1,iNp2);
-
-    uvec B = conv_to<uvec>::from(floor(AB/iNp)); //convert to unsigned integer indexing vector
-    uvec A = conv_to<uvec>::from(AB) - B*iNp;
-
-    ivec KAB = eBs.unique(A+Nh) + eBs.unique(B+Nh);
-
-
-    ivec K_unique = unique(KAB);
-    */
-    //field<uvec> tempRows = blocksort_symmetric({});
-    //K_unique = tempRows(tempRows.n_rows);
-    //uiN = len(K_unique);
-    //uint uiN = K_unique.n_elem;
-
-
 
     field<ivec> lhs = pp();
     ivec K_unique = unique(lhs(2));
@@ -542,53 +418,19 @@ void blockmap::map_vpppp(){
 
     blocklengths(uiCurrent_block) = uiN; //number of blocks in config
     fvConfigs(uiCurrent_block) = K_unique; //ordering
-    //fmBlocks(uiCurrent_block).set_size(uiN);
     fmBlockz(uiCurrent_block).set_size(uiN,2);
     fuvCols(uiCurrent_block).set_size(uiN);
     fuvRows(uiCurrent_block).set_size(uiN);
 
-    //field<uvec> tempElements(uiN);
-    //field<uvec> tempBlockmap1(uiN);
-    //field<uvec> tempBlockmap2(uiN);
-    //field<uvec> tempBlockmap3(uiN);
-
-    //uint tempElementsSize = 0;
-    //field<uvec> tempRows = blocksort_symmetric({});
-
-    //field
-    //field<ivec> lhs = pp();
-    //tempRows = partition_pp(lhs, unique(lhs(2)));
 
 
     for(uint i = 0; i<uiN; ++i){
-        /*
-        uvec ind = find(KAB==K_unique(i));
-        uvec a = A.elem(ind);
-        uvec b = B.elem(ind);
-        cout << "a:"<<endl;
-        a.print();
-        cout << endl;
-        //b.print();
-        cout << endl;
-        */
         uvec i2 = tempRows(i);
         uvec uvB = floor(i2/Np); //convert to unsigned integer indexing vector
         uvec uvA = i2 - uvB*Np;
-        //uvA.print();
-
-        //ai.print();
-        //cout << endl;
-
 
         fmBlockz(uiCurrent_block)(i,0) = uvA; //reusing the framework here, naming does not matter
         fmBlockz(uiCurrent_block)(i,1) = uvB;
-
-        //fmBlockz(uiCurrent_block)(i,0) = tempRows(0)(i); //reusing the framework here, naming does not matter
-        //fmBlockz(uiCurrent_block)(i,1) = tempRows(1)(i);
-
-
-        //fuvRows(uiCurrent_block)(i) = row;
-        //fuvCols(uiCurrent_block)(i) = row;
 
 
     }
@@ -962,7 +804,7 @@ field<ivec> blockmap::pp(){
     return ppmap;
     }
 
-field<ivec> blockmap::ppp(){
+field<ivec> blockmap::ppp(ivec signs){
     //return a "compacted" particle particle particle unique indexvector
     //length of "compacted" vector
     uint N = Np*(Np+1)*(Np+2)/6;
@@ -981,7 +823,7 @@ field<ivec> blockmap::ppp(){
             }
         }
     }
-    ivec Kabc = eBs.unique(conv_to<uvec>::from(a) +Nh) + eBs.unique(conv_to<uvec>::from(b)+Nh) + eBs.unique(conv_to<uvec>::from(c) +Nh);
+    ivec Kabc = signs(0)*eBs.unique(conv_to<uvec>::from(a) +Nh) + signs(1)*eBs.unique(conv_to<uvec>::from(b)+Nh) + signs(2)*eBs.unique(conv_to<uvec>::from(c) +Nh);
 
     field<ivec> pppmap(4);
     pppmap(0) = a;
@@ -989,7 +831,93 @@ field<ivec> blockmap::ppp(){
     pppmap(2) = c;
     pppmap(3) = Kabc;
     return pppmap;
+}
+
+field<ivec> blockmap::hpp(){
+    //return a "compacted" particle particle particle unique indexvector
+    //length of "compacted" vector
+    uint N = Nh*Np*(Np+1)/2;
+    //indices
+    ivec i(N);
+    ivec a(N);
+    ivec b(N);
+    uint count = 0;
+    for(int ni = 0; ni<Nh; ++ni){
+        for(int na = 0; na<Np; ++na){
+            for(int nb = 0; nb<na+1; ++nb){
+                i(count) = ni;
+                a(count) = na;
+                b(count) = nb;
+                count += 1;
+            }
+        }
     }
+    ivec Kiab = eBs.unique(conv_to<uvec>::from(i)) + eBs.unique(conv_to<uvec>::from(a)+Nh) + eBs.unique(conv_to<uvec>::from(b) +Nh);
+    field<ivec> pppmap(4);
+    pppmap(0) = i;
+    pppmap(1) = a;
+    pppmap(2) = b;
+    pppmap(3) = Kiab;
+    return pppmap;
+}
+
+field<ivec> blockmap::php(){
+    //return a "compacted" particle particle particle unique indexvector
+    //length of "compacted" vector
+    uint N = Nh*Np*(Np+1)/2;
+    //indices
+    ivec a(N);
+    ivec i(N);
+    ivec b(N);
+    uint count = 0;
+    for(int na = 0; na<Np; ++na){
+        for(int ni = 0; ni<Nh; ++ni){
+            for(int nb = 0; nb<na+1; ++nb){
+                i(count) = ni;
+                a(count) = na;
+                b(count) = nb;
+                count += 1;
+            }
+        }
+    }
+    ivec Kaib = eBs.unique(conv_to<uvec>::from(i)) + eBs.unique(conv_to<uvec>::from(a)+Nh) + eBs.unique(conv_to<uvec>::from(b) +Nh);
+
+    field<ivec> pppmap(4);
+    pppmap(0) = a;
+    pppmap(1) = i;
+    pppmap(2) = b;
+    pppmap(3) = Kaib;
+    return pppmap;
+}
+
+field<ivec> blockmap::pph(){
+    //return a "compacted" particle particle particle unique indexvector
+    //length of "compacted" vector
+    uint N = Nh*Np*(Np+1)/2;
+    //indices
+    ivec i(N);
+    ivec a(N);
+    ivec b(N);
+    uint count = 0;
+    for(int na = 0; na<Np; ++na){
+        for(int nb = 0; nb<na+1; ++nb){
+            for(int ni = 0; ni<Nh; ++ni){
+                i(count) = ni;
+                a(count) = na;
+                b(count) = nb;
+                count += 1;
+            }
+        }
+    }
+    ivec Kabi = eBs.unique(conv_to<uvec>::from(i)) + eBs.unique(conv_to<uvec>::from(a)+Nh) + eBs.unique(conv_to<uvec>::from(b) +Nh);
+
+    field<ivec> pppmap(4);
+    pppmap(0) = a;
+    pppmap(1) = b;
+    pppmap(2) = i;
+    pppmap(3) = Kabi;
+    return pppmap;
+}
 
 field<ivec> blockmap::hh(){
     //noncompacted
@@ -1248,6 +1176,87 @@ field<uvec> blockmap::partition_ppp(field<ivec> LHS, ivec K_unique){
                     row(nx) = r + q*Np + p*Np2;
                     nx += 1;
                 }
+            }
+            row_collect = true;
+        }
+
+        //if row is complete
+        else{
+            if(row_collect){
+                tempRows(i) = sort(row(span(0,nx-1)));
+                lc -= 1;
+                i += 1;
+                nx = 0;
+                C = K_unique(i);
+                row_collect = false;
+            }
+        }
+        lc += 1;
+    }
+
+    //collect final block
+    tempRows(i) = sort(row(span(0,nx-1)));
+    return tempRows;
+}
+
+field<uvec> blockmap::partition_hpp(field<ivec> LHS, ivec K_unique){
+    //partition particle-particle rows into blocks with preserved quantum numbers
+    uvec l_sorted = sort_index(LHS(3));
+    //bool adv = false;
+
+    int Nhp = Np*Nh;
+
+    uint lc = 0;
+    uint i = 0;
+    uint uiN = K_unique.n_rows;
+    uint uiS = l_sorted.n_rows;
+
+    int C = K_unique(i);
+
+    uint nx = 0;
+    int l_c= LHS(3)(l_sorted(lc));
+    field<uvec> tempRows(uiN);
+    //tempRows(uiN) = K_unique;
+    //tempRows(0).set_size(uiN);
+    //tempRows(1).set_size(uiN);
+
+    //align counters
+    while(l_c<C){
+        lc += 1;
+        l_c = LHS(3)(l_sorted(lc));
+    }
+
+    //want to find row indices where LHS == k_config(i)
+    //now: l_c == C
+    //bool br = false;
+    bool row_collect = false;
+    //int ll_c = l_c;
+    uint p,q,r;
+
+    uint l_sorted_lc;
+    uvec row(1000000);
+    //uvec row_b(1000000);
+
+
+    uvec Ni = conv_to<uvec>::from(LHS(0));
+    uvec Na = conv_to<uvec>::from(LHS(1));
+    uvec Nb = conv_to<uvec>::from(LHS(2));
+
+    uint Np2 =Np*Np;
+    while(lc < uiS){
+        l_sorted_lc = l_sorted(lc);
+        l_c = LHS(3)(l_sorted_lc);
+
+        if(l_c == C){
+            p = Ni(l_sorted_lc);
+            q = Na(l_sorted_lc);
+            r = Nb(l_sorted_lc);
+            //the locations a + b*Np and b + a*Np (in the full array) are now identified to have LHS == C, belonging to the block
+            row(nx) = p + q*Nh + r*Nhp;
+            nx += 1;
+            if(r!=q){
+                row(nx) = p + r*Nh + q*Nhp;
+                nx += 1;
             }
             row_collect = true;
         }

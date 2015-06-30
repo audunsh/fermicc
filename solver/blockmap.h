@@ -68,10 +68,9 @@ public:
 
     electrongas eBs;
 
-
-
+   //experimental optimized frameworks
     field<ivec> pp();
-    field<ivec> ppp();
+    field<ivec> ppp(ivec signs);
     field<ivec> ph();
     field<ivec> hp();
     field<ivec> hh();
@@ -79,6 +78,15 @@ public:
     field<uvec> partition(ivec LHS, ivec K_unique);
     field<uvec> partition_pp(field<ivec> LHS, ivec K_unique);
     field<uvec> partition_ppp(field<ivec> LHS, ivec K_unique);
+
+    field<ivec> hpp();
+    field<ivec> php();
+    field<ivec> pph();
+
+    field<uvec> partition_hpp(field<ivec> LHS, ivec K_unique);
+    field<uvec> partition_php(field<ivec> LHS, ivec K_unique);
+    field<uvec> partition_pph(field<ivec> LHS, ivec K_unique);
+
 
 
 

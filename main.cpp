@@ -24,7 +24,7 @@ using namespace arma;
 int main()
 {
     electrongas fgas;
-    fgas.generate_state_list2(5.0,1.0, 14);
+    fgas.generate_state_list2(10.0,1.0, 14);
 
     //cout << "Energy per particle:" << fgas.eref(14)/14.0 << " (a.u)"  << endl;
     //cout << "[Main] Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;
@@ -38,7 +38,7 @@ int main()
 
     //vec amptest = zeros(Np*Np*Np*Nh*Nh*Nh);
 
-    bccd solver(fgas);
+    //bccd solver(fgas);
 
 
     //blockmap t2;
@@ -49,11 +49,14 @@ int main()
     //solver2.CCSD_SG(2);
     //ccd_pt solver(fgas, .5);
 
-
-    /*
+    clock_t t = clock();
     amplitude t3;
     t3.init(fgas, 2, {Np, Np, Np, Nh, Nh, Nh});
     t3.make_t3();
+    t3.map_t3_permutations();
+    cout << "0:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+
+    /*
     t3.map6({1,2,3},{4,5,6});
     t3.map6({1,3},{4,5,-2,6});
     cout << t3.blocklengths(0) << endl;
