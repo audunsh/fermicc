@@ -658,7 +658,7 @@ void amplitude::map_t3_permutations(){
     field<ivec> ijk = hhh();
 
     ivec K_unique = intersect1d(unique(abc(3)), unique(ijk(3)));
-    field<uvec> tempRows = partition_ppp(abc, K_unique);
+    field<uvec> tempRows = partition_ppp_permutations(abc, K_unique);
     field<uvec> tempCols = partition(ijk(3), K_unique);
     uvec row;
     uvec col;
@@ -666,12 +666,20 @@ void amplitude::map_t3_permutations(){
     uvec i,j,k;
 
     permutative_ordering.set_size(K_unique.n_rows);
-    /*
+
 
     for(uint n = 0; n <K_unique.n_rows; ++n){
         uvec dim(6);
         row = tempRows(n);
         col = tempCols(n);
+        //row.print();
+        //cout << endl;
+        //row.elem(Pab(n)).print();
+        //cout << endl;
+        //cout << endl;
+
+
+        /*
 
 
         c = floor(row/(Np*Np));
@@ -715,13 +723,14 @@ void amplitude::map_t3_permutations(){
                 }
             }
         }
+        */
 
 
 
 
 
     }
-    */
+
 
 
 
@@ -1411,12 +1420,15 @@ field<uvec> amplitude::partition_ppp(field<ivec> LHS, ivec K_unique){
             q = Nb(l_sorted_lc);
             r = Nc(l_sorted_lc);
             //the locations a + b*Np and b + a*Np (in the full array) are now identified to have LHS == C, belonging to the block
+            //a b c
             row(nx) = p + q*Np + r*Np2;
             nx += 1;
             if(r!=q){
+                //b!=c
                 row(nx) = p + r*Np + q*Np2;
                 nx += 1;
                 if(p!=q){
+                    //a!=b (!=c)
                     row(nx) = q + p*Np + r*Np2;
                     nx += 1;
                     row(nx) = q + r*Np + p*Np2;
@@ -1445,6 +1457,277 @@ field<uvec> amplitude::partition_ppp(field<ivec> LHS, ivec K_unique){
         else{
             if(row_collect){
                 tempRows(i) = sort(row(span(0,nx-1)));
+                lc -= 1;
+                i += 1;
+                nx = 0;
+                C = K_unique(i);
+                row_collect = false;
+            }
+        }
+        lc += 1;
+    }
+
+    //collect final block
+    //tempRows(i) = sort(row(span(0,nx-1))); //is this needed?
+    return tempRows;
+}
+
+field<uvec> amplitude::partition_ppp_permutations(field<ivec> LHS, ivec K_unique){
+    //partition particle-particle rows into blocks with preserved quantum numbers
+    uvec l_sorted = sort_index(LHS(3));
+    //bool adv = false;
+
+    uint lc = 0;
+    uint i = 0;
+    uint uiN = K_unique.n_rows;
+    uint uiS = l_sorted.n_rows;
+
+    Pab.set_size(uiN);
+    Pac.set_size(uiN);
+
+    int C = K_unique(i);
+
+    uint nx = 0;
+    int l_c= LHS(3)(l_sorted(lc));
+    field<uvec> tempRows(uiN);
+    //tempRows(uiN) = K_unique;
+    //tempRows(0).set_size(uiN);
+    //tempRows(1).set_size(uiN);
+
+    //align counters
+    while(l_c<C){
+        lc += 1;
+        l_c = LHS(3)(l_sorted(lc));
+    }
+
+    //want to find row indices where LHS == k_config(i)
+    //now: l_c == C
+    //bool br = false;
+    bool row_collect = false;
+    //int ll_c = l_c;
+    uint a,b,c;
+
+    uint l_sorted_lc;
+    uvec row(1000000);
+    //uvec row_b(1000000);
+
+
+    uvec Na = conv_to<uvec>::from(LHS(0));
+    uvec Nb = conv_to<uvec>::from(LHS(1));
+    uvec Nc = conv_to<uvec>::from(LHS(2));
+
+    uvec permute_ab(1000000);
+    uvec permute_ac(1000000);
+
+
+    uint nx0 = 0;
+    uint Np2 =Np*Np;
+    while(lc < uiS){
+        l_sorted_lc = l_sorted(lc);
+        l_c = LHS(3)(l_sorted_lc);
+
+        if(l_c == C){
+            a = Na(l_sorted_lc);
+            b = Nb(l_sorted_lc);
+            c = Nc(l_sorted_lc);
+            if(a==b){
+                if(a==c){
+                    //(2)
+                    row(nx) = a + b*Np + c*Np2;
+
+                    permute_ab(nx) = nx;
+
+                    permute_ac(nx) = nx;
+
+                    nx += 1;
+
+                }
+                else{
+                    //(3)
+                    row(nx) = a + b*Np + c*Np2;
+                    row(nx+1) = a + c*Np + b*Np2;
+                    row(nx+2) = c + b*Np + a*Np2;
+
+                    permute_ab(nx) = nx;
+                    permute_ab(nx+1) = nx +2;
+                    permute_ab(nx+2) = nx+1;
+
+                    permute_ac(nx) = nx+2;
+                    permute_ac(nx+1) = nx+1;
+                    permute_ac(nx+2) = nx;
+
+
+
+                    nx += 3;
+
+                }
+            }
+            else{
+                //a!=b
+                if(a==c){
+                    //(1)
+                    row(nx) = a + b*Np + c*Np2;
+                    row(nx+1) = b + a*Np + c*Np2;
+                    row(nx+2) = a + c*Np + b*Np2;
+
+                    permute_ab(nx) = nx+1;
+                    permute_ab(nx+1) = nx;
+                    permute_ab(nx+2) = nx+2;
+
+                    permute_ac(nx) = nx;
+                    permute_ac(nx+1) = nx+2;
+                    permute_ac(nx+2) = nx+1;
+
+                    nx += 3;
+
+
+
+                }
+                else{
+                    if(b==c){
+                        //(4)
+                        row(nx) = a + b*Np + c*Np2;
+                        row(nx+1) = b + a*Np + c*Np2;
+                        row(nx+2) = c + b*Np + a*Np2;
+
+                        permute_ab(nx) = nx+1;
+                        permute_ab(nx+1) = nx;
+                        permute_ab(nx+2) = nx+2;
+
+                        permute_ac(nx) = nx+2;
+                        permute_ac(nx+1) = nx+1;
+                        permute_ac(nx+2) = nx;
+
+                        nx += 3;
+
+                    }
+                    else{
+                        //(5)
+                        row(nx) =   a + b*Np + c*Np2;
+                        row(nx+1) = b + a*Np + c*Np2;
+                        row(nx+2) = a + c*Np + b*Np2;
+                        row(nx+3) = c + a*Np + b*Np2;
+                        row(nx+4) = b + c*Np + a*Np2;
+                        row(nx+5) = c + b*Np + a*Np2;
+
+                        permute_ab(nx) = nx+1;
+                        permute_ab(nx+1) = nx;
+                        permute_ab(nx+2) = nx+3;
+                        permute_ab(nx+3) = nx+2;
+                        permute_ab(nx+4) = nx+5;
+                        permute_ab(nx+5) = nx+4;
+
+                        permute_ac(nx) = nx+5;
+                        permute_ac(nx+1) = nx+3;
+                        permute_ac(nx+2) = nx+4;
+                        permute_ac(nx+3) = nx+5;
+                        permute_ac(nx+4) = nx+2;
+                        permute_ac(nx+5) = nx;
+
+                        nx += 6;
+
+                    }
+                }
+            }
+
+
+
+            /*
+            //the locations a + b*Np and b + a*Np (in the full array) are now identified to have LHS == C, belonging to the block
+            //a b c
+            row(nx) = a + b*Np + c*Np2;
+            nx0 = nx;
+            nx += 1;
+            if(c!=b){
+                //b!=c
+                row(nx) = a + c*Np + b*Np2;
+                nx += 1;
+
+
+
+                if(a!=b){
+                    //a!=b (!=c)
+                    row(nx) = b + a*Np + c*Np2;
+                    nx += 1;
+                    row(nx) = b + c*Np + a*Np2;
+                    nx += 1;
+                    //it follows that p!=r, so
+                    row(nx) = c + a*Np + b*Np2;
+                    nx += 1;
+                    row(nx) = c + b*Np + a*Np2;
+                    nx += 1;
+
+                    permute_ab(nx0) = nx0 + 2;
+                    permute_ab(nx0+1) = nx0 + 4;
+                    permute_ab(nx0+2) = nx0;
+                    permute_ab(nx0+3) = nx0 + 5;
+                    permute_ab(nx0+4) = nx0 + 1;
+                    permute_ab(nx0+5) = nx0 + 3;
+
+                    permute_ac(nx0) = nx0 + 5;
+                    permute_ac(nx0+1) = nx0 + 3;
+                    permute_ac(nx0+2) = nx0 + 4;
+                    permute_ac(nx0+3) = nx0 + 1;
+                    permute_ac(nx0+4) = nx0 + 2;
+                    permute_ac(nx0+5) = nx0;
+
+
+
+
+                }
+                else{
+                    //c!=b, a==b
+                    permute_ab(nx0) = nx;
+                    permute_ab(nx) = nx0;
+
+                    permute_ac(nx0) = nx;
+                    permute_ac(nx) = nx0;
+                }
+            }
+            else{
+                if(a!=b){
+                    row(nx) = b + a*Np + c*Np2;
+                    nx += 1;
+                    permute_ab(nx0) = nx;
+                    permute_ab(nx) = nx0;
+
+                    permute_ac(nx0) = nx;
+                    permute_ac(nx) = nx0;
+
+                }
+                else{
+                    if(a!=c){
+                        row(nx) = c + b*Np + a*Np2;
+                        nx += 1;
+                        permute_ab(nx) = nx;
+                        permute_ab(nx0) = nx0;
+
+                        permute_ac(nx) = nx0;
+                        permute_ac(nx0) = nx;
+
+                    }
+                    else{
+                        permute_ab(nx0) = nx0;
+                        permute_ac(nx0) = nx0;
+
+                    }
+                }
+            }
+            */
+            row_collect = true;
+        }
+
+        //if row is complete
+        else{
+            if(row_collect){
+                uvec sorted = sort_index(row(span(0,nx-1)));
+                uvec rr = row(span(0,nx-1));
+                uvec pab = permute_ab(span(0,nx-1));
+                uvec pac = permute_ac(span(0,nx-1));
+
+                tempRows(i) = rr.elem(sorted);
+                Pab(i) = pab.elem(sorted);
+                Pac(i) = pac.elem(sorted);
                 lc -= 1;
                 i += 1;
                 nx = 0;

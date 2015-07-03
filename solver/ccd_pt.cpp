@@ -66,7 +66,7 @@ ccd_pt::ccd_pt(electrongas bs, double a){
     T.set_amplitudes(bs.vEnergy);
     T.map_indices();
 
-    check_matrix_consistency();
+    //check_matrix_consistency();
 
     //mat spectrogram(11,25);
     energy();

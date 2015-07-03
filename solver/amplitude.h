@@ -60,6 +60,9 @@ public:
 
     field<uvec> permutative_ordering; //for use with unpermuted basic initialization.
 
+    field<uvec> partition_ppp_permutations(field<ivec> LHS, ivec K_unique);
+    field<uvec> Pab;
+    field<uvec> Pac;
 
 
 
