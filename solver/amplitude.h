@@ -40,6 +40,7 @@ public:
     field<uvec> blocksort(ivec LHS, ivec K_unique);
 
     mat getblock(int u, int i);
+
     void setblock(int u, int i, mat mBlock);
     void addblock(int u, int i, mat mBlock);
 
@@ -61,8 +62,13 @@ public:
     field<uvec> permutative_ordering; //for use with unpermuted basic initialization.
 
     field<uvec> partition_ppp_permutations(field<ivec> LHS, ivec K_unique);
+    field<uvec> partition_hhh_permutations(field<ivec> LHS, ivec K_unique);
     field<uvec> Pab;
     field<uvec> Pac;
+    field<uvec> Pbc;
+    field<uvec> Pij;
+    field<uvec> Pik;
+    field<uvec> Pjk;
 
 
 
@@ -78,6 +84,9 @@ public:
 
     //debugging and optimization
     umat getraw(int u, int i);
+    umat getraw_permuted(int u, int i, int n);
+    mat getblock_permuted(int u, int i, int n);
+
     void compress();
 
 

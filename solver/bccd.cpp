@@ -20,7 +20,7 @@ bccd::bccd(electrongas fgas)
 
     //compare();
     cout << "[BCCD]Energy:" << energy() << endl;
-    solve(10);
+    solve(30);
 }
 
 

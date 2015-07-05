@@ -73,7 +73,7 @@ void electrongas::generate_state_list2(int Ne, double rs, int Np){
             for(int y = -Nmax; y<Nmax+1; y++){
                 for(int z = -Nmax; z<Nmax+1; z++){
                     if(x*x+y*y+z*z == energy_integer){
-                        e2 = 2*energy_integer*(pi*pi)/(dL2);
+                        e2 = 2*(energy_integer)*(pi*pi)/(dL2);
                         //e2 = 2.13647*energy_integer*(pi*pi)/(dL2);
                         is_shell = true;
                         vKx(index_count) = x;
@@ -319,7 +319,7 @@ double electrongas::v3(int p, int q, int r, int s){
         }
 
     }
-    return val*(term1 - term2);
+    return val*(term1 - term2); //*1.91293118277;
 }
 
 
@@ -385,7 +385,7 @@ double electrongas::v2(int p, int q, int r, int s){
             }
         }
     }
-    return val*(term1 - term2);
+    return val*(term1 - term2); //*1.91293118277;
     //return 4*pi*interaction/dL3;
 }
 
@@ -461,6 +461,29 @@ double electrongas::f(int P, int Q){
         }
     }
     val += dPrefactor1*val2;
+    return val;
+}
+
+double electrongas::F(int p){
+    //Fock operator matrix elements
+    //double val = dPrefactor2;
+    double val = 1; //vEnergy(p);
+    //rowvec KP = mSortedEnergy.row(P);
+    //rowvec KQ = mSortedEnergy.row(Q);
+    vec kp(3);
+    //kp.zeros(3);
+    kp(0) = vKx(p);
+    kp(1) = vKy(p);
+    kp(2) = vKz(p);
+    val *= 2*pi*pi*dot(kp, kp)/dL2;
+    //val *= kd_vec(KP,KQ);
+    double val2 = 0;
+    for(int i = 0; i < iNparticles; i++){
+        //if(i != p){
+        val2 += v2(p, i, p, i);
+        //}
+    }
+    val += val2;
     return val;
 }
 

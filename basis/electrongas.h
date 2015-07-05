@@ -24,6 +24,9 @@ public:
 
 
     double f(int P, int Q);
+    double F(int p);
+
+
     double h(int P, int Q);
     double eref(int nParticles);
     double analytic_energy(int nParticles);

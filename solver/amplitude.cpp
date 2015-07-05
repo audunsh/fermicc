@@ -81,7 +81,9 @@ void amplitude::init_amplitudes(){
         //cout << p(0) <<  " " << p(1) << " " << p(2) << " " << p(3) << " "<< endl;
         vElements(i) = eBs.v2(p(0)+Nh,p(1)+Nh,p(2),p(3));
         //double v = eBs.vEnergy(p(2))+ eBs.vEnergy(p(3));
-        vEnergies(i) = eBs.vEnergy(p(2)) + eBs.vEnergy(p(3))-eBs.vEnergy(p(0)+Nh)-eBs.vEnergy(p(1)+Nh);
+        //vEnergies(i) = eBs.vEnergy(p(2)) + eBs.vEnergy(p(3))-eBs.vEnergy(p(0)+Nh)-eBs.vEnergy(p(1)+Nh);
+
+        vEnergies(i) = eBs.F(p(2)) + eBs.F(p(3))-eBs.F(p(0)+Nh)-eBs.F(p(1)+Nh);
     }
 } //initialize as amplitude
 
@@ -659,77 +661,170 @@ void amplitude::map_t3_permutations(){
 
     ivec K_unique = intersect1d(unique(abc(3)), unique(ijk(3)));
     field<uvec> tempRows = partition_ppp_permutations(abc, K_unique);
-    field<uvec> tempCols = partition(ijk(3), K_unique);
+    //field<uvec> tempCols = partition(ijk(3), K_unique);
+    field<uvec> tempCols = partition_hhh_permutations(ijk, K_unique);
     uvec row;
     uvec col;
     uvec a,b,c;
     uvec i,j,k;
 
+
+    //for use in actual amplitude mapping
     permutative_ordering.set_size(K_unique.n_rows);
+    uint uiN = K_unique.n_elem;
 
+    blocklengths(uiCurrent_block) = uiN; //number of blocks in config
+    fvConfigs(uiCurrent_block) = K_unique; //ordering
+    fmBlocks(uiCurrent_block).set_size(uiN);
 
+    field<uvec> tempElements(uiN);
+    field<uvec> tempBlockmap1(uiN);
+    field<uvec> tempBlockmap2(uiN);
+    field<uvec> tempBlockmap3(uiN);
+
+    uint tempElementsSize = 0;
+    //uvec a,b,c,i,j,k;
+    uint systemsize = 0;
     for(uint n = 0; n <K_unique.n_rows; ++n){
         uvec dim(6);
         row = tempRows(n);
         col = tempCols(n);
-        //row.print();
-        //cout << endl;
-        //row.elem(Pab(n)).print();
-        //cout << endl;
-        //cout << endl;
+        //systemsize += row.n_rows*col.n_rows;
 
 
-        /*
+        int Nx = row.n_rows;
+        int Ny = col.n_rows;
+        //cout << Nx << " " << Ny << " " << " " << K_unique(i) << endl;
+        umat block(Nx,Ny);
+        uvec pqrs(4);
+        uvec tElements(Nx*Ny);
+        uvec tBlockmap1(Nx*Ny);
+        uvec tBlockmap2(Nx*Ny);
+        uvec tBlockmap3(Nx*Ny);
+
+        c = floor(row/(Np*Np)); //k
+        b = floor(((row - c*Np*Np))/Np);
+        a = row - c*Np*Np - b*Np;
+
+        k = floor(col/(Nh*Nh)); //k
+        j = floor(((col - k*Nh*Nh))/Nh);
+        i = col - k*Nh*Nh - j*Nh;
 
 
-        c = floor(row/(Np*Np));
-        b = floor((row - c*Np*Np)/Np);
-        a = row-c*Np*Np-b*Np;
+        uint index;
+        tempElementsSize += Nx*Ny;
+        for(int nx = 0; nx < Nx; nx++){
+            for(int ny = 0; ny < Ny; ny++){
 
-        uvec bac = b + a*Np + c*Np*Np;
-        uvec cba = c + b*Np + a*Np*Np;
+                index = to6(a(nx), b(nx), c(nx), i(ny), j(ny), k(ny));
 
-        k = floor(col/(Nh*Nh));
-        j = floor((col - k*Nh*Nh)/Nh);
-        i = col-k*Nh*Nh-j*Nh;
-
-        uvec jik = j + i*Nh + k*Nh*Nh;
-        uvec kji = k + j*Nh + i*Nh*Nh;
-
-        ivec perm_bac(row.n_rows);
-        ivec perm_cba(row.n_rows);
-
-        ivec perm_jik(col.n_rows);
-        ivec perm_kji(col.n_rows);
-
-        for(uint ni = 0; ni < row.n_rows; ++ni){
-            for(uint nj = 0; nj < row.n_rows; ++nj){
-                if(row(ni) == bac(nj)){
-                    perm_bac(nj) = ni;
-                }
-                if(row(ni) == cba(nj)){
-                    perm_cba(nj) = ni;
-                }
+                tElements(nx*Ny + ny) = index;
+                tBlockmap1(nx*Ny + ny) = n;
+                tBlockmap2(nx*Ny + ny) = nx;
+                tBlockmap3(nx*Ny + ny) = ny;
+                block(nx, ny) = index;
             }
         }
+        fmBlocks(0)(n) = block;
+        tempElements(n) = tElements;
+        tempBlockmap1(n) = tBlockmap1; //block that element belongs to
+        tempBlockmap2(n) = tBlockmap2; //row of element
+        tempBlockmap3(n) = tBlockmap3; //column of element
 
-        for(uint ni = 0; ni < col.n_rows; ++ni){
-            for(uint nj = 0; nj < col.n_rows; ++nj){
-                if(col(ni) == jik(nj)){
-                    perm_jik(nj) = ni;
-                }
-                if(col(ni) == kji(nj)){
-                    perm_kji(nj) = ni;
-                }
-            }
-        }
-        */
+
+
 
 
 
 
 
     }
+    cout << "Blocks:" << tempRows.n_rows << endl;
+    cout << "Size:" << systemsize << endl;
+    cout << "init_size:" << Np*(Np+1)*(Np+2)/6 << endl;
+
+
+    // ####################################################################
+    // ## Flatten tempElements and tempBlockmap                          ##
+    // ####################################################################
+    uvec flatElements(tempElementsSize);
+    uvec flatBlockmap1(tempElementsSize);
+    uvec flatBlockmap2(tempElementsSize);
+    uvec flatBlockmap3(tempElementsSize);
+
+    uint counter = 0;
+    for(uint ni = 0; ni<uiN; ++ni){
+        for(uint nj = 0; nj < tempElements(ni).n_rows; ++nj){
+            flatElements(counter) = tempElements(ni)(nj);
+            flatBlockmap1(counter) = tempBlockmap1(ni)(nj);
+            flatBlockmap2(counter) = tempBlockmap2(ni)(nj);
+            flatBlockmap3(counter) = tempBlockmap3(ni)(nj);
+            counter += 1;
+        }
+        tempElements(ni).set_size(0);
+        tempBlockmap1(ni).set_size(0);
+        tempBlockmap2(ni).set_size(0);
+        tempBlockmap3(ni).set_size(0);
+
+    }
+
+    // ####################################################################
+    // ## Consolidate blocks with existing configurations                ##
+    // ####################################################################
+
+
+    umat n = sort_index(flatElements);
+    flatElements = flatElements.elem(n);
+    flatBlockmap1 = flatBlockmap1.elem(n); //DOES THIS SORT PROPERLY? UNKNOWN,
+    flatBlockmap2 = flatBlockmap2.elem(n); //DOES THIS SORT PROPERLY? UNKNOWN,
+    flatBlockmap3 = flatBlockmap3.elem(n); //DOES THIS SORT PROPERLY? UNKNOWN,
+
+    uint tempN = 0;
+    uint trueN = 0;
+    uint tempL = flatElements.n_rows;
+    uint trueL = uvElements.n_rows;
+    bool all_resolved = false;
+    while(trueN < trueL){
+        if(uvElements(trueN) == flatElements(tempN)){
+            //identical indexes occuring in
+            fmBlocks(uiCurrent_block)(flatBlockmap1(tempN))(flatBlockmap2(tempN),flatBlockmap3(tempN)) = trueN;
+            trueN += 1;
+            tempN += 1;
+        }
+        else{
+            if(uvElements(trueN) == flatElements(tempN)){
+                trueN += 1;
+            }
+            else{
+                tempN += 1;
+                if(tempN>=tempL){
+                    all_resolved = true;
+                    break;
+                }
+            }
+
+        }
+    }
+
+
+    //if(all_resolved != true){
+    if(tempN<tempL){
+        uvec remaining(tempL-tempN);
+        uint tN = 0;
+        while(tempN<tempL){
+            remaining(tN) = flatElements(tempN);
+            fmBlocks(uiCurrent_block)(flatBlockmap1(tempN))(flatBlockmap2(tempN),flatBlockmap3(tempN)) = trueN + tN;
+            tempN += 1;
+            tN += 1;
+        }
+
+        //cout << tempL << " "<< tempN << " " << remaining.n_elem << " " << uvElements.n_elem << endl;
+        uvElements = join_cols<umat>(uvElements, remaining);
+    }
+
+
+    //lock and load
+    uiCurrent_block += 1;
 
 
 
@@ -986,6 +1081,61 @@ umat amplitude::getraw(int u, int i){
     return fmBlocks(u)(i);
 }
 
+umat amplitude::getraw_permuted(int u, int i, int n){
+    //return index block, used for debugging and optimization
+    umat aligned = fmBlocks(u)(i);
+    if(n==0){
+        aligned = aligned.rows(Pab(i));
+    }
+    if(n==1){
+        aligned = aligned.rows(Pac(i));
+    }
+    if(n==2){
+        aligned = aligned.rows(Pbc(i));
+    }
+    if(n==3){
+        aligned = aligned.cols(Pij(i));
+    }
+    if(n==4){
+        aligned = aligned.cols(Pik(i));
+    }
+    if(n==5){
+        aligned = aligned.cols(Pjk(i));
+    }
+    return aligned;
+}
+
+mat amplitude::getblock_permuted(int u, int i, int n){
+    //return index block, used for debugging and optimization
+
+    umat aligned = fmBlocks(u)(i);
+    if(n==0){
+        aligned = aligned.rows(Pab(i));
+    }
+    if(n==1){
+        aligned = aligned.rows(Pac(i));
+    }
+    if(n==2){
+        aligned = aligned.rows(Pbc(i));
+    }
+    if(n==3){
+        aligned = aligned.cols(Pij(i));
+    }
+    if(n==4){
+        aligned = aligned.cols(Pik(i));
+    }
+    if(n==5){
+        aligned = aligned.cols(Pjk(i));
+    }
+
+
+    mat block = vElements.elem(aligned);
+    block.reshape(fmBlocks(u)(i).n_rows, fmBlocks(u)(i).n_cols);
+
+    return block;
+}
+
+
 void amplitude::setblock(int u, int i, mat mBlock){
     vElements.elem(fmBlocks(u)(i)) = vectorise(mBlock);
 }
@@ -1186,6 +1336,7 @@ field<ivec> amplitude::hh(){
     return hhmap;
 }
 
+/*
 field<ivec> amplitude::hhh(){
     //noncompacted
     ivec h = linspace<ivec>(0,Nh*Nh*Nh-1,Nh*Nh*Nh);
@@ -1197,8 +1348,36 @@ field<ivec> amplitude::hhh(){
 
     hhhmap(3) = eBs.unique(conv_to<uvec>::from(hhhmap(0))) + eBs.unique(conv_to<uvec>::from(hhhmap(1)))+eBs.unique(conv_to<uvec>::from(hhhmap(2)));
     return hhhmap;
-}
+}*/
 
+field<ivec> amplitude::hhh(){
+    //return a "compacted" hole-hole-hole particle unique indexvector
+    //length of "compacted" vector
+    uint N = Nh*(Nh+1)*(Nh+2)/6;
+    //indices
+    ivec a(N);
+    ivec b(N);
+    ivec c(N);
+    uint count = 0;
+    for(int na = 0; na<Nh; ++na){
+        for(int nb = 0; nb<na+1; ++nb){
+            for(int nc = 0; nc<nb+1; ++nc){
+                a(count) = na;
+                b(count) = nb;
+                c(count) = nc;
+                count += 1;
+            }
+        }
+    }
+    ivec Kabc = eBs.unique(conv_to<uvec>::from(a)) + eBs.unique(conv_to<uvec>::from(b)) + eBs.unique(conv_to<uvec>::from(c));
+
+    field<ivec> pppmap(4);
+    pppmap(0) = a;
+    pppmap(1) = b;
+    pppmap(2) = c;
+    pppmap(3) = Kabc;
+    return pppmap;
+}
 
 field<ivec> amplitude::hp(){
     ivec h = linspace<ivec>(0,Nh-1,Nh);
@@ -1298,6 +1477,7 @@ field<uvec> amplitude::partition_pp(field<ivec> LHS, ivec K_unique){
     uint nx = 0;
     int l_c= LHS(2)(l_sorted(lc));
     field<uvec> tempRows(uiN);
+    Pab.set_size(uiN);
     //tempRows(uiN) = K_unique;
     //tempRows(0).set_size(uiN);
     //tempRows(1).set_size(uiN);
@@ -1323,6 +1503,7 @@ field<uvec> amplitude::partition_pp(field<ivec> LHS, ivec K_unique){
 
     uvec Na = conv_to<uvec>::from(LHS(0));
     uvec Nb = conv_to<uvec>::from(LHS(1));
+    uvec pab(1000000);
 
     while(lc < uiS){
         l_sorted_lc = l_sorted(lc);
@@ -1334,17 +1515,26 @@ field<uvec> amplitude::partition_pp(field<ivec> LHS, ivec K_unique){
             //c = Cn(l_sorted_lc);
             //the locations a + b*Np and b + a*Np (in the full array) are now identified to have LHS == C, belonging to the block
 
-            row(nx) = a + b*Np;
 
             //row_b(nx) = b;
             if(a!=b){
-                nx += 1;
-                row(nx) = b + a*Np;
+                row(nx) = a + b*Np;
+                row(nx+1) = b + a*Np;
+                pab(nx) = nx+1;
+                pab(nx+1) = nx;
+
+
+                nx += 2;
 
                 //row_b(nx) = a;
             }
+            else{
+                row(nx) = a + b*Np;
+                pab(nx) = nx;
+                nx += 1;
+            }
             //row(nx) = l_sorted(lc);
-            nx += 1;
+            //nx += 1;
             row_collect = true;
         }
 
@@ -1352,7 +1542,12 @@ field<uvec> amplitude::partition_pp(field<ivec> LHS, ivec K_unique){
         else{
             if(row_collect){
                 //uvec r = sort(row(span(0,nx-1)));
-                tempRows(i) = sort(row(span(0,nx-1)));
+                uvec rr = sort_index(row);
+                uvec row_rr = row(span(0,nx-1));
+                uvec ab_index = pab(span(0,nx-1));
+                tempRows(i) = row_rr.elem(rr);
+                //tempRows(i) = row.elem(rr);
+                Pab(i) = ab_index.elem(rr);
                 //tempRows(1)(i) = row_b(span(0,nx-1));
                 lc -= 1;
                 i += 1;
@@ -1484,6 +1679,7 @@ field<uvec> amplitude::partition_ppp_permutations(field<ivec> LHS, ivec K_unique
 
     Pab.set_size(uiN);
     Pac.set_size(uiN);
+    Pbc.set_size(uiN);
 
     int C = K_unique(i);
 
@@ -1518,6 +1714,8 @@ field<uvec> amplitude::partition_ppp_permutations(field<ivec> LHS, ivec K_unique
 
     uvec permute_ab(1000000);
     uvec permute_ac(1000000);
+    uvec permute_bc(1000000);
+
 
 
     uint nx0 = 0;
@@ -1539,6 +1737,8 @@ field<uvec> amplitude::partition_ppp_permutations(field<ivec> LHS, ivec K_unique
 
                     permute_ac(nx) = nx;
 
+                    permute_bc(nx) = nx;
+
                     nx += 1;
 
                 }
@@ -1555,6 +1755,10 @@ field<uvec> amplitude::partition_ppp_permutations(field<ivec> LHS, ivec K_unique
                     permute_ac(nx) = nx+2;
                     permute_ac(nx+1) = nx+1;
                     permute_ac(nx+2) = nx;
+
+                    permute_bc(nx) = nx+1;
+                    permute_bc(nx+1) = nx;
+                    permute_bc(nx+2) = nx+2;
 
 
 
@@ -1578,6 +1782,10 @@ field<uvec> amplitude::partition_ppp_permutations(field<ivec> LHS, ivec K_unique
                     permute_ac(nx+1) = nx+2;
                     permute_ac(nx+2) = nx+1;
 
+                    permute_bc(nx) = nx+2;
+                    permute_bc(nx+1) = nx+1;
+                    permute_bc(nx+2) = nx;
+
                     nx += 3;
 
 
@@ -1597,6 +1805,10 @@ field<uvec> amplitude::partition_ppp_permutations(field<ivec> LHS, ivec K_unique
                         permute_ac(nx) = nx+2;
                         permute_ac(nx+1) = nx+1;
                         permute_ac(nx+2) = nx;
+
+                        permute_bc(nx) = nx;
+                        permute_bc(nx+1) = nx+2;
+                        permute_bc(nx+2) = nx+1;
 
                         nx += 3;
 
@@ -1624,6 +1836,14 @@ field<uvec> amplitude::partition_ppp_permutations(field<ivec> LHS, ivec K_unique
                         permute_ac(nx+4) = nx+2;
                         permute_ac(nx+5) = nx;
 
+                        permute_bc(nx) = nx+2;
+                        permute_bc(nx+1) = nx+4;
+                        permute_bc(nx+2) = nx;
+                        permute_bc(nx+3) = nx+5;
+                        permute_bc(nx+4) = nx+1;
+                        permute_bc(nx+5) = nx+3;
+
+
                         nx += 6;
 
                     }
@@ -1631,89 +1851,6 @@ field<uvec> amplitude::partition_ppp_permutations(field<ivec> LHS, ivec K_unique
             }
 
 
-
-            /*
-            //the locations a + b*Np and b + a*Np (in the full array) are now identified to have LHS == C, belonging to the block
-            //a b c
-            row(nx) = a + b*Np + c*Np2;
-            nx0 = nx;
-            nx += 1;
-            if(c!=b){
-                //b!=c
-                row(nx) = a + c*Np + b*Np2;
-                nx += 1;
-
-
-
-                if(a!=b){
-                    //a!=b (!=c)
-                    row(nx) = b + a*Np + c*Np2;
-                    nx += 1;
-                    row(nx) = b + c*Np + a*Np2;
-                    nx += 1;
-                    //it follows that p!=r, so
-                    row(nx) = c + a*Np + b*Np2;
-                    nx += 1;
-                    row(nx) = c + b*Np + a*Np2;
-                    nx += 1;
-
-                    permute_ab(nx0) = nx0 + 2;
-                    permute_ab(nx0+1) = nx0 + 4;
-                    permute_ab(nx0+2) = nx0;
-                    permute_ab(nx0+3) = nx0 + 5;
-                    permute_ab(nx0+4) = nx0 + 1;
-                    permute_ab(nx0+5) = nx0 + 3;
-
-                    permute_ac(nx0) = nx0 + 5;
-                    permute_ac(nx0+1) = nx0 + 3;
-                    permute_ac(nx0+2) = nx0 + 4;
-                    permute_ac(nx0+3) = nx0 + 1;
-                    permute_ac(nx0+4) = nx0 + 2;
-                    permute_ac(nx0+5) = nx0;
-
-
-
-
-                }
-                else{
-                    //c!=b, a==b
-                    permute_ab(nx0) = nx;
-                    permute_ab(nx) = nx0;
-
-                    permute_ac(nx0) = nx;
-                    permute_ac(nx) = nx0;
-                }
-            }
-            else{
-                if(a!=b){
-                    row(nx) = b + a*Np + c*Np2;
-                    nx += 1;
-                    permute_ab(nx0) = nx;
-                    permute_ab(nx) = nx0;
-
-                    permute_ac(nx0) = nx;
-                    permute_ac(nx) = nx0;
-
-                }
-                else{
-                    if(a!=c){
-                        row(nx) = c + b*Np + a*Np2;
-                        nx += 1;
-                        permute_ab(nx) = nx;
-                        permute_ab(nx0) = nx0;
-
-                        permute_ac(nx) = nx0;
-                        permute_ac(nx0) = nx;
-
-                    }
-                    else{
-                        permute_ab(nx0) = nx0;
-                        permute_ac(nx0) = nx0;
-
-                    }
-                }
-            }
-            */
             row_collect = true;
         }
 
@@ -1724,10 +1861,227 @@ field<uvec> amplitude::partition_ppp_permutations(field<ivec> LHS, ivec K_unique
                 uvec rr = row(span(0,nx-1));
                 uvec pab = permute_ab(span(0,nx-1));
                 uvec pac = permute_ac(span(0,nx-1));
+                uvec pbc = permute_bc(span(0,nx-1));
 
                 tempRows(i) = rr.elem(sorted);
                 Pab(i) = pab.elem(sorted);
                 Pac(i) = pac.elem(sorted);
+                Pbc(i) = pbc.elem(sorted);
+                lc -= 1;
+                i += 1;
+                nx = 0;
+                C = K_unique(i);
+                row_collect = false;
+            }
+        }
+        lc += 1;
+    }
+
+    //collect final block
+    //tempRows(i) = sort(row(span(0,nx-1))); //is this needed?
+    return tempRows;
+}
+
+field<uvec> amplitude::partition_hhh_permutations(field<ivec> LHS, ivec K_unique){
+    //partition particle-particle rows into blocks with preserved quantum numbers
+    uvec l_sorted = sort_index(LHS(3));
+    //bool adv = false;
+
+    uint lc = 0;
+    uint i = 0;
+    uint uiN = K_unique.n_rows;
+    uint uiS = l_sorted.n_rows;
+
+    Pij.set_size(uiN);
+    Pik.set_size(uiN);
+    Pjk.set_size(uiN);
+
+    int C = K_unique(i);
+
+    uint nx = 0;
+    int l_c= LHS(3)(l_sorted(lc));
+    field<uvec> tempRows(uiN);
+    //tempRows(uiN) = K_unique;
+    //tempRows(0).set_size(uiN);
+    //tempRows(1).set_size(uiN);
+
+    //align counters
+    while(l_c<C){
+        lc += 1;
+        l_c = LHS(3)(l_sorted(lc));
+    }
+
+    //want to find row indices where LHS == k_config(i)
+    //now: l_c == C
+    //bool br = false;
+    bool row_collect = false;
+    //int ll_c = l_c;
+    uint a,b,c;
+
+    uint l_sorted_lc;
+    uvec row(1000000);
+    //uvec row_b(1000000);
+
+
+    uvec Ni = conv_to<uvec>::from(LHS(0));
+    uvec Nj = conv_to<uvec>::from(LHS(1));
+    uvec Nk = conv_to<uvec>::from(LHS(2));
+
+    uvec permute_ij(1000000);
+    uvec permute_ik(1000000);
+    uvec permute_jk(1000000);
+
+
+
+    uint nx0 = 0;
+    uint Nh2 =Nh*Nh;
+    while(lc < uiS){
+        l_sorted_lc = l_sorted(lc);
+        l_c = LHS(3)(l_sorted_lc);
+
+        if(l_c == C){
+            a = Ni(l_sorted_lc);
+            b = Nj(l_sorted_lc);
+            c = Nk(l_sorted_lc);
+            if(a==b){
+                if(a==c){
+                    //(2)
+                    row(nx) = a + b*Nh + c*Nh2;
+
+                    permute_ij(nx) = nx;
+
+                    permute_ik(nx) = nx;
+
+                    permute_jk(nx) = nx;
+
+                    nx += 1;
+
+                }
+                else{
+                    //(3)
+                    row(nx) = a + b*Nh + c*Nh2;
+                    row(nx+1) = a + c*Nh + b*Nh2;
+                    row(nx+2) = c + b*Nh + a*Nh2;
+
+                    permute_ij(nx) = nx;
+                    permute_ij(nx+1) = nx +2;
+                    permute_ij(nx+2) = nx+1;
+
+                    permute_ik(nx) = nx+2;
+                    permute_ik(nx+1) = nx+1;
+                    permute_ik(nx+2) = nx;
+
+                    permute_jk(nx) = nx+1;
+                    permute_jk(nx+1) = nx;
+                    permute_jk(nx+2) = nx+2;
+
+
+
+                    nx += 3;
+
+                }
+            }
+            else{
+                //a!=b
+                if(a==c){
+                    //(1)
+                    row(nx) = a + b*Nh + c*Nh2;
+                    row(nx+1) = b + a*Nh + c*Nh2;
+                    row(nx+2) = a + c*Nh + b*Nh2;
+
+                    permute_ij(nx) = nx+1;
+                    permute_ij(nx+1) = nx;
+                    permute_ij(nx+2) = nx+2;
+
+                    permute_ik(nx) = nx;
+                    permute_ik(nx+1) = nx+2;
+                    permute_ik(nx+2) = nx+1;
+
+                    permute_jk(nx) = nx+2;
+                    permute_jk(nx+1) = nx+1;
+                    permute_jk(nx+2) = nx;
+
+                    nx += 3;
+
+
+
+                }
+                else{
+                    if(b==c){
+                        //(4)
+                        row(nx) = a + b*Nh + c*Nh2;
+                        row(nx+1) = b + a*Nh + c*Nh2;
+                        row(nx+2) = c + b*Nh + a*Nh2;
+
+                        permute_ij(nx) = nx+1;
+                        permute_ij(nx+1) = nx;
+                        permute_ij(nx+2) = nx+2;
+
+                        permute_ik(nx) = nx+2;
+                        permute_ik(nx+1) = nx+1;
+                        permute_ik(nx+2) = nx;
+
+                        permute_jk(nx) = nx;
+                        permute_jk(nx+1) = nx+2;
+                        permute_jk(nx+2) = nx+1;
+
+                        nx += 3;
+
+                    }
+                    else{
+                        //(5)
+                        row(nx) =   a + b*Nh + c*Nh2;
+                        row(nx+1) = b + a*Nh + c*Nh2;
+                        row(nx+2) = a + c*Nh + b*Nh2;
+                        row(nx+3) = c + a*Nh + b*Nh2;
+                        row(nx+4) = b + c*Nh + a*Nh2;
+                        row(nx+5) = c + b*Nh + a*Nh2;
+
+                        permute_ij(nx) = nx+1;
+                        permute_ij(nx+1) = nx;
+                        permute_ij(nx+2) = nx+3;
+                        permute_ij(nx+3) = nx+2;
+                        permute_ij(nx+4) = nx+5;
+                        permute_ij(nx+5) = nx+4;
+
+                        permute_ik(nx) = nx+5;
+                        permute_ik(nx+1) = nx+3;
+                        permute_ik(nx+2) = nx+4;
+                        permute_ik(nx+3) = nx+5;
+                        permute_ik(nx+4) = nx+2;
+                        permute_ik(nx+5) = nx;
+
+                        permute_jk(nx) = nx+2;
+                        permute_jk(nx+1) = nx+4;
+                        permute_jk(nx+2) = nx;
+                        permute_jk(nx+3) = nx+5;
+                        permute_jk(nx+4) = nx+1;
+                        permute_jk(nx+5) = nx+3;
+
+
+                        nx += 6;
+
+                    }
+                }
+            }
+
+
+            row_collect = true;
+        }
+
+        //if row is complete
+        else{
+            if(row_collect){
+                uvec sorted = sort_index(row(span(0,nx-1)));
+                uvec rr = row(span(0,nx-1));
+                uvec pij = permute_ij(span(0,nx-1));
+                uvec pik = permute_ik(span(0,nx-1));
+                uvec pjk = permute_jk(span(0,nx-1));
+
+                tempRows(i) = rr.elem(sorted);
+                Pij(i) = pij.elem(sorted);
+                Pik(i) = pik.elem(sorted);
+                Pjk(i) = pjk.elem(sorted);
                 lc -= 1;
                 i += 1;
                 nx = 0;

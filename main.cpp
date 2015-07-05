@@ -24,7 +24,7 @@ using namespace arma;
 int main()
 {
     electrongas fgas;
-    fgas.generate_state_list2(20.0,1.0, 14);
+    fgas.generate_state_list2(5.0,1.0, 14);
 
     //cout << "Energy per particle:" << fgas.eref(14)/14.0 << " (a.u)"  << endl;
     //cout << "[Main] Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;
@@ -38,9 +38,29 @@ int main()
 
     //vec amptest = zeros(Np*Np*Np*Nh*Nh*Nh);
 
-    //bccd solver(fgas);
+    bccd solver(fgas);
+    //solver.t2.blocklengths.print();
 
 
+    /*
+    umat a(3,3);
+    a(0,0) = 0;
+    a(1,0) = 1;
+    a(2,0) = 2;
+
+    a(0,1) = 3;
+    a(1,1) = 4;
+    a(2,1) = 5;
+    a(0,2) = 6;
+    a(1,2) = 7;
+    a(2,2) = 8;
+
+    uvec ind = {0,2,};
+    umat b = a.rows(ind);
+    b.print();
+    cout << endl;
+    a.print();
+    */
 
     //blockmap t2;
     //t2.init(fgas, 2, {Np,Np,Nh,Nh});
@@ -51,12 +71,20 @@ int main()
     //ccd_pt solver(fgas, .5);
 
 
+    /*
     clock_t t = clock();
     amplitude t3;
     t3.init(fgas, 2, {Np, Np, Np, Nh, Nh, Nh});
     t3.make_t3();
     t3.map_t3_permutations();
     cout << "0:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+    for(uint i = 0; i < t3.blocklengths(0); ++i){
+        t3.getraw_permuted(0,i,0).print();
+        cout << endl;
+        t3.getraw_permuted(0,i,3).print();
+        cout << endl;
+
+        cout << endl;}*/
 
 
     /*
