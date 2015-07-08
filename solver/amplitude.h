@@ -63,6 +63,9 @@ public:
 
     field<uvec> partition_ppp_permutations(field<ivec> LHS, ivec K_unique);
     field<uvec> partition_hhh_permutations(field<ivec> LHS, ivec K_unique);
+
+    field<uvec> partition_pp_permutations(field<ivec> LHS, ivec K_unique);
+    field<uvec> partition_hh_permutations(field<ivec> LHS, ivec K_unique);
     field<uvec> Pab;
     field<uvec> Pac;
     field<uvec> Pbc;
@@ -91,27 +94,29 @@ public:
 
 
     void map_t3_permutations();
+    void map_t2_permutations();
 
 
     //experimental optimized frameworks
-     field<ivec> pp();
-     field<ivec> ppp(ivec signs);
-     field<ivec> ph();
-     field<ivec> hp();
-     field<ivec> hh();
-     field<ivec> hhh();
+    field<ivec> pp();
+    field<ivec> ppp(ivec signs);
+    field<ivec> ph();
+    field<ivec> hp();
+    field<ivec> hh();
+    field<ivec> hh_compact();
+    field<ivec> hhh();
 
-     field<uvec> partition(ivec LHS, ivec K_unique);
-     field<uvec> partition_pp(field<ivec> LHS, ivec K_unique);
-     field<uvec> partition_ppp(field<ivec> LHS, ivec K_unique);
+    field<uvec> partition(ivec LHS, ivec K_unique);
+    field<uvec> partition_pp(field<ivec> LHS, ivec K_unique);
+    field<uvec> partition_ppp(field<ivec> LHS, ivec K_unique);
 
-     field<ivec> hpp();
-     field<ivec> php();
-     field<ivec> pph();
+    field<ivec> hpp();
+    field<ivec> php();
+    field<ivec> pph();
 
-     field<uvec> partition_hpp(field<ivec> LHS, ivec K_unique);
-     field<uvec> partition_php(field<ivec> LHS, ivec K_unique);
-     field<uvec> partition_pph(field<ivec> LHS, ivec K_unique);
+    field<uvec> partition_hpp(field<ivec> LHS, ivec K_unique);
+    field<uvec> partition_php(field<ivec> LHS, ivec K_unique);
+    field<uvec> partition_pph(field<ivec> LHS, ivec K_unique);
 
 
 

@@ -48,6 +48,7 @@ public:
 
     amplitude t2;
     amplitude t2temp; //used for permutations
+    amplitude t2temp2;
     amplitude t2n; //next
     blockmap vhhpp;
     blockmap vpppp;

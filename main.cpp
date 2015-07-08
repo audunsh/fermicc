@@ -24,7 +24,7 @@ using namespace arma;
 int main()
 {
     electrongas fgas;
-    fgas.generate_state_list2(5.0,1.0, 14);
+    fgas.generate_state_list2(15.0,1.0, 14);
 
     //cout << "Energy per particle:" << fgas.eref(14)/14.0 << " (a.u)"  << endl;
     //cout << "[Main] Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;
@@ -37,9 +37,81 @@ int main()
     uint Nh = fgas.iNparticles;
 
     //vec amptest = zeros(Np*Np*Np*Nh*Nh*Nh);
+    //ccd solver(fgas, .5);
 
     bccd solver(fgas);
     //solver.t2.blocklengths.print();
+
+
+
+    //testing consistency of t2 permutative mapping
+    //amplitude t2a(fgas, 8, {Np, Np, Nh, Nh});
+    //t2a.make_t3();
+    //t2a.map6({1,2,3},{4,5,6}); //ab ij (0)
+    //t2a.map6({1,2,3},{5,4,6}); //ab ij (0)
+    //t2a.init_amplitudes();
+
+
+    /*
+    clock_t t = clock();
+    amplitude t2b(fgas, 8, {Np, Np, Nh, Nh});
+    t2b.make_t3();
+    t2b.map_t3_permutations();
+    //t2b.init_amplitudes();
+    cout << "time spent initializing amplitude:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+    */
+
+
+    //cout << t2a.blocklengths(0) << t2b.blocklengths(0) << endl;
+
+    /*
+    for(uint i = 0; i <t2a.blocklengths(0); ++i){
+        t2a.getraw(1,i).print();
+        cout << endl;
+        //cout << t2b.Pab(i) << endl;
+        //t2b.getraw(0,i).print();
+        cout << endl;
+
+        t2b.getraw_permuted(0,i, 3).print();
+        cout << endl;
+    }
+    */
+
+
+
+
+    /*
+    for(uint i = 0; i < t2b.fvConfigs(0).n_rows; ++i){
+        cout << t2b.fvConfigs(0)(i) << " " << t2a.fvConfigs(0)(i) << endl;
+    }
+
+
+
+    for(uint i = 0; i<t2b.uvElements.n_rows; ++i){
+        cout << t2a.uvElements(i) << " " << t2b.uvElements(i) << endl;
+
+        //t2b.from(t2b.uvElements(i)).print();
+        //cout << endl;
+
+
+        //t2a.from(t2a.uvElements(i)).print();
+        //cout << endl;
+    }
+    */
+
+    /*
+    t2a.uvSize.print();
+    t2b.uvSize.print();
+    for(uint i =1; i < 100000; i*=2){
+        cout << t2a.from(i) << " " << t2b.from(i) << endl;
+    }*/
+
+
+
+
+
+
+
 
 
     /*

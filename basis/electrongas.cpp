@@ -467,7 +467,7 @@ double electrongas::f(int P, int Q){
 double electrongas::F(int p){
     //Fock operator matrix elements
     //double val = dPrefactor2;
-    double val = 1; //vEnergy(p);
+    double val = 2*pi*pi/dL2; //vEnergy(p);
     //rowvec KP = mSortedEnergy.row(P);
     //rowvec KQ = mSortedEnergy.row(Q);
     vec kp(3);
@@ -475,7 +475,7 @@ double electrongas::F(int p){
     kp(0) = vKx(p);
     kp(1) = vKy(p);
     kp(2) = vKz(p);
-    val *= 2*pi*pi*dot(kp, kp)/dL2;
+    val *= dot(kp, kp);
     //val *= kd_vec(KP,KQ);
     double val2 = 0;
     for(int i = 0; i < iNparticles; i++){
