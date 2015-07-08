@@ -1948,12 +1948,9 @@ field<uvec> amplitude::partition_hh_permutations(field<ivec> LHS, ivec K_unique)
             if(row_collect){
                 uvec rr = sort_index(row(span(0,nx-1)));
                 uvec r_inv = sort_index(rr);
-
-                //uvec rr = sort_index(row);
                 uvec row_rr = row(span(0,nx-1));
                 uvec ab_index = pab(span(0,nx-1));
                 tempRows(i) = row_rr.elem(rr);
-                //tempRows(i) = row.elem(rr);
                 uvec ab_perm(ab_index.n_rows);
                 for(uint h =0; h < ab_index.n_rows; ++h){
                     uint a_new = r_inv(h);
@@ -1961,11 +1958,7 @@ field<uvec> amplitude::partition_hh_permutations(field<ivec> LHS, ivec K_unique)
                     ab_perm(a_new) = b_new;
                     ab_perm(b_new) = a_new;
                 }
-
-
-                //Pij(i) = ab_index.elem(rr);
                 Pij(i) = ab_perm;
-                //tempRows(1)(i) = row_b(span(0,nx-1));
                 lc -= 1;
                 i += 1;
                 nx = 0;
@@ -1977,7 +1970,21 @@ field<uvec> amplitude::partition_hh_permutations(field<ivec> LHS, ivec K_unique)
     }
 
     //collect final block
-    tempRows(i) = sort(row(span(0,nx-1)));
+    //tempRows(i) = sort(row(span(0,nx-1)));
+    if(nx>0){
+        uvec rr = sort_index(row(span(0,nx-1)));
+        uvec r_inv = sort_index(rr);
+        uvec row_rr = row(span(0,nx-1));
+        uvec ab_index = pab(span(0,nx-1));
+        tempRows(i) = row_rr.elem(rr);
+        uvec ab_perm(ab_index.n_rows);
+        for(uint h =0; h < ab_index.n_rows; ++h){
+            uint a_new = r_inv(h);
+            uint b_new = r_inv(ab_index(h));
+            ab_perm(a_new) = b_new;
+            ab_perm(b_new) = a_new;
+        }
+        Pij(i) = ab_perm;}
     return tempRows;
 
 }
@@ -2063,16 +2070,10 @@ field<uvec> amplitude::partition_pp_permutations(field<ivec> LHS, ivec K_unique)
             if(row_collect){
                 uvec rr = sort_index(row(span(0,nx-1)));
                 uvec r_inv = sort_index(rr);
-                //uvec arr = sort_index(rr);
                 uvec row_rr = row(span(0,nx-1));
                 uvec ab_index = pab(span(0,nx-1));
-                //rr.print();
-                //cout << endl;
-                //row_rr.print();
-
-                //uvec te = row_rr.elem(rr);
                 tempRows(i) = row_rr.elem(rr);
-                //tempRows(i) = row.elem(rr);
+
                 uvec ab_perm(ab_index.n_rows);
                 for(uint h =0; h < ab_index.n_rows; ++h){
                     uint a_new = r_inv(h);
@@ -2081,9 +2082,7 @@ field<uvec> amplitude::partition_pp_permutations(field<ivec> LHS, ivec K_unique)
                     ab_perm(b_new) = a_new;
                 }
 
-                //Pab(i) = rr.elem(arr.elem(ab_index));
                 Pab(i) = ab_perm;
-                //tempRows(1)(i) = row_b(span(0,nx-1));
                 lc -= 1;
                 i += 1;
                 nx = 0;
@@ -2096,6 +2095,22 @@ field<uvec> amplitude::partition_pp_permutations(field<ivec> LHS, ivec K_unique)
 
     //collect final block
     //tempRows(i) = sort(row(span(0,nx-1)));
+    if(nx>0){
+        uvec rr = sort_index(row(span(0,nx-1)));
+        uvec r_inv = sort_index(rr);
+        uvec row_rr = row(span(0,nx-1));
+        uvec ab_index = pab(span(0,nx-1));
+        tempRows(i) = row_rr.elem(rr);
+
+        uvec ab_perm(ab_index.n_rows);
+        for(uint h =0; h < ab_index.n_rows; ++h){
+            uint a_new = r_inv(h);
+            uint b_new = r_inv(ab_index(h));
+            ab_perm(a_new) = b_new;
+            ab_perm(b_new) = a_new;
+        }
+
+        Pab(i) = ab_perm;}
     return tempRows;
 
 }
