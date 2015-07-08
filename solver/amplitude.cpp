@@ -1374,6 +1374,7 @@ field<ivec> amplitude::pp(){
     ivec a(N);
     ivec b(N);
     uint count = 0;
+    //#pragma omp parallel for num_threads(4)
     for(int na = 0; na<Np; ++na){
         for(int nb = 0; nb<na+1; ++nb){
             a(count) = na;
@@ -2357,45 +2358,43 @@ field<uvec> amplitude::partition_ppp_permutations(field<ivec> LHS, ivec K_unique
 
     //collect final block
     //tempRows(i) = sort(row(span(0,nx-1))); //is this needed?
+    if(nx>0){
+        uvec sorted = sort_index(row(span(0,nx-1)));
+        uvec rr = row(span(0,nx-1));
+        uvec pab = permute_ab(span(0,nx-1));
+        uvec pac = permute_ac(span(0,nx-1));
+        uvec pbc = permute_bc(span(0,nx-1));
 
-    uvec sorted = sort_index(row(span(0,nx-1)));
-    uvec rr = row(span(0,nx-1));
-    uvec pab = permute_ab(span(0,nx-1));
-    uvec pac = permute_ac(span(0,nx-1));
-    uvec pbc = permute_bc(span(0,nx-1));
+        tempRows(i) = rr.elem(sorted);
 
-    tempRows(i) = rr.elem(sorted);
-
-
-
-
-    uvec r_inv = sort_index(sorted);
-    uvec ab_perm(pab.n_rows);
-    uvec ac_perm(pab.n_rows);
-    uvec bc_perm(pab.n_rows);
+        uvec r_inv = sort_index(sorted);
+        uvec ab_perm(pab.n_rows);
+        uvec ac_perm(pab.n_rows);
+        uvec bc_perm(pab.n_rows);
 
 
-    for(uint h =0; h < ab_perm.n_rows; ++h){
-        uint current = r_inv(h);
+        for(uint h =0; h < ab_perm.n_rows; ++h){
+            uint current = r_inv(h);
 
-        uint ab_new = r_inv(pab(h));
-        ab_perm(current) = ab_new;
-        ab_perm(ab_new) = current;
+            uint ab_new = r_inv(pab(h));
+            ab_perm(current) = ab_new;
+            ab_perm(ab_new) = current;
 
-        uint ac_new = r_inv(pac(h));
-        ac_perm(current) = ac_new;
-        ac_perm(ac_new) = current;
+            uint ac_new = r_inv(pac(h));
+            ac_perm(current) = ac_new;
+            ac_perm(ac_new) = current;
 
-        uint bc_new = r_inv(pbc(h));
-        bc_perm(current) = bc_new;
-        bc_perm(ac_new) = current;
+            uint bc_new = r_inv(pbc(h));
+            bc_perm(current) = bc_new;
+            bc_perm(ac_new) = current;
 
 
+        }
+
+        Pab(i) = ab_perm; //pab.elem(sorted);
+        Pac(i) = ac_perm; //pac.elem(sorted);
+        Pbc(i) = bc_perm; //pbc.elem(sorted);
     }
-
-    Pab(i) = ab_perm; //pab.elem(sorted);
-    Pac(i) = ac_perm; //pac.elem(sorted);
-    Pbc(i) = bc_perm; //pbc.elem(sorted);
 
 
     return tempRows;
@@ -2642,44 +2641,45 @@ field<uvec> amplitude::partition_hhh_permutations(field<ivec> LHS, ivec K_unique
 
     //collect final block
     //tempRows(i) = sort(row(span(0,nx-1))); //is this needed?
-    uvec sorted = sort_index(row(span(0,nx-1)));
-    uvec rr = row(span(0,nx-1));
-    uvec pij = permute_ij(span(0,nx-1));
-    uvec pik = permute_ik(span(0,nx-1));
-    uvec pjk = permute_jk(span(0,nx-1));
+    if(nx>0){
+        uvec sorted = sort_index(row(span(0,nx-1)));
+        uvec rr = row(span(0,nx-1));
+        uvec pij = permute_ij(span(0,nx-1));
+        uvec pik = permute_ik(span(0,nx-1));
+        uvec pjk = permute_jk(span(0,nx-1));
 
-    tempRows(i) = rr.elem(sorted);
-
-
-
-    uvec r_inv = sort_index(sorted);
-    uvec ab_perm(pij.n_rows);
-    uvec ac_perm(pik.n_rows);
-    uvec bc_perm(pjk.n_rows);
+        tempRows(i) = rr.elem(sorted);
 
 
-    for(uint h =0; h < ab_perm.n_rows; ++h){
-        uint current = r_inv(h);
 
-        uint ab_new = r_inv(pij(h));
-        ab_perm(current) = ab_new;
-        ab_perm(ab_new) = current;
-
-        uint ac_new = r_inv(pik(h));
-        ac_perm(current) = ac_new;
-        ac_perm(ac_new) = current;
-
-        uint bc_new = r_inv(pjk(h));
-        bc_perm(current) = bc_new;
-        bc_perm(ac_new) = current;
+        uvec r_inv = sort_index(sorted);
+        uvec ab_perm(pij.n_rows);
+        uvec ac_perm(pik.n_rows);
+        uvec bc_perm(pjk.n_rows);
 
 
+        for(uint h =0; h < ab_perm.n_rows; ++h){
+            uint current = r_inv(h);
+
+            uint ab_new = r_inv(pij(h));
+            ab_perm(current) = ab_new;
+            ab_perm(ab_new) = current;
+
+            uint ac_new = r_inv(pik(h));
+            ac_perm(current) = ac_new;
+            ac_perm(ac_new) = current;
+
+            uint bc_new = r_inv(pjk(h));
+            bc_perm(current) = bc_new;
+            bc_perm(ac_new) = current;
+
+
+        }
+
+        Pij(i) = ab_perm; //pab.elem(sorted);
+        Pik(i) = ac_perm; //pac.elem(sorted);
+        Pjk(i) = bc_perm; //pbc.elem(sorted);
     }
-
-    Pij(i) = ab_perm; //pab.elem(sorted);
-    Pik(i) = ac_perm; //pac.elem(sorted);
-    Pjk(i) = bc_perm; //pbc.elem(sorted);
-
     return tempRows;
 }
 
