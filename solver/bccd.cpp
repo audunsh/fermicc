@@ -125,7 +125,8 @@ void bccd::init(){
     // #############################################
     if(pert_triples){
         vhphh.init(eBs, 3, {Nh, Np, Nh, Nh});
-        vhphh.map({1,2,-4},{3});
+        //vhphh.map({1,2,-4},{3});
+        vhphh.map({1},{-2,3,4});
         //cout << "Number of vhphh:" << vhphh.blocklengths(0) << endl;
 
         vppph.init(eBs, 3, {Np, Np, Np, Nh});
@@ -334,13 +335,13 @@ void bccd::solve(uint Nt){
             for(uint i = 0; i < t3temp.fvConfigs(0).n_rows; ++i){
                 //cout << i << endl;
                 mat block = t3temp.getblock(0,i)
-                                - t3temp.getblock_permuted(0,i,3)
-                                - t3temp.getblock_permuted(0,i,5)
                                 - t3temp.getblock_permuted(0,i,0)
-                                + t3temp.getblock_permuted(0,i,7)
-                                + t3temp.getblock_permuted(0,i,8)
                                 - t3temp.getblock_permuted(0,i,1)
+                                - t3temp.getblock_permuted(0,i,4)
+                                + t3temp.getblock_permuted(0,i,7)
                                 + t3temp.getblock_permuted(0,i,10)
+                                - t3temp.getblock_permuted(0,i,5)
+                                + t3temp.getblock_permuted(0,i,8)
                                 + t3temp.getblock_permuted(0,i,11)
                                 ;
                 t3.addblock(0,i,block);
@@ -351,43 +352,22 @@ void bccd::solve(uint Nt){
             // ## Calculate t2b                           ##
             // ############################################
             t3temp.zeros();
-            //t3temp.fvConfigs(2).print();
-            //t2.fvConfigs(9).print();
-            //t2.fvConfigs(9).print();
-
-            //t2bconfig.print();
-
-            //cout << t3temp.blocklengths(2) << endl;
-            //cout << t3temp.vElements.n_rows << endl;
-
             for(uint i = 0; i < t2bconfig.n_rows; ++i){
-                mat block = t2.getblock(9,t2bconfig(i,0))*vhphh.getblock(0,t2bconfig(i,1)).t();
-
-
-                //t2.getblock(9,t2bconfig(i,0)).print();
-                //cout << vhphh.getblock(0,t2bconfig(i,1)).n_cols << endl;
-                //cout << vhphh.getblock(0,t2bconfig(i,1)).n_rows << endl;
-
-
-                //cout << block.n_cols << " " << block.n_rows << endl;
-                //cout << endl;
-                //cout << t3temp.getraw(2, t2bconfig(i,2)).max() << endl;
-                //cout << " " << t3temp.getblock(2, t2bconfig(i,2)).n_rows << endl;
-                //t2.getblock(6,t2aconfig(i,0))*vhhpp.getblock(3,Q4config(i,1))*t2.getblock(7,Q4config(i,2)));
+                mat block = t2.getblock(9,t2bconfig(i,0))*vhphh.getblock(0,t2bconfig(i,1)); //.t();
                 t3temp.addblock(2,t2bconfig(i,2),block); //t2bconfig is wrong
             }
             for(uint i = 0; i < t3temp.fvConfigs(0).n_rows; ++i){
                 mat block = -1.0*(t3temp.getblock(0,i)
-                                - t3temp.getblock_permuted(0,i,3)
-                                - t3temp.getblock_permuted(0,i,5)
-                                - t3temp.getblock_permuted(0,i,0)
-                                + t3temp.getblock_permuted(0,i,7)
-                                + t3temp.getblock_permuted(0,i,8)
                                 - t3temp.getblock_permuted(0,i,1)
+                                - t3temp.getblock_permuted(0,i,2)
+                                - t3temp.getblock_permuted(0,i,3)
+                                + t3temp.getblock_permuted(0,i,9)
+                                + t3temp.getblock_permuted(0,i,12)
+                                - t3temp.getblock_permuted(0,i,4)
                                 + t3temp.getblock_permuted(0,i,10)
-                                + t3temp.getblock_permuted(0,i,11)
+                                + t3temp.getblock_permuted(0,i,13)
                                 );
-                t3.addblock(0,i,block);
+                t3.addblock(0,i,0*block);
             }
 
             // ############################################
@@ -410,7 +390,7 @@ void bccd::solve(uint Nt){
             //#pragma omp parallel for num_threads(nthreads)
             for(uint i = 0; i < t2temp2.fvConfigs(0).n_rows; ++i){
                 //mat block = t2temp.getblock(0,i) - t2temp.getblock(2,i);
-                mat block2 = 0*-.5*(t2temp2.getblock(0,i)); // - t2temp2.getblock_permuted(0,i,0));
+                mat block2 = -.5*(t2temp2.getblock(0,i) - t2temp2.getblock_permuted(0,i,0));
                 t2n.addblock(0,i,block2);
             }
 
@@ -422,7 +402,7 @@ void bccd::solve(uint Nt){
 
             //#pragma omp parallel for num_threads(nthreads)
             for(uint i = 0; i < d10cconfig.n_rows; ++i){
-                mat block = t3.getblock(2, d10cconfig(i,0))*vphpp.getblock(0,d10cconfig(i,1));
+                mat block = t3.getblock(2, d10cconfig(i,0))*vhhhp.getblock(0,d10cconfig(i,1));
                 t2temp2.addblock(6,d10cconfig(i,2),block);
             }
             //#pragma omp parallel for num_threads(nthreads)

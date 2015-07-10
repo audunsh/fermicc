@@ -314,19 +314,57 @@ void ccd_pt::advance(){
 
     t2a.update_as_qru_pst(vppph.pqs_r()*T.q_prs(), Np,Np,Np,Nr,Nr,Nr);
     //t2a.update_as_pqr_stu(t2a.pqr_stu()-t2a.qpr_stu()-t2a.rpq_stu()-t2a.rpq_uts()+t2a.prq_stu()+t2a.qrp_uts()-t2a.qrp_ust()+t2a.rqp_uts()+t2a.pqr_ust(), Np,Np,Np,Nr,Nr,Nr);
-    t2a.update_as_pqr_stu(t2a.pqr_stu()-t2a.pqr_uts()-t2a.pqr_sut()-t2a.qpr_stu()+t2a.qpr_uts()+t2a.qpr_sut()-t2a.rqp_stu()+t2a.rqp_uts()+t2a.rqp_sut(), Np, Np, Np, Nr,Nr,Nr);
+    t2a.update_as_pqr_stu(t2a.pqr_stu()
+                          -t2a.qpr_stu()
+                          -t2a.rqp_stu()
+                          -t2a.pqr_uts()
+                          +t2a.qpr_uts()
+                          +t2a.rqp_uts()
+                          -t2a.pqr_sut()
+                          +t2a.qpr_sut()
+                          +t2a.rqp_sut(), Np, Np, Np, Nr,Nr,Nr);
+    /*
+    t2a.update_as_pqr_stu(t2a.pqr_stu()
+                          -t2a.pqr_uts()
+                          -t2a.pqr_sut()
+                          -t2a.qpr_stu()
+                          +t2a.qpr_uts()
+                          +t2a.qpr_sut()
+                          -t2a.rqp_stu()
+                          +t2a.rqp_uts()
+                          +t2a.rqp_sut(), Np, Np, Np, Nr,Nr,Nr);
+    */
 
     t2b.update_as_pqs_rtu(T.pqr_s()*vhphh.p_qrs(), Np,Np,Np,Nr,Nr,Nr);
-    t2b.update_as_pqr_stu(t2b.pqr_stu()-t2b.rqp_stu()-t2b.rpq_stu()-t2b.rpq_tsu()+t2b.qpr_stu()+t2b.qrp_tsu()-t2b.qrp_ust()+t2b.prq_tsu()+t2b.pqr_ust(), Np,Np,Np,Nr,Nr,Nr);
+    t2b.update_as_pqr_stu(t2b.pqr_stu()
+                          -t2b.rqp_stu()
+                          -t2b.prq_stu()
+                          -t2b.pqr_tsu()
+                          +t2b.rqp_tsu()
+                          +t2b.prq_tsu()
+                          -t2b.pqr_uts()
+                          +t2b.rqp_uts()
+                          +t2b.prq_uts(), Np,Np,Np,Nr,Nr,Nr);
 
+    /*
+    t2b.update_as_pqr_stu(t2b.pqr_stu()
+                          -t2b.rqp_stu()
+                          -t2b.rpq_stu()
+                          -t2b.rpq_tsu()
+                          +t2b.qpr_stu()
+                          +t2b.qrp_tsu()
+                          -t2b.qrp_ust()
+                          +t2b.prq_tsu()
+                          +t2b.pqr_ust(), Np,Np,Np,Nr,Nr,Nr);
+    */
     //Setting up T3
-    T3.update_as_pqr_stu(t2a.pqr_stu() - t2b.pqr_stu(), Np,Np,Np,Nr,Nr,Nr);
+    T3.update_as_pqr_stu(t2a.pqr_stu() - 0*t2b.pqr_stu(), Np,Np,Np,Nr,Nr,Nr);
 
     T3.set_amplitudes(ebs.vHFEnergy);
 
     //Calculating the triples contributions to T2
     fmD10b.update_as_q_rsp(vphpp.p_qrs()*T3.uqr_stp(), Np,Np,Nr,Nr);
-    fmD10b.update(fmD10b.pq_rs(), Np, Nq, Nr, Ns); // - fmD10b.qp_rs(), Np, Nq, Nr, Ns);
+    fmD10b.update(fmD10b.pq_rs() - fmD10b.qp_rs(), Np, Nq, Nr, Ns);
 
     fmD10c.update_as_pqr_s(T3.pqs_tur()*vhhhp.pqs_r(), Np,Np,Nr,Nr); //remember to permute these
     fmD10c.update(fmD10c.pq_rs() - fmD10c.pq_sr(), Np,Np,Nr,Nr);
@@ -339,7 +377,7 @@ void ccd_pt::advance(){
 
     Tprev.update(T.pq_rs(), Np,Nq,Nr,Ns); //When using relaxation we need to store the previous amplitudes
 
-    T.update(vpphh.pq_rs() + .5*(L1 + L2) + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4 - .5*(0*fmD10b.pq_rs() - fmD10c.pq_rs()), Np, Nq, Nr, Ns); //the sign of the two last t2 terms seems to be inverted in S-B
+    T.update(vpphh.pq_rs() + .5*(L1 + L2) + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4 - .5*(fmD10b.pq_rs() - fmD10c.pq_rs()), Np, Nq, Nr, Ns); //the sign of the two last t2 terms seems to be inverted in S-B
     T.set_amplitudes(ebs.vHFEnergy); //divide updated amplitides by energy denominator
     T.update(alpha*Tprev.pq_rs() + (1.0-alpha)*T.pq_rs(), Np, Nq,Nr,Ns);
 
