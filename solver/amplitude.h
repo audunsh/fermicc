@@ -24,6 +24,7 @@ public:
     void zeros(); //zero out all elements
 
     void init_amplitudes(); //initialize as amplitude
+    void init_t3_amplitudes(); //initialize as amplitude
     void init_interaction(ivec shift);
     void divide_energy(); //divide all elements by corresponding energy (for amplitudes)
     void print_block_maximum();
@@ -84,6 +85,8 @@ public:
     uvec from6(uint i);
     void map_regions6(imat L, imat R);
     void map6(ivec left, ivec right);
+    void map6c(ivec left, ivec right, ivec preconf);
+    void map_regions6c(imat L, imat R, ivec preconf);
 
     //debugging and optimization
     umat getraw(int u, int i);

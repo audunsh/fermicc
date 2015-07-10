@@ -72,6 +72,22 @@ void amplitude::zeros(){
     vElements *= 0;
 } //zero out all elements
 
+void amplitude::init_t3_amplitudes(){
+    vElements.set_size(uvElements.n_rows);
+    vEnergies.set_size(uvElements.n_rows);
+    //uvElements.print(); //could we maybe retrieve these "on the fly" ? (would mean to locate blocks "on the fly")
+    for(uint i= 0; i<uvElements.n_rows; ++i){
+        uvec p = from6(uvElements(i));
+        //cout << p(0) <<  " " << p(1) << " " << p(2) << " " << p(3) << " "<< endl;
+        vElements(i) = 0; //eBs.v2(p(0)+Nh,p(1)+Nh,p(2),p(3));
+        //double v = eBs.vEnergy(p(2))+ eBs.vEnergy(p(3));
+        //vEnergies(i) = eBs.vEnergy(p(2)) + eBs.vEnergy(p(3))-eBs.vEnergy(p(0)+Nh)-eBs.vEnergy(p(1)+Nh);
+
+        vEnergies(i) = eBs.F(p(3)) + eBs.F(p(4))+eBs.F(p(5))-eBs.F(p(0)+Nh)-eBs.F(p(1)+Nh)-eBs.F(p(2)+Nh);
+    }
+} //initialize as t3 amplitude
+
+
 void amplitude::init_amplitudes(){
     vElements.set_size(uvElements.n_rows);
     vEnergies.set_size(uvElements.n_rows);
@@ -221,7 +237,7 @@ uvec amplitude::from(uint i){
 
 
 uint amplitude::to6(uint p, uint q, uint r, uint s, uint t, uint u){
-    return p + q*uvSize(0) + r*uvSize(0)*uvSize(1) + s * uvSize(0)*uvSize(1)*uvSize(2) + t*uvSize(0)*uvSize(1)*uvSize(2)*uvSize(4) + u*uvSize(0)*uvSize(1)*uvSize(2)*uvSize(4)*uvSize(5);
+    return p + q*uvSize(0) + r*uvSize(0)*uvSize(1) + s * uvSize(0)*uvSize(1)*uvSize(2) + t*uvSize(0)*uvSize(1)*uvSize(2)*uvSize(3) + u*uvSize(0)*uvSize(1)*uvSize(2)*uvSize(3)*uvSize(4);
 }  //compressed index, t3 amplitude
 
 void amplitude::make_t3(){
@@ -255,6 +271,50 @@ uvec amplitude::from6(uint i){
 // ## External functions                           ##
 // ##                                              ##
 // ##################################################
+
+void amplitude::map6c(ivec left, ivec right, ivec preconf){
+    // ###########################################
+    // ##  Map t3 amplitudes to a given configuration (preconf)
+    // ##############################################
+    imat L(left.n_rows,3);
+    //left.print();
+    for(uint i = 0; i<left.n_rows; ++i){
+        L(i,0) =abs(left(i)) - 1;
+        if(left(i)<0){
+            L(i,1) = -1;
+        }
+        else{
+            L(i,1) = 1;
+        }
+        if(abs(left(i))<=3){
+            L(i,2) = Nh;
+        }
+        else{
+            L(i,2) = 0;
+        }
+    }
+    //L.print();
+
+    imat R(right.n_rows,3);
+    for(uint i = 0; i<right.n_rows; ++i){
+        R(i,0) =abs(right(i)) - 1;
+        if(right(i)<0){
+            R(i,1) = -1;
+        }
+        else{
+            R(i,1) = 1;
+        }
+        if(abs(right(i))<=3){
+            R(i,2) = Nh;
+        }
+        else{
+            R(i,2) = 0;
+        }
+    }
+    //R.print();
+    map_regions6c(L,R, preconf);
+
+}
 
 void amplitude::map6(ivec left, ivec right){
     imat L(left.n_rows,3);
@@ -398,11 +458,16 @@ field<uvec> amplitude::blocksort(ivec LHS, ivec K_unique){
         lc += 1;
         //cout << l_c - C << endl;
     }
+    if(nx>0){
+        //collect final row
+        tempRows(i) = sort(row(span(0,nx-1)));
+    }
+
     return tempRows;
 
 }
 
-void amplitude::map_regions6(imat L, imat R){
+void amplitude::map_regions6c(imat L, imat R, ivec preconf){
 
 
     // ###########################################################
@@ -480,7 +545,9 @@ void amplitude::map_regions6(imat L, imat R){
     ivec unique_L = unique(LHS);
     ivec unique_R = unique(RHS);
     ivec K_unique = intersect1d(unique_L, unique_R);
+    //K_unique = intersect1d(K_unique, preconf); //map against configuration
 
+    //K_unique.print();
     uint uiN = K_unique.n_elem;
 
     blocklengths(uiCurrent_block) = uiN; //number of blocks in config
@@ -637,16 +704,247 @@ void amplitude::map_regions6(imat L, imat R){
 
     //lock and load
     uiCurrent_block += 1;
+} //map all regions defined by L == R
 
 
+void amplitude::map_regions6(imat L, imat R){
 
 
+    // ###########################################################
+    // ## Counting number of rows and columns in representation ##
+    // ###########################################################
+    uint iNrows = 1;
+    uint iNcols = 1;
+
+    for(uint i = 0; i<L.n_rows; ++i){
+        iNrows *= uvSize(L(i,0));
+    }
+    for(uint i = 0; i<R.n_rows; ++i){
+        iNcols *= uvSize(R(i,0));
+    }
+
+    // #########################################
+    // ## Extract and organize actual indices ##
+    // #########################################
+    //uvec rows = conv_to<uvec>::from(linspace(0,iNrows-1, iNrows));
+
+    uvec rows = linspace<uvec>(0,iNrows-1, iNrows);
+    uvec cols = linspace<uvec>(0,iNcols-1, iNcols);
+
+    //uvec cols = conv_to<uvec>::from(linspace(0,iNcols-1, iNcols));
+
+    field<uvec> left = unpack(rows, L);
+    field<uvec> right = unpack(cols, R);
 
 
+    field<uvec> PQRS(6);
+    for(uint i = 0; i< left.n_rows; ++i){
+        PQRS(L(i,0)) = left(i);
+    }
+    for(uint i = 0; i< right.n_rows; ++i){
+        PQRS(R(i,0)) = right(i);
+    }
+    //PQRS.print();
+
+    // ############################################################
+    // ## assign nonambiguous integer to each bra and ket config ##
+    // ############################################################
+    ivec LHS(iNrows); // = conv_to<ivec>::from(zeros(iNrows));
+    for(uint i = 0; i<iNrows;++i){
+        LHS(i) = 0;
+    }
+    //ivec LHS = conv_to<ivec>::from(zeros(iNrows));
+
+    ivec RHS(iNcols); // = conv_to<ivec>::from(zeros(iNcols));
+    for(uint i = 0; i<iNcols;++i){
+        RHS(i) = 0;
+    }
+
+    //LHS*=0;
+    //RHS*=0;
+    //ivec LHS = zeros<int> (iNrows);
+    //cout << iNrows << " " << iNcols << endl;
 
 
+    //cout << L.n_rows << " " << L.n_cols << " " << L.n_elem << endl;
+    for(uint i = 0; i<L.n_rows; ++i){
+        LHS += eBs.unique(PQRS(L(i,0))+L(i,2))*L(i,1);
+        //LHS += eBs.unique(PQRS(L(i,0)));
+    }
+    for(uint i = 0; i<R.n_rows; ++i){
+        RHS += eBs.unique(PQRS(R(i,0))+R(i,2))*R(i,1);
+    }
+    //cout << LHS.n_rows << endl;
+    //RHS.print();
+
+    // ####################################################################
+    // ## Iterate over unique combinations, retain blocks where RHS==LHS ##
+    // ####################################################################
+    //LHS.print();
+    //cout << LHS.n_elem << endl << endl;
+    ivec unique_L = unique(LHS);
+    ivec unique_R = unique(RHS);
+    ivec K_unique = intersect1d(unique_L, unique_R);
+
+    uint uiN = K_unique.n_elem;
+
+    blocklengths(uiCurrent_block) = uiN; //number of blocks in config
+    fvConfigs(uiCurrent_block) = K_unique; //ordering
+    fmBlocks(uiCurrent_block).set_size(uiN);
+
+    field<uvec> tempElements(uiN);
+    field<uvec> tempBlockmap1(uiN);
+    field<uvec> tempBlockmap2(uiN);
+    field<uvec> tempBlockmap3(uiN);
+
+    uint tempElementsSize = 0;
+
+    clock_t t0;
+
+    t0 = clock();
+    //experiment, trying to speed up initialization
+    field<uvec> tempRows = blocksort(LHS, K_unique);
+    field<uvec> tempCols = blocksort(RHS, K_unique);
+    //cout << " First method:" << (float)(clock()-t0)/CLOCKS_PER_SEC << endl;
+    //t0 = clock();
 
 
+    for(uint i = 0; i<uiN; ++i){
+        //uvec indx = find(LHS==K_unique(i));
+        //LHS.elem(indx).print();
+        //uvec row = rows.elem(find(LHS==K_unique(i)));
+        //uvec col = cols.elem(find(RHS==K_unique(i)));
+        uvec row = tempRows(i);
+        uvec col = tempCols(i);
+        //srow.print();
+        int Nx = row.n_rows;
+        int Ny = col.n_rows;
+        //cout << Nx << " " << Ny << " " << " " << K_unique(i) << endl;
+        umat block(Nx,Ny);
+        uvec pqrs(6);
+        uvec tElements(Nx*Ny);
+        uvec tBlockmap1(Nx*Ny);
+        uvec tBlockmap2(Nx*Ny);
+        uvec tBlockmap3(Nx*Ny);
+
+        uint index;
+        tempElementsSize += Nx*Ny;
+        for(int nx = 0; nx < Nx; nx++){
+            for(int ny = 0; ny < Ny; ny++){
+                uvec lhs = unpack_uvec(row(nx), L);
+                uvec rhs = unpack_uvec(col(ny), R);
+                for(uint j = 0; j<lhs.n_elem; ++j){
+                    pqrs(L(j,0)) = lhs(j);
+                }
+                for(uint j = 0; j<rhs.n_elem; ++j){
+                    pqrs(R(j,0)) = rhs(j);
+                }
+                index = to6(pqrs(0), pqrs(1), pqrs(2), pqrs(3), pqrs(4), pqrs(5));
+
+                tElements(nx*Ny + ny) = index;
+                tBlockmap1(nx*Ny + ny) = i;
+                tBlockmap2(nx*Ny + ny) = nx;
+                tBlockmap3(nx*Ny + ny) = ny;
+                block(nx, ny) = index;
+            }
+        }
+        //cout << block.max() << endl;
+        fmBlocks(uiCurrent_block)(i) = block;
+        tempElements(i) = tElements;
+        tempBlockmap1(i) = tBlockmap1;
+        tempBlockmap2(i) = tBlockmap2;
+        tempBlockmap3(i) = tBlockmap3;
+
+        //block.print();
+        //cout << i << endl;
+    }
+    //fmBlocks(uiCurrent_block)(3).print();
+    //cout << "Second method:" << (float)(clock()-t0)/CLOCKS_PER_SEC << endl;
+    //t0 = clock();
+
+    // ####################################################################
+    // ## Flatten tempElements and tempBlockmap                          ##
+    // ####################################################################
+    uvec flatElements(tempElementsSize);
+    uvec flatBlockmap1(tempElementsSize);
+    uvec flatBlockmap2(tempElementsSize);
+    uvec flatBlockmap3(tempElementsSize);
+
+    uint counter = 0;
+    for(uint i = 0; i<uiN; ++i){
+        for(uint j = 0; j < tempElements(i).n_rows; ++j){
+            flatElements(counter) = tempElements(i)(j);
+            flatBlockmap1(counter) = tempBlockmap1(i)(j);
+            flatBlockmap2(counter) = tempBlockmap2(i)(j);
+            flatBlockmap3(counter) = tempBlockmap3(i)(j);
+            counter += 1;
+        }
+        tempElements(i).set_size(0);
+        tempBlockmap1(i).set_size(0);
+        tempBlockmap2(i).set_size(0);
+        tempBlockmap3(i).set_size(0);
+
+    }
+
+    // ####################################################################
+    // ## Consolidate blocks with existing configurations                ##
+    // ####################################################################
+
+
+    umat n = sort_index(flatElements);
+    flatElements = flatElements.elem(n);
+    flatBlockmap1 = flatBlockmap1.elem(n); //DOES THIS SORT PROPERLY? UNKNOWN,
+    flatBlockmap2 = flatBlockmap2.elem(n); //DOES THIS SORT PROPERLY? UNKNOWN,
+    flatBlockmap3 = flatBlockmap3.elem(n); //DOES THIS SORT PROPERLY? UNKNOWN,
+
+    uint tempN = 0;
+    uint trueN = 0;
+    uint tempL = flatElements.n_rows;
+    uint trueL = uvElements.n_rows;
+    bool all_resolved = false;
+    while(trueN < trueL){
+        //cout << "Consol rows 0" << endl;
+        if(uvElements(trueN) == flatElements(tempN)){
+            //identical indexes occuring in
+            fmBlocks(uiCurrent_block)(flatBlockmap1(tempN))(flatBlockmap2(tempN),flatBlockmap3(tempN)) = trueN;
+            trueN += 1;
+            tempN += 1;
+        }
+        else{
+            if(uvElements(trueN) == flatElements(tempN)){
+                trueN += 1;
+            }
+            else{
+                tempN += 1;
+                if(tempN>=tempL){
+                    all_resolved = true;
+                    break;
+                }
+            }
+
+        }
+    }
+    //cout << "TrueN:" << trueN << " " << tempN << endl;
+
+
+    //if(all_resolved != true){
+    if(tempN<tempL){
+        cout << "consolidating blocks" << endl;
+        uvec remaining(tempL-tempN);
+        uint tN = 0;
+        while(tempN<tempL){
+            remaining(tN) = flatElements(tempN);
+            fmBlocks(uiCurrent_block)(flatBlockmap1(tempN))(flatBlockmap2(tempN),flatBlockmap3(tempN)) = trueN + tN;
+            tempN += 1;
+            tN += 1;
+        }
+        //cout << tempL << " "<< tempN << " " << remaining.n_elem << " " << uvElements.n_elem << endl;
+        uvElements = join_cols<umat>(uvElements, remaining);
+    }
+    //lock and load
+    //cout << "TrueN:" << trueN << " " << tempN << " " << endl;
+
+    uiCurrent_block += 1;
 } //map all regions defined by L == R
 
 
@@ -915,9 +1213,9 @@ void amplitude::map_t3_permutations(){
 
 
     }
-    cout << "Blocks:" << tempRows.n_rows << endl;
-    cout << "Size:" << systemsize << endl;
-    cout << "init_size:" << Np*(Np+1)*(Np+2)/6 << endl;
+    //cout << "Blocks:" << tempRows.n_rows << endl;
+    //cout << "Size:" << systemsize << endl;
+    //cout << "init_size:" << Np*(Np+1)*(Np+2)/6 << endl;
 
 
     // ####################################################################
@@ -1306,8 +1604,38 @@ mat amplitude::getblock_permuted(int u, int i, int n){
         aligned = aligned.rows(Pab(i));
         aligned = aligned.cols(Pij(i));
     }
-
-
+    if(n==7){
+        aligned = aligned.rows(Pab(i));
+        aligned = aligned.cols(Pik(i));
+    }
+    if(n==8){
+        aligned = aligned.rows(Pab(i));
+        aligned = aligned.cols(Pjk(i));
+    }
+    if(n==9){
+        aligned = aligned.rows(Pac(i));
+        aligned = aligned.cols(Pij(i));
+    }
+    if(n==10){
+        aligned = aligned.rows(Pac(i));
+        aligned = aligned.cols(Pik(i));
+    }
+    if(n==11){
+        aligned = aligned.rows(Pac(i));
+        aligned = aligned.cols(Pjk(i));
+    }
+    if(n==12){
+        aligned = aligned.rows(Pbc(i));
+        aligned = aligned.cols(Pij(i));
+    }
+    if(n==13){
+        aligned = aligned.rows(Pbc(i));
+        aligned = aligned.cols(Pik(i));
+    }
+    if(n==14){
+        aligned = aligned.rows(Pbc(i));
+        aligned = aligned.cols(Pjk(i));
+    }
 
     mat block = vElements.elem(aligned);
     block.reshape(fmBlocks(u)(i).n_rows, fmBlocks(u)(i).n_cols);

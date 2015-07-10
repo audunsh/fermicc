@@ -399,6 +399,9 @@ field<uvec> blockmap::blocksort(ivec LHS, ivec K_unique){
         lc += 1;
         //cout << l_c - C << endl;
     }
+    if(nx>0){
+        tempRows(i) = sort(row(span(0,nx-1)));
+    }
 
 
     return tempRows;
@@ -658,8 +661,8 @@ void blockmap::map_regions(imat L, imat R){
 
     //uint tempElementsSize = 0;
 
-    field<uvec> tempRow = blocksort(LHS, K_unique);
-    field<uvec> tempCol = blocksort(RHS, K_unique);
+    //field<uvec> tempRow = blocksort(LHS, K_unique);
+    //field<uvec> tempCol = blocksort(RHS, K_unique);
 
 
     for(uint i = 0; i<uiN; ++i){

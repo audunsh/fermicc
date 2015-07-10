@@ -28,7 +28,7 @@ void bccd::init(){
     // ## Initializing the needed configurations ##
     // ############################################
 
-    bool pert_triples = true;
+    pert_triples = true;
 
     clock_t t;
     t = clock();
@@ -36,7 +36,7 @@ void bccd::init(){
     cout << "0:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
     t = clock();
 
-    t2.init(eBs, 8, {Np, Np, Nh, Nh});
+    t2.init(eBs, 10, {Np, Np, Nh, Nh});
     t2.map_t2_permutations();
     t2.map({2,-4},{-1,3}); //for use in L3 (1)
 
@@ -48,6 +48,11 @@ void bccd::init(){
 
     t2.map({1},{4,3,-2});  //for use in Q4 (6)
     t2.map({1},{-2,4,3});  //for use in Q4 (7)
+
+    if(pert_triples){
+        t2.map({2},{-1,2,3});  //for use in t2a (8)
+        t2.map({1,2,-3},{4});  //for use in t2b (9)
+    }
 
     cout << "1:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
     t = clock();
@@ -74,8 +79,9 @@ void bccd::init(){
 
 
     if(pert_triples){
-        t2temp2.map({2}, {3,4,-1});  //for use in D10b update (8)
-        t2temp2.map({1,2,-3}, {4});  //for use in D10c update (9)
+        t2temp2.map({2}, {3,4,-1});  //for use in D10b update (5)
+        t2temp2.map({1,2,-3}, {4});  //for use in D10c update (6)
+
     }
     t2temp.init_amplitudes();
     t2temp.zeros();
@@ -120,24 +126,61 @@ void bccd::init(){
     if(pert_triples){
         vhphh.init(eBs, 3, {Nh, Np, Nh, Nh});
         vhphh.map({1,2,-4},{3});
-        cout << "Number of vhphh:" << vhphh.blocklengths(0) << endl;
+        //cout << "Number of vhphh:" << vhphh.blocklengths(0) << endl;
 
         vppph.init(eBs, 3, {Np, Np, Np, Nh});
-        cout << Np*Np*Np << endl;
+        //cout << Np*Np*Np << endl;
         vppph.map({1,2,-3},{4});
-        cout << "Number of vppph:" << vppph.blocklengths(0) << endl;
+        //vppph.map({-4},{3,1,2});
+        //cout << "Number of vppph:" << vppph.blocklengths(0) << endl;
+
+        vphpp.init(eBs, 3, {Np, Nh, Np, Np});
+        vphpp.map({1},{-2,3,4});
+
+        vhhhp.init(eBs, 3, {Nh,Nh,Nh,Np});
+        vhhhp.map({1,2,-4},{3});
+        cout << "triple interaction:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+        t = clock();
+
 
         t3.init(eBs, 3, {Np, Np, Np, Nh, Nh, Nh});
         t3.make_t3();
         t3.map_t3_permutations();
+        t3temp = t3;
         t3.map6({-6,2,3}, {4,5,-1}); //for use in d10b (1)
         t3.map6({1,2,-4}, {5,6,-3}); //for use in d10c (2) (and
+        t3.init_t3_amplitudes();
 
-        t3temp.init(eBs, 7, {Np,Np,Np,Nh,Nh,Nh});
-        t3temp.map_t3_permutations();
-        t3temp.map6({2,3,-6}, {-1,4,5}); //for use in t2a (1)
-        t3temp.map6({1,2,-4}, {-3,5,6}); //for use in t2b (2)
+        cout << "t31:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+        t = clock();
+
+        //t3temp.init(eBs, 7, {Np,Np,Np,Nh,Nh,Nh});
+        //t3temp.make_t3();
+        //t3temp.map_t3_permutations();
+        //t3temp.uiCurrent_block = 1;
+
+        //t2.fvConfigs(6).print();
+        t3temp.map6({2,3,-6}, {-1,4,5}); //, t2.fvConfigs(5)); //for use in t2a (1)
+        cout << "Length of elements:" << t3temp.uvElements.n_rows << endl;
+        t3temp.map6({1,2,-4}, {-3,5,6}); //, t2.fvConfigs(6)); //for use in t2b (2)
+        //t3temp.uiCurrent_block = 0;
+        //t3temp.map_t3_permutations();
+        cout << "Length of elements:" << t3temp.uvElements.n_rows << endl;
+        t3temp.init_t3_amplitudes();
+        t3temp.zeros();
+        cout << "t32:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+        t = clock();
     }
+
+    //print t3temp configurations
+
+    /*
+    for(uint i = 0; i < t3temp.blocklengths(1); ++i){
+        t3temp.getblock(1,i).print();
+        cout << t3temp.getblock(1, i).max() << " " << i << endl;
+        cout << endl;
+    }*/
+
 
 }
 
@@ -157,6 +200,16 @@ void bccd::solve(uint Nt){
     umat Q2config = intersect_blocks_triple(t2,2,vhhpp,1,t2,3);
     umat Q3config = intersect_blocks_triple(t2,4,vhhpp,2,t2,5);
     umat Q4config = intersect_blocks_triple(t2,6,vhhpp,3,t2,7);
+
+    umat t2aconfig = intersect_blocks_triple(t2,8, vppph, 0, t3temp, 1);
+    //umat t2bconfig = intersect_blocks(t2,9, vhphh, 0);
+    umat t2bconfig = intersect_blocks_triple(t2,9, vhphh, 0, t3temp, 2);
+    //t3temp.fvConfigs(2).print();
+    //t2bconfig.print();
+
+    umat d10bconfig = intersect_blocks_triple(t3,1, vphpp, 0, t2temp2, 5);
+    umat d10cconfig = intersect_blocks_triple(t3,2, vhhhp, 0, t2temp2, 6);
+
     t2n.zeros(); //zero out next amplitudes
 
     uint nthreads = 4;
@@ -261,6 +314,127 @@ void bccd::solve(uint Nt){
             t2n.addblock(0,i,block2);
         }
 
+        if(pert_triples){
+            // ##################################################
+            // ##                                              ##
+            // ## Calculate perturbative triples amplitudes    ##
+            // ##                                              ##
+            // ##################################################
+            t3temp.zeros();
+
+            // ############################################
+            // ## Calculate t2a                           ##
+            // ############################################
+
+            for(uint i = 0; i < t2aconfig.n_rows; ++i){
+                mat block = vppph.getblock(0,t2aconfig(i,1))*t2.getblock(8,t2aconfig(i,0));
+                //t2.getblock(6,t2aconfig(i,0))*vhhpp.getblock(3,Q4config(i,1))*t2.getblock(7,Q4config(i,2)));
+                t3temp.addblock(1,t2aconfig(i,2),block); //t2aconfig is wriong
+            }
+            for(uint i = 0; i < t3temp.fvConfigs(0).n_rows; ++i){
+                //cout << i << endl;
+                mat block = t3temp.getblock(0,i)
+                                - t3temp.getblock_permuted(0,i,3)
+                                - t3temp.getblock_permuted(0,i,5)
+                                - t3temp.getblock_permuted(0,i,0)
+                                + t3temp.getblock_permuted(0,i,7)
+                                + t3temp.getblock_permuted(0,i,8)
+                                - t3temp.getblock_permuted(0,i,1)
+                                + t3temp.getblock_permuted(0,i,10)
+                                + t3temp.getblock_permuted(0,i,11)
+                                ;
+                t3.addblock(0,i,block);
+            }
+
+
+            // ############################################
+            // ## Calculate t2b                           ##
+            // ############################################
+            t3temp.zeros();
+            //t3temp.fvConfigs(2).print();
+            //t2.fvConfigs(9).print();
+            //t2.fvConfigs(9).print();
+
+            //t2bconfig.print();
+
+            //cout << t3temp.blocklengths(2) << endl;
+            //cout << t3temp.vElements.n_rows << endl;
+
+            for(uint i = 0; i < t2bconfig.n_rows; ++i){
+                mat block = t2.getblock(9,t2bconfig(i,0))*vhphh.getblock(0,t2bconfig(i,1)).t();
+
+
+                //t2.getblock(9,t2bconfig(i,0)).print();
+                //cout << vhphh.getblock(0,t2bconfig(i,1)).n_cols << endl;
+                //cout << vhphh.getblock(0,t2bconfig(i,1)).n_rows << endl;
+
+
+                //cout << block.n_cols << " " << block.n_rows << endl;
+                //cout << endl;
+                //cout << t3temp.getraw(2, t2bconfig(i,2)).max() << endl;
+                //cout << " " << t3temp.getblock(2, t2bconfig(i,2)).n_rows << endl;
+                //t2.getblock(6,t2aconfig(i,0))*vhhpp.getblock(3,Q4config(i,1))*t2.getblock(7,Q4config(i,2)));
+                t3temp.addblock(2,t2bconfig(i,2),block); //t2bconfig is wrong
+            }
+            for(uint i = 0; i < t3temp.fvConfigs(0).n_rows; ++i){
+                mat block = -1.0*(t3temp.getblock(0,i)
+                                - t3temp.getblock_permuted(0,i,3)
+                                - t3temp.getblock_permuted(0,i,5)
+                                - t3temp.getblock_permuted(0,i,0)
+                                + t3temp.getblock_permuted(0,i,7)
+                                + t3temp.getblock_permuted(0,i,8)
+                                - t3temp.getblock_permuted(0,i,1)
+                                + t3temp.getblock_permuted(0,i,10)
+                                + t3temp.getblock_permuted(0,i,11)
+                                );
+                t3.addblock(0,i,block);
+            }
+
+            // ############################################
+            // ## Set up T3                           ##
+            // ############################################
+
+            t3.divide_energy();
+
+
+            // ############################################
+            // ## Calculate D10b                           ##
+            // ############################################
+
+            t2temp2.zeros();
+            //#pragma omp parallel for num_threads(nthreads)
+            for(uint i = 0; i < d10bconfig.n_rows; ++i){
+                mat block = vphpp.getblock(0,d10bconfig(i,1))*t3.getblock(1, d10bconfig(i,0));
+                t2temp2.addblock(5,d10bconfig(i,2),block);
+            }
+            //#pragma omp parallel for num_threads(nthreads)
+            for(uint i = 0; i < t2temp2.fvConfigs(0).n_rows; ++i){
+                //mat block = t2temp.getblock(0,i) - t2temp.getblock(2,i);
+                mat block2 = 0*-.5*(t2temp2.getblock(0,i)); // - t2temp2.getblock_permuted(0,i,0));
+                t2n.addblock(0,i,block2);
+            }
+
+            t2temp2.zeros();
+
+            // ############################################
+            // ## Calculate D10c                           ##
+            // ############################################
+
+            //#pragma omp parallel for num_threads(nthreads)
+            for(uint i = 0; i < d10cconfig.n_rows; ++i){
+                mat block = t3.getblock(2, d10cconfig(i,0))*vphpp.getblock(0,d10cconfig(i,1));
+                t2temp2.addblock(6,d10cconfig(i,2),block);
+            }
+            //#pragma omp parallel for num_threads(nthreads)
+            for(uint i = 0; i < t2temp2.fvConfigs(0).n_rows; ++i){
+                //mat block = t2temp.getblock(0,i) - t2temp.getblock(2,i);
+                mat block2 = .5*(t2temp2.getblock(0,i) - t2temp2.getblock_permuted(0,i,3));
+                t2n.addblock(0,i,block2);
+            }
+
+
+        }
+
         t2n.divide_energy();
         t2 = t2n;
         cout << "[BCCD][" << t << "]Energy:" << energy() << endl;
@@ -275,13 +449,9 @@ umat bccd::intersect_blocks_triple(amplitude a, uint na, blockmap b, uint nb, am
     umat tintersection(a.blocklengths(na), 3);
     uint counter = 0;
     for(uint n1 = 0; n1 < a.blocklengths(na); ++n1){
-
         int ac = a.fvConfigs(na)(n1);
-
-
         for(uint n2 = 0; n2 < b.blocklengths(nb); ++n2){
             int bc = b.fvConfigs(nb)(n2);
-
             if(bc == ac){
                 //found intersecting configuration
                 for(uint n3 = 0; n3 < c.blocklengths(nc); ++n3){

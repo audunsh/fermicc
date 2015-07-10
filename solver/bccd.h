@@ -36,6 +36,8 @@ public:
     umat intersect_blocks_triple(amplitude a, uint na, blockmap b, uint nb, amplitude c, uint nc);
 
 
+    bool pert_triples; //enable perturbative triples
+
     //internal objects and parameters
     electrongas eBs;
     uint Np;
@@ -56,9 +58,13 @@ public:
     blockmap vpphh;
     blockmap vhhhh;
 
+
     //for the triples
     blockmap vppph;
     blockmap vhphh;
+
+    blockmap vphpp;
+    blockmap vhhhp;
 
 
     blockmap v0;

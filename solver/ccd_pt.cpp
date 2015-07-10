@@ -63,7 +63,7 @@ ccd_pt::ccd_pt(electrongas bs, double a){
     //set up first T2-amplitudes
     T.init(iSetup.vValsVpphh, iSetup.aVpphh, iSetup.bVpphh, iSetup.iVpphh, iSetup.jVpphh, iSetup.iNp, iSetup.iNp, iSetup.iNh, iSetup.iNh);
     T.shed_zeros();
-    T.set_amplitudes(bs.vEnergy);
+    T.set_amplitudes(bs.vHFEnergy);
     T.map_indices();
 
     //check_matrix_consistency();
@@ -157,7 +157,7 @@ void ccd_pt::check_matrix_consistency(){
                         //cout << "Found discrepancy" << endl;
                         vhhpp_err += 1;
                     }
-                    if(T.pq_rs()(a + b*iSetup.iNp, i + j*iSetup.iNh) != iSetup.bs.v2(a + iSetup.iNh , b+ iSetup.iNh, i,j)/(iSetup.bs.vEnergy(i) + iSetup.bs.vEnergy(j)-iSetup.bs.vEnergy(a+iSetup.iNh)-iSetup.bs.vEnergy(b+iSetup.iNh))){
+                    if(T.pq_rs()(a + b*iSetup.iNp, i + j*iSetup.iNh) != iSetup.bs.v2(a + iSetup.iNh , b+ iSetup.iNh, i,j)/(iSetup.bs.vHFEnergy(i) + iSetup.bs.vHFEnergy(j)-iSetup.bs.vHFEnergy(a+iSetup.iNh)-iSetup.bs.vHFEnergy(b+iSetup.iNh))){
                         //cout << "Found discrepancy" << T.pq_rs()(a + b*iSetup.iNp, i + j*iSetup.iNh)<< iSetup.bs.v2(a + iSetup.iNh , b+ iSetup.iNh, i,j)/(iSetup.bs.vEnergy(i) + iSetup.bs.vEnergy(j)-iSetup.bs.vEnergy(a)-iSetup.bs.vEnergy(b))<< endl;
                         tpphh_err += 1;
                     }
@@ -322,11 +322,11 @@ void ccd_pt::advance(){
     //Setting up T3
     T3.update_as_pqr_stu(t2a.pqr_stu() - t2b.pqr_stu(), Np,Np,Np,Nr,Nr,Nr);
 
-    T3.set_amplitudes(ebs.vEnergy);
+    T3.set_amplitudes(ebs.vHFEnergy);
 
     //Calculating the triples contributions to T2
     fmD10b.update_as_q_rsp(vphpp.p_qrs()*T3.uqr_stp(), Np,Np,Nr,Nr);
-    fmD10b.update(fmD10b.pq_rs() - fmD10b.qp_rs(), Np, Nq, Nr, Ns);
+    fmD10b.update(fmD10b.pq_rs(), Np, Nq, Nr, Ns); // - fmD10b.qp_rs(), Np, Nq, Nr, Ns);
 
     fmD10c.update_as_pqr_s(T3.pqs_tur()*vhhhp.pqs_r(), Np,Np,Nr,Nr); //remember to permute these
     fmD10c.update(fmD10c.pq_rs() - fmD10c.pq_sr(), Np,Np,Nr,Nr);
@@ -339,8 +339,8 @@ void ccd_pt::advance(){
 
     Tprev.update(T.pq_rs(), Np,Nq,Nr,Ns); //When using relaxation we need to store the previous amplitudes
 
-    T.update(vpphh.pq_rs() + .5*(L1 + L2) + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4 - .5*(fmD10b.pq_rs() - fmD10c.pq_rs()), Np, Nq, Nr, Ns); //the sign of the two last t2 terms seems to be inverted in S-B
-    T.set_amplitudes(ebs.vEnergy); //divide updated amplitides by energy denominator
+    T.update(vpphh.pq_rs() + .5*(L1 + L2) + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4 - .5*(0*fmD10b.pq_rs() - fmD10c.pq_rs()), Np, Nq, Nr, Ns); //the sign of the two last t2 terms seems to be inverted in S-B
+    T.set_amplitudes(ebs.vHFEnergy); //divide updated amplitides by energy denominator
     T.update(alpha*Tprev.pq_rs() + (1.0-alpha)*T.pq_rs(), Np, Nq,Nr,Ns);
 
     energy(); //Calculate the energy

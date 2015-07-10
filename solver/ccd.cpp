@@ -76,7 +76,7 @@ ccd::ccd(electrongas bs, double a){
     //set up first T2-amplitudes
     T.init(iSetup.vValsVpphh, iSetup.aVpphh, iSetup.bVpphh, iSetup.iVpphh, iSetup.jVpphh, iSetup.iNp, iSetup.iNp, iSetup.iNh, iSetup.iNh);
     T.shed_zeros();
-    T.set_amplitudes(bs.vEnergy);
+    T.set_amplitudes(bs.vHFEnergy);
     t = clock();
     T.map_indices();
     cout << "[CCD]Amplitude mapping time:" <<  (float)(clock()-t)/CLOCKS_PER_SEC << endl;
@@ -431,7 +431,7 @@ void ccd::advance_intermediates(){
     Q3 = fmQ3.pq_rs()-fmQ3.qp_rs();
 
     T.update(vpphh.pq_rs() + .5*L1+L2+L3-Q2-Q3, Np, Nq, Nr, Ns);
-    T.set_amplitudes(ebs.vEnergy); //divide updated amplitides by energy denominator
+    T.set_amplitudes(ebs.vHFEnergy); //divide updated amplitides by energy denominator
 
     energy();
 
@@ -497,7 +497,7 @@ void ccd::advance(){
     T.update(vpphh.pq_rs() + .5*(L1 + L2) + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4, Np, Nq, Nr, Ns);
     //T.update(alpha*T.pq_rs() + (1.0-alpha)*(vpphh.pq_rs() + .5*(L1 + L2) + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4), Np, Nq, Nr, Ns);
 
-    T.set_amplitudes(ebs.vEnergy); //divide updated amplitides by energy denominator
+    T.set_amplitudes(ebs.vHFEnergy); //divide updated amplitides by energy denominator
     T.update(alpha*Tprev.pq_rs() + (1.0-alpha)*T.pq_rs(), Np, Nq,Nr,Ns);
     if(timing){
         cout << "Time spent on T:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;

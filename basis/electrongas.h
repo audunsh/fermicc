@@ -43,6 +43,7 @@ public:
 
     mat mSortedEnergy;
     vec vEnergy;
+    vec vHFEnergy;
     double dPrefactor1;
     double dPrefactor2;
     double mu;

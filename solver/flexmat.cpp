@@ -301,15 +301,15 @@ void flexmat::set_amplitudes(vec Energy){
    vec vEi = vEnergy.elem(vr);
    vec vEj = vEnergy.elem(vs);
    vValues = vValues/(vEi + vEj - vEa - vEb);
-   /*
-   for(int i = 0; i < vValues.size(); ++i){
+
+   //for(int i = 0; i < vValues.size(); ++i){
        //cout << vp.size() << endl;
        //cout << vEnergy(vp(i)) << endl;
 
 
-       vValues(i) = vValues(i)/(vEnergy(vr(i)) + vEnergy(vs(i)) - vEnergy(vp(i)+iNr) - vEnergy(vq(i)+iNr));
-   }
-   */
+       //vValues(i) = vValues(i)/(vEnergy(vr(i)) + vEnergy(vs(i)) - vEnergy(vp(i)+iNr) - vEnergy(vq(i)+iNr));
+   //}
+
 
 }
 

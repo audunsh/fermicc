@@ -24,7 +24,7 @@ using namespace arma;
 int main()
 {
     electrongas fgas;
-    fgas.generate_state_list2(5.0,1.0, 14);
+    fgas.generate_state_list2(3.0,1.0, 14);
 
     //cout << "Energy per particle:" << fgas.eref(14)/14.0 << " (a.u)"  << endl;
     //cout << "[Main] Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;
@@ -37,19 +37,32 @@ int main()
     uint Nh = fgas.iNparticles;
 
     //vec amptest = zeros(Np*Np*Np*Nh*Nh*Nh);
-    //ccd solver(fgas, .5);
+    ccd_pt solver(fgas, 0);
 
-    bccd solver(fgas);
+    bccd solver1(fgas);
     //solver.t2.blocklengths.print();
 
 
 
     //testing consistency of t2 permutative mapping
-    //amplitude t2a(fgas, 8, {Np, Np, Nh, Nh});
-    //t2a.make_t3();
+    /*
+    amplitude t2a(fgas, 8, {Np, Np, Nh, Nh});
+    t2a.make_t3();
+    t2a.uiCurrent_block = 1;
     //t2a.map6({1,2,3},{4,5,6}); //ab ij (0)
-    //t2a.map6({1,2,3},{5,4,6}); //ab ij (0)
-    //t2a.init_amplitudes();
+    //t2a.map6({1,2,-4},{5,-3,6}); //ab ij (0)
+    t2a.map6({2,3,-6}, {-1,4,5}); //, t2.fvConfigs(5)); //for use in t2a (1)
+    t2a.map6({1,2,-4}, {-3,5,6}); //, t2.fvConfigs(6)); //for use in t2b (2)
+
+    t2a.uiCurrent_block = 0;
+    t2a.map_t3_permutations();
+    t2a.init_t3_amplitudes();
+
+    cout << t2a.to6(1,2,3,4,5,6) << endl;
+    cout << t2a.from6(80004881) << endl;
+
+    t2a.getblock(1,10).print();
+    */
 
 
     /*
