@@ -51,6 +51,7 @@ ccd_pt::ccd_pt(electrongas bs, double a){
 
     vhppp.init(iSetup.vValsVhppp, iSetup.iVhppp, iSetup.aVhppp, iSetup.bVhppp, iSetup.cVhppp, iSetup.iNh, iSetup.iNp, iSetup.iNp, iSetup.iNp);
     vphpp.init(-iSetup.vValsVhppp, iSetup.aVhppp, iSetup.iVhppp, iSetup.bVhppp, iSetup.cVhppp, iSetup.iNp, iSetup.iNh, iSetup.iNp, iSetup.iNp);
+    vppph.init(-iSetup.vValsVhppp, iSetup.bVhppp, iSetup.cVhppp, iSetup.aVhppp, iSetup.iVhppp, iSetup.iNp, iSetup.iNh, iSetup.iNp, iSetup.iNh);
 
     vhphh.init(iSetup.vValsVhphh, iSetup.iVhphh, iSetup.aVhphh, iSetup.jVhphh, iSetup.kVhphh, iSetup.iNh, iSetup.iNp, iSetup.iNh, iSetup.iNh);
     vhhhp.init(iSetup.vValsVhhhp, iSetup.iVhhhp, iSetup.jVhhhp, iSetup.kVhhhp, iSetup.aVhhhp, iSetup.iNh, iSetup.iNh, iSetup.iNh, iSetup.iNp);
@@ -311,8 +312,8 @@ void ccd_pt::advance(){
     // ## Calculating perturbative triples amplitudes  ##
     // ##                                              ##
     // ##################################################
-
-    t2a.update_as_qru_pst(vppph.pqs_r()*T.q_prs(), Np,Np,Np,Nr,Nr,Nr);
+    sp_mat tempt2a = vppph.pqs_r()*T.q_prs();
+    t2a.update_as_qru_pst(tempt2a, Np,Np,Np,Nr,Nr,Nr);
     //t2a.update_as_pqr_stu(t2a.pqr_stu()-t2a.qpr_stu()-t2a.rpq_stu()-t2a.rpq_uts()+t2a.prq_stu()+t2a.qrp_uts()-t2a.qrp_ust()+t2a.rqp_uts()+t2a.pqr_ust(), Np,Np,Np,Nr,Nr,Nr);
     t2a.update_as_pqr_stu(t2a.pqr_stu()
                           -t2a.qpr_stu()
@@ -336,15 +337,28 @@ void ccd_pt::advance(){
     */
 
     t2b.update_as_pqs_rtu(T.pqr_s()*vhphh.p_qrs(), Np,Np,Np,Nr,Nr,Nr);
-    t2b.update_as_pqr_stu(t2b.pqr_stu()
+    mat VVhphh;
+    VVhphh = vhphh.p_qrs();
+    cout << sum(abs(vectorise(VVhphh))) << endl;
+    VVhphh = T.pqr_s();
+    cout << sum(abs(vectorise(VVhphh))) << endl;
+    VVhphh = sum(abs(t2b.pqr_stu()));
+    cout << sum(abs(vectorise(VVhphh))) << endl;
+
+
+
+    t2b.update_as_pqr_stu(0*t2b.pqr_stu()
                           -t2b.rqp_stu()
-                          -t2b.prq_stu()
-                          -t2b.pqr_tsu()
-                          +t2b.rqp_tsu()
-                          +t2b.prq_tsu()
-                          -t2b.pqr_uts()
-                          +t2b.rqp_uts()
-                          +t2b.prq_uts(), Np,Np,Np,Nr,Nr,Nr);
+                          -t2b.prq_stu()*0
+                          -t2b.pqr_tsu()*0
+                          +t2b.rqp_tsu()*0
+                          +t2b.prq_tsu()*0
+                          -t2b.pqr_uts()*0
+                          +t2b.rqp_uts()*0
+                          +t2b.prq_uts()*0, Np,Np,Np,Nr,Nr,Nr);
+
+    VVhphh = t2b.pqr_stu();
+    cout << sum(abs(vectorise(VVhphh))) << endl;
 
     /*
     t2b.update_as_pqr_stu(t2b.pqr_stu()
@@ -358,7 +372,7 @@ void ccd_pt::advance(){
                           +t2b.pqr_ust(), Np,Np,Np,Nr,Nr,Nr);
     */
     //Setting up T3
-    T3.update_as_pqr_stu(t2a.pqr_stu() - 0*t2b.pqr_stu(), Np,Np,Np,Nr,Nr,Nr);
+    T3.update_as_pqr_stu(t2a.pqr_stu() - t2b.pqr_stu(), Np,Np,Np,Nr,Nr,Nr);
 
     T3.set_amplitudes(ebs.vHFEnergy);
 

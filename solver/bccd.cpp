@@ -149,7 +149,10 @@ void bccd::init(){
         t3.map_t3_permutations();
         t3temp = t3;
         t3.map6({-6,2,3}, {4,5,-1}); //for use in d10b (1)
-        t3.map6({1,2,-4}, {5,6,-3}); //for use in d10c (2) (and
+        t3.map6({1,2,-4}, {-3,5,6}); //for use in d10c (2) (and
+        //t3.map6({1,2,-4}, {-3,5,6}); //for use in d10c (2) (and
+
+
         t3.init_t3_amplitudes();
 
         cout << "t31:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
@@ -352,23 +355,37 @@ void bccd::solve(uint Nt){
             // ## Calculate t2b                           ##
             // ############################################
             t3temp.zeros();
+            double tsum = 0;
+            double vsum = 0;
+            double bsum = 0;
             for(uint i = 0; i < t2bconfig.n_rows; ++i){
+                //sum all these and compare
+                vsum += sum(abs(vectorise(vhphh.getblock(0,t2bconfig(i,1))))); // << endl;
+                tsum += sum(abs(vectorise(t2.getblock(9,t2bconfig(i,0)))));
                 mat block = t2.getblock(9,t2bconfig(i,0))*vhphh.getblock(0,t2bconfig(i,1)); //.t();
+                bsum += sum(abs(vectorise(block)));
+
                 t3temp.addblock(2,t2bconfig(i,2),block); //t2bconfig is wrong
             }
+            cout << vsum << " " << tsum << " ";
+            cout << bsum << endl;
+            bsum = 0;
             for(uint i = 0; i < t3temp.fvConfigs(0).n_rows; ++i){
-                mat block = -1.0*(t3temp.getblock(0,i)
+                //1 - ac - cb - ij + ij/ac + ij/cb - ik +ik/ac + ik/cb
+                mat block = -1.0*(t3temp.getblock(0,i)*0
                                 - t3temp.getblock_permuted(0,i,1)
-                                - t3temp.getblock_permuted(0,i,2)
-                                - t3temp.getblock_permuted(0,i,3)
-                                + t3temp.getblock_permuted(0,i,9)
-                                + t3temp.getblock_permuted(0,i,12)
-                                - t3temp.getblock_permuted(0,i,4)
-                                + t3temp.getblock_permuted(0,i,10)
-                                + t3temp.getblock_permuted(0,i,13)
+                                - t3temp.getblock_permuted(0,i,2)*0
+                                - t3temp.getblock_permuted(0,i,3)*0
+                                + t3temp.getblock_permuted(0,i,9)*0
+                                + t3temp.getblock_permuted(0,i,12)*0
+                                - t3temp.getblock_permuted(0,i,4)*0
+                                + t3temp.getblock_permuted(0,i,10)*0
+                                + t3temp.getblock_permuted(0,i,13)*0
                                 );
-                t3.addblock(0,i,0*block);
+                bsum += sum(abs(vectorise(block)));
+                t3.addblock(0,i,block);
             }
+            cout << bsum << endl;
 
             // ############################################
             // ## Set up T3                           ##
@@ -409,7 +426,7 @@ void bccd::solve(uint Nt){
             for(uint i = 0; i < t2temp2.fvConfigs(0).n_rows; ++i){
                 //mat block = t2temp.getblock(0,i) - t2temp.getblock(2,i);
                 mat block2 = .5*(t2temp2.getblock(0,i) - t2temp2.getblock_permuted(0,i,3));
-                t2n.addblock(0,i,block2);
+                t2n.addblock(0,i,0*block2);
             }
 
 

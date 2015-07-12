@@ -1733,7 +1733,7 @@ sp_mat flexmat::pqs_r(){
         locations.set_size(vp.size(), 2);
         locations.col(0) = vp + vq*iNp + vs*iNp*iNq;
         locations.col(1) = vr;
-        sp_mat pq(locations.t(), vValues, iNp*iNq*iNs,iNr);
+        //sp_mat pq(locations.t(), vValues, iNp*iNq*iNs,iNr);
         Vpqs_r = sp_mat(locations.t(), vValues, iNp*iNq*iNs,iNr);
         Npqs_r = 1;
         return Vpqs_r;
