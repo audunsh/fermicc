@@ -51,7 +51,7 @@ ccd_pt::ccd_pt(electrongas bs, double a){
 
     vhppp.init(iSetup.vValsVhppp, iSetup.iVhppp, iSetup.aVhppp, iSetup.bVhppp, iSetup.cVhppp, iSetup.iNh, iSetup.iNp, iSetup.iNp, iSetup.iNp);
     vphpp.init(-iSetup.vValsVhppp, iSetup.aVhppp, iSetup.iVhppp, iSetup.bVhppp, iSetup.cVhppp, iSetup.iNp, iSetup.iNh, iSetup.iNp, iSetup.iNp);
-    vppph.init(-iSetup.vValsVhppp, iSetup.bVhppp, iSetup.cVhppp, iSetup.aVhppp, iSetup.iVhppp, iSetup.iNp, iSetup.iNh, iSetup.iNp, iSetup.iNh);
+    vppph.init(-iSetup.vValsVhppp, iSetup.bVhppp, iSetup.cVhppp, iSetup.aVhppp, iSetup.iVhppp, iSetup.iNp, iSetup.iNh, iSetup.iNp, iSetup.iNh); //added later (july)
 
     vhphh.init(iSetup.vValsVhphh, iSetup.iVhphh, iSetup.aVhphh, iSetup.jVhphh, iSetup.kVhphh, iSetup.iNh, iSetup.iNp, iSetup.iNh, iSetup.iNh);
     vhhhp.init(iSetup.vValsVhhhp, iSetup.iVhhhp, iSetup.jVhhhp, iSetup.kVhhhp, iSetup.aVhhhp, iSetup.iNh, iSetup.iNh, iSetup.iNh, iSetup.iNp);
@@ -219,7 +219,8 @@ void ccd_pt::L1_dense_multiplication(){
     for(uint i = 0; i < N; ++i){
         V.clear();
         stream = iSetup.bmVpppp.get_block(i); //get current block
-        Na = stream(0).size();
+        Na = stream(0).n_rows;
+        //Na = stream(0).size();
         V.set_size(Na, Na);
         for(uint p = 0; p<Na; ++p){
             a = stream(0)(p);
@@ -241,12 +242,12 @@ void ccd_pt::L1_dense_multiplication(){
         //perform multiplication and cast to sparse matrix L1;
         Ttemp = T.rows_dense(stream(4)); //load only elements in row
         tempStorage = V*Ttemp;
-        int N_elems = T.MCols.size()*stream(4).size();
+        int N_elems = T.MCols.n_rows*stream(4).n_rows;
         umat locations(2, N_elems);
         vec values(N_elems);
         uint count = 0;
-        for(uint p = 0; p<stream(4).size(); ++p ){
-            for(uint q = 0; q<T.MCols.size(); ++q ){
+        for(uint p = 0; p<stream(4).n_rows; ++p ){
+            for(uint q = 0; q<T.MCols.n_rows; ++q ){
                 locations(0, count) = stream(4)(p);
                 locations(1, count) = T.MCols(q);
                 values(count) = tempStorage(p,q);
@@ -263,7 +264,7 @@ void ccd_pt::L1_dense_multiplication(){
     vec vData(total_elements);
     int iCount=0;
     for(uint i = 0; i < N; ++i){
-        for(uint j = 0; j < fvValues(i).size(); ++j){
+        for(uint j = 0; j < fvValues(i).n_rows; ++j){
             mCOO(0, iCount) = fmLocations(i)(0,j);
             mCOO(1, iCount) = fmLocations(i)(1,j);
             vData(iCount) = fvValues(i)(j);
@@ -347,15 +348,15 @@ void ccd_pt::advance(){
 
 
 
-    t2b.update_as_pqr_stu(0*t2b.pqr_stu()
+    t2b.update_as_pqr_stu(t2b.pqr_stu()
                           -t2b.rqp_stu()
-                          -t2b.prq_stu()*0
-                          -t2b.pqr_tsu()*0
-                          +t2b.rqp_tsu()*0
-                          +t2b.prq_tsu()*0
-                          -t2b.pqr_uts()*0
-                          +t2b.rqp_uts()*0
-                          +t2b.prq_uts()*0, Np,Np,Np,Nr,Nr,Nr);
+                          -t2b.prq_stu()
+                          -t2b.pqr_tsu()
+                          +t2b.rqp_tsu()
+                          +t2b.prq_tsu()
+                          -t2b.pqr_uts()
+                          +t2b.rqp_uts()
+                          +t2b.prq_uts(), Np,Np,Np,Nr,Nr,Nr);
 
     VVhphh = t2b.pqr_stu();
     cout << sum(abs(vectorise(VVhphh))) << endl;

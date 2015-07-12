@@ -37,8 +37,8 @@ umat blockmat::get_sparse_block(uint n){
     // #################################################
     // ## Returns a sparse initializer without values ##
     // #################################################
-    uint nx = p(n).size();
-    uint ny = r(n).size();
+    uint nx = p(n).n_rows;
+    uint ny = r(n).n_rows;
 
     umat mCOO(4,nx*ny);
     /*
@@ -58,8 +58,8 @@ umat blockmat::get_sparse_block(uint n){
 
 field<uvec> blockmat::get_block(uint n){
     //returns 4xN matrix (N = number of elements) with pqrs indices
-    //uint nx = p(n).size();
-    //uint ny = r(n).size();
+    //uint nx = p(n).n_rows;
+    //uint ny = r(n).n_rows;
     field<uvec> indx(5);
     /*
     indices.clear();

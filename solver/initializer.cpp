@@ -29,8 +29,8 @@ initializer::initializer(electrongas Bs)
 
 vec initializer::V(uvec p, uvec q, uvec r, uvec s){
     //delta function of summation of momentum quantum numbers is assumed to have passed before entering here
-    vec ret; // = zeros(p.size());
-    ret.set_size(p.size());
+    vec ret; // = zeros(p.n_rows);
+    ret.set_size(p.n_rows);
 
     //retrieve relevant quantum numbers (in vectors)
     ivec Msa = bs.vMs.elem(p);
@@ -55,20 +55,20 @@ vec initializer::V(uvec p, uvec q, uvec r, uvec s){
     ivec Kdz = bs.vKz.elem(s);
 
     //set up interaction
-    ivec KDplus = conv_to<ivec>::from(ones(p.size())); //*4*pi/bs.dL3;
+    ivec KDplus = conv_to<ivec>::from(ones(p.n_rows)); //*4*pi/bs.dL3;
     KDplus = KDplus%(Kax+Kbx==Kcx+Kdx)%(Kay+Kby==Kcy+Kdy)%(Kaz+Kbz==Kcz+Kdz);
 
     ivec diff_ca = absdiff2(Kcx, Kcy, Kcz, Kax, Kay, Kaz);
     ivec diff_da = absdiff2(Kdx, Kdy, Kdz, Kax, Kay, Kaz);
 
-    vec term1 = zeros(p.size()); //term 1
-    //term1.set_size(p.size());
+    vec term1 = zeros(p.n_rows); //term 1
+    //term1.set_size(p.n_rows);
     term1.elem(conv_to<uvec>::from(find(Msa==Msc && Msb==Msd))) += 4*pi/bs.dL3; //By changing this i get comparable results
     term1.elem(conv_to<uvec>::from(find(Kax==Kcx && Kay==Kcy && Kaz==Kcz))) *= 0;
     term1.elem(find(term1!=0)) /= 4*pi*pi*conv_to<vec>::from(diff_ca.elem(find(term1!=0)))/bs.dL2;
 
-    vec term2 = zeros(p.size()); //term 2
-    //term2.set_size(p.size());
+    vec term2 = zeros(p.n_rows); //term 2
+    //term2.set_size(p.n_rows);
     term2.elem(conv_to<uvec>::from(find(Msa==Msd && Msb==Msc))) += 4*pi/bs.dL3;
     term2.elem(conv_to<uvec>::from(find(Kax==Kdx && Kay==Kdy && Kaz==Kdz))) *= 0;
     term2.elem(find(term2!=0)) /= 4*pi*pi*conv_to<vec>::from(diff_da.elem(find(term2!=0)))/bs.dL2;
@@ -80,8 +80,8 @@ vec initializer::V(uvec p, uvec q, uvec r, uvec s){
 vec initializer::V3(uvec p, uvec q, uvec r, uvec s){
     //Inefficient interaction calculation, not really vectorized but returns a vector
     vec vVals;
-    vVals.set_size(p.size());
-    for(int n = 0; n< p.size(); n++){
+    vVals.set_size(p.n_rows);
+    for(int n = 0; n< p.n_rows; n++){
         vVals(n) = bs.v2(p(n), q(n), r(n), s(n));
     }
     return vVals;
@@ -91,7 +91,7 @@ void initializer::V3_count_nonzero(uvec p, uvec q, uvec r, uvec s){
     //Count nonzero entries in pqrs
     uint count = 0;
     double val;
-    for(int n = 0; n< p.size(); n++){
+    for(int n = 0; n< p.n_rows; n++){
         val = bs.v2(p(n), q(n), r(n), s(n));
         if(val!=0){
             count += 1;
@@ -102,11 +102,11 @@ void initializer::V3_count_nonzero(uvec p, uvec q, uvec r, uvec s){
 
 vec initializer::V4(Col<u32> p, Col<u32> q, Col<u32> r, Col<u32> s){
     //Inefficient interaction calculation, not really vectorized but returns a vector
-    arma::u32 nnz = p.size();
+    arma::u32 nnz = p.n_rows;
     double * aux_mem = new double[nnz];
     vec vVals(aux_mem, nnz, false, true);
 
-    for(int n = 0; n< p.size(); n++){
+    for(int n = 0; n< p.n_rows; n++){
         vVals(n) = bs.v2(p(n), q(n), r(n), s(n));
     }
     return vVals;
@@ -120,7 +120,7 @@ vec initializer::V2(uvec t0, uvec t1){
     uvec d = conv_to<uvec>::from(floor(t1/iNp)); //convert to unsigned integer indexing vector
     uvec c = conv_to<uvec>::from(t1) - d*iNp;
 
-    vec ret = zeros(t0.size());
+    vec ret = zeros(t0.n_rows);
 
     ivec Msa = bs.vMs.elem(a+iNh);
     ivec Msb = bs.vMs.elem(b+iNh);
@@ -144,18 +144,18 @@ vec initializer::V2(uvec t0, uvec t1){
     ivec Kdz = bs.vKz.elem(d+iNh);
 
 
-    ivec KDplus = conv_to<ivec>::from(ones(t0.size())); //*4*pi/bs.dL3;
+    ivec KDplus = conv_to<ivec>::from(ones(t0.n_rows)); //*4*pi/bs.dL3;
     KDplus = KDplus%(Kax+Kbx==Kcx+Kdx)%(Kay+Kby==Kcy+Kdy)%(Kaz+Kbz==Kcz+Kdz);
 
     ivec diff_ca = absdiff2(Kcx, Kcy, Kcz, Kax, Kay, Kaz);
     ivec diff_da = absdiff2(Kdx, Kdy, Kdz, Kax, Kay, Kaz);
 
-    vec term1 = zeros(t0.size()); //term 1
+    vec term1 = zeros(t0.n_rows); //term 1
     //term1.elem(conv_to<uvec>::from(find(Msa==Msc && Msb==Msd))) += 4*pi/bs.dL3;
     //term1.elem(conv_to<uvec>::from(find(Kax==Kcx && Kay==Kcy && Kaz==Kcz))) *= 0;
     //term1.elem(find(term1!=0)) /= 4*pi*pi*diff_ca.elem(find(term1!=0))/bs.dL2;
 
-    vec term2 = zeros(t0.size()); //term 2
+    vec term2 = zeros(t0.n_rows); //term 2
     //term2.elem(conv_to<uvec>::from(find(Msa==Msd && Msb==Msc))) += 4*pi/bs.dL3;
     //term2.elem(conv_to<uvec>::from(find(Kax==Kdx && Kay==Kdy && Kaz==Kdz))) *= 0;
     //term2.elem(find(term2!=0)) /= 4*pi*pi*diff_da.elem(find(term2!=0))/bs.dL2;
@@ -178,9 +178,9 @@ ivec initializer::absdiff2(ivec kpx, ivec kpy, ivec kpz, ivec kqx,ivec kqy, ivec
 
 uvec initializer::append(uvec V1, uvec V2){
     //
-    int V1size = V1.size();
-    V1.resize(V1size+V2.size());
-    for(int i= 0; i<V2.size(); i++){
+    int V1size = V1.n_rows;
+    V1.resize(V1size+V2.n_rows);
+    for(int i= 0; i<V2.n_rows; i++){
         V1(i+V1size) = V2(i);
     }
     return V1;
@@ -188,14 +188,14 @@ uvec initializer::append(uvec V1, uvec V2){
 
 
 vec initializer::appendvec(vec V1, vec V2){
-    //int V1size = V1.size();
+    //int V1size = V1.n_rows;
     vec V3;
-    V3.set_size(V1.size() + V2.size());
-    for(int i= 0; i<V1.size(); i++){
+    V3.set_size(V1.n_rows + V2.n_rows);
+    for(int i= 0; i<V1.n_rows; i++){
         V3(i) = V1(i);
     }
-    for(int i= V1.size(); i<V1.size()+V2.size(); i++){
-        V3(i) = V2(i-V1.size());
+    for(int i= V1.n_rows; i<V1.n_rows+V2.n_rows; i++){
+        V3(i) = V2(i-V1.n_rows);
     }
 
     return V3;
@@ -248,33 +248,33 @@ void initializer::sVhphh(){
     uvec T1;// = conv_to<uvec>::from(zeros(0));
 
     field<uvec> TT;
-    TT.set_size(K_unique.size(), 2);
+    TT.set_size(K_unique.n_rows, 2);
 
-    for(int i = 0; i < K_unique.size(); ++i){
+    for(int i = 0; i < K_unique.n_rows; ++i){
         vec Tia = IA.elem(find(KIA==K_unique(i)));
-        vec ONh = ones(Tia.size());
+        vec ONh = ones(Tia.n_rows);
 
         vec Tjk = JK.elem(find(KJK==K_unique(i)));
-        vec ONp = ones(Tjk.size());
+        vec ONp = ones(Tjk.n_rows);
 
-        if(Tia.size() != 0 && Tjk.size() != 0){
+        if(Tia.n_rows != 0 && Tjk.n_rows != 0){
             uvec t0 = conv_to<uvec>::from(kron(Tia, ONp));
             uvec t1 = conv_to<uvec>::from(kron(ONh, Tjk));
             TT(i, 0) = t0;
             TT(i, 1) = t1;
-            iN += t0.size();
+            iN += t0.n_rows;
         }
     }
 
     T0.set_size(iN);
     T1.set_size(iN);
     iN = 0;
-    for(int i = 0; i < K_unique.size(); ++i){
+    for(int i = 0; i < K_unique.n_rows; ++i){
         //this is the most time-consuming process in initialization
-        if(TT(i,0).size() != 0){
-            T0(span(iN, iN+TT(i,0).size()-1)) = TT(i,0);
-            T1(span(iN, iN+TT(i,1).size()-1)) = TT(i,1);
-            iN += TT(i,0).size();}
+        if(TT(i,0).n_rows != 0){
+            T0(span(iN, iN+TT(i,0).n_rows-1)) = TT(i,0);
+            T1(span(iN, iN+TT(i,1).n_rows-1)) = TT(i,1);
+            iN += TT(i,0).n_rows;}
     }
 
 
@@ -345,33 +345,33 @@ void initializer::sVhppp(){
     uvec T1;// = conv_to<uvec>::from(zeros(0));
 
     field<uvec> TT;
-    TT.set_size(K_unique.size(), 2);
+    TT.set_size(K_unique.n_rows, 2);
 
-    for(int i = 0; i < K_unique.size(); ++i){
+    for(int i = 0; i < K_unique.n_rows; ++i){
         vec Tia = IA.elem(find(KIA==K_unique(i)));
-        vec ONh = ones(Tia.size());
+        vec ONh = ones(Tia.n_rows);
 
         vec Tbc = BC.elem(find(KBC==K_unique(i)));
-        vec ONp = ones(Tbc.size());
+        vec ONp = ones(Tbc.n_rows);
 
-        if(Tia.size() != 0 && Tbc.size() != 0){
+        if(Tia.n_rows != 0 && Tbc.n_rows != 0){
             uvec t0 = conv_to<uvec>::from(kron(Tia, ONp));
             uvec t1 = conv_to<uvec>::from(kron(ONh, Tbc));
             TT(i, 0) = t0;
             TT(i, 1) = t1;
-            iN += t0.size();
+            iN += t0.n_rows;
         }
     }
 
     T0.set_size(iN);
     T1.set_size(iN);
     iN = 0;
-    for(int i = 0; i < K_unique.size(); ++i){
+    for(int i = 0; i < K_unique.n_rows; ++i){
         //this is the most time-consuming process in initialization
-        if(TT(i,0).size() != 0){
-            T0(span(iN, iN+TT(i,0).size()-1)) = TT(i,0);
-            T1(span(iN, iN+TT(i,1).size()-1)) = TT(i,1);
-            iN += TT(i,0).size();}
+        if(TT(i,0).n_rows != 0){
+            T0(span(iN, iN+TT(i,0).n_rows-1)) = TT(i,0);
+            T1(span(iN, iN+TT(i,1).n_rows-1)) = TT(i,1);
+            iN += TT(i,0).n_rows;}
     }
 
     aVhppp = conv_to<uvec>::from(floor(T0/iNh)); //convert to unsigned integer indexing vector
@@ -382,7 +382,7 @@ void initializer::sVhppp(){
 
 
     vValsVhppp = V3(iVhppp,aVhppp+iNh,bVhppp+iNh,cVhppp+iNh);
-    //cout << vValsVhppp.size() << endl;
+    //cout << vValsVhppp.n_rows << endl;
     //cout << vValsVhppp.max() << endl;
     //V3_count_nonzero(iVhppp,aVhppp+iNh,bVhppp+iNh,cVhppp+iNh);
 
@@ -393,9 +393,9 @@ void initializer::sVhppp(){
     //iVpphp = iVhppp;
     //cVpphp = aVhppp;
     cVpphp = conv_to<uvec>::from(floor(T0/iNh)); //convert to unsigned integer indexing vector
-    iVpphp = conv_to<uvec>::from(T0) - cVhppp*iNh ;
+    iVpphp = conv_to<uvec>::from(T0) - cVpphp*iNh ;
     aVpphp = conv_to<uvec>::from(floor(T1/iNp)) ; //convert to unsigned integer indexing vector
-    bVpphp = conv_to<uvec>::from(T1) - aVhppp*iNp;
+    bVpphp = conv_to<uvec>::from(T1) - aVpphp*iNp;
     vValsVpphp = V3(aVpphp+iNh,bVpphp+iNh, iVpphp,cVpphp+iNh);
 }
 
@@ -436,14 +436,14 @@ void initializer::sVhpppBlock(){
 
     int iN = 0;
     uvec Tia, Tbc;
-    //bmVhppp.set_size(K_unique.size(), iNp, iNp, iNp, iNp);
-    for(int i = 0; i < K_unique.size(); ++i){
+    //bmVhppp.set_size(K_unique.n_rows, iNp, iNp, iNp, iNp);
+    for(int i = 0; i < K_unique.n_rows; ++i){
 
         Tia = find(KIA==K_unique(i));
         Tbc = find(KBC==K_unique(i));
 
         //bmVhppp.set_block(i, I.elem(Tia), A.elem(Tia),B.elem(Tbc), C.elem(Tbc));
-        iN += Tia.size();
+        iN += Tia.n_rows;
     }
 }
 
@@ -497,22 +497,22 @@ void initializer::sVppppO(){
     ivec KAB_unique = unique(KAB);
 
     field<uvec> TT;
-    TT.set_size(KAB_unique.size(), 2);
+    TT.set_size(KAB_unique.n_rows, 2);
     u32 iN = 0;
     vec T, O;
     uvec tT;
     uvec t0, t1;
 
-    cout << KAB_unique.size() << endl;
+    cout << KAB_unique.n_rows << endl;
 
-    //bmVpppp.set_size(KAB_unique.size(), iNp, iNp, iNp, iNp);
+    //bmVpppp.set_size(KAB_unique.n_rows, iNp, iNp, iNp, iNp);
 
     cout << "Good so far... (3)"  << (double)(clock() - t)/CLOCKS_PER_SEC<< endl;
     t = clock();
 
 
 
-    for(uint i = 0; i < KAB_unique.size(); ++i){
+    for(uint i = 0; i < KAB_unique.n_rows; ++i){
         //locating non-zero regions where K_a + K_b = K_c + K_d
         //it is possible to exploit spin symmetry further inside this loop
         T = conv_to<vec>::from(find(KAB==KAB_unique(i))); //Is it possible to make this vector "shrink" as more indices is identified?
@@ -520,12 +520,12 @@ void initializer::sVppppO(){
         tT = find(KAB==KAB_unique(i));
         //bmVpppp.set_block(i, A.elem(tT), B.elem(tT),A.elem(tT), B.elem(tT));
 
-        O = ones(T.size());
+        O = ones(T.n_rows);
         t0 = conv_to<uvec>::from(kron(T, O));
         t1 = conv_to<uvec>::from(kron(O, T));
         TT(i, 0) = t0;
         TT(i, 1) = t1;
-        iN += t0.size();
+        iN += t0.n_rows;
     }
 
 
@@ -544,12 +544,12 @@ void initializer::sVppppO(){
 
     iN = 0;
     int iNt = 0;
-    for(uint i = 0; i < KAB_unique.size(); ++i){
-        aVppp(span(iN, iN+TT(i,0).size()-1)) = A.elem(TT(i,0));
-        bVppp(span(iN, iN+TT(i,0).size()-1)) = B.elem(TT(i,0));
-        cVppp(span(iN, iN+TT(i,0).size()-1)) = A.elem(TT(i,1));
-        dVppp(span(iN, iN+TT(i,0).size()-1)) = B.elem(TT(i,1));
-        iN += TT(i,0).size();
+    for(uint i = 0; i < KAB_unique.n_rows; ++i){
+        aVppp(span(iN, iN+TT(i,0).n_rows-1)) = A.elem(TT(i,0));
+        bVppp(span(iN, iN+TT(i,0).n_rows-1)) = B.elem(TT(i,0));
+        cVppp(span(iN, iN+TT(i,0).n_rows-1)) = A.elem(TT(i,1));
+        dVppp(span(iN, iN+TT(i,0).n_rows-1)) = B.elem(TT(i,1));
+        iN += TT(i,0).n_rows;
     }
 
 
@@ -559,14 +559,14 @@ void initializer::sVppppO(){
 
     //Interaction is currently precalculated here and stored in a sparse matrix
     vec vValsVppp = V3(aVppp+iNh,bVppp+iNh,cVppp+iNh,dVppp+iNh); //this works, tested agains bs.v2, 9.4.2015
-    iN = vValsVppp.size();
+    iN = vValsVppp.n_rows;
 
 
 
 
     cout << "Good so far... (7)"  << (double)(clock() - t)/CLOCKS_PER_SEC<< endl;
-    //cout << "Number of nonzeros:" << vValsVppp(find(vValsVppp==0.0)).size() << endl;
-    //cout << "Number of nonzeros:" << find(vValsVppp).size() << endl;
+    //cout << "Number of nonzeros:" << vValsVppp(find(vValsVppp==0.0)).n_rows << endl;
+    //cout << "Number of nonzeros:" << find(vValsVppp).n_rows << endl;
 
 
     t = clock();
@@ -626,17 +626,17 @@ void initializer::sVppppBlock_mp(){
     ivec KAB_unique = unique(KAB);
 
     field<uvec> TT;
-    TT.set_size(KAB_unique.size(), 2);
+    TT.set_size(KAB_unique.n_rows, 2);
     u32 iN = 0;
     vec T, O;
     //uvec tT;
     uvec t0, t1;
 
 
-    bmVpppp.set_size(KAB_unique.size(), iNp, iNp, iNp, iNp);
+    bmVpppp.set_size(KAB_unique.n_rows, iNp, iNp, iNp, iNp);
 
     #pragma omp parallel for
-    for(uint i = 0; i < KAB_unique.size(); ++i){
+    for(uint i = 0; i < KAB_unique.n_rows; ++i){
         //locating non-zero regions where K_a + K_b = K_c + K_d
         //T = conv_to<vec>::from(find(KAB==KAB_unique(i))); //Is it possible to make this vector "shrink" as more indices is identified?
         uvec tT = find(KAB==KAB_unique(i));
@@ -662,17 +662,17 @@ void initializer::sVppppBlock(){
     ivec KAB_unique = unique(KAB);
 
     field<uvec> TT;
-    TT.set_size(KAB_unique.size(), 2);
+    TT.set_size(KAB_unique.n_rows, 2);
     u32 iN = 0;
     vec T, O;
     uvec tT;
     uvec t0, t1;
 
 
-    bmVpppp.set_size(KAB_unique.size(), iNp, iNp, iNp, iNp);
+    bmVpppp.set_size(KAB_unique.n_rows, iNp, iNp, iNp, iNp);
 
 
-    for(uint i = 0; i < KAB_unique.size(); ++i){
+    for(uint i = 0; i < KAB_unique.n_rows; ++i){
         //locating non-zero regions where K_a + K_b = K_c + K_d
         //T = conv_to<vec>::from(find(KAB==KAB_unique(i))); //Is it possible to make this vector "shrink" as more indices is identified?
         tT = find(KAB==KAB_unique(i));
@@ -719,22 +719,22 @@ void initializer::sVpppp(){
 
     //int iN;
     field<uvec> TT;
-    TT.set_size(KAB_unique.size(), 2);
+    TT.set_size(KAB_unique.n_rows, 2);
     int iN = 0;
     //cout << "    Stage 2:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
     //t = clock();
 
 
-    for(int i = 0; i < KAB_unique.size(); ++i){
+    for(int i = 0; i < KAB_unique.n_rows; ++i){
         //this is the most time-consuming process in initialization
         //vec T = AB.elem(find(KAB==KAB_unique(i)));
         vec T = conv_to<vec>::from(find(KAB==KAB_unique(i))); //Is it possible to exploit to make this vector should "shrink" ?
-        vec O = ones(T.size());
+        vec O = ones(T.n_rows);
         uvec t0 = conv_to<uvec>::from(kron(T, O));
         uvec t1 = conv_to<uvec>::from(kron(O, T));
         TT(i, 0) = t0;
         TT(i, 1) = t1;
-        iN += t0.size();
+        iN += t0.n_rows;
     }
 
     //cout << "    Stage 3:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
@@ -744,10 +744,10 @@ void initializer::sVpppp(){
     iN = 0;
     //cout << "    Stage 4:" << (double)(clock() - t)/CLOCKS_PER_SEC << endl;
     //t = clock();
-    for(int i = 0; i < KAB_unique.size(); ++i){
-        T0(span(iN, iN+TT(i,0).size()-1)) = TT(i,0);
-        T1(span(iN, iN+TT(i,1).size()-1)) = TT(i,1);
-        iN += TT(i,0).size();
+    for(int i = 0; i < KAB_unique.n_rows; ++i){
+        T0(span(iN, iN+TT(i,0).n_rows-1)) = TT(i,0);
+        T1(span(iN, iN+TT(i,1).n_rows-1)) = TT(i,1);
+        iN += TT(i,0).n_rows;
     }
 
 
@@ -790,22 +790,22 @@ void initializer::sVhhhhO(){
     ivec KIJ_unique = unique(KIJ);
 
     field<uvec> TT;
-    TT.set_size(KIJ_unique.size(), 2);
+    TT.set_size(KIJ_unique.n_rows, 2);
     int iN = 0;
     vec T, O;
     uvec t0, t1;
 
 
-    for(uint i = 0; i < KIJ_unique.size(); ++i){
+    for(uint i = 0; i < KIJ_unique.n_rows; ++i){
         //locating non-zero regions where K_a + K_b = K_c + K_d
         //it is possible to exploit spin symmetry further inside this loop
         T = conv_to<vec>::from(find(KIJ==KIJ_unique(i))); //Is it possible to make this vector "shrink" as more indices is identified?
-        O = ones(T.size());
+        O = ones(T.n_rows);
         t0 = conv_to<uvec>::from(kron(T, O));
         t1 = conv_to<uvec>::from(kron(O, T));
         TT(i, 0) = t0;
         TT(i, 1) = t1;
-        iN += t0.size();
+        iN += t0.n_rows;
     }
 
     uvec iVhhh, jVhhh, kVhhh, lVhhh;
@@ -816,17 +816,17 @@ void initializer::sVhhhhO(){
 
 
     iN = 0;
-    for(uint i = 0; i < KIJ_unique.size(); ++i){
-        iVhhh(span(iN, iN+TT(i,0).size()-1)) = I.elem(TT(i,0));
-        jVhhh(span(iN, iN+TT(i,0).size()-1)) = J.elem(TT(i,0));
-        kVhhh(span(iN, iN+TT(i,0).size()-1)) = I.elem(TT(i,1));
-        lVhhh(span(iN, iN+TT(i,0).size()-1)) = J.elem(TT(i,1));
-        iN += TT(i,0).size();
+    for(uint i = 0; i < KIJ_unique.n_rows; ++i){
+        iVhhh(span(iN, iN+TT(i,0).n_rows-1)) = I.elem(TT(i,0));
+        jVhhh(span(iN, iN+TT(i,0).n_rows-1)) = J.elem(TT(i,0));
+        kVhhh(span(iN, iN+TT(i,0).n_rows-1)) = I.elem(TT(i,1));
+        lVhhh(span(iN, iN+TT(i,0).n_rows-1)) = J.elem(TT(i,1));
+        iN += TT(i,0).n_rows;
     }
 
 
     vec vValsVhhh = V3(iVhhh,jVhhh,kVhhh,lVhhh); //this works, tested agains bs.v2, 9.4.2015
-    iN = vValsVhhh.size();
+    iN = vValsVhhh.n_rows;
 
     //use symmetries to fill in remaining interactions
     iVhhhh.set_size(4*iN);
@@ -895,18 +895,18 @@ void initializer::sVhhhh(){
     //T1.set_size(0);
 
     field<uvec> TT;
-    TT.set_size(KIJ_unique.size(), 2);
+    TT.set_size(KIJ_unique.n_rows, 2);
     int iN = 0;
 
-    for(int i = 0; i < KIJ_unique.size(); ++i){
+    for(int i = 0; i < KIJ_unique.n_rows; ++i){
         vec T = IJ.elem(find(KIJ==KIJ_unique(i)));
-        vec O = ones(T.size());
+        vec O = ones(T.n_rows);
         uvec t0 = conv_to<uvec>::from(kron(T, O));
         uvec t1 = conv_to<uvec>::from(kron(O, T));
 
         TT(i, 0) = t0;
         TT(i, 1) = t1;
-        iN += t0.size();
+        iN += t0.n_rows;
     }
 
 
@@ -914,13 +914,13 @@ void initializer::sVhhhh(){
     T1.set_size(iN);
     iN = 0;
     int j;
-    for(int i = 0; i < KIJ_unique.size(); i++){
+    for(int i = 0; i < KIJ_unique.n_rows; i++){
         //this is the most time-consuming process in initialization
-        //T0(span(iN, iN+TT(i,0).size()-1)) = TT(i,0);
-        //T1(span(iN, iN+TT(i,1).size()-1)) = TT(i,1);
-        //iN += TT(i,0).size();
+        //T0(span(iN, iN+TT(i,0).n_rows-1)) = TT(i,0);
+        //T1(span(iN, iN+TT(i,1).n_rows-1)) = TT(i,1);
+        //iN += TT(i,0).n_rows;
 
-        for(j = 0; j < TT(i,0).size(); ++j){
+        for(j = 0; j < TT(i,0).n_rows; ++j){
             T0(iN) = TT(i,0)(j);
             T1(iN) = TT(i,1)(j);
             iN += 1;
@@ -984,24 +984,24 @@ void initializer::sVhhpp(){
     T1.set_size(0);
 
     field<uvec> TT;
-    TT.set_size(K_unique.size(), 2);
+    TT.set_size(K_unique.n_rows, 2);
 
     int iN = 0;
 
-    for(int i = 0; i < K_unique.size(); ++i){
+    for(int i = 0; i < K_unique.n_rows; ++i){
         vec Tij = IJ.elem(find(KIJ==K_unique(i)));
-        vec ONh = ones(Tij.size());
+        vec ONh = ones(Tij.n_rows);
 
         vec Tab = AB.elem(find(KAB==K_unique(i)));
-        vec ONp = ones(Tab.size());
+        vec ONp = ones(Tab.n_rows);
 
-        if(Tij.size() != 0 && Tab.size() != 0){
+        if(Tij.n_rows != 0 && Tab.n_rows != 0){
             uvec t0 = conv_to<uvec>::from(kron(Tij, ONp));
             uvec t1 = conv_to<uvec>::from(kron(ONh, Tab));
 
             TT(i, 0) = t0;
             TT(i, 1) = t1;
-            iN += t0.size();
+            iN += t0.n_rows;
 
         }
     }
@@ -1010,13 +1010,13 @@ void initializer::sVhhpp(){
     T1.set_size(iN);
     iN = 0;
     int j;
-    for(uint i = 0; i < K_unique.size(); ++i){
+    for(uint i = 0; i < K_unique.n_rows; ++i){
         //this is the most time-consuming process in initialization of Vhhpp
-        if(TT(i,0).size() != 0){
-            T0(span(iN, iN+TT(i,0).size()-1)) = TT(i,0);
-            T1(span(iN, iN+TT(i,1).size()-1)) = TT(i,1);
-            iN += TT(i,0).size();}
-        //for(j = 0; j < TT(i,0).size(); j++){
+        if(TT(i,0).n_rows != 0){
+            T0(span(iN, iN+TT(i,0).n_rows-1)) = TT(i,0);
+            T1(span(iN, iN+TT(i,1).n_rows-1)) = TT(i,1);
+            iN += TT(i,0).n_rows;}
+        //for(j = 0; j < TT(i,0).n_rows; j++){
         //    T0(iN) = TT(i,0)(j);
         //    T1(iN) = TT(i,1)(j);
         //    iN += 1;
@@ -1104,36 +1104,36 @@ void initializer::sVhpph(){
 
 
     field<uvec> TT;
-    TT.set_size(K_unique.size(), 2);
+    TT.set_size(K_unique.n_rows, 2);
     int iN = 0;
     //int iN;
-    for(int i = 0; i < K_unique.size(); ++i){
+    for(int i = 0; i < K_unique.n_rows; ++i){
         vec Tia = IA.elem(find(KIA==K_unique(i)));
-        vec ONh = ones(Tia.size());
+        vec ONh = ones(Tia.n_rows);
 
         vec Tbj = BJ.elem(find(KBJ==K_unique(i)));
-        vec ONp = ones(Tbj.size());
+        vec ONp = ones(Tbj.n_rows);
 
-        if(Tia.size() != 0 && Tbj.size() != 0){
+        if(Tia.n_rows != 0 && Tbj.n_rows != 0){
             uvec t0 = conv_to<uvec>::from(kron(Tia, ONp));
             uvec t1 = conv_to<uvec>::from(kron(ONh, Tbj));
             //T0 = append(T0,t0);
             //T1 = append(T1,t1);
             TT(i, 0) = t0;
             TT(i, 1) = t1;
-            iN += t0.size();
+            iN += t0.n_rows;
         }
     }
 
     T0.set_size(iN);
     T1.set_size(iN);
     iN = 0;
-    for(int i = 0; i < K_unique.size(); ++i){
+    for(int i = 0; i < K_unique.n_rows; ++i){
         //this is the most time-consuming process in initialization
-        if(TT(i,0).size() != 0){
-            T0(span(iN, iN+TT(i,0).size()-1)) = TT(i,0);
-            T1(span(iN, iN+TT(i,1).size()-1)) = TT(i,1);
-            iN += TT(i,0).size();}
+        if(TT(i,0).n_rows != 0){
+            T0(span(iN, iN+TT(i,0).n_rows-1)) = TT(i,0);
+            T1(span(iN, iN+TT(i,1).n_rows-1)) = TT(i,1);
+            iN += TT(i,0).n_rows;}
     }
 
 
