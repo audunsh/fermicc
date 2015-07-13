@@ -2610,7 +2610,7 @@ field<uvec> amplitude::partition_ppp_permutations(field<ivec> LHS, ivec K_unique
                         permute_ac(nx) = nx+5;
                         permute_ac(nx+1) = nx+3;
                         permute_ac(nx+2) = nx+4;
-                        permute_ac(nx+3) = nx+5;
+                        permute_ac(nx+3) = nx+1;
                         permute_ac(nx+4) = nx+2;
                         permute_ac(nx+5) = nx;
 
@@ -2665,7 +2665,7 @@ field<uvec> amplitude::partition_ppp_permutations(field<ivec> LHS, ivec K_unique
 
                     uint bc_new = r_inv(pbc(h));
                     bc_perm(current) = bc_new;
-                    bc_perm(ac_new) = current;
+                    bc_perm(bc_new) = current;
 
 
                 }
@@ -2714,7 +2714,7 @@ field<uvec> amplitude::partition_ppp_permutations(field<ivec> LHS, ivec K_unique
 
             uint bc_new = r_inv(pbc(h));
             bc_perm(current) = bc_new;
-            bc_perm(ac_new) = current;
+            bc_perm(bc_new) = current;
 
 
         }
@@ -2893,7 +2893,7 @@ field<uvec> amplitude::partition_hhh_permutations(field<ivec> LHS, ivec K_unique
                         permute_ik(nx) = nx+5;
                         permute_ik(nx+1) = nx+3;
                         permute_ik(nx+2) = nx+4;
-                        permute_ik(nx+3) = nx+5;
+                        permute_ik(nx+3) = nx+1;
                         permute_ik(nx+4) = nx+2;
                         permute_ik(nx+5) = nx;
 
@@ -2947,7 +2947,7 @@ field<uvec> amplitude::partition_hhh_permutations(field<ivec> LHS, ivec K_unique
 
                     uint bc_new = r_inv(pjk(h));
                     bc_perm(current) = bc_new;
-                    bc_perm(ac_new) = current;
+                    bc_perm(bc_new) = current;
 
 
                 }
@@ -2999,7 +2999,7 @@ field<uvec> amplitude::partition_hhh_permutations(field<ivec> LHS, ivec K_unique
 
             uint bc_new = r_inv(pjk(h));
             bc_perm(current) = bc_new;
-            bc_perm(ac_new) = current;
+            bc_perm(bc_new) = current;
 
 
         }

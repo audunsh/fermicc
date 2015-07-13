@@ -18,7 +18,7 @@ bccd::bccd(electrongas fgas)
     Nh = fgas.iNparticles; //conflicting naming here
     init();
     cout << "[BCCD]Energy:" << energy() << endl;
-    solve(30);
+    solve(10);
 }
 
 
@@ -28,7 +28,7 @@ void bccd::init(){
     // ## Initializing the needed configurations ##
     // ############################################
 
-    pert_triples = true;
+    pert_triples = false;
 
     clock_t t;
     t = clock();
@@ -165,11 +165,11 @@ void bccd::init(){
 
         //t2.fvConfigs(6).print();
         t3temp.map6({2,3,-6}, {-1,4,5}); //, t2.fvConfigs(5)); //for use in t2a (1)
-        cout << "Length of elements:" << t3temp.uvElements.n_rows << endl;
+        //cout << "Length of elements:" << t3temp.uvElements.n_rows << endl;
         t3temp.map6({1,2,-4}, {-3,5,6}); //, t2.fvConfigs(6)); //for use in t2b (2)
         //t3temp.uiCurrent_block = 0;
         //t3temp.map_t3_permutations();
-        cout << "Length of elements:" << t3temp.uvElements.n_rows << endl;
+        //cout << "Length of elements:" << t3temp.uvElements.n_rows << endl;
         t3temp.init_t3_amplitudes();
         t3temp.zeros();
         cout << "t32:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
@@ -355,37 +355,37 @@ void bccd::solve(uint Nt){
             // ## Calculate t2b                           ##
             // ############################################
             t3temp.zeros();
-            double tsum = 0;
-            double vsum = 0;
-            double bsum = 0;
+            //double tsum = 0;
+            //double vsum = 0;
+            //double bsum = 0;
             for(uint i = 0; i < t2bconfig.n_rows; ++i){
                 //sum all these and compare
-                vsum += sum(abs(vectorise(vhphh.getblock(0,t2bconfig(i,1))))); // << endl;
-                tsum += sum(abs(vectorise(t2.getblock(9,t2bconfig(i,0)))));
+                //vsum += sum(abs(vectorise(vhphh.getblock(0,t2bconfig(i,1))))); // << endl;
+                //tsum += sum(abs(vectorise(t2.getblock(9,t2bconfig(i,0)))));
                 mat block = t2.getblock(9,t2bconfig(i,0))*vhphh.getblock(0,t2bconfig(i,1)); //.t();
-                bsum += sum(abs(vectorise(block)));
+                //bsum += sum(abs(vectorise(block)));
 
                 t3temp.addblock(2,t2bconfig(i,2),block); //t2bconfig is wrong
             }
-            cout << vsum << " " << tsum << " ";
-            cout << bsum << endl;
-            bsum = 0;
+            //cout << vsum << " " << tsum << " ";
+            //cout << bsum << endl;
+            //bsum = 0;
             for(uint i = 0; i < t3temp.fvConfigs(0).n_rows; ++i){
                 //1 - ac - cb - ij + ij/ac + ij/cb - ik +ik/ac + ik/cb
-                mat block = -1.0*(t3temp.getblock(0,i)*0
+                mat block = -1.0*(t3temp.getblock(0,i)
                                 - t3temp.getblock_permuted(0,i,1)
-                                - t3temp.getblock_permuted(0,i,2)*0
-                                - t3temp.getblock_permuted(0,i,3)*0
-                                + t3temp.getblock_permuted(0,i,9)*0
-                                + t3temp.getblock_permuted(0,i,12)*0
-                                - t3temp.getblock_permuted(0,i,4)*0
-                                + t3temp.getblock_permuted(0,i,10)*0
-                                + t3temp.getblock_permuted(0,i,13)*0
+                                - t3temp.getblock_permuted(0,i,2)
+                                - t3temp.getblock_permuted(0,i,3)
+                                + t3temp.getblock_permuted(0,i,9)
+                                + t3temp.getblock_permuted(0,i,12)
+                                - t3temp.getblock_permuted(0,i,4)
+                                + t3temp.getblock_permuted(0,i,10)
+                                + t3temp.getblock_permuted(0,i,13)
                                 );
-                bsum += sum(abs(vectorise(block)));
+                //bsum += sum(abs(vectorise(block)));
                 t3.addblock(0,i,block);
             }
-            cout << bsum << endl;
+            //cout << bsum << endl;
 
             // ############################################
             // ## Set up T3                           ##

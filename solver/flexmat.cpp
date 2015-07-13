@@ -200,7 +200,11 @@ mat flexmat::rows_dense_mp(uvec urows, ivec &mcols){
     //    col_ptrs(MCols(i)) = -1;
     //}
     //Mret(0) = M;
-    mcols = MCols;
+    mcols.set_size((MCols.n_rows));
+    for(uint i = 0; i < MCols.n_rows; ++i){
+        mcols(i) = MCols(i);
+    }
+    //mcols = MCols;
 
 
     return M;
@@ -236,7 +240,7 @@ mat flexmat::rows_dense(uvec urows){
     }
 
     //find all unique column indices
-    all_columns.clear();
+    //all_columns.clear();
     all_columns.set_size(n_cols);
     uint c = 0; //counter
     //uint elements_in_current_row;
@@ -1737,6 +1741,8 @@ sp_mat flexmat::pqs_r(){
         locations.col(1) = vr;
         //sp_mat pq(locations.t(), vValues, iNp*iNq*iNs,iNr);
         Vpqs_r = sp_mat(locations.t(), vValues, iNp*iNq*iNs,iNr);
+        //Vpqs_r.init_batch(locations.t(), vValues, iNp*iNq*iNs,iNr);
+
         Npqs_r = 1;
         return Vpqs_r;
     }

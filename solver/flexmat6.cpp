@@ -151,7 +151,7 @@ mat flexmat6::rows_dense(uvec urows){
     }
 
     //find all unique column indices
-    all_columns.clear();
+    //all_columns.clear();
     all_columns.set_size(n_cols);
     uint c = 0; //counter
     //uint elements_in_current_row;

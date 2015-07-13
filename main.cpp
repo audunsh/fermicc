@@ -37,7 +37,7 @@ int main()
     uint Nh = fgas.iNparticles;
 
     //vec amptest = zeros(Np*Np*Np*Nh*Nh*Nh);
-    ccd_pt solver(fgas, 0);
+    //ccd_pt solver(fgas, 0);
 
     bccd solver1(fgas);
     //solver.t2.blocklengths.print();
@@ -45,24 +45,35 @@ int main()
 
 
     //testing consistency of t2 permutative mapping
+
+
     /*
     amplitude t2a(fgas, 8, {Np, Np, Nh, Nh});
     t2a.make_t3();
     t2a.uiCurrent_block = 1;
     //t2a.map6({1,2,3},{4,5,6}); //ab ij (0)
     //t2a.map6({1,2,-4},{5,-3,6}); //ab ij (0)
-    t2a.map6({2,3,-6}, {-1,4,5}); //, t2.fvConfigs(5)); //for use in t2a (1)
-    t2a.map6({1,2,-4}, {-3,5,6}); //, t2.fvConfigs(6)); //for use in t2b (2)
+
 
     t2a.uiCurrent_block = 0;
     t2a.map_t3_permutations();
+    t2a.map6({1,2,3}, {4,6,5}); //, t2.fvConfigs(5)); //for use in t2a (1)
+    //t2a.map6({1,2,-4}, {-3,5,6}); //, t2.fvConfigs(6)); //for use in t2b (2)
     t2a.init_t3_amplitudes();
 
-    cout << t2a.to6(1,2,3,4,5,6) << endl;
-    cout << t2a.from6(80004881) << endl;
+    for(uint i = 0; i <t2a.blocklengths(0); ++i){
+        t2a.getraw(1,i).print();
+        cout << endl;
+        //cout << t2b.Pab(i) << endl;
+        //t2b.getraw(0,i).print();
+        cout << endl;
 
-    t2a.getblock(1,10).print();
+        t2a.getraw_permuted(0,i, 5).print();
+        cout << endl;
+    }
     */
+
+
 
 
     /*
