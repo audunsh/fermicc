@@ -473,6 +473,11 @@ double electrongas::f(int P, int Q){
     return val;
 }
 
+
+vec electrongas::F_vectorized(uint p){
+    return vHFEnergy;
+}
+
 double electrongas::F(int p){
     //Fock operator matrix elements
     //double val = dPrefactor2;

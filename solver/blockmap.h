@@ -39,6 +39,7 @@ public:
 
     void map_vppph();
 
+
     mat getblock(int u, int i);
     mat getblock_vpppp(int u, int i);
 

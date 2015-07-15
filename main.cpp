@@ -23,8 +23,11 @@ using namespace arma;
 
 int main()
 {
+    //TODO LIST
+    //1. Speed up initialization
+    //2. Experiment with uniquely reduced t3amps in setup
     electrongas fgas;
-    fgas.generate_state_list2(3.0,1.0, 14);
+    fgas.generate_state_list2(5.0,1.0, 14);
 
     //cout << "Energy per particle:" << fgas.eref(14)/14.0 << " (a.u)"  << endl;
     //cout << "[Main] Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;

@@ -13,6 +13,7 @@ public:
     electrongas();
     void generate_state_list2(int Ne, double rs, int Np);
     void generate_state_list(int Ne, double rs, int Np);
+    vec F_vectorized(uint p); //fock eigenvalues vectorized
     double absdiff2(rowvec A, rowvec B);
     double v(int P, int Q, int R, int S);
     double v2(int p, int q, int r, int s);

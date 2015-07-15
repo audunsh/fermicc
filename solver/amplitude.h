@@ -34,6 +34,12 @@ public:
     field<uvec> unpack(uvec vStream, imat imOrder); //unpack a disorganized sequence of indices
     uvec unpack_uvec(uint vStream, imat imOrder);
 
+    //specialized functions
+    void map_t3_236_145(ivec Kk_unique);
+    void map_t3_623_451(ivec Kk_unique);
+    void map_t3_124_356(ivec Kk_unique);
+
+
 
     //external functions
     void map(ivec left, ivec right); //simpler interface to map_regions
@@ -117,9 +123,19 @@ public:
     field<ivec> php();
     field<ivec> pph();
 
+    field<ivec> phh();
+    field<ivec> hph();
+    field<ivec> hhp();
+
+
     field<uvec> partition_hpp(field<ivec> LHS, ivec K_unique);
     field<uvec> partition_php(field<ivec> LHS, ivec K_unique);
     field<uvec> partition_pph(field<ivec> LHS, ivec K_unique);
+
+
+    field<uvec> partition_phh(field<ivec> LHS, ivec K_unique);
+    field<uvec> partition_hph(field<ivec> LHS, ivec K_unique);
+    field<uvec> partition_hhp(field<ivec> LHS, ivec K_unique);
 
 
 

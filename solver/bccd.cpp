@@ -28,13 +28,11 @@ void bccd::init(){
     // ## Initializing the needed configurations ##
     // ############################################
 
-    pert_triples = false;
+    pert_triples = true;
 
     clock_t t;
     t = clock();
 
-    cout << "0:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
-    t = clock();
 
     t2.init(eBs, 10, {Np, Np, Nh, Nh});
     t2.map_t2_permutations();
@@ -54,8 +52,6 @@ void bccd::init(){
         t2.map({1,2,-3},{4});  //for use in t2b (9)
     }
 
-    cout << "1:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
-    t = clock();
 
     t2.init_amplitudes();
     t2.divide_energy();
@@ -65,8 +61,6 @@ void bccd::init(){
     t2n = t2;
 
     t2n.zeros();
-    cout << "2:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
-    t = clock();
 
     //Temporary amplitude storage for permutations
     t2temp2.init(eBs, 8, {Np, Np, Nh, Nh});
@@ -85,39 +79,29 @@ void bccd::init(){
     }
     t2temp.init_amplitudes();
     t2temp.zeros();
-    cout << "3:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
-    t = clock();
 
     vhhpp.init(eBs, 4, {Nh,Nh,Np,Np});
     vhhpp.init_interaction({0,0,Nh,Nh});
     vhhpp.map({1,-3},{-2,4}); //for use in Q2 (1)
     vhhpp.map({2},{-1,3,4});  //for use in Q3 (2)
     vhhpp.map({1,2,-4},{3});  //for use in Q4 (3)
-    cout << "4:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
-    t = clock();
 
     v0.init(eBs, 3, {Nh,Nh,Np,Np});
     v0.init_interaction({0,0,Nh,Nh});
 
     vpphh.init(eBs, 3, {Np, Np, Nh, Nh});
     vpphh.init_interaction({Nh,Nh,0,0});
-    cout << "5:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
-    t = clock();
 
 
     vpppp.init(eBs, 3, {Np, Np, Np, Np});
     vpppp.map_vpppp();
-    cout << "6:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
-    t = clock();
 
     vhhhh.init(eBs, 3, {Nh, Nh, Nh, Nh});
     vhhhh.init_interaction({0,0,0,0});
-    cout << "7:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
-    t = clock();
 
     vhpph.init(eBs, 3, {Nh, Np, Np, Nh});
     vhpph.map({-4,2},{3,-1}); //for use in L3 (0)
-    cout << "8:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+    cout << "[BCCD] Time spent initializing doubles.:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
     t = clock();
 
     // #############################################
@@ -125,22 +109,17 @@ void bccd::init(){
     // #############################################
     if(pert_triples){
         vhphh.init(eBs, 3, {Nh, Np, Nh, Nh});
-        //vhphh.map({1,2,-4},{3});
         vhphh.map({1},{-2,3,4});
-        //cout << "Number of vhphh:" << vhphh.blocklengths(0) << endl;
 
         vppph.init(eBs, 3, {Np, Np, Np, Nh});
-        //cout << Np*Np*Np << endl;
         vppph.map({1,2,-3},{4});
-        //vppph.map({-4},{3,1,2});
-        //cout << "Number of vppph:" << vppph.blocklengths(0) << endl;
 
         vphpp.init(eBs, 3, {Np, Nh, Np, Np});
         vphpp.map({1},{-2,3,4});
 
         vhhhp.init(eBs, 3, {Nh,Nh,Nh,Np});
         vhhhp.map({1,2,-4},{3});
-        cout << "triple interaction:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+        cout << "[BCCD] Time spent initializing triples interaction:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
         t = clock();
 
 
@@ -148,33 +127,24 @@ void bccd::init(){
         t3.make_t3();
         t3.map_t3_permutations();
         t3temp = t3;
-        t3.map6({-6,2,3}, {4,5,-1}); //for use in d10b (1)
-        t3.map6({1,2,-4}, {-3,5,6}); //for use in d10c (2) (and
-        //t3.map6({1,2,-4}, {-3,5,6}); //for use in d10c (2) (and
 
+        t3.map_t3_623_451(vphpp.fvConfigs(0)); //for d10b
+        t3.map_t3_124_356(vhhhp.fvConfigs(0)); //for d10c
+
+        //t3.map6({-6,2,3}, {4,5,-1}); //for use in d10b (1) //these need special treatment
+        //t3.map6({1,2,-4}, {-3,5,6}); //for use in d10c (2) (and
 
         t3.init_t3_amplitudes();
 
-        cout << "t31:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+        cout << "[BCCD] Time spent mapping T3 amplitude (1):" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
         t = clock();
 
-        //t3temp.init(eBs, 7, {Np,Np,Np,Nh,Nh,Nh});
-        //t3temp.make_t3();
-        //t3temp.map_t3_permutations();
-        //t3temp.uiCurrent_block = 1;
-
-        //t2.fvConfigs(6).print();
-        t3temp.map6({2,3,-6}, {-1,4,5}); //, t2.fvConfigs(5)); //for use in t2a (1)
-        //cout << "Length of elements:" << t3temp.uvElements.n_rows << endl;
+        t3temp.map_t3_236_145(t2.fvConfigs(8));
         t3temp.map6({1,2,-4}, {-3,5,6}); //, t2.fvConfigs(6)); //for use in t2b (2)
-        //t3temp.uiCurrent_block = 0;
-        //t3temp.map_t3_permutations();
-        //cout << "Length of elements:" << t3temp.uvElements.n_rows << endl;
-        t3temp.init_t3_amplitudes();
+        t3temp.init_t3_amplitudes(); //HUGE opt-potential (use precalc F)
         t3temp.zeros();
-        cout << "t32:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
-        t = clock();
-    }
+        cout << "[BCCD] Time spent mapping T3 amplitude (2):" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+        t = clock();    }
 
     //print t3temp configurations
 
