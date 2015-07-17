@@ -154,10 +154,11 @@ void bccd::init(){
 
         t3temp = t3;
         t3temp.uiCurrent_block = 1;
-        t3.map_t3_permutations_bconfig();
         //t3temp.map_t3_permutations();
 
-        //t3.uiCurrent_block = 1;
+        //t3.map_t3_permutations_bconfig();
+
+        t3.uiCurrent_block = 1;
 
         //t3.uiCurrent_block = 1;
 
@@ -196,8 +197,16 @@ void bccd::init(){
         cout << "[" << mode << "] Time spent mapping T3 amplitude (2):" << omp_get_wtime()-tm << endl;
         tm = omp_get_wtime();
         //t3.getraw(0,10).print();
-        cout << endl;
-        //t3temp.getraw(2,0).print();
+        //cout << endl;
+
+        t3.fmBlocks(3).set_size(0);
+        t3temp.fmBlocks(3).set_size(0);
+
+
+
+        //test
+        //t3temp.vElements = linspace(0, t3temp.vElements.n_rows-1, t3temp.vElements.n_rows);
+        //t3temp.getraw(3,0).print();
 
 
 
@@ -370,20 +379,23 @@ void bccd::solve(uint Nt){
                 t3temp.addblock(1,t2aconfig(i,2),block); //t2aconfig is wriong
             }
 
+            if(t3temp.vElements(0) !=0){
+                cout << "Value error in vElements" << endl;
+            }
             for(uint i = 0; i < t3temp.fvConfigs(3).n_rows; ++i){
                 //cout << i << endl;
-                mat block = t3temp.getblock(3,i)
-                                - t3temp.getblock_permuted(3,i,0)
-                                - t3temp.getblock_permuted(3,i,1)
-                                - t3temp.getblock_permuted(3,i,4)
-                                + t3temp.getblock_permuted(3,i,7)
-                                + t3temp.getblock_permuted(3,i,10)
-                                - t3temp.getblock_permuted(3,i,5)
-                                + t3temp.getblock_permuted(3,i,8)
-                                + t3temp.getblock_permuted(3,i,11)
+                mat block = t3temp.getsblock(3,i)
+                                - t3temp.getsblock_permuted(3,i,0)
+                                - t3temp.getsblock_permuted(3,i,1)
+                                - t3temp.getsblock_permuted(3,i,4)
+                                + t3temp.getsblock_permuted(3,i,7)
+                                + t3temp.getsblock_permuted(3,i,10)
+                                - t3temp.getsblock_permuted(3,i,5)
+                                + t3temp.getsblock_permuted(3,i,8)
+                                + t3temp.getsblock_permuted(3,i,11)
                                 ;
 
-                t3.addblock(0,i,block);
+                t3.addsblock(0,i,block);
             }
 
 
@@ -406,23 +418,29 @@ void bccd::solve(uint Nt){
             //cout << vsum << " " << tsum << " ";
             //cout << bsum << endl;
             //bsum = 0;
+            if(t3temp.vElements(0) !=0){
+                cout << "Value error in vElements" << endl;
+            }
+
             for(uint i = 0; i < t3temp.fvConfigs(3).n_rows; ++i){
                 //1 - ac - cb - ij + ij/ac + ij/cb - ik +ik/ac + ik/cb
-                mat block = -1.0*(t3temp.getblock(3,i)
-                                - t3temp.getblock_permuted(3,i,1)
-                                - t3temp.getblock_permuted(3,i,2)
-                                - t3temp.getblock_permuted(3,i,3)
-                                + t3temp.getblock_permuted(3,i,9)
-                                + t3temp.getblock_permuted(3,i,12)
-                                - t3temp.getblock_permuted(3,i,4)
-                                + t3temp.getblock_permuted(3,i,10)
-                                + t3temp.getblock_permuted(3,i,13)
+                mat block = -1.0*(t3temp.getsblock(3,i)
+                                - t3temp.getsblock_permuted(3,i,1)
+                                - t3temp.getsblock_permuted(3,i,2)
+                                - t3temp.getsblock_permuted(3,i,3)
+                                + t3temp.getsblock_permuted(3,i,9)
+                                + t3temp.getsblock_permuted(3,i,12)
+                                - t3temp.getsblock_permuted(3,i,4)
+                                + t3temp.getsblock_permuted(3,i,10)
+                                + t3temp.getsblock_permuted(3,i,13)
                                 );
                 //bsum += sum(abs(vectorise(block)));
+
                 //t3temp.getblock(0,i).print();
-                //cout << endl;
-                t3.addblock(0,i,block);
+                //cout << i << endl;
+                t3.addsblock(0,i,block);
             }
+            //t3temp.getblock_permuted(3,208,3).print();
             //cout << bsum << endl;
 
             // ############################################

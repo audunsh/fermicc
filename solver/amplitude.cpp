@@ -88,6 +88,263 @@ void amplitude::init_amplitudes(){
     }
 } //initialize as amplitude
 
+
+void amplitude::enroll_block(uint tempElementsSize, uvec tempElements, uvec tempBlockmap1,uvec tempBlockmap2,uvec tempBlockmap3){
+
+    // ####################################################################
+    // ## Consolidate block  with existing configuration                 ##
+    // ####################################################################
+
+    umat n = sort_index(tempElements);
+    uvec flatElements = tempElements.elem(n);
+    uvec flatBlockmap1 = tempBlockmap1.elem(n); //DOES THIS SORT PROPERLY? UNKNOWN,
+    uvec flatBlockmap2 = tempBlockmap2.elem(n); //DOES THIS SORT PROPERLY? UNKNOWN,
+    uvec flatBlockmap3 = tempBlockmap3.elem(n); //DOES THIS SORT PROPERLY? UNKNOWN,
+
+    uint tempN = 0;
+    uint trueN = 0;
+    uint tempL = flatElements.n_rows;
+    uint trueL = uvElements.n_rows;
+
+    //uvec uvNsort = sort_index(uvElements);
+    //uvec uvElemtemp = uvElements.elem(uvNsort);
+    //uvec uvBsort = sort_index(uvNsort); //backsort
+
+    uvec remains(flatElements.n_rows);
+    uint remN = 0;
+
+    umat block(fmBlocks(uiCurrent_block)(flatBlockmap1(tempN)).n_rows, fmBlocks(uiCurrent_block)(flatBlockmap1(tempN)).n_cols);
+    block *= 0;
+
+    //SpMat<uint> block2;
+    //block2.set_size(fmBlocks(uiCurrent_block)(flatBlockmap1(tempN)).n_rows, fmBlocks(uiCurrent_block)(flatBlockmap1(tempN)).n_cols);
+
+
+    fspDims(flatBlockmap1(0), 0) = fmBlocks(uiCurrent_block)(flatBlockmap1(tempN)).n_rows; //nx
+    fspDims(flatBlockmap1(0), 1) = fmBlocks(uiCurrent_block)(flatBlockmap1(tempN)).n_cols; //ny
+
+
+    umat sparseblock(3, tempL);
+    uint count = 0;
+    //for(tempN = 0; tempN < tempL; tempN++){
+    while(tempN < tempL){
+        if(trueN<trueL){
+            if(uvElemtemp1(trueN) == flatElements(tempN)){
+                //multiple occurances, correct elem index in block
+                fmBlocks(uiCurrent_block)(flatBlockmap1(tempN))(flatBlockmap2(tempN),flatBlockmap3(tempN)) = uvNsort1(trueN);
+                //block(flatBlockmap2(tempN),flatBlockmap3(tempN)) = uvNsort1(trueN);
+                //block2(flatBlockmap2(tempN),flatBlockmap3(tempN)) = uvNsort1(trueN);
+                sparseblock(0, count) = uvNsort1(trueN); //element
+                sparseblock(1, count) = flatBlockmap2(tempN); //x
+                sparseblock(2, count) = flatBlockmap3(tempN); //y
+                count += 1;
+
+
+                trueN += 1;
+                tempN += 1;
+
+            }
+            else{
+                if(uvElemtemp1(trueN) < flatElements(tempN)){
+                    //advance trueN until multiple occurance
+                    //what about this one?
+                    trueN += 1;
+
+                }
+                else{
+                    //flat < evElem, append elem to remains
+                    remains(remN) = flatElements(tempN);
+                    fmBlocks(uiCurrent_block)(flatBlockmap1(tempN))(flatBlockmap2(tempN),flatBlockmap3(tempN)) = trueL + remN;
+                    remN += 1;
+                    tempN += 1;
+
+                }
+            }
+        }
+        else{
+            //block outside domain
+            remains(remN) = flatElements(tempN);
+            fmBlocks(uiCurrent_block)(flatBlockmap1(tempN))(flatBlockmap2(tempN),flatBlockmap3(tempN)) = trueL + remN;
+            remN += 1;
+            tempN += 1;
+        }
+    }
+    //cout << "remaining T:" << remN << endl;
+    //umat tt(2,2);
+    //fmBlocks(uiCurrent_block)(flatBlockmap1(0)) = block; //block;
+    fmBlocks(uiCurrent_block)(flatBlockmap1(0)).set_size(0);
+
+    //fspBlocks(flatBlockmap1(0)) = block2;
+    if(count != 0){
+        fspBlocks(flatBlockmap1(0)) = sparseblock.cols(span(0,count-1));
+    }
+    else{
+        umat b(3,1);
+        b*=0;
+        fspBlocks(flatBlockmap1(0)) = b;
+    }
+    /*
+    //join remains to uvElements
+    if(remN!=0){
+        uvElements = join_cols<umat>(uvElements, remains(span(0,remN-1)));
+    }
+    */
+}
+
+
+void amplitude::consolidate_blocks(uint uiN, uint tempElementsSize, field<uvec> tempElements, field<uvec> tempBlockmap1,field<uvec> tempBlockmap2,field<uvec> tempBlockmap3){
+
+    //Flatten fields into 1d uvecs
+
+    uvec flatElements(tempElementsSize);
+    uvec flatBlockmap1(tempElementsSize);
+    uvec flatBlockmap2(tempElementsSize);
+    uvec flatBlockmap3(tempElementsSize);
+
+    ivec flatBconfig(tempElementsSize);
+
+    uint counter = 0;
+    for(uint ni = 0; ni<uiN; ++ni){
+        for(uint nj = 0; nj < tempElements(ni).n_rows; ++nj){
+            flatElements(counter) = tempElements(ni)(nj);
+            flatBlockmap1(counter) = tempBlockmap1(ni)(nj);
+            flatBlockmap2(counter) = tempBlockmap2(ni)(nj);
+            flatBlockmap3(counter) = tempBlockmap3(ni)(nj);
+
+            //flatBconfig(counter) = bconfigs(ni)(nj);
+
+            counter += 1;
+        }
+        tempElements(ni).set_size(0);
+        tempBlockmap1(ni).set_size(0);
+        tempBlockmap2(ni).set_size(0);
+        tempBlockmap3(ni).set_size(0);
+
+    }
+    // ####################################################################
+    // ## Consolidate blocks with existing configurations                ##
+    // ####################################################################
+
+
+    umat n = sort_index(flatElements);
+    flatElements = flatElements.elem(n);
+    flatBlockmap1 = flatBlockmap1.elem(n); //DOES THIS SORT PROPERLY? UNKNOWN,
+    flatBlockmap2 = flatBlockmap2.elem(n); //DOES THIS SORT PROPERLY? UNKNOWN,
+    flatBlockmap3 = flatBlockmap3.elem(n); //DOES THIS SORT PROPERLY? UNKNOWN,
+
+    uint tempN = 0;
+    uint trueN = 0;
+    uint tempL = flatElements.n_rows;
+    uint trueL = uvElements.n_rows;
+
+    uvec uvNsort = sort_index(uvElements);
+    uvec uvElemtemp = uvElements.elem(uvNsort);
+    uvec uvBsort = sort_index(uvNsort); //backsort
+
+    uvec remains(flatElements.n_rows);
+    uint remN = 0;
+
+
+    //for(tempN = 0; tempN < tempL; tempN++){
+    while(tempN < tempL){
+        if(trueN<trueL){
+            if(uvElemtemp(trueN) == flatElements(tempN)){
+                //multiple occurances, correct elem index in block
+                fmBlocks(uiCurrent_block)(flatBlockmap1(tempN))(flatBlockmap2(tempN),flatBlockmap3(tempN)) = uvNsort(trueN);
+                trueN += 1;
+                tempN += 1;
+
+            }
+            else{
+                if(uvElemtemp(trueN) < flatElements(tempN)){
+                    //advance trueN until multiple occurance
+                    //what about this one?
+                    trueN += 1;
+
+                }
+                else{
+                    //flat < evElem, append elem to remains
+                    remains(remN) = flatElements(tempN);
+                    fmBlocks(uiCurrent_block)(flatBlockmap1(tempN))(flatBlockmap2(tempN),flatBlockmap3(tempN)) = trueL + remN;
+                    remN += 1;
+                    tempN += 1;
+
+                }
+            }
+        }
+        else{
+            //block outside domain
+            remains(remN) = flatElements(tempN);
+            fmBlocks(uiCurrent_block)(flatBlockmap1(tempN))(flatBlockmap2(tempN),flatBlockmap3(tempN)) = trueL + remN;
+            remN += 1;
+            tempN += 1;
+        }
+    }
+    cout << "remaining T:" << remN << endl;
+
+    //join remains to uvElements
+    if(remN!=0){
+        uvElements = join_cols<umat>(uvElements, remains(span(0,remN-1)));
+    }
+    /*
+    bool all_resolved = false;
+    while(trueN < trueL){
+        //if(uvElements(trueN) == flatElements(tempN)){
+        if(uvElemtemp(trueN) == flatElements(tempN)){
+
+            //identical indexes occuring in
+            //cout << trueN << endl;
+            //fmBlocks(uiCurrent_block)(flatBlockmap1(tempN))(flatBlockmap2(tempN),flatBlockmap3(tempN)) = trueN;
+            fmBlocks(uiCurrent_block)(flatBlockmap1(tempN))(flatBlockmap2(tempN),flatBlockmap3(tempN)) = uvNsort(trueN);
+            trueN += 1;
+            tempN += 1;
+            if(tempN>=tempL){
+                all_resolved = true;
+                break;
+            }
+        }
+        else{
+
+            //if(uvElements(trueN) < flatElements(tempN)){
+            if(uvElemtemp(trueN) < flatElements(tempN)){
+                trueN += 1;
+            }
+            else{
+                //append to remains
+                fmBlocks(uiCurrent_block)(flatBlockmap1(tempN))(flatBlockmap2(tempN),flatBlockmap3(tempN)) = trueL + remN; //uvNsort(trueN);
+                remains(remN) = flatElements(tempN);
+                remN += 1;
+
+                tempN += 1;
+                if(tempN>=tempL){
+                    all_resolved = true;
+                    break;
+                }
+            }
+
+        }
+    }
+
+
+    //if(all_resolved != true){
+    if(tempN<tempL){
+        uvec remaining(tempL-tempN);
+        uint tN = 0;
+        while(tempN<tempL){
+            //cout << "new block" << trueN + tN << endl;
+            remaining(tN) = flatElements(tempN);
+            fmBlocks(uiCurrent_block)(flatBlockmap1(tempN))(flatBlockmap2(tempN),flatBlockmap3(tempN)) = trueN + tN;
+            tempN += 1;
+            tN += 1;
+        }
+
+        //cout << tempL << " "<< tempN << " " << remaining.n_elem << " " << uvElements.n_elem << endl;
+        uvElements = join_cols<umat>(uvElements, remaining);
+    }
+    */
+
+}
+
 void amplitude::init_interaction(ivec shift){
     //imat L(2,3);
     //imat R(2,3);
@@ -709,6 +966,9 @@ void amplitude::map_t3_124_356(ivec Kk_unique){
                 block(nx, ny) = index;
             }
         }
+
+
+
         fmBlocks(uiCurrent_block)(n) = block;
         tempElements(n) = tElements;
         tempBlockmap1(n) = tBlockmap1; //block that element belongs to
@@ -716,50 +976,213 @@ void amplitude::map_t3_124_356(ivec Kk_unique){
         tempBlockmap3(n) = tBlockmap3; //column of element
 
 
-
-
-
-
-
-
     }
+
+    consolidate_blocks(uiN, tempElementsSize, tempElements, tempBlockmap1, tempBlockmap2, tempBlockmap3);
 
     // ####################################################################
     // ## Flatten bconfigs                                               ##
     // ####################################################################
-
-
-
-
-    // ####################################################################
-    // ## Flatten tempElements and tempBlockmap                          ##
-    // ####################################################################
-    uvec flatElements(tempElementsSize);
-    uvec flatBlockmap1(tempElementsSize);
-    uvec flatBlockmap2(tempElementsSize);
-    uvec flatBlockmap3(tempElementsSize);
 
     ivec flatBconfig(tempElementsSize);
 
     uint counter = 0;
     for(uint ni = 0; ni<uiN; ++ni){
         for(uint nj = 0; nj < tempElements(ni).n_rows; ++nj){
-            flatElements(counter) = tempElements(ni)(nj);
-            flatBlockmap1(counter) = tempBlockmap1(ni)(nj);
-            flatBlockmap2(counter) = tempBlockmap2(ni)(nj);
-            flatBlockmap3(counter) = tempBlockmap3(ni)(nj);
 
             flatBconfig(counter) = bconfigs(ni)(nj);
 
             counter += 1;
         }
-        tempElements(ni).set_size(0);
-        tempBlockmap1(ni).set_size(0);
-        tempBlockmap2(ni).set_size(0);
-        tempBlockmap3(ni).set_size(0);
 
     }
 
+    ivBconfigs = unique(join_cols(ivBconfigs, flatBconfig)); //consolidate unique configs "unaligned"
+    ivBconfigs = sort(ivBconfigs);
+
+
+
+
+    //lock and load
+    uiCurrent_block += 1;
+}
+
+void amplitude::map_t3_124_356_new(ivec Kk_unique){
+    field<ivec> abi = pph();
+    field<ivec> cjk = phh();
+
+    //Kk_unique.print();
+    ivec k_unique = intersect1d(unique(abi(3)), unique(cjk(3)));
+
+    ivec K_unique = intersect1d(k_unique, Kk_unique);
+
+    field<uvec> tempRows = partition_pph(abi, K_unique);
+    field<uvec> tempCols = partition_phh(cjk, K_unique);
+    //Kk_unique.print();
+    uint uiN = K_unique.n_elem;
+
+    blocklengths(uiCurrent_block) = uiN; //number of blocks in config
+    fvConfigs(uiCurrent_block) = K_unique; //ordering
+    fmBlocks(uiCurrent_block).set_size(uiN);
+
+    field<uvec> tempElements(uiN);
+    field<uvec> tempBlockmap1(uiN);
+    field<uvec> tempBlockmap2(uiN);
+    field<uvec> tempBlockmap3(uiN);
+
+    uint tempElementsSize = 0;
+    uvec a,b,c,i,j,k;
+    //uint systemsize = 0;
+    uint Np2 = Np*Np;
+    uint Nph = Np*Nh;
+
+    field<ivec> bconfigs(uiN); //normally aligned configurations for each block
+    uint bconfig_len = 0;
+
+    uvec uvNsort = sort_index(uvElements); //tosort
+    uvec uvElemtemp = uvElements.elem(uvNsort); //sorted
+    uvec uvBsort = sort_index(uvElemtemp); //backsort
+
+    for(uint n = 0; n <K_unique.n_rows; ++n){
+        uvec dim(6);
+        uvec row = tempRows(n);
+        uvec col = tempCols(n);
+        //systemsize += row.n_rows*col.n_rows;
+
+
+        int Nx = row.n_rows;
+        int Ny = col.n_rows;
+        //cout << Nx << " " << Ny << " " << " " << K_unique(n) << endl;
+        umat block(Nx,Ny);
+        uvec pqrs(6);
+        uvec tElements(Nx*Ny);
+        uvec tBlockmap1(Nx*Ny);
+        uvec tBlockmap2(Nx*Ny);
+        uvec tBlockmap3(Nx*Ny);
+
+        i = floor(row/Np2); //k
+        b = floor((row  - i*Np2)/Np);
+        a = row - i*Np2 - b*Np;
+
+        k = floor(col/Nph); //k
+        j = floor((col - k*Nph)/Np);
+        c = col - k*Nph - j*Np;
+
+        bconfigs(n).set_size(Nx*Ny); //collect unique config "unaligned"
+        bconfig_len += Ny;
+
+        uint index;
+        tempElementsSize += Nx*Ny;
+        for(int nx = 0; nx < Nx; nx++){
+            for(int ny = 0; ny < Ny; ny++){
+
+                index = to6(a(nx), b(nx), c(ny), i(nx), j(ny), k(ny));
+
+
+                bconfigs(n)(nx*Ny + ny) = eBs.unique_int(i(nx)) + eBs.unique_int(j(ny)) +eBs.unique_int(k(ny));
+
+                tElements(nx*Ny + ny) = index;
+                tBlockmap1(nx*Ny + ny) = n;
+                tBlockmap2(nx*Ny + ny) = nx;
+                tBlockmap3(nx*Ny + ny) = ny;
+                block(nx, ny) = index;
+            }
+        }
+        fmBlocks(uiCurrent_block)(n) = block;
+        //tempElements(n) = tElements;
+        //tempBlockmap1(n) = tBlockmap1; //block that element belongs to
+        //tempBlockmap2(n) = tBlockmap2; //row of element
+        //tempBlockmap3(n) = tBlockmap3; //column of element
+
+        //consolidate each block as they are traversed
+
+        umat ns = sort_index(tElements);
+        uvec flatElements = tElements.elem(ns);
+        uvec flatBlockmap1 = tBlockmap1.elem(ns); //DOES THIS SORT PROPERLY? UNKNOWN,
+        uvec flatBlockmap2 = tBlockmap2.elem(ns); //DOES THIS SORT PROPERLY? UNKNOWN,
+        uvec flatBlockmap3 = tBlockmap3.elem(ns); //DOES THIS SORT PROPERLY? UNKNOWN,
+
+        uint tempN = 0;
+        uint trueN = 0;
+        uint tempL = flatElements.n_rows;
+        uint trueL = uvElements.n_rows;
+
+
+
+
+        bool all_resolved = false;
+        while(trueN < trueL){
+            //if(uvElements(trueN) == flatElements(tempN)){
+            if(uvElemtemp(trueN) == flatElements(tempN)){
+
+                //identical indexes occuring in
+                //cout << trueN << endl;
+                //fmBlocks(uiCurrent_block)(flatBlockmap1(tempN))(flatBlockmap2(tempN),flatBlockmap3(tempN)) = trueN;
+                fmBlocks(uiCurrent_block)(flatBlockmap1(tempN))(flatBlockmap2(tempN),flatBlockmap3(tempN)) = uvNsort(trueN);
+                trueN += 1;
+                tempN += 1;
+                if(tempN>=tempL){
+                    all_resolved = true;
+                    break;
+                }
+            }
+            else{
+
+                //if(uvElements(trueN) < flatElements(tempN)){
+                if(uvElemtemp(trueN) < flatElements(tempN)){
+                    trueN += 1;
+                }
+                else{
+                    //flatElements(tempN) does not occur in uvElements
+                    cout << fmBlocks(uiCurrent_block)(flatBlockmap1(tempN))(flatBlockmap2(tempN),flatBlockmap3(tempN)) << endl;
+                    tempN += 1;
+                    if(tempN>=tempL){
+                        all_resolved = true;
+                        break;
+                    }
+                }
+
+            }
+        }
+
+
+        //if(all_resolved != true){
+        if(tempN<tempL){
+            uvec remaining(tempL-tempN);
+            uint tN = 0;
+            while(tempN<tempL){
+                //cout << "new block" << trueN + tN << endl;
+                remaining(tN) = flatElements(tempN);
+                fmBlocks(uiCurrent_block)(flatBlockmap1(tempN))(flatBlockmap2(tempN),flatBlockmap3(tempN)) = trueN + tN;
+                tempN += 1;
+                tN += 1;
+            }
+
+            //cout << tempL << " "<< tempN << " " << remaining.n_elem << " " << uvElements.n_elem << endl;
+            uvElements = join_cols<umat>(uvElements, remaining);
+        }
+
+
+
+
+
+
+
+
+
+    }
+
+
+    ivec flatBconfig(tempElementsSize);
+
+    uint counter = 0;
+    for(uint ni = 0; ni<uiN; ++ni){
+        for(uint nj = 0; nj < tempElements(ni).n_rows; ++nj){
+            flatBconfig(counter) = bconfigs(ni)(nj);
+
+            counter += 1;
+        }
+    }
     ivBconfigs = unique(join_cols(ivBconfigs, flatBconfig)); //consolidate unique configs "unaligned"
     ivBconfigs = sort(ivBconfigs);
 
@@ -768,60 +1191,7 @@ void amplitude::map_t3_124_356(ivec Kk_unique){
     // ####################################################################
 
 
-    umat n = sort_index(flatElements);
-    flatElements = flatElements.elem(n);
-    flatBlockmap1 = flatBlockmap1.elem(n); //DOES THIS SORT PROPERLY? UNKNOWN,
-    flatBlockmap2 = flatBlockmap2.elem(n); //DOES THIS SORT PROPERLY? UNKNOWN,
-    flatBlockmap3 = flatBlockmap3.elem(n); //DOES THIS SORT PROPERLY? UNKNOWN,
 
-    uint tempN = 0;
-    uint trueN = 0;
-    uint tempL = flatElements.n_rows;
-    uint trueL = uvElements.n_rows;
-    bool all_resolved = false;
-    while(trueN < trueL){
-        if(uvElements(trueN) == flatElements(tempN)){
-            //identical indexes occuring in
-            //cout << trueN << endl;
-            fmBlocks(uiCurrent_block)(flatBlockmap1(tempN))(flatBlockmap2(tempN),flatBlockmap3(tempN)) = trueN;
-            trueN += 1;
-            tempN += 1;
-            if(tempN>=tempL){
-                all_resolved = true;
-                break;
-            }
-        }
-        else{
-            if(uvElements(trueN) < flatElements(tempN)){
-                trueN += 1;
-            }
-            else{
-                tempN += 1;
-                if(tempN>=tempL){
-                    all_resolved = true;
-                    break;
-                }
-            }
-
-        }
-    }
-
-
-    //if(all_resolved != true){
-    if(tempN<tempL){
-        uvec remaining(tempL-tempN);
-        uint tN = 0;
-        while(tempN<tempL){
-            cout << "new block" << trueN + tN << endl;
-            remaining(tN) = flatElements(tempN);
-            fmBlocks(uiCurrent_block)(flatBlockmap1(tempN))(flatBlockmap2(tempN),flatBlockmap3(tempN)) = trueN + tN;
-            tempN += 1;
-            tN += 1;
-        }
-
-        //cout << tempL << " "<< tempN << " " << remaining.n_elem << " " << uvElements.n_elem << endl;
-        uvElements = join_cols<umat>(uvElements, remaining);
-    }
 
 
     //lock and load
@@ -2082,6 +2452,8 @@ void amplitude::map_t3_permutations_bconfig_sparse(){
     blocklengths(uiCurrent_block) = uiN; //number of blocks in config
     fvConfigs(uiCurrent_block) = K_unique; //ordering
     fmBlocks(uiCurrent_block).set_size(uiN);
+    fspBlocks.set_size(uiN);
+    fspDims.set_size(uiN,2);
 
     field<uvec> tempElements(uiN);
     field<uvec> tempBlockmap1(uiN);
@@ -2091,6 +2463,11 @@ void amplitude::map_t3_permutations_bconfig_sparse(){
     uint tempElementsSize = 0;
     //uvec a,b,c,i,j,k;
     uint systemsize = 0;
+
+    uvNsort1 = sort_index(uvElements);
+    uvElemtemp1 = uvElements.elem(uvNsort1);
+    uvBsort1 = sort_index(uvNsort1); //backsort
+
     for(uint n = 0; n <K_unique.n_rows; ++n){
         uvec dim(6);
         row = tempRows(n);
@@ -2136,11 +2513,16 @@ void amplitude::map_t3_permutations_bconfig_sparse(){
 
         fmBlocks(uiCurrent_block)(n) = block;
 
+
+        enroll_block(Nx*Ny, tElements, tBlockmap1, tBlockmap2, tBlockmap3);
+
         //consolidate block right here
         // ####################################################################
         // ## Consolidate blocks with existing configurations                ##
         // ####################################################################
 
+
+        /*
         uvec flatElements(Nx*Ny);
         uvec flatBlockmap1(Nx*Ny);
         uvec flatBlockmap2(Nx*Ny);
@@ -2164,6 +2546,7 @@ void amplitude::map_t3_permutations_bconfig_sparse(){
         uint tempL = flatElements.n_rows;
         uint trueL = uvElements.n_rows;
         bool all_resolved = false;
+
         while(trueN < trueL){
             if(uvElements(trueN) == flatElements(tempN)){
                 //identical indexes occuring in
@@ -2195,7 +2578,7 @@ void amplitude::map_t3_permutations_bconfig_sparse(){
             }
         }
         fmBlocks(uiCurrent_block)(n) = block3;
-
+        */
 
 
         /*
@@ -2475,6 +2858,17 @@ mat amplitude::getblock(int u, int i){
     return block;
 }
 
+mat amplitude::getsblock(int u, int i){
+    umat indblock = getfspBlock(i);;
+
+    //sp_mat<uint> fs = fspBlocks(i);
+    //umat indblock(fs);
+
+    mat block = vElements.elem(indblock);
+    block.reshape(fspDims(i,0), fspDims(i,1));
+    return block;
+}
+
 umat amplitude::getraw(int u, int i){
     //return index block, used for debugging and optimization
     return fmBlocks(u)(i);
@@ -2569,31 +2963,103 @@ mat amplitude::getblock_permuted(int u, int i, int n){
     return block;
 }
 
+umat amplitude::getfspBlock(uint i){
+    uint Nx = fspDims(i,0);
+    uint Ny = fspDims(i,1);
+    umat block(Nx, Ny);
+    block*=0;
+
+    umat indices = fspBlocks(i);
+    //indices.print();
+    for(uint ni = 0; ni < indices.n_cols; ++ni){
+
+        block(indices(1,ni), indices(2,ni)) = indices(0,ni);
+    }
+
+    return block;
+}
+
+mat amplitude::getsblock_permuted(int u, int i, int n){
+    //return index block, used for debugging and optimization
+
+    umat aligned = getfspBlock(i);
+    // umat aligned = fmBlocks(u)(i);
+
+    if(n==0){
+        aligned = aligned.rows(Pab(i));
+    }
+    if(n==1){
+        aligned = aligned.rows(Pac(i));
+    }
+    if(n==2){
+        aligned = aligned.rows(Pbc(i));
+    }
+    if(n==3){
+        aligned = aligned.cols(Pij(i));
+    }
+    if(n==4){
+        aligned = aligned.cols(Pik(i));
+    }
+    if(n==5){
+        aligned = aligned.cols(Pjk(i));
+    }
+    if(n==6){
+        aligned = aligned.rows(Pab(i));
+        aligned = aligned.cols(Pij(i));
+    }
+    if(n==7){
+        aligned = aligned.rows(Pab(i));
+        aligned = aligned.cols(Pik(i));
+    }
+    if(n==8){
+        aligned = aligned.rows(Pab(i));
+        aligned = aligned.cols(Pjk(i));
+    }
+    if(n==9){
+        aligned = aligned.rows(Pac(i));
+        aligned = aligned.cols(Pij(i));
+    }
+    if(n==10){
+        aligned = aligned.rows(Pac(i));
+        aligned = aligned.cols(Pik(i));
+    }
+    if(n==11){
+        aligned = aligned.rows(Pac(i));
+        aligned = aligned.cols(Pjk(i));
+    }
+    if(n==12){
+        aligned = aligned.rows(Pbc(i));
+        aligned = aligned.cols(Pij(i));
+    }
+    if(n==13){
+        aligned = aligned.rows(Pbc(i));
+        aligned = aligned.cols(Pik(i));
+    }
+    if(n==14){
+        aligned = aligned.rows(Pbc(i));
+        aligned = aligned.cols(Pjk(i));
+    }
+
+    mat block = vElements.elem(aligned);
+    block.reshape(fspDims(i,0), fspDims(i,1));
+
+    return block;
+}
+
 
 void amplitude::setblock(int u, int i, mat mBlock){
     vElements.elem(fmBlocks(u)(i)) = vectorise(mBlock);
 }
 
 void amplitude::addblock(int u, int i, mat mBlock){
-    //vectorise(mBlock);
-    //cout << mBlock.size() << endl;
-    //fmBlocks(u)(i).print();
-    //cout << endl;
-    //cout <<vElements.n_elem <<endl;
-    //cout << endl;
-    //vElements.elem(fmBlocks(u)(i)).print();
-    //cout << endl;
-    //mBlock.print();
-
-    //cout << endl;
-    //cout << endl;
-
-    //vec elems = vElements.elem(fmBlocks(u)(i));
-    //cout << elems.n_elem << endl;
-    //cout << vElements.elem(fmBlocks(u)(i)).n_elem << endl;
-    //vectorise(mBlock).print();
 
     vElements.elem(fmBlocks(u)(i)) += vectorise(mBlock);
+}
+
+void amplitude::addsblock(int u, int i, mat mBlock){
+    umat block = getfspBlock(i);
+
+    vElements.elem(block) += vectorise(mBlock);
 }
 
 

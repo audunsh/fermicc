@@ -30,6 +30,18 @@ public:
     void print_block_maximum();
 
 
+    void consolidate_blocks(uint uiN, uint tempElementsSize, field<uvec> tempElements, field<uvec> tempBlockmap1,field<uvec> tempBlockmap2,field<uvec> tempBlockmap3);
+    void enroll_block(uint tempElementsSize, uvec tempElements, uvec tempBlockmap1,uvec tempBlockmap2,uvec tempBlockmap3);
+    uvec uvNsort1; // = sort_index(uvElements);
+    uvec uvElemtemp1;// = uvElements.elem(uvNsort);
+    uvec uvBsort1;// = sort_index(uvNsort); //backsort
+    //field<SpMat<uint> > fspBlocks; //sparse blocks with t3 amplitudes
+    field<umat> fspBlocks;
+    umat fspDims;
+    umat getfspBlock(uint i);
+
+
+
     //index related functions
     field<uvec> unpack(uvec vStream, imat imOrder); //unpack a disorganized sequence of indices
     uvec unpack_uvec(uint vStream, imat imOrder);
@@ -38,6 +50,8 @@ public:
     void map_t3_236_145(ivec Kk_unique);
     void map_t3_623_451(ivec Kk_unique);
     void map_t3_124_356(ivec Kk_unique);
+    void map_t3_124_356_new(ivec Kk_unique);
+
 
 
 
@@ -47,9 +61,13 @@ public:
     field<uvec> blocksort(ivec LHS, ivec K_unique);
 
     mat getblock(int u, int i);
+    mat getsblock(int u, int i);
 
     void setblock(int u, int i, mat mBlock);
     void addblock(int u, int i, mat mBlock);
+    void addsblock(int u, int i, mat mBlock);
+
+
 
     //Block storage
     int k_step;   //stepsize for identifying unique regions
@@ -101,6 +119,8 @@ public:
     umat getraw(int u, int i);
     umat getraw_permuted(int u, int i, int n);
     mat getblock_permuted(int u, int i, int n);
+    mat getsblock_permuted(int u, int i, int n);
+
 
     void compress();
 
