@@ -44,6 +44,7 @@ void amplitude::init(electrongas bs, int n_configs, uvec size){
 
     uvSize = size; //true state configurations (Np, Np, Nh, Nh) or (Np, Np, Np, Nh, Nh, Nh) (or similar)
 
+    ivBconfigs.set_size(0);
 }
 
 // ##################################################
@@ -282,6 +283,10 @@ void amplitude::map_t3_236_145(ivec Kk_unique){
     //uint systemsize = 0;
     uint Np2 = Np*Np;
     uint Nph = Np*Nh;
+
+    field<ivec> bconfigs(uiN); //normally aligned configurations for each block
+    uint bconfig_len = 0;
+
     for(uint n = 0; n <K_unique.n_rows; ++n){
         uvec dim(6);
         uvec row = tempRows(n);
@@ -307,6 +312,8 @@ void amplitude::map_t3_236_145(ivec Kk_unique){
         i = floor((col - j*Nph)/Np);
         a = col - j*Nph - i*Np;
 
+        bconfigs(n).set_size(Nx*Ny); //collect unique config "unaligned"
+        bconfig_len += Ny;
 
         uint index;
         tempElementsSize += Nx*Ny;
@@ -314,6 +321,9 @@ void amplitude::map_t3_236_145(ivec Kk_unique){
             for(int ny = 0; ny < Ny; ny++){
 
                 index = to6(a(ny), b(nx), c(nx), i(ny), j(ny), k(nx));
+
+                bconfigs(n)(nx*Ny + ny) = eBs.unique_int(i(ny)) + eBs.unique_int(j(ny)) +eBs.unique_int(k(nx));
+
 
                 tElements(nx*Ny + ny) = index;
                 tBlockmap1(nx*Ny + ny) = n;
@@ -329,14 +339,7 @@ void amplitude::map_t3_236_145(ivec Kk_unique){
         tempBlockmap3(n) = tBlockmap3; //column of element
 
 
-
-
-
-
-
-
     }
-
 
 
     // ####################################################################
@@ -347,6 +350,8 @@ void amplitude::map_t3_236_145(ivec Kk_unique){
     uvec flatBlockmap2(tempElementsSize);
     uvec flatBlockmap3(tempElementsSize);
 
+    ivec flatBconfig(tempElementsSize);
+
     uint counter = 0;
     for(uint ni = 0; ni<uiN; ++ni){
         for(uint nj = 0; nj < tempElements(ni).n_rows; ++nj){
@@ -354,6 +359,9 @@ void amplitude::map_t3_236_145(ivec Kk_unique){
             flatBlockmap1(counter) = tempBlockmap1(ni)(nj);
             flatBlockmap2(counter) = tempBlockmap2(ni)(nj);
             flatBlockmap3(counter) = tempBlockmap3(ni)(nj);
+
+            flatBconfig(counter) = bconfigs(ni)(nj);
+
             counter += 1;
         }
         tempElements(ni).set_size(0);
@@ -361,7 +369,11 @@ void amplitude::map_t3_236_145(ivec Kk_unique){
         tempBlockmap2(ni).set_size(0);
         tempBlockmap3(ni).set_size(0);
 
+
     }
+
+    ivBconfigs = unique(join_cols(ivBconfigs, flatBconfig)); //consolidate unique configs "unaligned"
+    ivBconfigs = sort(ivBconfigs);
 
     // ####################################################################
     // ## Consolidate blocks with existing configurations                ##
@@ -387,7 +399,7 @@ void amplitude::map_t3_236_145(ivec Kk_unique){
             tempN += 1;
         }
         else{
-            if(uvElements(trueN) == flatElements(tempN)){
+            if(uvElements(trueN) < flatElements(tempN)){
                 trueN += 1;
             }
             else{
@@ -415,6 +427,7 @@ void amplitude::map_t3_236_145(ivec Kk_unique){
 
         //cout << tempL << " "<< tempN << " " << remaining.n_elem << " " << uvElements.n_elem << endl;
         uvElements = join_cols<umat>(uvElements, remaining);
+
     }
 
 
@@ -453,6 +466,10 @@ void amplitude::map_t3_623_451(ivec Kk_unique){
     uint Np2 = Np*Np;
     uint Nph = Np*Nh;
     uint Nh2 = Nh*Nh;
+
+    field<ivec> bconfigs(uiN); //normally aligned configurations for each block
+    uint bconfig_len = 0;
+
     for(uint n = 0; n <K_unique.n_rows; ++n){
         uvec dim(6);
         uvec row = tempRows(n);
@@ -480,6 +497,9 @@ void amplitude::map_t3_623_451(ivec Kk_unique){
         j = floor((col - a*Nh2)/Nh);
         i = col - a*Nh2 - j*Nh;
 
+        bconfigs(n).set_size(Nx*Ny); //collect unique config "unaligned"
+        bconfig_len += Ny;
+
 
         uint index;
         tempElementsSize += Nx*Ny;
@@ -487,6 +507,8 @@ void amplitude::map_t3_623_451(ivec Kk_unique){
             for(int ny = 0; ny < Ny; ny++){
 
                 index = to6(a(ny), b(nx), c(nx), i(ny), j(ny), k(nx));
+
+                bconfigs(n)(nx*Ny + ny) = eBs.unique_int(i(ny)) + eBs.unique_int(j(ny)) +eBs.unique_int(k(nx));
 
 
                 tElements(nx*Ny + ny) = index;
@@ -503,13 +525,13 @@ void amplitude::map_t3_623_451(ivec Kk_unique){
         tempBlockmap3(n) = tBlockmap3; //column of element
 
 
-
-
-
-
-
-
     }
+
+    // ####################################################################
+    // ## Flatten bconfigs                                               ##
+    // ####################################################################
+
+
 
 
 
@@ -521,6 +543,8 @@ void amplitude::map_t3_623_451(ivec Kk_unique){
     uvec flatBlockmap2(tempElementsSize);
     uvec flatBlockmap3(tempElementsSize);
 
+    ivec flatBconfig(tempElementsSize);
+
     uint counter = 0;
     for(uint ni = 0; ni<uiN; ++ni){
         for(uint nj = 0; nj < tempElements(ni).n_rows; ++nj){
@@ -528,6 +552,9 @@ void amplitude::map_t3_623_451(ivec Kk_unique){
             flatBlockmap1(counter) = tempBlockmap1(ni)(nj);
             flatBlockmap2(counter) = tempBlockmap2(ni)(nj);
             flatBlockmap3(counter) = tempBlockmap3(ni)(nj);
+
+            flatBconfig(counter) = bconfigs(ni)(nj);
+
             counter += 1;
         }
         tempElements(ni).set_size(0); //release memory
@@ -536,6 +563,9 @@ void amplitude::map_t3_623_451(ivec Kk_unique){
         tempBlockmap3(ni).set_size(0);
 
     }
+
+    ivBconfigs = unique(join_cols(ivBconfigs, flatBconfig)); //consolidate unique configs "unaligned"
+    ivBconfigs = sort(ivBconfigs);
 
     // ####################################################################
     // ## Consolidate blocks with existing configurations                ##
@@ -579,11 +609,13 @@ void amplitude::map_t3_623_451(ivec Kk_unique){
         }
     }
 
-    if(tempN<tempL){
-        //if(all_resolved != true){
+    //if(tempN<tempL){
+    if(all_resolved != true){
+        cout << "remaining  blocks" << endl;
         uvec remaining(tempL-tempN);
         uint tN = 0;
         while(tempN<tempL){
+            //cout << trueN + tN << endl;
             remaining(tN) = flatElements(tempN);
             fmBlocks(uiCurrent_block)(flatBlockmap1(tempN))(flatBlockmap2(tempN),flatBlockmap3(tempN)) = trueN + tN;
             tempN += 1;
@@ -592,6 +624,7 @@ void amplitude::map_t3_623_451(ivec Kk_unique){
 
         //cout << tempL << " "<< tempN << " " << remaining.n_elem << " " << uvElements.n_elem << endl;
         uvElements = join_cols<umat>(uvElements, remaining);
+
     }
 
 
@@ -627,6 +660,10 @@ void amplitude::map_t3_124_356(ivec Kk_unique){
     //uint systemsize = 0;
     uint Np2 = Np*Np;
     uint Nph = Np*Nh;
+
+    field<ivec> bconfigs(uiN); //normally aligned configurations for each block
+    uint bconfig_len = 0;
+
     for(uint n = 0; n <K_unique.n_rows; ++n){
         uvec dim(6);
         uvec row = tempRows(n);
@@ -652,6 +689,8 @@ void amplitude::map_t3_124_356(ivec Kk_unique){
         j = floor((col - k*Nph)/Np);
         c = col - k*Nph - j*Np;
 
+        bconfigs(n).set_size(Nx*Ny); //collect unique config "unaligned"
+        bconfig_len += Ny;
 
         uint index;
         tempElementsSize += Nx*Ny;
@@ -659,6 +698,9 @@ void amplitude::map_t3_124_356(ivec Kk_unique){
             for(int ny = 0; ny < Ny; ny++){
 
                 index = to6(a(nx), b(nx), c(ny), i(nx), j(ny), k(ny));
+
+
+                bconfigs(n)(nx*Ny + ny) = eBs.unique_int(i(nx)) + eBs.unique_int(j(ny)) +eBs.unique_int(k(ny));
 
                 tElements(nx*Ny + ny) = index;
                 tBlockmap1(nx*Ny + ny) = n;
@@ -682,6 +724,11 @@ void amplitude::map_t3_124_356(ivec Kk_unique){
 
     }
 
+    // ####################################################################
+    // ## Flatten bconfigs                                               ##
+    // ####################################################################
+
+
 
 
     // ####################################################################
@@ -692,6 +739,8 @@ void amplitude::map_t3_124_356(ivec Kk_unique){
     uvec flatBlockmap2(tempElementsSize);
     uvec flatBlockmap3(tempElementsSize);
 
+    ivec flatBconfig(tempElementsSize);
+
     uint counter = 0;
     for(uint ni = 0; ni<uiN; ++ni){
         for(uint nj = 0; nj < tempElements(ni).n_rows; ++nj){
@@ -699,6 +748,9 @@ void amplitude::map_t3_124_356(ivec Kk_unique){
             flatBlockmap1(counter) = tempBlockmap1(ni)(nj);
             flatBlockmap2(counter) = tempBlockmap2(ni)(nj);
             flatBlockmap3(counter) = tempBlockmap3(ni)(nj);
+
+            flatBconfig(counter) = bconfigs(ni)(nj);
+
             counter += 1;
         }
         tempElements(ni).set_size(0);
@@ -707,6 +759,9 @@ void amplitude::map_t3_124_356(ivec Kk_unique){
         tempBlockmap3(ni).set_size(0);
 
     }
+
+    ivBconfigs = unique(join_cols(ivBconfigs, flatBconfig)); //consolidate unique configs "unaligned"
+    ivBconfigs = sort(ivBconfigs);
 
     // ####################################################################
     // ## Consolidate blocks with existing configurations                ##
@@ -727,9 +782,14 @@ void amplitude::map_t3_124_356(ivec Kk_unique){
     while(trueN < trueL){
         if(uvElements(trueN) == flatElements(tempN)){
             //identical indexes occuring in
+            //cout << trueN << endl;
             fmBlocks(uiCurrent_block)(flatBlockmap1(tempN))(flatBlockmap2(tempN),flatBlockmap3(tempN)) = trueN;
             trueN += 1;
             tempN += 1;
+            if(tempN>=tempL){
+                all_resolved = true;
+                break;
+            }
         }
         else{
             if(uvElements(trueN) < flatElements(tempN)){
@@ -752,6 +812,7 @@ void amplitude::map_t3_124_356(ivec Kk_unique){
         uvec remaining(tempL-tempN);
         uint tN = 0;
         while(tempN<tempL){
+            cout << "new block" << trueN + tN << endl;
             remaining(tN) = flatElements(tempN);
             fmBlocks(uiCurrent_block)(flatBlockmap1(tempN))(flatBlockmap2(tempN),flatBlockmap3(tempN)) = trueN + tN;
             tempN += 1;
@@ -1172,7 +1233,7 @@ void amplitude::map_regions6c(imat L, imat R, ivec preconf){
             tempN += 1;
         }
         else{
-            if(uvElements(trueN) == flatElements(tempN)){
+            if(uvElements(trueN) < flatElements(tempN)){
                 trueN += 1;
             }
             else{
@@ -1205,7 +1266,7 @@ void amplitude::map_regions6c(imat L, imat R, ivec preconf){
 
     //lock and load
     uiCurrent_block += 1;
-} //map all regions defined by L == R
+}
 
 
 void amplitude::map_regions6(imat L, imat R){
@@ -1414,7 +1475,7 @@ void amplitude::map_regions6(imat L, imat R){
             tempN += 1;
         }
         else{
-            if(uvElements(trueN) == flatElements(tempN)){
+            if(uvElements(trueN) < flatElements(tempN)){
                 trueN += 1;
             }
             else{
@@ -1590,7 +1651,7 @@ void amplitude::map_t2_permutations(){
             tempN += 1;
         }
         else{
-            if(uvElements(trueN) == flatElements(tempN)){
+            if(uvElements(trueN) < flatElements(tempN)){
                 trueN += 1;
             }
             else{
@@ -1769,7 +1830,7 @@ void amplitude::map_t3_permutations(){
             tempN += 1;
         }
         else{
-            if(uvElements(trueN) == flatElements(tempN)){
+            if(uvElements(trueN) < flatElements(tempN)){
                 trueN += 1;
             }
             else{
@@ -1804,6 +1865,368 @@ void amplitude::map_t3_permutations(){
     uiCurrent_block += 1;
 
 
+
+
+}
+
+void amplitude::map_t3_permutations_bconfig(){
+    // ###################################################################
+    // ## Set up amplitude as t3temp with index permutations in blocks  ##
+    // ###################################################################
+
+    //Basically, we set up the standard amplitude sorting as abc-ijk, but store dimensions of each block so we ,may easily permute them later
+    field<ivec> abc = ppp({1,1,1});
+    field<ivec> ijk = hhh();
+
+    ivec K_unique = intersect1d(unique(abc(3)), unique(ijk(3)));
+
+    K_unique = intersect1d(K_unique, ivBconfigs); //map against preexisting configs
+
+    field<uvec> tempRows = partition_ppp_permutations(abc, K_unique);
+    //field<uvec> tempCols = partition(ijk(3), K_unique);
+    field<uvec> tempCols = partition_hhh_permutations(ijk, K_unique);
+    uvec row;
+    uvec col;
+    uvec a,b,c;
+    uvec i,j,k;
+
+
+    //for use in actual amplitude mapping
+    permutative_ordering.set_size(K_unique.n_rows);
+    uint uiN = K_unique.n_elem;
+
+    blocklengths(uiCurrent_block) = uiN; //number of blocks in config
+    fvConfigs(uiCurrent_block) = K_unique; //ordering
+    fmBlocks(uiCurrent_block).set_size(uiN);
+
+    field<uvec> tempElements(uiN);
+    field<uvec> tempBlockmap1(uiN);
+    field<uvec> tempBlockmap2(uiN);
+    field<uvec> tempBlockmap3(uiN);
+
+    uint tempElementsSize = 0;
+    //uvec a,b,c,i,j,k;
+    uint systemsize = 0;
+    for(uint n = 0; n <K_unique.n_rows; ++n){
+        uvec dim(6);
+        row = tempRows(n);
+        col = tempCols(n);
+        //systemsize += row.n_rows*col.n_rows;
+
+
+        int Nx = row.n_rows;
+        int Ny = col.n_rows;
+        //cout << Nx << " " << Ny << " " << " " << K_unique(i) << endl;
+        umat block(Nx,Ny);
+        uvec pqrs(4);
+        uvec tElements(Nx*Ny);
+        uvec tBlockmap1(Nx*Ny);
+        uvec tBlockmap2(Nx*Ny);
+        uvec tBlockmap3(Nx*Ny);
+
+        c = floor(row/(Np*Np)); //k
+        b = floor(((row - c*Np*Np))/Np);
+        a = row - c*Np*Np - b*Np;
+
+        k = floor(col/(Nh*Nh)); //k
+        j = floor(((col - k*Nh*Nh))/Nh);
+        i = col - k*Nh*Nh - j*Nh;
+
+
+        uint index;
+        tempElementsSize += Nx*Ny;
+        for(int nx = 0; nx < Nx; nx++){
+            for(int ny = 0; ny < Ny; ny++){
+
+                index = to6(a(nx), b(nx), c(nx), i(ny), j(ny), k(ny));
+
+                tElements(nx*Ny + ny) = index;
+                tBlockmap1(nx*Ny + ny) = n;
+                tBlockmap2(nx*Ny + ny) = nx;
+                tBlockmap3(nx*Ny + ny) = ny;
+                block(nx, ny) = index;
+            }
+        }
+        fmBlocks(0)(n) = block;
+        tempElements(n) = tElements;
+        tempBlockmap1(n) = tBlockmap1; //block that element belongs to
+        tempBlockmap2(n) = tBlockmap2; //row of element
+        tempBlockmap3(n) = tBlockmap3; //column of element
+
+
+
+
+
+
+
+
+    }
+    //cout << "Blocks:" << tempRows.n_rows << endl;
+    //cout << "Size:" << systemsize << endl;
+    //cout << "init_size:" << Np*(Np+1)*(Np+2)/6 << endl;
+
+
+    // ####################################################################
+    // ## Flatten tempElements and tempBlockmap                          ##
+    // ####################################################################
+    uvec flatElements(tempElementsSize);
+    uvec flatBlockmap1(tempElementsSize);
+    uvec flatBlockmap2(tempElementsSize);
+    uvec flatBlockmap3(tempElementsSize);
+
+    uint counter = 0;
+    for(uint ni = 0; ni<uiN; ++ni){
+        for(uint nj = 0; nj < tempElements(ni).n_rows; ++nj){
+            flatElements(counter) = tempElements(ni)(nj);
+            flatBlockmap1(counter) = tempBlockmap1(ni)(nj);
+            flatBlockmap2(counter) = tempBlockmap2(ni)(nj);
+            flatBlockmap3(counter) = tempBlockmap3(ni)(nj);
+            counter += 1;
+        }
+        tempElements(ni).set_size(0);
+        tempBlockmap1(ni).set_size(0);
+        tempBlockmap2(ni).set_size(0);
+        tempBlockmap3(ni).set_size(0);
+
+    }
+
+    // ####################################################################
+    // ## Consolidate blocks with existing configurations                ##
+    // ####################################################################
+
+
+    umat n = sort_index(flatElements);
+    flatElements = flatElements.elem(n);
+    flatBlockmap1 = flatBlockmap1.elem(n); //DOES THIS SORT PROPERLY? UNKNOWN,
+    flatBlockmap2 = flatBlockmap2.elem(n); //DOES THIS SORT PROPERLY? UNKNOWN,
+    flatBlockmap3 = flatBlockmap3.elem(n); //DOES THIS SORT PROPERLY? UNKNOWN,
+
+    uint tempN = 0;
+    uint trueN = 0;
+    uint tempL = flatElements.n_rows;
+    uint trueL = uvElements.n_rows;
+    bool all_resolved = false;
+    while(trueN < trueL){
+        if(uvElements(trueN) == flatElements(tempN)){
+            //identical indexes occuring in
+            fmBlocks(uiCurrent_block)(flatBlockmap1(tempN))(flatBlockmap2(tempN),flatBlockmap3(tempN)) = trueN;
+            trueN += 1;
+            tempN += 1;
+        }
+        else{
+            if(uvElements(trueN) < flatElements(tempN)){
+                trueN += 1;
+            }
+            else{
+                tempN += 1;
+                if(tempN>=tempL){
+                    all_resolved = true;
+                    break;
+                }
+            }
+
+        }
+    }
+
+
+    //if(all_resolved != true){
+    if(tempN<tempL){
+        uvec remaining(tempL-tempN);
+        uint tN = 0;
+        while(tempN<tempL){
+            remaining(tN) = flatElements(tempN);
+            fmBlocks(uiCurrent_block)(flatBlockmap1(tempN))(flatBlockmap2(tempN),flatBlockmap3(tempN)) = trueN + tN;
+            tempN += 1;
+            tN += 1;
+        }
+
+        //cout << tempL << " "<< tempN << " " << remaining.n_elem << " " << uvElements.n_elem << endl;
+        uvElements = join_cols<umat>(uvElements, remaining);
+    }
+
+
+    //lock and load
+    uiCurrent_block += 1;
+
+
+
+
+}
+
+void amplitude::map_t3_permutations_bconfig_sparse(){
+    // ###################################################################
+    // ## Set up amplitude as t3temp with index permutations in blocks  ##
+    // ###################################################################
+
+    //Basically, we set up the standard amplitude sorting as abc-ijk, but store dimensions of each block so we ,may easily permute them later
+    field<ivec> abc = ppp({1,1,1});
+    field<ivec> ijk = hhh();
+
+    ivec K_unique = intersect1d(unique(abc(3)), unique(ijk(3)));
+
+    K_unique = intersect1d(K_unique, ivBconfigs); //map against preexisting configs
+
+    field<uvec> tempRows = partition_ppp_permutations(abc, K_unique);
+    //field<uvec> tempCols = partition(ijk(3), K_unique);
+    field<uvec> tempCols = partition_hhh_permutations(ijk, K_unique);
+    uvec row;
+    uvec col;
+    uvec a,b,c;
+    uvec i,j,k;
+
+
+    //for use in actual amplitude mapping
+    permutative_ordering.set_size(K_unique.n_rows);
+    uint uiN = K_unique.n_elem;
+
+    blocklengths(uiCurrent_block) = uiN; //number of blocks in config
+    fvConfigs(uiCurrent_block) = K_unique; //ordering
+    fmBlocks(uiCurrent_block).set_size(uiN);
+
+    field<uvec> tempElements(uiN);
+    field<uvec> tempBlockmap1(uiN);
+    field<uvec> tempBlockmap2(uiN);
+    field<uvec> tempBlockmap3(uiN);
+
+    uint tempElementsSize = 0;
+    //uvec a,b,c,i,j,k;
+    uint systemsize = 0;
+    for(uint n = 0; n <K_unique.n_rows; ++n){
+        uvec dim(6);
+        row = tempRows(n);
+        col = tempCols(n);
+        //systemsize += row.n_rows*col.n_rows;
+
+
+        int Nx = row.n_rows;
+        int Ny = col.n_rows;
+        //cout << Nx << " " << Ny << " " << " " << K_unique(i) << endl;
+        umat block(Nx,Ny);
+        uvec pqrs(4);
+        uvec tElements(Nx*Ny);
+        uvec tBlockmap1(Nx*Ny);
+        uvec tBlockmap2(Nx*Ny);
+        uvec tBlockmap3(Nx*Ny);
+
+        c = floor(row/(Np*Np)); //k
+        b = floor(((row - c*Np*Np))/Np);
+        a = row - c*Np*Np - b*Np;
+
+        k = floor(col/(Nh*Nh)); //k
+        j = floor(((col - k*Nh*Nh))/Nh);
+        i = col - k*Nh*Nh - j*Nh;
+
+
+        uint index;
+        tempElementsSize += Nx*Ny;
+        for(int nx = 0; nx < Nx; nx++){
+            for(int ny = 0; ny < Ny; ny++){
+
+                index = to6(a(nx), b(nx), c(nx), i(ny), j(ny), k(ny));
+
+                tElements(nx*Ny + ny) = index;
+                tBlockmap1(nx*Ny + ny) = n;
+                tBlockmap2(nx*Ny + ny) = nx;
+                tBlockmap3(nx*Ny + ny) = ny;
+                block(nx, ny) = index;
+            }
+        }
+
+        //scan for elements already present in block and create sparse representation of the matrix
+
+        fmBlocks(uiCurrent_block)(n) = block;
+
+        //consolidate block right here
+        // ####################################################################
+        // ## Consolidate blocks with existing configurations                ##
+        // ####################################################################
+
+        uvec flatElements(Nx*Ny);
+        uvec flatBlockmap1(Nx*Ny);
+        uvec flatBlockmap2(Nx*Ny);
+        uvec flatBlockmap3(Nx*Ny);
+
+        umat sn = sort_index(tElements);
+        flatElements = tElements.elem(sn);
+        flatBlockmap1 = tBlockmap1.elem(sn); //DOES THIS SORT PROPERLY? UNKNOWN,
+        flatBlockmap2 = tBlockmap2.elem(sn); //DOES THIS SORT PROPERLY? UNKNOWN,
+        flatBlockmap3 = tBlockmap3.elem(sn); //DOES THIS SORT PROPERLY? UNKNOWN,
+
+        SpMat <uint> block2;
+        block2.set_size(block.n_rows, block.n_cols);
+
+        umat block3(block.n_rows, block.n_cols);
+        block3*=0;
+
+
+        uint tempN = 0;
+        uint trueN = 0;
+        uint tempL = flatElements.n_rows;
+        uint trueL = uvElements.n_rows;
+        bool all_resolved = false;
+        while(trueN < trueL){
+            if(uvElements(trueN) == flatElements(tempN)){
+                //identical indexes occuring in
+                //cout << flatBlockmap1(tempN) << "  " << tempN << " " << tempL << " " << n << endl;
+                fmBlocks(uiCurrent_block)(flatBlockmap1(tempN))(flatBlockmap2(tempN),flatBlockmap3(tempN)) = trueN;
+                block2(flatBlockmap2(tempN),flatBlockmap3(tempN)) = trueN;
+                block3(flatBlockmap2(tempN),flatBlockmap3(tempN)) = trueN;
+
+                trueN += 1;
+                tempN += 1;
+                if(tempN>=tempL){
+                    all_resolved = true;
+                    break;
+                }
+
+            }
+            else{
+                if(uvElements(trueN) < flatElements(tempN)){
+                    trueN += 1;
+                }
+                else{
+                    tempN += 1;
+                    if(tempN>=tempL){
+                        all_resolved = true;
+                        break;
+                    }
+                }
+
+            }
+        }
+        fmBlocks(uiCurrent_block)(n) = block3;
+
+
+
+        /*
+        //if(all_resolved != true){
+        if(tempN<tempL){
+            uvec remaining(tempL-tempN);
+            uint tN = 0;
+            while(tempN<tempL){
+                remaining(tN) = flatElements(tempN);
+                fmBlocks(uiCurrent_block)(flatBlockmap1(tempN))(flatBlockmap2(tempN),flatBlockmap3(tempN)) = trueN + tN;
+                tempN += 1;
+                tN += 1;
+            }
+
+            //cout << tempL << " "<< tempN << " " << remaining.n_elem << " " << uvElements.n_elem << endl;
+            uvElements = join_cols<umat>(uvElements, remaining);
+        }*/
+
+
+
+
+
+
+
+
+
+
+    }
+
+    //lock and load
+    uiCurrent_block += 1;
 
 
 }
@@ -2009,7 +2432,7 @@ void amplitude::map_regions(imat L, imat R){
             tempN += 1;
         }
         else{
-            if(uvElements(trueN) == flatElements(tempN)){
+            if(uvElements(trueN) < flatElements(tempN)){
                 trueN += 1;
             }
             else{

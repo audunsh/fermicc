@@ -37,6 +37,7 @@ public:
 
 
     bool pert_triples; //enable perturbative triples
+    string mode; //mode of operation ( CCD or CCD(T) )
 
     //internal objects and parameters
     electrongas eBs;
@@ -68,6 +69,8 @@ public:
 
 
     blockmap v0;
+
+
 
 };
 

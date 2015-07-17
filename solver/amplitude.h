@@ -59,6 +59,9 @@ public:
     //field<umat> fmBlocks; //block of indices
     field<field <umat> > fmBlocks;
     field<ivec> fvConfigs; //configuration in quantum numbers of each block
+
+    ivec ivBconfigs; //track aligned configurations
+
     uvec blocklengths;  //number of blocks in each configuration
     field<imat> fmOrdering; //the ordering of each configuration
     uvec uvSize; //particle-hole organization
@@ -103,6 +106,10 @@ public:
 
 
     void map_t3_permutations();
+    void map_t3_permutations_bconfig();
+    void map_t3_permutations_bconfig_sparse();
+
+
     void map_t2_permutations();
 
 

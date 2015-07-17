@@ -20,6 +20,7 @@ public:
     double v3(int p, int q, int r, int s); //skip momentum kroenecker k_p + k_q == k_r + k_s
     double v4(int p, int q); //for the case <pq||pq>
     ivec unique(uvec p);
+    int unique_int(uint p);
 
     void print();
 

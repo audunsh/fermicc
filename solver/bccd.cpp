@@ -18,6 +18,7 @@ bccd::bccd(electrongas fgas)
     Nh = fgas.iNparticles; //conflicting naming here
     init();
     cout << "[BCCD]Energy:" << energy() << endl;
+
     solve(10);
 }
 
@@ -27,11 +28,13 @@ void bccd::init(){
     // ############################################
     // ## Initializing the needed configurations ##
     // ############################################
-
+    mode = "CCD";
     pert_triples = true;
 
     clock_t t;
     t = clock();
+
+    double tm = omp_get_wtime();
 
 
     t2.init(eBs, 10, {Np, Np, Nh, Nh});
@@ -101,13 +104,16 @@ void bccd::init(){
 
     vhpph.init(eBs, 3, {Nh, Np, Np, Nh});
     vhpph.map({-4,2},{3,-1}); //for use in L3 (0)
-    cout << "[BCCD] Time spent initializing doubles.:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
+
+    cout << "[" << mode << "] Time spent initializing doubles.:" << omp_get_wtime()-tm << endl;
     t = clock();
+    tm = omp_get_wtime();
 
     // #############################################
     // ## Perturbative triples setup              ##
     // #############################################
     if(pert_triples){
+        mode = "CCD(T)";
         vhphh.init(eBs, 3, {Nh, Np, Nh, Nh});
         vhphh.map({1},{-2,3,4});
 
@@ -119,32 +125,88 @@ void bccd::init(){
 
         vhhhp.init(eBs, 3, {Nh,Nh,Nh,Np});
         vhhhp.map({1,2,-4},{3});
-        cout << "[BCCD] Time spent initializing triples interaction:" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
-        t = clock();
+        cout << "[" << mode << "] Time spent initializing triples interaction:" << omp_get_wtime()-tm << endl;
+        tm = omp_get_wtime();
 
+        //testitude
+        amplitude t4;
+        t4.init(eBs, 5, {Np, Np, Np, Nh, Nh, Nh});
+        t4.make_t3();
+        t4.map_t3_623_451(vphpp.fvConfigs(0)); //for d10b
+        t4.map_t3_124_356(vhhhp.fvConfigs(0)); //for d10c
+        //t4.map_t3_236_145(t2.fvConfigs(8));
+        //t4.map_t3_124_356(t2.fvConfigs(9));
 
-        t3.init(eBs, 3, {Np, Np, Np, Nh, Nh, Nh});
+        ivec bconf = t4.ivBconfigs;
+        cout << bconf.n_rows << endl;
+        //bconf.print();
+
+        //end testitude
+
+        t3.init(eBs, 5, {Np, Np, Np, Nh, Nh, Nh});
         t3.make_t3();
-        t3.map_t3_permutations();
+        t3.ivBconfigs = bconf;
+        //t3.map_t3_permutations();
+        //cout << t3.fvConfigs(0).n_rows << endl;
+        //t3.map_t3_permutations_bconfig();
+
+
+
         t3temp = t3;
+        t3temp.uiCurrent_block = 1;
+        t3.map_t3_permutations_bconfig();
+        //t3temp.map_t3_permutations();
+
+        //t3.uiCurrent_block = 1;
+
+        //t3.uiCurrent_block = 1;
+
+        //t3temp.map_t3_permutations_bconfig();
+
+        //
+        //t3.ivBconfigs = t3temp.ivBconfigs;
+        //t3.map_t3_permutations_bconfig();
+        //
 
         t3.map_t3_623_451(vphpp.fvConfigs(0)); //for d10b
         t3.map_t3_124_356(vhhhp.fvConfigs(0)); //for d10c
+        t3.map_t3_permutations_bconfig_sparse();
+
+        //t3.uiCurrent_block = 0;
+
+
+        //t3.ivBconfigs.print();
+        //t3.fvConfigs(0).print();
 
         //t3.map6({-6,2,3}, {4,5,-1}); //for use in d10b (1) //these need special treatment
         //t3.map6({1,2,-4}, {-3,5,6}); //for use in d10c (2) (and
 
         t3.init_t3_amplitudes();
 
-        cout << "[BCCD] Time spent mapping T3 amplitude (1):" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
-        t = clock();
+        cout << "[" << mode << "] Time spent mapping T3 amplitude (1):" << omp_get_wtime()-tm << endl;
+        tm = omp_get_wtime();
 
         t3temp.map_t3_236_145(t2.fvConfigs(8));
-        t3temp.map6({1,2,-4}, {-3,5,6}); //, t2.fvConfigs(6)); //for use in t2b (2)
+        t3temp.map_t3_124_356(t2.fvConfigs(9));
+        t3temp.map_t3_permutations_bconfig_sparse();
+
+        //t3temp.map6({1,2,-4}, {-3,5,6}); //, t2.fvConfigs(6)); //for use in t2b (2)
         t3temp.init_t3_amplitudes(); //HUGE opt-potential (use precalc F)
         t3temp.zeros();
-        cout << "[BCCD] Time spent mapping T3 amplitude (2):" << (float)(clock()-t)/CLOCKS_PER_SEC << endl;
-        t = clock();    }
+        cout << "[" << mode << "] Time spent mapping T3 amplitude (2):" << omp_get_wtime()-tm << endl;
+        tm = omp_get_wtime();
+        //t3.getraw(0,10).print();
+        cout << endl;
+        //t3temp.getraw(2,0).print();
+
+
+
+
+        //test
+        //cout << t3temp.uiCurrent_block << endl;
+
+
+    }
 
     //print t3temp configurations
 
@@ -188,6 +250,8 @@ void bccd::solve(uint Nt){
 
     uint nthreads = 4;
     for(uint t = 0; t < Nt; ++t){
+
+        double tm = omp_get_wtime();
         // ############################################
         // ## Reset next amplitude                   ##
         // ############################################
@@ -305,18 +369,20 @@ void bccd::solve(uint Nt){
                 //t2.getblock(6,t2aconfig(i,0))*vhhpp.getblock(3,Q4config(i,1))*t2.getblock(7,Q4config(i,2)));
                 t3temp.addblock(1,t2aconfig(i,2),block); //t2aconfig is wriong
             }
-            for(uint i = 0; i < t3temp.fvConfigs(0).n_rows; ++i){
+
+            for(uint i = 0; i < t3temp.fvConfigs(3).n_rows; ++i){
                 //cout << i << endl;
-                mat block = t3temp.getblock(0,i)
-                                - t3temp.getblock_permuted(0,i,0)
-                                - t3temp.getblock_permuted(0,i,1)
-                                - t3temp.getblock_permuted(0,i,4)
-                                + t3temp.getblock_permuted(0,i,7)
-                                + t3temp.getblock_permuted(0,i,10)
-                                - t3temp.getblock_permuted(0,i,5)
-                                + t3temp.getblock_permuted(0,i,8)
-                                + t3temp.getblock_permuted(0,i,11)
+                mat block = t3temp.getblock(3,i)
+                                - t3temp.getblock_permuted(3,i,0)
+                                - t3temp.getblock_permuted(3,i,1)
+                                - t3temp.getblock_permuted(3,i,4)
+                                + t3temp.getblock_permuted(3,i,7)
+                                + t3temp.getblock_permuted(3,i,10)
+                                - t3temp.getblock_permuted(3,i,5)
+                                + t3temp.getblock_permuted(3,i,8)
+                                + t3temp.getblock_permuted(3,i,11)
                                 ;
+
                 t3.addblock(0,i,block);
             }
 
@@ -340,19 +406,21 @@ void bccd::solve(uint Nt){
             //cout << vsum << " " << tsum << " ";
             //cout << bsum << endl;
             //bsum = 0;
-            for(uint i = 0; i < t3temp.fvConfigs(0).n_rows; ++i){
+            for(uint i = 0; i < t3temp.fvConfigs(3).n_rows; ++i){
                 //1 - ac - cb - ij + ij/ac + ij/cb - ik +ik/ac + ik/cb
-                mat block = -1.0*(t3temp.getblock(0,i)
-                                - t3temp.getblock_permuted(0,i,1)
-                                - t3temp.getblock_permuted(0,i,2)
-                                - t3temp.getblock_permuted(0,i,3)
-                                + t3temp.getblock_permuted(0,i,9)
-                                + t3temp.getblock_permuted(0,i,12)
-                                - t3temp.getblock_permuted(0,i,4)
-                                + t3temp.getblock_permuted(0,i,10)
-                                + t3temp.getblock_permuted(0,i,13)
+                mat block = -1.0*(t3temp.getblock(3,i)
+                                - t3temp.getblock_permuted(3,i,1)
+                                - t3temp.getblock_permuted(3,i,2)
+                                - t3temp.getblock_permuted(3,i,3)
+                                + t3temp.getblock_permuted(3,i,9)
+                                + t3temp.getblock_permuted(3,i,12)
+                                - t3temp.getblock_permuted(3,i,4)
+                                + t3temp.getblock_permuted(3,i,10)
+                                + t3temp.getblock_permuted(3,i,13)
                                 );
                 //bsum += sum(abs(vectorise(block)));
+                //t3temp.getblock(0,i).print();
+                //cout << endl;
                 t3.addblock(0,i,block);
             }
             //cout << bsum << endl;
@@ -404,7 +472,8 @@ void bccd::solve(uint Nt){
 
         t2n.divide_energy();
         t2 = t2n;
-        cout << "[BCCD][" << t << "]Energy:" << energy() << endl;
+        cout << "[" << mode << "][" << t << "]Energy:" << energy() << endl;
+        cout << "[" << mode << "]   Iteration time:" << omp_get_wtime()-tm << endl;
     }
 }
 

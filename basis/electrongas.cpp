@@ -108,10 +108,10 @@ void electrongas::generate_state_list2(int Ne, double rs, int Np){
     for(uint i = 0; i < nStates; ++i){
         vHFEnergy(i) = F(i);
     }
+}
 
-
-
-
+int electrongas::unique_int(uint p){
+    return vKx(p) + vKy(p)*k_step + vKz(p)*k_step*k_step + vMs(p)*k_step*k_step*k_step;
 
 }
 
