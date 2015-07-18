@@ -31,7 +31,7 @@ public:
 
 
     void consolidate_blocks(uint uiN, uint tempElementsSize, field<uvec> tempElements, field<uvec> tempBlockmap1,field<uvec> tempBlockmap2,field<uvec> tempBlockmap3);
-    void enroll_block(uint tempElementsSize, uvec tempElements, uvec tempBlockmap1,uvec tempBlockmap2,uvec tempBlockmap3);
+    void enroll_block(umat umBlock,uint tempElementsSize, uvec tempElements, uvec tempBlockmap1,uvec tempBlockmap2,uvec tempBlockmap3);
     uvec uvNsort1; // = sort_index(uvElements);
     uvec uvElemtemp1;// = uvElements.elem(uvNsort);
     uvec uvBsort1;// = sort_index(uvNsort); //backsort
@@ -166,7 +166,7 @@ public:
 
 
 
-
+    uint nthreads;
 
 
 };

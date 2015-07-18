@@ -16,6 +16,7 @@
 #include "solver/ccd_mp.h"
 #include "solver/amplitude.h"
 #include "solver/bccd.h"
+#include <omp.h>
 
 using namespace std;
 using namespace arma;
@@ -28,7 +29,7 @@ int main()
     //2. Experiment with uniquely reduced t3amps in setup
     //3. parallellization
     electrongas fgas;
-    fgas.generate_state_list2(5.0,1.0, 14);
+    fgas.generate_state_list2(3.0,1.0, 14);
     cout << "[Main] " << setprecision(8) << "Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;
     cout << "[Main] G.Baardsens results:" << 1.9434 << endl;
 
@@ -37,6 +38,18 @@ int main()
     uint Nh = fgas.iNparticles;
 
     bccd solver1(fgas);
+
+
+    /*
+    double tm = omp_get_wtime();
+
+    #pragma omp parallel for num_threads(4)
+    for(uint i = 0; i < 1000000; ++i){
+        mat block(100,100);
+        block*=0;
+    }*/
+
+    //cout << "ts:" << omp_get_wtime()-tm << endl;
 
     //umat test(4,1);
     //test(0,0) = 0;
