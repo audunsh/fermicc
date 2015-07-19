@@ -37,7 +37,11 @@ int main()
     uint Np = fgas.iNbstates-fgas.iNparticles; //conflicting notation here
     uint Nh = fgas.iNparticles;
 
+
+    //triples diagrams corresponds to eachother when added in separately, but not together (deviation)
     bccd solver1(fgas);
+    cout << endl;
+    ccd_pt solver2(fgas, 0);
 
 
     /*

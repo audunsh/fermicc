@@ -41,6 +41,7 @@ public:
 
     void sVhpppBlock();
     void sVppphBlock();
+    void sVppph();
 
 
 
@@ -148,6 +149,18 @@ public:
     uvec bVhpph;
     uvec jVhpph;
     vec vValsVhpph;
+
+    uvec iVppph;
+    uvec aVppph;
+    uvec bVppph;
+    uvec cVppph;
+    vec vValsVppph;
+
+    uvec iVphpp;
+    uvec aVphpp;
+    uvec bVphpp;
+    uvec cVphpp;
+    vec vValsVphpp;
 
     int iNp;
     int iNh;

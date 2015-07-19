@@ -32,6 +32,7 @@ public:
     void solve(uint Nt);
     void compare();
     bool unconverged(); //convergence test - returns true while unconverged
+
     umat intersect_blocks(amplitude a, uint na, blockmap b, uint nb);
     umat intersect_blocks_triple(amplitude a, uint na, blockmap b, uint nb, amplitude c, uint nc);
 
@@ -69,6 +70,24 @@ public:
 
 
     blockmap v0;
+
+
+    void activate_diagrams();
+    uint acL1;
+    uint acL2;
+    uint acL3;
+    uint acL4;
+
+    uint acQ1;
+    uint acQ2;
+    uint acQ3;
+    uint acQ4;
+
+    uint acT2a;
+    uint acT2b;
+
+    uint acD10c;
+    uint acD10b;
 
 
 

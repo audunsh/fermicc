@@ -305,6 +305,117 @@ void initializer::sVppphBlock(){
 
 }
 
+void initializer::sVppph(){
+    //indexing rows
+
+    vec BC = linspace(0,iNp*iNp-1,iNp*iNp);
+
+    //uvec I = conv_to<uvec>::from(floor(BCI/(iNp*iNp)));
+    uvec C = conv_to<uvec>::from(floor(BC/iNp));
+    uvec B = conv_to<uvec>::from(BC) - C*iNp;
+
+
+    ivec KBCx = bs.vKx.elem(C+iNh)+bs.vKx.elem(B+iNh);
+    ivec KBCy = iNmax*(bs.vKy.elem(C+iNh)+bs.vKy.elem(B+iNh));
+    ivec KBCz = iNmax2*(bs.vKz.elem(C+iNh)+bs.vKz.elem(B+iNh));
+    ivec KBCs = iNmax2*iNmax*(bs.vMs.elem(C+iNh)+bs.vMs.elem(B+iNh));
+
+    ivec KBC = bs.unique(C+iNh) + bs.unique(B+iNh);
+
+    //ivec KBC = KBCx+KBCy+KBCz; // +KBCs;
+    ivec KBC_unique = unique(KBC);
+
+    //indexing columns
+
+    vec DK =  linspace(0,iNp*iNh-1,iNp*iNh);
+
+
+
+    uvec K = conv_to<uvec>::from(floor(DK/iNp));
+    uvec D = conv_to<uvec>::from(DK) - K*iNp;
+
+    ivec KDKx = bs.vKx.elem(D+iNh)+bs.vKx.elem(K);
+    ivec KDKy = iNmax*(bs.vKy.elem(D+iNh)+bs.vKy.elem(K));
+    ivec KDKz = iNmax2*(bs.vKz.elem(D+iNh)+bs.vKz.elem(K));
+    ivec KDKs = iNmax2*iNmax*(bs.vMs.elem(D+iNh)+bs.vMs.elem(K));
+
+    //ivec KDK = KDKx+KDKy+KDKz; //+KDKs;
+    ivec KDK = bs.unique(D+iNh) + bs.unique(K);
+
+    ivec KDK_unique = unique(KDK);
+
+    //consolidating rows and columns
+    ivec K_joined = join_cols<imat>(KBC_unique, KDK_unique);
+    ivec K_unique = unique(K_joined);
+
+    int iN = 0;
+    //uvec Tab, Tci;
+
+    uvec T0;// = conv_to<uvec>::from(zeros(0));
+    uvec T1;// = conv_to<uvec>::from(zeros(0));
+
+    field<uvec> TT;
+    TT.set_size(K_unique.n_rows, 2);
+
+    for(int i = 0; i < K_unique.n_rows; ++i){
+        vec Tab = BC.elem(find(KBC==K_unique(i)));
+        vec ONh = ones(Tab.n_rows);
+
+        vec Tci = DK.elem(find(KDK==K_unique(i)));
+        vec ONp = ones(Tci.n_rows);
+
+        if(Tab.n_rows != 0 && Tci.n_rows != 0){
+            //Tab.print();
+            //cout << endl;
+            //Tci.print();
+            //cout << endl;
+            uvec t0 = conv_to<uvec>::from(kron(Tab, ONp));
+            uvec t1 = conv_to<uvec>::from(kron(ONh, Tci));
+            TT(i, 0) = t0;
+            TT(i, 1) = t1;
+            iN += t0.n_rows;
+        }
+    }
+
+    T0.set_size(iN);
+    T1.set_size(iN);
+    iN = 0;
+    for(int i = 0; i < K_unique.n_rows; ++i){
+        //this is the most time-consuming process in initialization
+        if(TT(i,0).n_rows != 0){
+            T0(span(iN, iN+TT(i,0).n_rows-1)) = TT(i,0);
+            T1(span(iN, iN+TT(i,1).n_rows-1)) = TT(i,1);
+            iN += TT(i,0).n_rows;}
+    }
+
+
+    cVppph = conv_to<uvec>::from(floor(T0/iNp)) ; //convert to unsigned integer indexing vector
+    bVppph = conv_to<uvec>::from(T0) - cVppph*iNp;
+
+    iVppph = conv_to<uvec>::from(floor(T1/iNp)) ; //convert to unsigned integer indexing vector
+    aVppph = conv_to<uvec>::from(T1) - iVppph*iNp;
+
+    //bVppph.print();
+
+
+
+
+
+    //iVppph.print();
+    vValsVppph = V3(bVppph+iNh,cVppph+iNh,aVppph+iNh,iVppph);
+
+
+    iVphpp = conv_to<uvec>::from(floor(T1/iNp)) ; //convert to unsigned integer indexing vector
+    aVphpp = conv_to<uvec>::from(T1) - iVphpp*iNp;
+
+    cVphpp = conv_to<uvec>::from(floor(T0/iNp)) ; //convert to unsigned integer indexing vector
+    bVphpp = conv_to<uvec>::from(T0) - cVphpp*iNp;
+
+    vValsVphpp = V3(aVphpp+iNh,iVphpp, bVphpp+iNh,cVphpp+iNh);
+
+    //cout << sum(abs(vValsVppph)) << endl;
+}
+
 void initializer::sVhppp(){
     //indexing rows
 

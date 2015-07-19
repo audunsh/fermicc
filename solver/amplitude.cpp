@@ -10,7 +10,7 @@ amplitude::amplitude(){}
 
 amplitude::amplitude(electrongas bs, int n_configs, uvec size)
 {
-    nthreads = 4;
+    nthreads = 1;
     eBs = bs;
     k_step = 2*eBs.vKx.max()+3; //stepsize for identifying unique regions
     iNconfigs = n_configs;
@@ -26,10 +26,12 @@ amplitude::amplitude(electrongas bs, int n_configs, uvec size)
 
     uvSize = size; //true state configurations (Np, Np, Nh, Nh) or (Np, Np, Np, Nh, Nh, Nh) (or similar)
 
+    memsize = 0; //bookkeeping for allocated memory (presently only for t3 amplitudes)
+
 }
 
 void amplitude::init(electrongas bs, int n_configs, uvec size){
-    nthreads = 4;
+    nthreads = 1;
     eBs = bs;
     k_step = 2*eBs.vKx.max()+3; //stepsize for identifying unique regions
     iNconfigs = n_configs;
@@ -47,6 +49,8 @@ void amplitude::init(electrongas bs, int n_configs, uvec size){
     uvSize = size; //true state configurations (Np, Np, Nh, Nh) or (Np, Np, Np, Nh, Nh, Nh) (or similar)
 
     ivBconfigs.set_size(0);
+
+    memsize = 0;
 }
 
 // ##################################################
@@ -62,6 +66,7 @@ void amplitude::zeros(){
 void amplitude::init_t3_amplitudes(){
     vElements.set_size(uvElements.n_rows);
     vEnergies.set_size(uvElements.n_rows);
+    memsize += uvElements.n_rows*2;
     //uvElements.print(); //could we maybe retrieve these "on the fly" ? (would mean to locate blocks "on the fly")
     #pragma omp parallel for num_threads(nthreads)
     for(uint i= 0; i<uvElements.n_rows; ++i){
@@ -80,7 +85,7 @@ void amplitude::init_amplitudes(){
     vElements.set_size(uvElements.n_rows);
     vEnergies.set_size(uvElements.n_rows);
     //uvElements.print(); //could we maybe retrieve these "on the fly" ? (would mean to locate blocks "on the fly")
-    #pragma omp parallel for num_threads(nthreads)
+    //#pragma omp parallel for num_threads(nthreads)
     for(uint i= 0; i<uvElements.n_rows; ++i){
         uvec p = from(uvElements(i));
         //cout << p(0) <<  " " << p(1) << " " << p(2) << " " << p(3) << " "<< endl;
@@ -117,15 +122,7 @@ void amplitude::enroll_block(umat umBlock, uint tempElementsSize, uvec tempEleme
     uvec remains(flatElements.n_rows);
     uint remN = 0;
 
-    //umat block(fmBlocks(uiCurrent_block)(flatBlockmap1(tempN)).n_rows, fmBlocks(uiCurrent_block)(flatBlockmap1(tempN)).n_cols);
-    //block *= 0;
 
-    //SpMat<uint> block2;
-    //block2.set_size(fmBlocks(uiCurrent_block)(flatBlockmap1(tempN)).n_rows, fmBlocks(uiCurrent_block)(flatBlockmap1(tempN)).n_cols);
-
-
-    //fspDims(flatBlockmap1(0), 0) = fmBlocks(uiCurrent_block)(flatBlockmap1(tempN)).n_rows; //nx
-    //fspDims(flatBlockmap1(0), 1) = fmBlocks(uiCurrent_block)(flatBlockmap1(tempN)).n_cols; //ny
 
     fspDims(flatBlockmap1(0), 0) = umBlock.n_rows; //nx
     fspDims(flatBlockmap1(0), 1) = umBlock.n_cols; //ny
@@ -176,14 +173,21 @@ void amplitude::enroll_block(umat umBlock, uint tempElementsSize, uvec tempEleme
             tempN += 1;
         }
     }
-    //cout << "remaining T:" << remN << endl;
-    //umat tt(2,2);
-    //fmBlocks(uiCurrent_block)(flatBlockmap1(0)) = block; //block;
 
 
-    //fmBlocks(uiCurrent_block)(flatBlockmap1(0)).set_size(0);
+    umat b(3,count+1);
+    b(0,0) =0;
+    b(1,0) = 0;
+    b(2,0) = 0;
+    for(uint i = 0; i < count; ++i){
+        b(0,i+1) = sparseblock(0,i);
+        b(1,i+1) = sparseblock(1,i);
+        b(2,i+1) = sparseblock(2,i);
+    }
 
-    //fspBlocks(flatBlockmap1(0)) = block2;
+    fspBlocks(flatBlockmap1(0)) = b;
+
+    /*
     if(count != 0){
         fspBlocks(flatBlockmap1(0)) = sparseblock.cols(span(0,count-1));
     }
@@ -191,13 +195,8 @@ void amplitude::enroll_block(umat umBlock, uint tempElementsSize, uvec tempEleme
         umat b(3,1);
         b*=0;
         fspBlocks(flatBlockmap1(0)) = b;
-    }
-    /*
-    //join remains to uvElements
-    if(remN!=0){
-        uvElements = join_cols<umat>(uvElements, remains(span(0,remN-1)));
-    }
-    */
+    }*/
+    memsize += count*3;
 }
 
 
@@ -314,6 +313,7 @@ void amplitude::init_interaction(ivec shift){
 
 
     vElements.set_size(uvElements.n_rows);
+    #pragma omp parallel for num_threads(nthreads)
     for(uint i= 0; i<uvElements.n_rows; ++i){
         uvec p = from(uvElements(i));
         //cout << p(0) <<  " " << p(1) << " " << p(2) << " " << p(3) << " "<< endl;
@@ -322,6 +322,7 @@ void amplitude::init_interaction(ivec shift){
 }
 
 void amplitude::divide_energy(){
+    #pragma omp parallel for num_threads(nthreads)
     for(uint i= 0; i<uvElements.n_rows; ++i){
         vElements(i) /= vEnergies(i);
     }
@@ -489,14 +490,14 @@ void amplitude::map_t3_236_145(ivec Kk_unique){
     field<uvec> tempBlockmap3(uiN);
 
     uint tempElementsSize = 0;
-    uvec a,b,c,i,j,k;
+    //uvec a,b,c,i,j,k;
     //uint systemsize = 0;
     uint Np2 = Np*Np;
     uint Nph = Np*Nh;
 
     field<ivec> bconfigs(uiN); //normally aligned configurations for each block
     uint bconfig_len = 0;
-
+    #pragma omp parallel for num_threads(nthreads)
     for(uint n = 0; n <K_unique.n_rows; ++n){
         uvec dim(6);
         uvec row = tempRows(n);
@@ -506,6 +507,7 @@ void amplitude::map_t3_236_145(ivec Kk_unique){
 
         int Nx = row.n_rows;
         int Ny = col.n_rows;
+        memsize += Nx*Ny;
         //cout << Nx << " " << Ny << " " << " " << K_unique(n) << endl;
         umat block(Nx,Ny);
         uvec pqrs(6);
@@ -514,13 +516,13 @@ void amplitude::map_t3_236_145(ivec Kk_unique){
         uvec tBlockmap2(Nx*Ny);
         uvec tBlockmap3(Nx*Ny);
 
-        k = floor(row/Np2); //k
-        c = floor((row  - k*Np2)/Np);
-        b = row - k*Np2 - c*Np;
+        uvec k = floor(row/Np2); //k
+        uvec c = floor((row  - k*Np2)/Np);
+        uvec b = row - k*Np2 - c*Np;
 
-        j = floor(col/Nph); //k
-        i = floor((col - j*Nph)/Np);
-        a = col - j*Nph - i*Np;
+        uvec j = floor(col/Nph); //k
+        uvec i = floor((col - j*Nph)/Np);
+        uvec a = col - j*Nph - i*Np;
 
         bconfigs(n).set_size(Nx*Ny); //collect unique config "unaligned"
         bconfig_len += Ny;
@@ -671,7 +673,7 @@ void amplitude::map_t3_623_451(ivec Kk_unique){
     field<uvec> tempBlockmap3(uiN);
 
     uint tempElementsSize = 0;
-    uvec a,b,c,i,j,k;
+    //uvec a,b,c,i,j,k;
     //uint systemsize = 0;
     uint Np2 = Np*Np;
     uint Nph = Np*Nh;
@@ -680,6 +682,7 @@ void amplitude::map_t3_623_451(ivec Kk_unique){
     field<ivec> bconfigs(uiN); //normally aligned configurations for each block
     uint bconfig_len = 0;
 
+    #pragma omp parallel for num_threads(nthreads)
     for(uint n = 0; n <K_unique.n_rows; ++n){
         uvec dim(6);
         uvec row = tempRows(n);
@@ -691,6 +694,7 @@ void amplitude::map_t3_623_451(ivec Kk_unique){
 
         int Nx = row.n_rows;
         int Ny = col.n_rows;
+        memsize += Nx*Ny;
         //cout << Nx << " " << Ny << " " << " " << K_unique(n) << endl;
         umat block(Nx,Ny);
         uvec pqrs(6);
@@ -699,13 +703,13 @@ void amplitude::map_t3_623_451(ivec Kk_unique){
         uvec tBlockmap2(Nx*Ny);
         uvec tBlockmap3(Nx*Ny);
 
-        c = floor(row/Nph); //k
-        b = floor((row  - c*Nph)/Nh);
-        k = row - c*Nph - b*Nh;
+        uvec c = floor(row/Nph); //k
+        uvec b = floor((row  - c*Nph)/Nh);
+        uvec k = row - c*Nph - b*Nh;
 
-        a = floor(col/Nh2); //k
-        j = floor((col - a*Nh2)/Nh);
-        i = col - a*Nh2 - j*Nh;
+        uvec a = floor(col/Nh2); //k
+        uvec j = floor((col - a*Nh2)/Nh);
+        uvec i = col - a*Nh2 - j*Nh;
 
         bconfigs(n).set_size(Nx*Ny); //collect unique config "unaligned"
         bconfig_len += Ny;
@@ -821,7 +825,7 @@ void amplitude::map_t3_623_451(ivec Kk_unique){
 
     //if(tempN<tempL){
     if(all_resolved != true){
-        cout << "remaining  blocks" << endl;
+        //cout << "remaining  blocks" << endl;
         uvec remaining(tempL-tempN);
         uint tN = 0;
         while(tempN<tempL){
@@ -866,14 +870,14 @@ void amplitude::map_t3_124_356(ivec Kk_unique){
     field<uvec> tempBlockmap3(uiN);
 
     uint tempElementsSize = 0;
-    uvec a,b,c,i,j,k;
+    //uvec a,b,c,i,j,k;
     //uint systemsize = 0;
     uint Np2 = Np*Np;
     uint Nph = Np*Nh;
 
     field<ivec> bconfigs(uiN); //normally aligned configurations for each block
     uint bconfig_len = 0;
-
+    #pragma omp parallel for num_threads(nthreads)
     for(uint n = 0; n <K_unique.n_rows; ++n){
         uvec dim(6);
         uvec row = tempRows(n);
@@ -891,13 +895,13 @@ void amplitude::map_t3_124_356(ivec Kk_unique){
         uvec tBlockmap2(Nx*Ny);
         uvec tBlockmap3(Nx*Ny);
 
-        i = floor(row/Np2); //k
-        b = floor((row  - i*Np2)/Np);
-        a = row - i*Np2 - b*Np;
+        uvec i = floor(row/Np2); //k
+        uvec b = floor((row  - i*Np2)/Np);
+        uvec a = row - i*Np2 - b*Np;
 
-        k = floor(col/Nph); //k
-        j = floor((col - k*Nph)/Np);
-        c = col - k*Nph - j*Np;
+        uvec k = floor(col/Nph); //k
+        uvec j = floor((col - k*Nph)/Np);
+        uvec c = col - k*Nph - j*Np;
 
         bconfigs(n).set_size(Nx*Ny); //collect unique config "unaligned"
         bconfig_len += Ny;
@@ -919,6 +923,7 @@ void amplitude::map_t3_124_356(ivec Kk_unique){
                 block(nx, ny) = index;
             }
         }
+        memsize += Nx*Ny;
 
 
 
@@ -984,7 +989,7 @@ void amplitude::map_t3_124_356_new(ivec Kk_unique){
     field<uvec> tempBlockmap3(uiN);
 
     uint tempElementsSize = 0;
-    uvec a,b,c,i,j,k;
+    //uvec a,b,c,i,j,k;
     //uint systemsize = 0;
     uint Np2 = Np*Np;
     uint Nph = Np*Nh;
@@ -995,7 +1000,7 @@ void amplitude::map_t3_124_356_new(ivec Kk_unique){
     uvec uvNsort = sort_index(uvElements); //tosort
     uvec uvElemtemp = uvElements.elem(uvNsort); //sorted
     uvec uvBsort = sort_index(uvElemtemp); //backsort
-
+    #pragma omp parallel for num_threads(nthreads)
     for(uint n = 0; n <K_unique.n_rows; ++n){
         uvec dim(6);
         uvec row = tempRows(n);
@@ -1013,13 +1018,13 @@ void amplitude::map_t3_124_356_new(ivec Kk_unique){
         uvec tBlockmap2(Nx*Ny);
         uvec tBlockmap3(Nx*Ny);
 
-        i = floor(row/Np2); //k
-        b = floor((row  - i*Np2)/Np);
-        a = row - i*Np2 - b*Np;
+        uvec i = floor(row/Np2); //k
+        uvec b = floor((row  - i*Np2)/Np);
+        uvec a = row - i*Np2 - b*Np;
 
-        k = floor(col/Nph); //k
-        j = floor((col - k*Nph)/Np);
-        c = col - k*Nph - j*Np;
+        uvec k = floor(col/Nph); //k
+        uvec j = floor((col - k*Nph)/Np);
+        uvec c = col - k*Nph - j*Np;
 
         bconfigs(n).set_size(Nx*Ny); //collect unique config "unaligned"
         bconfig_len += Ny;
@@ -1816,7 +1821,7 @@ void amplitude::map_regions6(imat L, imat R){
 
     //if(all_resolved != true){
     if(tempN<tempL){
-        cout << "consolidating blocks" << endl;
+        //cout << "consolidating blocks" << endl;
         uvec remaining(tempL-tempN);
         uint tN = 0;
         while(tempN<tempL){
@@ -2659,9 +2664,11 @@ void amplitude::map_regions(imat L, imat R){
 
     umat n = sort_index(flatElements);
     flatElements = flatElements.elem(n);
-    flatBlockmap1 = flatBlockmap1.elem(n); //DOES THIS SORT PROPERLY? UNKNOWN,
-    flatBlockmap2 = flatBlockmap2.elem(n); //DOES THIS SORT PROPERLY? UNKNOWN,
-    flatBlockmap3 = flatBlockmap3.elem(n); //DOES THIS SORT PROPERLY? UNKNOWN,
+    flatBlockmap1 = flatBlockmap1.elem(n);
+    flatBlockmap2 = flatBlockmap2.elem(n);
+    flatBlockmap3 = flatBlockmap3.elem(n);
+
+    //cout <<counter << " " << flatElements.n_rows << endl;
 
     uint tempN = 0;
     uint trueN = 0;
@@ -2674,6 +2681,10 @@ void amplitude::map_regions(imat L, imat R){
             fmBlocks(uiCurrent_block)(flatBlockmap1(tempN))(flatBlockmap2(tempN),flatBlockmap3(tempN)) = trueN;
             trueN += 1;
             tempN += 1;
+            if(tempN>=tempL){
+                all_resolved = true;
+                break;
+            }
         }
         else{
             if(uvElements(trueN) < flatElements(tempN)){
@@ -2844,6 +2855,73 @@ mat amplitude::getsblock_permuted(int u, int i, int n){
     //return index block, used for debugging and optimization
 
     umat aligned = getfspBlock(i);
+    // umat aligned = fmBlocks(u)(i);
+
+    if(n==0){
+        aligned = aligned.rows(Pab(i));
+    }
+    if(n==1){
+        aligned = aligned.rows(Pac(i));
+    }
+    if(n==2){
+        aligned = aligned.rows(Pbc(i));
+    }
+    if(n==3){
+        aligned = aligned.cols(Pij(i));
+    }
+    if(n==4){
+        aligned = aligned.cols(Pik(i));
+    }
+    if(n==5){
+        aligned = aligned.cols(Pjk(i));
+    }
+    if(n==6){
+        aligned = aligned.rows(Pab(i));
+        aligned = aligned.cols(Pij(i));
+    }
+    if(n==7){
+        aligned = aligned.rows(Pab(i));
+        aligned = aligned.cols(Pik(i));
+    }
+    if(n==8){
+        aligned = aligned.rows(Pab(i));
+        aligned = aligned.cols(Pjk(i));
+    }
+    if(n==9){
+        aligned = aligned.rows(Pac(i));
+        aligned = aligned.cols(Pij(i));
+    }
+    if(n==10){
+        aligned = aligned.rows(Pac(i));
+        aligned = aligned.cols(Pik(i));
+    }
+    if(n==11){
+        aligned = aligned.rows(Pac(i));
+        aligned = aligned.cols(Pjk(i));
+    }
+    if(n==12){
+        aligned = aligned.rows(Pbc(i));
+        aligned = aligned.cols(Pij(i));
+    }
+    if(n==13){
+        aligned = aligned.rows(Pbc(i));
+        aligned = aligned.cols(Pik(i));
+    }
+    if(n==14){
+        aligned = aligned.rows(Pbc(i));
+        aligned = aligned.cols(Pjk(i));
+    }
+
+    mat block = vElements.elem(aligned);
+    block.reshape(fspDims(i,0), fspDims(i,1));
+
+    return block;
+}
+
+mat amplitude::getspblock_permuted(umat aligned, uint i, int n){
+    //return index block, used for debugging and optimization
+
+    //umat aligned = getfspBlock(i);
     // umat aligned = fmBlocks(u)(i);
 
     if(n==0){

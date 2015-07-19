@@ -34,6 +34,8 @@ ccd_pt::ccd_pt(electrongas bs, double a){
     iSetup.sVhhpp();
     iSetup.sVhpph();
 
+
+
     //convert interaction data to flexmat objects
     vhhhh.init(iSetup.vValsVhhhh, iSetup.iVhhhh, iSetup.jVhhhh, iSetup.kVhhhh, iSetup.lVhhhh, iSetup.iNh, iSetup.iNh, iSetup.iNh, iSetup.iNh);
     vhhhh.shed_zeros();
@@ -47,11 +49,22 @@ ccd_pt::ccd_pt(electrongas bs, double a){
 
     //triples specific
     iSetup.sVhppp();
+    //iSetup.sVppph();
     iSetup.sVhphh();
+    iSetup.sVppph();
+
 
     vhppp.init( iSetup.vValsVhppp, iSetup.iVhppp, iSetup.aVhppp, iSetup.bVhppp, iSetup.cVhppp, iSetup.iNh, iSetup.iNp, iSetup.iNp, iSetup.iNp);
-    vphpp.init(-iSetup.vValsVhppp, iSetup.aVhppp, iSetup.iVhppp, iSetup.bVhppp, iSetup.cVhppp, iSetup.iNp, iSetup.iNh, iSetup.iNp, iSetup.iNp);
-    vppph.init(-iSetup.vValsVhppp, iSetup.bVhppp, iSetup.cVhppp, iSetup.aVhppp, iSetup.iVhppp, iSetup.iNp, iSetup.iNh, iSetup.iNp, iSetup.iNp); //added later (july)
+    //vphpp.init(-iSetup.vValsVhppp, iSetup.aVhppp, iSetup.iVhppp, iSetup.bVhppp, iSetup.cVhppp, iSetup.iNp, iSetup.iNh, iSetup.iNp, iSetup.iNp);
+
+
+    //vppph.init(-iSetup.vValsVhppp, iSetup.bVhppp, iSetup.cVhppp, iSetup.aVhppp, iSetup.iVhppp, iSetup.iNp, iSetup.iNp, iSetup.iNp, iSetup.iNh); //added later (july)
+    //vppph.init(-iSetup.vValsVhppp, iSetup.bVhppp, iSetup.cVhppp, iSetup.aVhppp, iSetup.iVhppp, iSetup.iNp, iSetup.iNp, iSetup.iNp, iSetup.iNh);
+    vppph.init(iSetup.vValsVppph, iSetup.bVppph,iSetup.cVppph, iSetup.aVppph, iSetup.iVppph, iSetup.iNp, iSetup.iNp, iSetup.iNp, iSetup.iNh);
+    vphpp.init(iSetup.vValsVphpp, iSetup.aVphpp,iSetup.iVphpp, iSetup.bVphpp, iSetup.cVphpp, iSetup.iNp, iSetup.iNh, iSetup.iNp, iSetup.iNp);
+    //cout << "value:" << sum(abs(iSetup.vValsVppph)) << endl;
+    //cout << vppph.pq_rs()
+
 
     vhphh.init(iSetup.vValsVhphh, iSetup.iVhphh, iSetup.aVhphh, iSetup.jVhphh, iSetup.kVhphh, iSetup.iNh, iSetup.iNp, iSetup.iNh, iSetup.iNh);
     vhhhp.init(iSetup.vValsVhhhp, iSetup.iVhhhp, iSetup.jVhhhp, iSetup.kVhhhp, iSetup.aVhhhp, iSetup.iNh, iSetup.iNh, iSetup.iNh, iSetup.iNp);
@@ -60,6 +73,7 @@ ccd_pt::ccd_pt(electrongas bs, double a){
     vphpp.shed_zeros();
     vhphh.shed_zeros();
     vhhhp.shed_zeros();
+    vppph.shed_zeros();
 
     //set up first T2-amplitudes
     T.init(iSetup.vValsVpphh, iSetup.aVpphh, iSetup.bVpphh, iSetup.iVpphh, iSetup.jVpphh, iSetup.iNp, iSetup.iNp, iSetup.iNh, iSetup.iNh);
@@ -71,7 +85,7 @@ ccd_pt::ccd_pt(electrongas bs, double a){
 
     //mat spectrogram(11,25);
     energy();
-    for(int i = 0; i < 10; i++){
+    for(int i = 0; i < 2; i++){
         //spectrogram.col(i) = spectrum();
         iterations += 1;
         advance();
@@ -196,7 +210,7 @@ void ccd_pt::L1_dense_multiplication(){
     // ##                                                   ##
     // #######################################################
 
-    //L1.clear();
+    L1.clear();
 
     uint N = iSetup.bmVpppp.uN; //number of blocks
     int Nh = iSetup.iNh;
@@ -291,7 +305,7 @@ void ccd_pt::advance(){
     // ##                                              ##
     // ##################################################
 
-    //L1_dense_multiplication(); //The pp-pp diagram, given special treatment to limit memory usage
+    L1_dense_multiplication(); //The pp-pp diagram, given special treatment to limit memory usage
 
     L2 = T.pq_rs()*vhhhh.pq_rs();
 
@@ -317,30 +331,33 @@ void ccd_pt::advance(){
     // ##################################################
     sp_mat tempt2a;
     tempt2a = vppph.pqs_r()*T.q_prs();
+    cout << "      vppph: "<< accu(abs(vppph.pqs_r())) << endl;
+    cout << "      tq_prs:"<<accu(abs(T.q_prs())) << endl;
+    cout << "      t2a:   " << accu(abs(tempt2a)) << endl;
+    //tempt2a = vhppp.srp_q()*T.q_prs();
     t2a.update_as_qru_pst(tempt2a, Np,Np,Np,Nr,Nr,Nr);
     //t2a.update_as_pqr_stu(t2a.pqr_stu()-t2a.qpr_stu()-t2a.rpq_stu()-t2a.rpq_uts()+t2a.prq_stu()+t2a.qrp_uts()-t2a.qrp_ust()+t2a.rqp_uts()+t2a.pqr_ust(), Np,Np,Np,Nr,Nr,Nr);
-    t2a.update_as_pqr_stu(t2a.pqr_stu()
-                          -t2a.qpr_stu()
-                          -t2a.rqp_stu()
-                          -t2a.pqr_uts()
-                          +t2a.qpr_uts()
-                          +t2a.rqp_uts()
-                          -t2a.pqr_sut()
-                          +t2a.qpr_sut()
-                          +t2a.rqp_sut(), Np, Np, Np, Nr,Nr,Nr);
-    /*
-    t2a.update_as_pqr_stu(t2a.pqr_stu()
-                          -t2a.pqr_uts()
-                          -t2a.pqr_sut()
-                          -t2a.qpr_stu()
-                          +t2a.qpr_uts()
-                          +t2a.qpr_sut()
-                          -t2a.rqp_stu()
-                          +t2a.rqp_uts()
-                          +t2a.rqp_sut(), Np, Np, Np, Nr,Nr,Nr);
-    */
 
+
+    t2a.update_as_pqr_stu(t2a.pqr_stu()
+                          -t2a.qpr_stu()
+                          -t2a.rqp_stu()
+                          -t2a.pqr_uts()
+                          +t2a.qpr_uts()
+                          +t2a.rqp_uts()
+                          -t2a.pqr_sut()
+                          +t2a.qpr_sut()
+                          +t2a.rqp_sut(), Np, Np, Np, Nr,Nr,Nr); //This one
+
+
+    cout << "      t2a p: " << accu(abs(t2a.pqr_stu())) << endl;
     t2b.update_as_pqs_rtu(T.pqr_s()*vhphh.p_qrs(), Np,Np,Np,Nr,Nr,Nr);
+
+    //cout <<"      " <<  accu(abs(vhphh.p_qrs())) << endl;
+    //cout <<"      " << accu(abs(T.pqr_s())) << endl;
+    cout <<"      Full t2b:" << accu(abs(T.pqr_s()*vhphh.p_qrs())) << endl;
+
+
     //mat VVhphh;
     //VVhphh = vhphh.p_qrs();
     //cout << sum(abs(vectorise(VVhphh))) << endl;
@@ -361,8 +378,11 @@ void ccd_pt::advance(){
                           +t2b.rqp_uts()
                           +t2b.prq_uts(), Np,Np,Np,Nr,Nr,Nr);
 
+
+
     //VVhphh = t2b.pqr_stu();
-    //cout << sum(abs(vectorise(VVhphh))) << endl;
+    cout << "      Full t2b(p):" << accu(abs(t2b.pqr_stu())) << endl;
+
 
     /*
     t2b.update_as_pqr_stu(t2b.pqr_stu()
@@ -376,15 +396,29 @@ void ccd_pt::advance(){
                           +t2b.pqr_ust(), Np,Np,Np,Nr,Nr,Nr);
     */
     //Setting up T3
+
     T3.update_as_pqr_stu(t2a.pqr_stu() - t2b.pqr_stu(), Np,Np,Np,Nr,Nr,Nr);
+
+    cout << "      full t3:" << accu(abs(T3.pqr_stu())) << endl;
 
     T3.set_amplitudes(ebs.vHFEnergy);
 
     //Calculating the triples contributions to T2
+
+
+
     fmD10b.update_as_q_rsp(vphpp.p_qrs()*T3.uqr_stp(), Np,Np,Nr,Nr);
+    //cout << "      full vphpp:" << accu(abs(vphpp.p_qrs())) << endl;
+    //cout << "      full t3.uqr_stp():" << accu(abs(T3.uqr_stp())) << endl;
+    cout << "      full d10b:" << accu(abs(fmD10b.pq_rs())) << endl;
     fmD10b.update(fmD10b.pq_rs() - fmD10b.qp_rs(), Np, Nq, Nr, Ns);
 
     fmD10c.update_as_pqr_s(T3.pqs_tur()*vhhhp.pqs_r(), Np,Np,Nr,Nr); //remember to permute these
+    cout << "      full d10c:" << accu(abs(fmD10c.pq_rs())) << endl;
+    cout << "      full d10c t3:" << accu(abs(T3.pqs_tur())) << endl;
+    //cout << "      full d10c vhhhp:" << accu(abs(vhhhp.pqs_r())) << endl;
+
+
     fmD10c.update(fmD10c.pq_rs() - fmD10c.pq_sr(), Np,Np,Nr,Nr);
 
     // ##################################################
@@ -402,6 +436,7 @@ void ccd_pt::advance(){
     energy(); //Calculate the energy
     T.shed_zeros();
     T.map_indices();
+
 }
 
 

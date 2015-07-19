@@ -120,6 +120,7 @@ public:
     umat getraw_permuted(int u, int i, int n);
     mat getblock_permuted(int u, int i, int n);
     mat getsblock_permuted(int u, int i, int n);
+    mat getspblock_permuted(umat aligned, uint i, int n);
 
 
     void compress();
@@ -167,6 +168,7 @@ public:
 
 
     uint nthreads;
+    uint memsize;
 
 
 };

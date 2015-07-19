@@ -474,7 +474,9 @@ void blockmap::map_vppph(){
 
     ivec RHS = eBs.unique(linspace<uvec>(0,Nh-1, Nh));
     K_unique = intersect1d(unique(RHS), K_unique); //the unique overlaps where preservation of quantum numbers occur
+    K_unique.print();
 
+    /*
     uvec l_sorted = sort_index(LHS);
     //uvec l_sorted = linspace<uvec>(0,Ndim-1, Ndim);
     bool adv = false;
@@ -569,6 +571,7 @@ void blockmap::map_vppph(){
     }
 
     //lock and load
+    */
     uiCurrent_block += 1;
 }
 
@@ -694,6 +697,7 @@ void blockmap::map_regions(imat L, imat R){
 
 
 } //map all regions defined by L == R
+
 
 mat blockmap::getblock_vpppp(int u, int i){
     uvec a = fmBlockz(u)(i,0);
