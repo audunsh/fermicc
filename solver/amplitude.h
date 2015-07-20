@@ -169,6 +169,7 @@ public:
 
     uint nthreads;
     uint memsize;
+    uint debug_enroll;
 
 
 };

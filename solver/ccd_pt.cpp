@@ -85,7 +85,7 @@ ccd_pt::ccd_pt(electrongas bs, double a){
 
     //mat spectrogram(11,25);
     energy();
-    for(int i = 0; i < 2; i++){
+    for(int i = 0; i < 10; i++){
         //spectrogram.col(i) = spectrum();
         iterations += 1;
         advance();

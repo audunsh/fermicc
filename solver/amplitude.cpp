@@ -146,6 +146,7 @@ void amplitude::enroll_block(umat umBlock, uint tempElementsSize, uvec tempEleme
 
                 trueN += 1;
                 tempN += 1;
+                debug_enroll += 1;
 
             }
             else{
@@ -173,6 +174,8 @@ void amplitude::enroll_block(umat umBlock, uint tempElementsSize, uvec tempEleme
             tempN += 1;
         }
     }
+
+    //cout << "remains:" << remN << endl;
 
 
     umat b(3,count+1);
@@ -233,7 +236,7 @@ void amplitude::consolidate_blocks(uint uiN, uint tempElementsSize, field<uvec> 
     // ## Consolidate blocks with existing configurations                ##
     // ####################################################################
 
-
+    //sort elements so their indices appear in increasing order
     umat n = sort_index(flatElements);
     flatElements = flatElements.elem(n);
     flatBlockmap1 = flatBlockmap1.elem(n); //DOES THIS SORT PROPERLY? UNKNOWN,
@@ -475,8 +478,13 @@ void amplitude::map_t3_236_145(ivec Kk_unique){
 
     ivec K_unique = intersect1d(k_unique, Kk_unique);
 
-    field<uvec> tempRows = partition_hhp(bck, K_unique);
-    field<uvec> tempCols = partition_hpp(aij, K_unique);
+    //field<uvec> tempRows = partition_hhp(bck, K_unique);
+    //field<uvec> tempCols = partition_hpp(aij, K_unique);
+    cout << "Number of blocks:" << K_unique.n_rows << endl;
+    field<uvec> tempRows = partition_pph(bck, K_unique);
+    field<uvec> tempCols = partition_phh(aij, K_unique);
+
+
     //Kk_unique.print();
     uint uiN = K_unique.n_elem;
 
@@ -553,7 +561,28 @@ void amplitude::map_t3_236_145(ivec Kk_unique){
 
     }
 
+    consolidate_blocks(uiN, tempElementsSize, tempElements, tempBlockmap1, tempBlockmap2, tempBlockmap3);
 
+    ivec flatBconfig(tempElementsSize);
+
+    uint counter = 0;
+    for(uint ni = 0; ni<uiN; ++ni){
+        for(uint nj = 0; nj < tempElements(ni).n_rows; ++nj){
+
+
+            flatBconfig(counter) = bconfigs(ni)(nj);
+
+            counter += 1;
+        }
+
+
+
+    }
+
+    ivBconfigs = unique(join_cols(ivBconfigs, flatBconfig)); //consolidate unique configs "unaligned"
+    ivBconfigs = sort(ivBconfigs);
+
+    /*
     // ####################################################################
     // ## Flatten tempElements and tempBlockmap                          ##
     // ####################################################################
@@ -640,7 +669,7 @@ void amplitude::map_t3_236_145(ivec Kk_unique){
         //cout << tempL << " "<< tempN << " " << remaining.n_elem << " " << uvElements.n_elem << endl;
         uvElements = join_cols<umat>(uvElements, remaining);
 
-    }
+    }*/
 
 
     //lock and load
@@ -2731,7 +2760,7 @@ mat amplitude::getblock(int u, int i){
 }
 
 mat amplitude::getsblock(int u, int i){
-    umat indblock = getfspBlock(i);;
+    umat indblock = getfspBlock(i);
 
     //sp_mat<uint> fs = fspBlocks(i);
     //umat indblock(fs);
@@ -4599,6 +4628,7 @@ field<uvec> amplitude::partition_pph(field<ivec> LHS, ivec K_unique){
     uint uiN = K_unique.n_rows;
     uint uiS = l_sorted.n_rows;
     int C = K_unique(i);
+    //K_unique.print();
 
     uint nx = 0;
     int l_c= LHS(3)(l_sorted(lc));
@@ -4627,7 +4657,8 @@ field<uvec> amplitude::partition_pph(field<ivec> LHS, ivec K_unique){
     uvec Nb = conv_to<uvec>::from(LHS(2));
 
     uint Np2 =Np*Np;
-    while(lc < uiS){
+    //while(lc < uiS){
+    while(i < uiN){
         l_sorted_lc = l_sorted(lc);
         l_c = LHS(3)(l_sorted_lc);
 
@@ -4648,7 +4679,10 @@ field<uvec> amplitude::partition_pph(field<ivec> LHS, ivec K_unique){
         //if row is complete
         else{
             if(row_collect){
+                //cout << C;
+                //cout << "     " << i << " : " << nx << " " << row(0) << " " << endl;
                 tempRows(i) = sort(row(span(0,nx-1)));
+
                 lc -= 1;
                 i += 1;
                 nx = 0;
@@ -4704,7 +4738,9 @@ field<uvec> amplitude::partition_phh(field<ivec> LHS, ivec K_unique){
     uvec Nb = conv_to<uvec>::from(LHS(2));
 
     uint Nh2 =Nh*Nh;
-    while(lc < uiS){
+    //while(lc < uiS){
+    while(i < uiN){
+
         l_sorted_lc = l_sorted(lc);
         l_c = LHS(3)(l_sorted_lc);
 
