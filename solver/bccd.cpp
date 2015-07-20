@@ -390,28 +390,16 @@ void bccd::solve(uint Nt){
             // ############################################
 
 
-            double d1 = 0;
-            double d2 = 0;
-            double d3 = 0;
             #pragma omp parallel for num_threads(nthreads)
             for(uint i = 0; i < t2aconfig.n_rows; ++i){
                 mat block = vppph.getblock(0,t2aconfig(i,1))*t2.getblock(8,t2aconfig(i,0));
-                d1 += accu(abs(vppph.getblock(0,t2aconfig(i,1))));
-                d2 += accu(abs(t2.getblock(8,t2aconfig(i,0))));
-                d3 += accu(abs(block));
 
                 t3temp.addblock(1,t2aconfig(i,2),acT2a*block);
             }
-            cout << "       t2a v   :" << d1 << endl;
-            cout << "       t2a t2  :" << d2 << endl;
-            cout << "       t2a f(1):" << sum(abs(t3temp.vElements)) << endl;
-            cout << "       t2a f   :" << d3 << endl;
-
 
             if(t3temp.vElements(0) !=0){
                 cout << "Value error in vElements" << endl;
             }
-            d1 = 0;
             #pragma omp parallel for num_threads(nthreads)
             for(uint i = 0; i < t3temp.fvConfigs(3).n_rows; ++i){
                 uint b = 3;
@@ -425,34 +413,9 @@ void bccd::solve(uint Nt){
                                 + t3temp.getsblock_permuted(3,i,8)
                                 + t3temp.getsblock_permuted(3,i,11)
                                 ;
-                //block.print();
-                //cout << endl;
-                /*
-                mat block = t3temp.getblock(b,i)
-                                - t3temp.getblock_permuted(b,i,0) //3i0
-                                - t3temp.getblock_permuted(b,i,1)
-                                - t3temp.getblock_permuted(b,i,4)
-                                + t3temp.getblock_permuted(b,i,7)
-                                + t3temp.getblock_permuted(b,i,10)
-                                - t3temp.getblock_permuted(b,i,5)
-                                + t3temp.getblock_permuted(b,i,8)
-                                + t3temp.getblock_permuted(b,i,11)
-                                ;*/
-                //cout << max(abs(block)) << endl;
-                //block.print();
-                //cout << endl;
-
-                //t3.getfspBlock(i).print();
-                //cout << endl;
 
                 t3.addsblock(0,i,block);
-                d1 += accu(abs(block));
-                //d1 += accu(abs(t3temp.getblock(1,i)));
-
-                //t3.addblock(0,i,block);
             }
-            cout << "      full t3 (a) :" << sum(abs(t3.vElements)) << endl;
-            cout << "        t2a p     :" << d1 << endl;
 
 
 
@@ -461,26 +424,12 @@ void bccd::solve(uint Nt){
             // ############################################
             t3temp.zeros();
 
-            d1 = 0;
-            d2 = 0;
-            d3 = 0;
             #pragma omp parallel for num_threads(nthreads)
             for(uint i = 0; i < t2bconfig.n_rows; ++i){
-                //sum all these and compare
-                //vsum += sum(abs(vectorise(vhphh.getblock(0,t2bconfig(i,1))))); // << endl;
-                //tsum += sum(abs(vectorise(t2.getblock(9,t2bconfig(i,0)))));
                 mat block = t2.getblock(9,t2bconfig(i,0))*vhphh.getblock(0,t2bconfig(i,1)); //.t();
-
-                d1 += accu(abs(vhphh.getblock(0,t2bconfig(i,1))));
-                d2 += accu(abs(t2.getblock(9,t2bconfig(i,0))));
-                d3 += accu(abs(block));
-
 
                 t3temp.addblock(2,t2bconfig(i,2),acT2b*block); //t2bconfig is wrong
             }
-            //cout << "      " << d1 << endl;
-            //cout << "      t2b, t2:   " << d2 << endl;
-            //cout << "      t2b:   " << d3 << endl;
 
             if(t3temp.vElements(0) !=0){
                 cout << "Value error in vElements" << endl;
@@ -503,20 +452,8 @@ void bccd::solve(uint Nt){
                                 );
                 bsum += accu(abs(block));
 
-                //cout << i << endl;
                 t3.addsblock(0,i,block);
-                //cout << t3.vElements(0) << endl;
-                //block.print();
-
-                //cout << endl;
-                //t3.getraw(0,i).print();
-                //cout << endl;
-
-                //t3.addblock(0,i,block);
             }
-            //t3temp.getblock_permuted(3,208,3).print();
-            cout << "      full t2b:" << bsum << endl;
-            cout << "      full t3 :" << sum(abs(t3.vElements)) << endl;
             // ############################################
             // ## Set up T3                           ##
             // ############################################
@@ -529,26 +466,15 @@ void bccd::solve(uint Nt){
             // ############################################
 
             t2temp2.zeros();
-            bsum = 0;
-            d2 = 0;
-            d3 = 0;
 
             #pragma omp parallel for num_threads(nthreads)
             for(uint i = 0; i < d10bconfig.n_rows; ++i){
                 mat block = vphpp.getblock(0,d10bconfig(i,1))*t3.getblock(1, d10bconfig(i,0));
                 t2temp2.addblock(5,d10bconfig(i,2),acD10b*block);
-                bsum += accu(abs(block));
-                d2 += accu(abs(vphpp.getblock(0,d10bconfig(i,1))));
-                d3 += accu(abs(t3.getblock(1, d10bconfig(i,0))));
             }
 
-            //cout << "      full vphpp:" << d2 << endl;
-            //cout << "      full t3.uqr_stp():" << d3 << endl;
-            cout << "      full d10b:" << bsum << endl;
-            bsum = 0;
             #pragma omp parallel for num_threads(nthreads)
             for(uint i = 0; i < t2temp2.fvConfigs(0).n_rows; ++i){
-                //mat block = t2temp.getblock(0,i) - t2temp.getblock(2,i);
                 mat block2 = -.5*(t2temp2.getblock(0,i) - t2temp2.getblock_permuted(0,i,0));
                 t2n.addblock(0,i,block2);
             }
@@ -558,27 +484,15 @@ void bccd::solve(uint Nt){
             // ############################################
             // ## Calculate D10c                           ##
             // ############################################
-            d1 = 0;
-            d2 = 0;
-            d3 = 0;
 
             #pragma omp parallel for num_threads(nthreads)
             for(uint i = 0; i < d10cconfig.n_rows; ++i){
                 mat block = t3.getblock(2, d10cconfig(i,0))*vhhhp.getblock(0,d10cconfig(i,1));
-                d1 += accu(abs(block));
-
-                d2 += accu(abs(t3.getblock(2, d10cconfig(i,0))));
-                d3 += accu(abs(vhhhp.getblock(0,d10cconfig(i,1))));
                 t2temp2.addblock(6,d10cconfig(i,2),acD10c*block);
             }
 
-            cout << "      D10c full:" << d1 << endl;
-            //cout << "      D10c vhhhp:" << d3 << endl;
-            cout << "      D10c t3:" << d2 << endl;
-
             #pragma omp parallel for num_threads(nthreads)
             for(uint i = 0; i < t2temp2.fvConfigs(0).n_rows; ++i){
-                //mat block = t2temp.getblock(0,i) - t2temp.getblock(2,i);
                 mat block2 = .5*(t2temp2.getblock(0,i) - t2temp2.getblock_permuted(0,i,3));
                 t2n.addblock(0,i,block2);
             }

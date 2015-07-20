@@ -331,10 +331,6 @@ void ccd_pt::advance(){
     // ##################################################
     sp_mat tempt2a;
     tempt2a = vppph.pqs_r()*T.q_prs();
-    cout << "      vppph: "<< accu(abs(vppph.pqs_r())) << endl;
-    cout << "      tq_prs:"<<accu(abs(T.q_prs())) << endl;
-    cout << "      t2a:   " << accu(abs(tempt2a)) << endl;
-    //tempt2a = vhppp.srp_q()*T.q_prs();
     t2a.update_as_qru_pst(tempt2a, Np,Np,Np,Nr,Nr,Nr);
     //t2a.update_as_pqr_stu(t2a.pqr_stu()-t2a.qpr_stu()-t2a.rpq_stu()-t2a.rpq_uts()+t2a.prq_stu()+t2a.qrp_uts()-t2a.qrp_ust()+t2a.rqp_uts()+t2a.pqr_ust(), Np,Np,Np,Nr,Nr,Nr);
 
@@ -350,21 +346,8 @@ void ccd_pt::advance(){
                           +t2a.rqp_sut(), Np, Np, Np, Nr,Nr,Nr); //This one
 
 
-    cout << "      t2a p: " << accu(abs(t2a.pqr_stu())) << endl;
     t2b.update_as_pqs_rtu(T.pqr_s()*vhphh.p_qrs(), Np,Np,Np,Nr,Nr,Nr);
 
-    //cout <<"      " <<  accu(abs(vhphh.p_qrs())) << endl;
-    //cout <<"      " << accu(abs(T.pqr_s())) << endl;
-    cout <<"      Full t2b:" << accu(abs(T.pqr_s()*vhphh.p_qrs())) << endl;
-
-
-    //mat VVhphh;
-    //VVhphh = vhphh.p_qrs();
-    //cout << sum(abs(vectorise(VVhphh))) << endl;
-    //VVhphh = T.pqr_s();
-    //cout << sum(abs(vectorise(VVhphh))) << endl;
-    //VVhphh = sum(abs(t2b.pqr_stu()));
-    //cout << sum(abs(vectorise(VVhphh))) << endl;
 
 
 
@@ -380,26 +363,10 @@ void ccd_pt::advance(){
 
 
 
-    //VVhphh = t2b.pqr_stu();
-    cout << "      Full t2b(p):" << accu(abs(t2b.pqr_stu())) << endl;
-
-
-    /*
-    t2b.update_as_pqr_stu(t2b.pqr_stu()
-                          -t2b.rqp_stu()
-                          -t2b.rpq_stu()
-                          -t2b.rpq_tsu()
-                          +t2b.qpr_stu()
-                          +t2b.qrp_tsu()
-                          -t2b.qrp_ust()
-                          +t2b.prq_tsu()
-                          +t2b.pqr_ust(), Np,Np,Np,Nr,Nr,Nr);
-    */
     //Setting up T3
 
     T3.update_as_pqr_stu(t2a.pqr_stu() - t2b.pqr_stu(), Np,Np,Np,Nr,Nr,Nr);
 
-    cout << "      full t3:" << accu(abs(T3.pqr_stu())) << endl;
 
     T3.set_amplitudes(ebs.vHFEnergy);
 
@@ -408,16 +375,9 @@ void ccd_pt::advance(){
 
 
     fmD10b.update_as_q_rsp(vphpp.p_qrs()*T3.uqr_stp(), Np,Np,Nr,Nr);
-    //cout << "      full vphpp:" << accu(abs(vphpp.p_qrs())) << endl;
-    //cout << "      full t3.uqr_stp():" << accu(abs(T3.uqr_stp())) << endl;
-    cout << "      full d10b:" << accu(abs(fmD10b.pq_rs())) << endl;
     fmD10b.update(fmD10b.pq_rs() - fmD10b.qp_rs(), Np, Nq, Nr, Ns);
 
     fmD10c.update_as_pqr_s(T3.pqs_tur()*vhhhp.pqs_r(), Np,Np,Nr,Nr); //remember to permute these
-    cout << "      full d10c:" << accu(abs(fmD10c.pq_rs())) << endl;
-    cout << "      full d10c t3:" << accu(abs(T3.pqs_tur())) << endl;
-    //cout << "      full d10c vhhhp:" << accu(abs(vhhhp.pqs_r())) << endl;
-
 
     fmD10c.update(fmD10c.pq_rs() - fmD10c.pq_sr(), Np,Np,Nr,Nr);
 
