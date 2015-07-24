@@ -475,7 +475,7 @@ void bccd::solve(uint Nt){
 
             #pragma omp parallel for num_threads(nthreads)
             for(uint i = 0; i < t2temp2.fvConfigs(0).n_rows; ++i){
-                mat block2 = -.5*(t2temp2.getblock(0,i) - t2temp2.getblock_permuted(0,i,0));
+                mat block2 = .5*(t2temp2.getblock(0,i) - t2temp2.getblock_permuted(0,i,0));
                 t2n.addblock(0,i,block2);
             }
 
@@ -493,7 +493,7 @@ void bccd::solve(uint Nt){
 
             #pragma omp parallel for num_threads(nthreads)
             for(uint i = 0; i < t2temp2.fvConfigs(0).n_rows; ++i){
-                mat block2 = .5*(t2temp2.getblock(0,i) - t2temp2.getblock_permuted(0,i,3));
+                mat block2 = -.5*(t2temp2.getblock(0,i) - t2temp2.getblock_permuted(0,i,3));
                 t2n.addblock(0,i,block2);
             }
 
