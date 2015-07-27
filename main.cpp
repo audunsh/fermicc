@@ -29,7 +29,7 @@ int main()
     //2. Experiment with uniquely reduced t3amps in setup
     //3. parallellization
     electrongas fgas;
-    fgas.generate_state_list2(3.0,1.0, 14);
+    fgas.generate_state_list2(9.0,1.0, 14);
     cout << "[Main] " << setprecision(16) << "Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;
     cout << "[Main] G.Baardsens results:" << 1.9434 << endl;
 
@@ -40,8 +40,8 @@ int main()
 
     //triples diagrams corresponds to eachother when added in separately, but not together (deviation)
     bccd solver1(fgas);
-    cout << endl;
-    ccd_pt solver(fgas, 0);
+    //cout << endl;
+    //ccd_pt solver(fgas, 0);
 
     /*
     double tm = omp_get_wtime();

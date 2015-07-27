@@ -63,6 +63,13 @@ void amplitude::zeros(){
     vElements *= 0;
 } //zero out all elements
 
+void amplitude::insert_zeros(){
+    vec z(1);
+    z(0) = 0;
+    uiLastind = vElements.n_rows;
+    vElements = join_cols(vElements, z);
+}
+
 void amplitude::init_t3_amplitudes(){
     vElements.set_size(uvElements.n_rows);
     vEnergies.set_size(uvElements.n_rows);
@@ -2868,7 +2875,8 @@ umat amplitude::getfspBlock(uint i){
     uint Nx = fspDims(i,0);
     uint Ny = fspDims(i,1);
     umat block(Nx, Ny);
-    block*=0;
+    //block*=0;
+    block.fill(uiLastind);
 
     umat indices = fspBlocks(i);
     //indices.print();

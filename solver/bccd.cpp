@@ -221,6 +221,8 @@ void bccd::init(){
 
 
     }
+    t3temp.insert_zeros();
+    t3.insert_zeros();
 
 
 

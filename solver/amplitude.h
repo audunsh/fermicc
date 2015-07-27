@@ -22,6 +22,8 @@ public:
     //element related functions
 
     void zeros(); //zero out all elements
+    void insert_zeros(); //append a zero element at end of vElements
+    uint uiLastind;
 
     void init_amplitudes(); //initialize as amplitude
     void init_t3_amplitudes(); //initialize as amplitude
