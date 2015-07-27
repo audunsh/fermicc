@@ -20,7 +20,7 @@ bccd::bccd(electrongas fgas)
     init();
     cout << "[BCCD]Energy:" << energy() << endl;
 
-    solve(10);
+    solve(40);
 }
 
 void bccd::activate_diagrams(){
@@ -171,6 +171,7 @@ void bccd::init(){
 
 
         t3.map_t3_623_451(vphpp.fvConfigs(0)); //for d10b
+        //t3.scan_uvElements();
         t3.map_t3_124_356(vhhhp.fvConfigs(0)); //for d10c
         t3.map_t3_permutations_bconfig_sparse();
         cout << "Number of enrolled (sparse) states (t3):" << t3.debug_enroll << " of " << t3.uvElements.n_rows << endl;
@@ -391,7 +392,6 @@ void bccd::solve(uint Nt){
             // ## Calculate t2a                           ##
             // ############################################
 
-
             #pragma omp parallel for num_threads(nthreads)
             for(uint i = 0; i < t2aconfig.n_rows; ++i){
                 mat block = vppph.getblock(0,t2aconfig(i,1))*t2.getblock(8,t2aconfig(i,0));
@@ -401,6 +401,8 @@ void bccd::solve(uint Nt){
 
             if(t3temp.vElements(0) !=0){
                 cout << "Value error in vElements" << endl;
+
+
             }
             #pragma omp parallel for num_threads(nthreads)
             for(uint i = 0; i < t3temp.fvConfigs(3).n_rows; ++i){
@@ -429,7 +431,6 @@ void bccd::solve(uint Nt){
             #pragma omp parallel for num_threads(nthreads)
             for(uint i = 0; i < t2bconfig.n_rows; ++i){
                 mat block = t2.getblock(9,t2bconfig(i,0))*vhphh.getblock(0,t2bconfig(i,1)); //.t();
-
                 t3temp.addblock(2,t2bconfig(i,2),acT2b*block); //t2bconfig is wrong
             }
 
@@ -437,7 +438,6 @@ void bccd::solve(uint Nt){
                 cout << "Value error in vElements" << endl;
             }
 
-            double bsum = 0;
             #pragma omp parallel for num_threads(nthreads)
             for(uint i = 0; i < t3temp.fvConfigs(3).n_rows; ++i){
                 //1 - ac - cb - ij + ij/ac + ij/cb - ik +ik/ac + ik/cb
@@ -452,15 +452,14 @@ void bccd::solve(uint Nt){
                                 + t3temp.getsblock_permuted(3,i,10)
                                 + t3temp.getsblock_permuted(3,i,13)
                                 );
-                bsum += accu(abs(block));
 
                 t3.addsblock(0,i,block);
             }
             // ############################################
             // ## Set up T3                           ##
             // ############################################
-
             t3.divide_energy();
+
 
 
             // ############################################
@@ -473,8 +472,8 @@ void bccd::solve(uint Nt){
             for(uint i = 0; i < d10bconfig.n_rows; ++i){
                 mat block = vphpp.getblock(0,d10bconfig(i,1))*t3.getblock(1, d10bconfig(i,0));
                 t2temp2.addblock(5,d10bconfig(i,2),acD10b*block);
-            }
 
+            }
             #pragma omp parallel for num_threads(nthreads)
             for(uint i = 0; i < t2temp2.fvConfigs(0).n_rows; ++i){
                 mat block2 = .5*(t2temp2.getblock(0,i) - t2temp2.getblock_permuted(0,i,0));
@@ -505,7 +504,7 @@ void bccd::solve(uint Nt){
         t2n.divide_energy();
         t2 = t2n;
         cout << "[" << mode << "][" << t << "]Energy:" << energy() << endl;
-        cout << "[" << mode << "]   Iteration time:" << omp_get_wtime()-tm << endl;
+        //cout << "[" << mode << "]   Iteration time:" << omp_get_wtime()-tm << endl;
     }
 }
 

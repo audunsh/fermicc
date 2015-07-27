@@ -15,8 +15,8 @@ public:
     void init(electrongas bs, int n_configs, uvec size);
 
     //internal functions
-    uint to(uint p, uint q, uint r, uint s);  //compressed index
-    uvec from(uint i); //expanded index
+    u64 to(uint p, uint q, uint r, uint s);  //compressed index
+    Col<u64> from(uint i); //expanded index
     ivec intersect1d(ivec A, ivec B);
 
     //element related functions
@@ -24,6 +24,7 @@ public:
     void zeros(); //zero out all elements
     void insert_zeros(); //append a zero element at end of vElements
     uint uiLastind;
+    void scan_uvElements();
 
     void init_amplitudes(); //initialize as amplitude
     void init_t3_amplitudes(); //initialize as amplitude
@@ -32,10 +33,14 @@ public:
     void print_block_maximum();
 
 
-    void consolidate_blocks(uint uiN, uint tempElementsSize, field<uvec> tempElements, field<uvec> tempBlockmap1,field<uvec> tempBlockmap2,field<uvec> tempBlockmap3);
+    void consolidate_blocks(uint uiN, uint tempElementsSize, field<Col<u64> > tempElements, field<uvec> tempBlockmap1,field<uvec> tempBlockmap2,field<uvec> tempBlockmap3);
     void enroll_block(umat umBlock,uint tempElementsSize, uvec tempElements, uvec tempBlockmap1,uvec tempBlockmap2,uvec tempBlockmap3);
     uvec uvNsort1; // = sort_index(uvElements);
-    uvec uvElemtemp1;// = uvElements.elem(uvNsort);
+
+    //test
+    //uvec uvElemtemp1;// = uvElements.elem(uvNsort);
+    Col<u64> uvElemtemp1;
+
     uvec uvBsort1;// = sort_index(uvNsort); //backsort
     //field<SpMat<uint> > fspBlocks; //sparse blocks with t3 amplitudes
     field<umat> fspBlocks;
@@ -75,16 +80,21 @@ public:
     int k_step;   //stepsize for identifying unique regions
     vec vElements; //element storage
     vec vEnergies;
-    uvec uvElements; //element storage (prior to initialization)
+    Col<u64> uvElements; //element storage (prior to initialization)
     //field<umat> fmBlocks; //block of indices
-    field<field <umat> > fmBlocks;
+    field<field <Mat<u64> > > fmBlocks;
     field<ivec> fvConfigs; //configuration in quantum numbers of each block
 
     ivec ivBconfigs; //track aligned configurations
 
     uvec blocklengths;  //number of blocks in each configuration
     field<imat> fmOrdering; //the ordering of each configuration
-    uvec uvSize; //particle-hole organization
+
+
+    //uvec uvSize; //particle-hole organization
+    Col<u64> uvSize; //particle-hole organization
+
+
     int iNconfigs;
     uint Np, Nh;
     uint uiCurrent_block;
@@ -108,10 +118,10 @@ public:
     electrongas eBs;
 
     //t3 amplitude related
-    uint n0,n1,n2,n3,n4,n5;
+    u64 n0,n1,n2,n3,n4,n5;
     void make_t3();
-    uint to6(uint p, uint q, uint r, uint s, uint t, uint u);
-    uvec from6(uint i);
+    u64 to6(u64 p, u64 q, u64 r, u64 s, u64 t, u64 u);
+    Col<u64> from6(u64 i);
     void map_regions6(imat L, imat R);
     void map6(ivec left, ivec right);
     void map6c(ivec left, ivec right, ivec preconf);

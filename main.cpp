@@ -57,6 +57,17 @@ int main()
     //umat test(4,1);
     //test(0,0) = 0;
     //test.print();
+
+    //testing largest possible uints
+    /*
+    Col<u64> g(2000);
+
+    for(u64 i = 0; i < 2000; ++i){
+        cout << i*i*i*14*14*14 << endl;
+        g(i) = i*i*i*14*14*14;
+    }
+
     return 0;
+    */
 
 }
