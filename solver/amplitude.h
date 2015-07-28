@@ -82,7 +82,11 @@ public:
     vec vEnergies;
     Col<u64> uvElements; //element storage (prior to initialization)
     //field<umat> fmBlocks; //block of indices
-    field<field <Mat<u64> > > fmBlocks;
+
+    //field<field <Mat<u64> > > fmBlocks;
+    field<field <umat> > fmBlocks;
+
+
     field<ivec> fvConfigs; //configuration in quantum numbers of each block
 
     ivec ivBconfigs; //track aligned configurations
