@@ -21,7 +21,7 @@ bccd::bccd(electrongas fgas, double relaxation)
     cout << "[BCCD]Energy:" << energy() << endl;
     dRelaxation_parameter = relaxation;
 
-    solve(50);
+    solve(120);
 }
 
 void bccd::activate_diagrams(){
@@ -143,7 +143,7 @@ void bccd::init(){
     // ## Perturbative triples setup              ##
     // #############################################
     if(pert_triples){
-        mode = "CCD(T)";
+        mode = "CCDT-1";
         vhphh.init(eBs, 3, {Nh, Np, Nh, Nh});
         vhphh.map({1},{-2,3,4});
 
@@ -165,26 +165,32 @@ void bccd::init(){
         t3.uiCurrent_block = 1;
         //t3.map_t3_permutations();
 
-        //t3temp = t3;
-        //t3temp.uiCurrent_block = 1;
 
-        //t3.map_t3_permutations();
 
 
         t3.map_t3_623_451(vphpp.fvConfigs(0)); //for d10b,
-        //t3.scan_uvElements();
         t3.map_t3_124_356(vhhhp.fvConfigs(0)); //for d10c + t2.fvConfigs(9)
-
         t3.map_t3_236_145(t2.fvConfigs(8)); //check this one
 
-        //t3temp 1 --> t3 3
-        //t3temp 2 --> t3 2
+        //count memory usage in maps
+        u64 memsize2 = 0;
+        for(uint u = 1; u < 4; ++u){
+            for(uint i = 0; i < t3.fmBlocks(u).n_rows; ++i){
+                memsize2 += t3.fmBlocks(u)(i).n_elem;
+            }
+        }
+        cout << "Memory usage from blocks:" << (memsize2*4)/(1000000000.0) <<  " Gb" << endl;
+
+
+
 
         t3.map_t3_permutations_bconfig_sparse();
         cout << "Number of enrolled (sparse) states (t3):" << t3.debug_enroll << " of " << t3.uvElements.n_rows << endl;
 
         t3.init_t3_amplitudes();
+        cout << "Memory usage from elements:" << (3*t3.vElements.n_elem*8)/(1000000000.0) <<  " Gb" << endl;
 
+        cout << "[" << mode << "] Approx of initialized memory for t3    :" << t3.memsize*8/1000000000.0 << " GB" << endl;
 
         /*
         t3temp.map_t3_236_145(t2.fvConfigs(8)); //check this one
@@ -267,7 +273,7 @@ void bccd::solve(uint Nt){
     cout << "[" << mode << "] Time spent intersecting blocks:" << omp_get_wtime()-tm << endl;
     tm = omp_get_wtime();
 
-    uint nthreads = 1;
+    uint nthreads = 5;
     for(uint t = 0; t < Nt; ++t){
 
         double tm = omp_get_wtime();

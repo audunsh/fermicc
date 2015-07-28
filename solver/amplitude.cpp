@@ -95,7 +95,7 @@ void amplitude::init_t3_amplitudes(){
     vElements.set_size(uvElements.n_rows);
     vEnergies.set_size(uvElements.n_rows);
     vElements_temp.set_size(uvElements.n_rows);
-    memsize += uvElements.n_rows*2;
+    //memsize += uvElements.n_rows*2;
     //uvElements.print(); //could we maybe retrieve these "on the fly" ? (would mean to locate blocks "on the fly")
     #pragma omp parallel for num_threads(nthreads)
     for(uint i= 0; i<uvElements.n_rows; ++i){
@@ -107,7 +107,13 @@ void amplitude::init_t3_amplitudes(){
         vEnergies(i) = eBs.vHFEnergy(p(3)) + eBs.vHFEnergy(p(4))+eBs.vHFEnergy(p(5))-eBs.vHFEnergy(p(0)+Nh)-eBs.vHFEnergy(p(1)+Nh)-eBs.vHFEnergy(p(2)+Nh);
 
     }
-    uvElements.set_size(0);
+    //uvElements.set_size(0);
+    //uvElemtemp1.set_size(0);
+    uvElements.reset();
+    uvElemtemp1.reset();
+    uvNsort1.reset();
+    uvBsort1.reset();
+
 } //initialize as t3 amplitude
 
 
@@ -545,7 +551,7 @@ void amplitude::map_t3_236_145(ivec Kk_unique){
 
         int Nx = row.n_rows;
         int Ny = col.n_rows;
-        memsize += Nx*Ny;
+        //memsize += Nx*Ny;
         //cout << Nx << " " << Ny << " " << " " << K_unique(n) << endl;
         Mat<u64> block(Nx,Ny);
         uvec pqrs(6);
@@ -753,7 +759,7 @@ void amplitude::map_t3_623_451(ivec Kk_unique){
 
         int Nx = row.n_rows;
         int Ny = col.n_rows;
-        memsize += Nx*Ny;
+        //memsize += Nx*Ny;
         //cout << Nx << " " << Ny << " " << " " << K_unique(n) << endl;
         Mat<u64> block(Nx,Ny);
         uvec pqrs(6);
@@ -994,7 +1000,7 @@ void amplitude::map_t3_124_356(ivec Kk_unique){
                 block(nx, ny) = index;
             }
         }
-        memsize += Nx*Ny;
+        //memsize += Nx*Ny;
 
 
 
@@ -2497,7 +2503,7 @@ void amplitude::map_t3_permutations_bconfig_sparse(){
 
     uvNsort1 = sort_index(uvElements);
     uvElemtemp1 = uvElements.elem(uvNsort1);
-    uvBsort1 = sort_index(uvNsort1); //backsort
+    //uvBsort1 = sort_index(uvNsort1); //backsort
 
     #pragma omp parallel for num_threads(nthreads)
     for(uint n = 0; n <K_unique.n_rows; ++n){
