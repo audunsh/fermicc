@@ -22,7 +22,7 @@ using namespace arma;
 class bccd
 {
 public:
-    bccd(electrongas fgas);
+    bccd(electrongas fgas, double relaxation);
 
     //internal functions
     double energy(); //calculate energy
@@ -32,6 +32,7 @@ public:
     void solve(uint Nt);
     void compare();
     bool unconverged(); //convergence test - returns true while unconverged
+    double dRelaxation_parameter;
 
     umat intersect_blocks(amplitude a, uint na, blockmap b, uint nb);
     umat intersect_blocks_triple(amplitude a, uint na, blockmap b, uint nb, amplitude c, uint nc);

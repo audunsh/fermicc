@@ -63,6 +63,10 @@ void amplitude::zeros(){
     vElements *= 0;
 } //zero out all elements
 
+void amplitude::tempZeros(){
+    vElements_temp *= 0;
+} //zero out all elements
+
 void amplitude::insert_zeros(){
     vec z(1);
     z(0) = 0;
@@ -90,26 +94,18 @@ void amplitude::scan_uvElements(){
 void amplitude::init_t3_amplitudes(){
     vElements.set_size(uvElements.n_rows);
     vEnergies.set_size(uvElements.n_rows);
+    vElements_temp.set_size(uvElements.n_rows);
     memsize += uvElements.n_rows*2;
     //uvElements.print(); //could we maybe retrieve these "on the fly" ? (would mean to locate blocks "on the fly")
     #pragma omp parallel for num_threads(nthreads)
     for(uint i= 0; i<uvElements.n_rows; ++i){
         uvec p = from6(uvElements(i));
-        //cout << p(0) <<  " " << p(1) << " " << p(2) << " " << p(3) << " "<< endl;
-        vElements(i) = 0; //eBs.v2(p(0)+Nh,p(1)+Nh,p(2),p(3));
-        //double v = eBs.vEnergy(p(2))+ eBs.vEnergy(p(3));
-        //vEnergies(i) = eBs.vEnergy(p(2)) + eBs.vEnergy(p(3))-eBs.vEnergy(p(0)+Nh)-eBs.vEnergy(p(1)+Nh);
+
+        vElements(i) = 0;
+        vElements_temp(i) = 0;
 
         vEnergies(i) = eBs.vHFEnergy(p(3)) + eBs.vHFEnergy(p(4))+eBs.vHFEnergy(p(5))-eBs.vHFEnergy(p(0)+Nh)-eBs.vHFEnergy(p(1)+Nh)-eBs.vHFEnergy(p(2)+Nh);
 
-        /*
-        if(vEnergies(i) != vEnergies(i)){
-            cout << "Warning" << endl;
-            p.print();
-            cout << eBs.vHFEnergy(p(3)) + eBs.vHFEnergy(p(4))+eBs.vHFEnergy(p(5)) << endl;
-            cout << -eBs.vHFEnergy(p(0)+Nh)-eBs.vHFEnergy(p(1)+Nh)-eBs.vHFEnergy(p(2)+Nh) << endl;
-            cout << endl;
-        }*/ //Used to ensure no overflow in uint
     }
     uvElements.set_size(0);
 } //initialize as t3 amplitude
@@ -2816,6 +2812,17 @@ mat amplitude::getsblock(int u, int i){
     return block;
 }
 
+mat amplitude::getsblock_temp(int u, int i){
+    umat indblock = getfspBlock(i);
+
+    //sp_mat<uint> fs = fspBlocks(i);
+    //umat indblock(fs);
+
+    mat block = vElements_temp.elem(indblock);
+    block.reshape(fspDims(i,0), fspDims(i,1));
+    return block;
+}
+
 umat amplitude::getraw(int u, int i){
     //return index block, used for debugging and optimization
     return fmBlocks(u)(i);
@@ -2994,6 +3001,73 @@ mat amplitude::getsblock_permuted(int u, int i, int n){
     return block;
 }
 
+mat amplitude::getsblock_permuted_temp(int u, int i, int n){
+    //return index block, used for debugging and optimization
+
+    umat aligned = getfspBlock(i);
+    // umat aligned = fmBlocks(u)(i);
+
+    if(n==0){
+        aligned = aligned.rows(Pab(i));
+    }
+    if(n==1){
+        aligned = aligned.rows(Pac(i));
+    }
+    if(n==2){
+        aligned = aligned.rows(Pbc(i));
+    }
+    if(n==3){
+        aligned = aligned.cols(Pij(i));
+    }
+    if(n==4){
+        aligned = aligned.cols(Pik(i));
+    }
+    if(n==5){
+        aligned = aligned.cols(Pjk(i));
+    }
+    if(n==6){
+        aligned = aligned.rows(Pab(i));
+        aligned = aligned.cols(Pij(i));
+    }
+    if(n==7){
+        aligned = aligned.rows(Pab(i));
+        aligned = aligned.cols(Pik(i));
+    }
+    if(n==8){
+        aligned = aligned.rows(Pab(i));
+        aligned = aligned.cols(Pjk(i));
+    }
+    if(n==9){
+        aligned = aligned.rows(Pac(i));
+        aligned = aligned.cols(Pij(i));
+    }
+    if(n==10){
+        aligned = aligned.rows(Pac(i));
+        aligned = aligned.cols(Pik(i));
+    }
+    if(n==11){
+        aligned = aligned.rows(Pac(i));
+        aligned = aligned.cols(Pjk(i));
+    }
+    if(n==12){
+        aligned = aligned.rows(Pbc(i));
+        aligned = aligned.cols(Pij(i));
+    }
+    if(n==13){
+        aligned = aligned.rows(Pbc(i));
+        aligned = aligned.cols(Pik(i));
+    }
+    if(n==14){
+        aligned = aligned.rows(Pbc(i));
+        aligned = aligned.cols(Pjk(i));
+    }
+
+    mat block = vElements_temp.elem(aligned);
+    block.reshape(fspDims(i,0), fspDims(i,1));
+
+    return block;
+}
+
 mat amplitude::getspblock_permuted(umat aligned, uint i, int n){
     //return index block, used for debugging and optimization
 
@@ -3064,6 +3138,11 @@ mat amplitude::getspblock_permuted(umat aligned, uint i, int n){
 
 void amplitude::setblock(int u, int i, mat mBlock){
     vElements.elem(fmBlocks(u)(i)) = vectorise(mBlock);
+}
+
+void amplitude::addblock_temp(int u, int i, mat mBlock){
+
+    vElements_temp.elem(fmBlocks(u)(i)) += vectorise(mBlock);
 }
 
 void amplitude::addblock(int u, int i, mat mBlock){

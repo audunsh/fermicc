@@ -72,6 +72,9 @@ public:
 
     void setblock(int u, int i, mat mBlock);
     void addblock(int u, int i, mat mBlock);
+
+
+
     void addsblock(int u, int i, mat mBlock);
 
 
@@ -79,6 +82,16 @@ public:
     //Block storage
     int k_step;   //stepsize for identifying unique regions
     vec vElements; //element storage
+    vec vElements_temp; //temporary container for permutations and accumulation
+    void tempZeros();
+    void addblock_temp(int u, int i, mat mBlock);
+    mat getsblock_permuted_temp(int u, int i, int n);
+    mat getsblock_temp(int u, int i);
+
+
+
+
+
     vec vEnergies;
     Col<u64> uvElements; //element storage (prior to initialization)
     //field<umat> fmBlocks; //block of indices

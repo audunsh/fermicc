@@ -11,7 +11,7 @@ using namespace std;
 using namespace arma;
 
 
-bccd::bccd(electrongas fgas)
+bccd::bccd(electrongas fgas, double relaxation)
 {
     eBs = fgas;
     Np = fgas.iNbstates-fgas.iNparticles;
@@ -19,8 +19,9 @@ bccd::bccd(electrongas fgas)
     activate_diagrams();
     init();
     cout << "[BCCD]Energy:" << energy() << endl;
+    dRelaxation_parameter = relaxation;
 
-    solve(40);
+    solve(50);
 }
 
 void bccd::activate_diagrams(){
@@ -164,22 +165,28 @@ void bccd::init(){
         t3.uiCurrent_block = 1;
         //t3.map_t3_permutations();
 
-        t3temp = t3;
+        //t3temp = t3;
         //t3temp.uiCurrent_block = 1;
 
         //t3.map_t3_permutations();
 
 
-        t3.map_t3_623_451(vphpp.fvConfigs(0)); //for d10b
+        t3.map_t3_623_451(vphpp.fvConfigs(0)); //for d10b,
         //t3.scan_uvElements();
-        t3.map_t3_124_356(vhhhp.fvConfigs(0)); //for d10c
+        t3.map_t3_124_356(vhhhp.fvConfigs(0)); //for d10c + t2.fvConfigs(9)
+
+        t3.map_t3_236_145(t2.fvConfigs(8)); //check this one
+
+        //t3temp 1 --> t3 3
+        //t3temp 2 --> t3 2
+
         t3.map_t3_permutations_bconfig_sparse();
         cout << "Number of enrolled (sparse) states (t3):" << t3.debug_enroll << " of " << t3.uvElements.n_rows << endl;
 
         t3.init_t3_amplitudes();
 
 
-
+        /*
         t3temp.map_t3_236_145(t2.fvConfigs(8)); //check this one
         t3temp.map_t3_124_356(t2.fvConfigs(9));
 
@@ -202,27 +209,12 @@ void bccd::init(){
         cout << "[" << mode << "] Approx of initialized memory for t3    :" << t3.memsize*8/1000000000.0 << " GB" << endl;
 
         cout << "[" << mode << "] Number of initialized values for t3temp:" << t3temp.memsize << endl;
+        */
 
-
-        //testing sparse mapping
-        vec Vel(t3temp.vElements.n_rows);
-        Vel*=0;
-        uint d = 0;
-        for(uint i = 0; i < t3temp.fvConfigs(3).n_rows; ++i){
-            //umat b = t3temp.getfspBlock(i);
-            umat indices = t3temp.fspBlocks(i);
-            d += indices.n_cols;
-            //mat v(b.n_rows, b.n_cols);
-            //Vel(b) = vectorise(v);
-
-        }
-
-        //Vel.print();
-        //cout << d << endl;
 
 
     }
-    t3temp.insert_zeros();
+    //t3temp.insert_zeros();
     t3.insert_zeros();
 
 
@@ -253,8 +245,8 @@ void bccd::solve(uint Nt){
     //t2bconfig.print();
     umat t2aconfig, t2bconfig, d10bconfig, d10cconfig;
     if(pert_triples){
-        t2aconfig = intersect_blocks_triple(t2,8, vppph, 0, t3temp, 1);
-        t2bconfig = intersect_blocks_triple(t2,9, vhphh, 0, t3temp, 2);
+        t2aconfig = intersect_blocks_triple(t2,8, vppph, 0, t3, 3);
+        t2bconfig = intersect_blocks_triple(t2,9, vhphh, 0, t3, 2);
 
         d10bconfig = intersect_blocks_triple(t3,1, vphpp, 0, t2temp2, 5);
         d10cconfig = intersect_blocks_triple(t3,2, vhhhp, 0, t2temp2, 6);
@@ -385,28 +377,32 @@ void bccd::solve(uint Nt){
             // ## Calculate perturbative triples amplitudes    ##
             // ##                                              ##
             // ##################################################
-            t3temp.zeros();
+            //t3temp.zeros();
             t3.zeros();
+            t3.tempZeros();
 
             // ############################################
             // ## Calculate t2a                           ##
             // ############################################
 
+
             #pragma omp parallel for num_threads(nthreads)
             for(uint i = 0; i < t2aconfig.n_rows; ++i){
                 mat block = vppph.getblock(0,t2aconfig(i,1))*t2.getblock(8,t2aconfig(i,0));
 
-                t3temp.addblock(1,t2aconfig(i,2),acT2a*block);
+                //t3temp.addblock(1,t2aconfig(i,2),acT2a*block);
+                t3.addblock_temp(3,t2aconfig(i,2),acT2a*block);
             }
 
-            if(t3temp.vElements(0) !=0){
-                cout << "Value error in vElements" << endl;
+            //if(t3temp.vElements(0) !=0){
+            //    cout << "Value error in vElements" << endl;
+            //}
 
-
-            }
             #pragma omp parallel for num_threads(nthreads)
-            for(uint i = 0; i < t3temp.fvConfigs(3).n_rows; ++i){
+            for(uint i = 0; i < t3.fvConfigs(4).n_rows; ++i){
+                //for(uint i = 0; i < t3temp.fvConfigs(3).n_rows; ++i){
                 uint b = 3;
+                /*
                 mat block = t3temp.getsblock(3,i)
                                 - t3temp.getsblock_permuted(3,i,0)
                                 - t3temp.getsblock_permuted(3,i,1)
@@ -416,9 +412,20 @@ void bccd::solve(uint Nt){
                                 - t3temp.getsblock_permuted(3,i,5)
                                 + t3temp.getsblock_permuted(3,i,8)
                                 + t3temp.getsblock_permuted(3,i,11)
+                                ;*/
+                mat block2 = t3.getsblock_temp(3,i)
+                                - t3.getsblock_permuted_temp(3,i,0)
+                                - t3.getsblock_permuted_temp(3,i,1)
+                                - t3.getsblock_permuted_temp(3,i,4)
+                                + t3.getsblock_permuted_temp(3,i,7)
+                                + t3.getsblock_permuted_temp(3,i,10)
+                                - t3.getsblock_permuted_temp(3,i,5)
+                                + t3.getsblock_permuted_temp(3,i,8)
+                                + t3.getsblock_permuted_temp(3,i,11)
                                 ;
 
-                t3.addsblock(0,i,block);
+
+                t3.addsblock(0,i,block2);
             }
 
 
@@ -427,21 +434,24 @@ void bccd::solve(uint Nt){
             // ## Calculate t2b                           ##
             // ############################################
             t3temp.zeros();
+            t3.tempZeros();
 
             #pragma omp parallel for num_threads(nthreads)
             for(uint i = 0; i < t2bconfig.n_rows; ++i){
                 mat block = t2.getblock(9,t2bconfig(i,0))*vhphh.getblock(0,t2bconfig(i,1)); //.t();
-                t3temp.addblock(2,t2bconfig(i,2),acT2b*block); //t2bconfig is wrong
+                //t3temp.addblock(2,t2bconfig(i,2),acT2b*block); //t2bconfig is wrong
+                t3.addblock_temp(2,t2bconfig(i,2),acT2b*block);
             }
 
-            if(t3temp.vElements(0) !=0){
-                cout << "Value error in vElements" << endl;
-            }
+            //if(t3temp.vElements(0) !=0){
+            //    cout << "Value error in vElements" << endl;
+            //}
 
             #pragma omp parallel for num_threads(nthreads)
-            for(uint i = 0; i < t3temp.fvConfigs(3).n_rows; ++i){
+            for(uint i = 0; i < t3.fvConfigs(4).n_rows; ++i){
                 //1 - ac - cb - ij + ij/ac + ij/cb - ik +ik/ac + ik/cb
                 //umat aligned = t3temp.getfspBlock(i);
+                /*
                 mat block = -1.0*(t3temp.getsblock(3,i)
                                 - t3temp.getsblock_permuted(3,i,1)
                                 - t3temp.getsblock_permuted(3,i,2)
@@ -451,9 +461,20 @@ void bccd::solve(uint Nt){
                                 - t3temp.getsblock_permuted(3,i,4)
                                 + t3temp.getsblock_permuted(3,i,10)
                                 + t3temp.getsblock_permuted(3,i,13)
+                                );*/
+
+                mat block2 = -1.0*(t3.getsblock_temp(3,i)
+                                - t3.getsblock_permuted_temp(3,i,1)
+                                - t3.getsblock_permuted_temp(3,i,2)
+                                - t3.getsblock_permuted_temp(3,i,3)
+                                + t3.getsblock_permuted_temp(3,i,9)
+                                + t3.getsblock_permuted_temp(3,i,12)
+                                - t3.getsblock_permuted_temp(3,i,4)
+                                + t3.getsblock_permuted_temp(3,i,10)
+                                + t3.getsblock_permuted_temp(3,i,13)
                                 );
 
-                t3.addsblock(0,i,block);
+                t3.addsblock(0,i,block2);
             }
             // ############################################
             // ## Set up T3                           ##
@@ -502,7 +523,8 @@ void bccd::solve(uint Nt){
         }
 
         t2n.divide_energy();
-        t2 = t2n;
+        t2.vElements = t2.vElements*(1-dRelaxation_parameter) + t2n.vElements*dRelaxation_parameter; //relaxation
+        //t2 =t2n;
         cout << "[" << mode << "][" << t << "]Energy:" << energy() << endl;
         //cout << "[" << mode << "]   Iteration time:" << omp_get_wtime()-tm << endl;
     }
