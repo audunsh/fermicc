@@ -16,6 +16,7 @@
 #include "solver/ccd_mp.h"
 #include "solver/amplitude.h"
 #include "solver/bccd.h"
+#include "solver/sccdt_mp.h"
 #include <omp.h>
 
 using namespace std;
@@ -39,9 +40,12 @@ int main()
 
 
     //triples diagrams corresponds to eachother when added in separately, but not together (deviation)
-    bccd solver1(fgas, .3);
+    //bccd solver1(fgas, .3);
+
+
     //cout << endl;
     //ccd_pt solver(fgas, 0);
+    sccdt_mp(fgas, 0);
 
     /*
     double tm = omp_get_wtime();

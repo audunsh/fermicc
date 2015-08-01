@@ -451,62 +451,31 @@ void ccd::advance(){
     //L1 = vpppp.pq_rs()*T.pq_rs();
     //L1_block_multiplication();
     L1_dense_multiplication();
-    if(timing){
-        cout << "Time spent on L1:" << (clock() - (float)t)/CLOCKS_PER_SEC << endl;
-        t = clock();}
-
     L2 = T.pq_rs()*vhhhh.pq_rs();
-    if(timing){
-        cout << "Time spent on L2:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
-        t = clock();}
 
     fmL3.update(vhpph.sq_rp()*T.qs_pr(), Ns, Nq, Np, Nr);
     L3 = fmL3.rq_sp() - fmL3.qr_sp() -fmL3.rq_ps() +fmL3.qr_ps();
-    if(timing){
-        cout << "Time spent on L3:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
-        t = clock();}
 
     fmQ1.update(T.rs_pq()*vhhpp.rs_pq()*T.rs_pq(), Nr, Ns, Np,Nq);
     Q1 = fmQ1.rs_pq();
-    if(timing){
-        cout << "Time spent on Q1:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
-        t = clock();}
 
     fmQ2.update(T.pr_qs()*vhhpp.rp_qs()*T.sq_pr(), Np, Nr, Nq, Ns); //needs realignment and permutations
     Q2 = fmQ2.pr_qs()-fmQ2.pr_sq(); //permuting elements
-    if(timing){
-        cout << "Time spent on Q2:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
-        t = clock();}
 
     fmQ3.update_as_r_pqs((T.r_sqp()*vhhpp.prs_q())*T.r_pqs(), Np, Nq, Nr, Ns); //needs realignment and permutations
     Q3 = fmQ3.pq_rs() - fmQ3.pq_sr(); //permuting elements
-    if(timing){
-        cout << "Time spent on Q3:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
-        t = clock();}
 
     fmQ4.update_as_p_qrs(T.p_srq()*vhhpp.pqr_s()*T.p_qrs(), Np, Nq, Nr, Ns); //needs realignment and permutations
     Q4 = fmQ4.pq_rs() - fmQ4.qp_rs(); //permuting elements
-    if(timing){
-        cout << "Time spent on Q4:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
-        t = clock();}
 
 
-    //double alpha = .5;
     Tprev.update(T.pq_rs(), Np,Nq,Nr,Ns);
 
     T.update(vpphh.pq_rs() + .5*(L1 + L2) + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4, Np, Nq, Nr, Ns);
-    //T.update(alpha*T.pq_rs() + (1.0-alpha)*(vpphh.pq_rs() + .5*(L1 + L2) + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4), Np, Nq, Nr, Ns);
-
     T.set_amplitudes(ebs.vHFEnergy); //divide updated amplitides by energy denominator
     T.update(alpha*Tprev.pq_rs() + (1.0-alpha)*T.pq_rs(), Np, Nq,Nr,Ns);
-    if(timing){
-        cout << "Time spent on T:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
-        t = clock();}
 
     energy();
-    if(timing){
-        cout << "Time spent on e:" <<  (clock() - (float)t)/CLOCKS_PER_SEC << endl;
-        t = clock();}
     T.shed_zeros();
     T.map_indices();
 }

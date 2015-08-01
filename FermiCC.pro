@@ -31,7 +31,8 @@ SOURCES += main.cpp \
     solver/ccd_mp.cpp \
     solver/blockmap.cpp \
     solver/amplitude.cpp \
-    solver/bccd.cpp
+    solver/bccd.cpp \
+    solver/sccdt_mp.cpp
 
 include(deployment.pri)
 qtcAddDeployment()
@@ -51,7 +52,8 @@ HEADERS += \
     solver/ccd_mp.h \
     solver/blockmap.h \
     solver/amplitude.h \
-    solver/bccd.h
+    solver/bccd.h \
+    solver/sccdt_mp.h
 
 LIBS += -larmadillo -lblas -llapack
 
