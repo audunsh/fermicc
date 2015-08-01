@@ -1035,6 +1035,9 @@ void flexmat6::deinit(){
     Nuts_rpq = 0;
     Nuts_rqp = 0;
 
+    Nrstu_pq = 0;
+    Npq_rstu = 0;
+
 
 }
 
@@ -1658,6 +1661,26 @@ void flexmat6::update_as_rstu_pq(sp_mat spC, int Np, int Nq, int Nr, int Ns, int
     deinit();
 }
 
+void flexmat6::update_as_pq_rstu(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
+    //handwritten
+    iNp = Np;
+    iNq = Nq;
+    iNr = Nr;
+    iNs = Ns;
+    iNt = Nt;
+    iNu = Nu;
+    unpack_sp_mat H(spC);
+    vu = conv_to<uvec>::from(floor( H.vT1/(iNr*iNs*iNt)));
+    vt = conv_to<uvec>::from(floor((H.vT1 - vu*iNr*iNs*iNt)/(iNr*iNs)));
+    vs = conv_to<uvec>::from(floor((H.vT1 - vt*iNr*iNs - vu*iNr*iNs*iNt)/(iNr)));
+    vr = conv_to<uvec>::from(floor((H.vT1 - vs*iNr - vt*iNr*iNs - vu*iNr*iNs*iNt)));
+
+    vq = conv_to<uvec>::from(floor( H.vT0/(iNp)));
+    vp = conv_to<uvec>::from(H.vT0 - vq*iNp );
+    vValues = H.vVals;
+    deinit();
+}
+
 void flexmat6::update_as_rs_tupq(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu){
     iNp = Np;
     iNq = Nq;
@@ -1683,6 +1706,20 @@ sp_mat flexmat6::rstu_pq(){
         locations.col(1) = vp + vq*iNp;
         Vrstu_pq = sp_mat(locations.t(), vValues, iNr*iNs*iNt*iNu,iNp*iNq);
         Nrstu_pq = 1;
+        return Vrstu_pq;
+    }
+    else{
+        return Vrstu_pq;
+    }
+}
+
+sp_mat flexmat6::pq_rstu(){
+    if(Npq_rstu == 0){
+        locations.set_size(vp.n_rows, 2);
+        locations.col(1) = vr + vs*iNr + vt*iNs*iNr + vu*iNt*iNs*iNr;
+        locations.col(0) = vp + vq*iNp;
+        Vpq_rstu = sp_mat(locations.t(), vValues, iNp*iNq,iNr*iNs*iNt*iNu);
+        Npq_rstu = 1;
         return Vrstu_pq;
     }
     else{

@@ -172,12 +172,16 @@ public:
     int Np_qtrus;
 
     void update_as_rstu_pq(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu);
+    void update_as_pq_rstu(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu);
     void update_as_rs_tupq(sp_mat spC, int Np, int Nq, int Nr, int Ns, int Nt, int Nu);
     sp_mat rstu_pq();
+    sp_mat pq_rstu();
     sp_mat rs_tupq();
 
     sp_mat Vpsqr_tu;
     sp_mat Vps_qrtu;
+    sp_mat Vpq_rstu;
+    int Npq_rstu;
     int Npsqr_tu;
     int Nps_qrtu;
 

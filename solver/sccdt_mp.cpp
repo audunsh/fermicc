@@ -50,10 +50,19 @@ sccdt_mp::sccdt_mp(electrongas bs, double a){
 
     //setup all interaction matrices
     iSetup.sVhhhhO();
+
     iSetup.sVppppBlock();
+
+
     iSetup.sVhhpp();
     iSetup.sVhpph();
 
+    //diags = {1,1,1,1,1,1,1, 1,1, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}; //which diagrams to include (0-7: CCD, 7,8: CCDT t2, 9:- t3)
+    diags = {1, 1, 1, 1, 1, 1, 1,   1,  1,     1,      1,1,1,    1,1,1,      1,1,1,1,1,1,1,  1,1}; //which diagrams to include (0-7: CCD, 7,8: CCDT t2, 9:- t3)
+    //       La Lb Lc Qa Qb Qc Qd   t2a t2b      t2t2: b,c,d  t3:a,b,c  t2t3:a,b,c,d,e,f,g,
+    iSetup.sVppppO();
+    vpppp.init(iSetup.vValsVpppp, iSetup.aVpppp, iSetup.bVpppp, iSetup.cVpppp, iSetup.dVpppp, iSetup.iNp, iSetup.iNp, iSetup.iNp, iSetup.iNp);
+    vpppp.shed_zeros();
 
     //convert interaction data to flexmat objects
     vhhhh.init(iSetup.vValsVhhhh, iSetup.iVhhhh, iSetup.jVhhhh, iSetup.kVhhhh, iSetup.lVhhhh, iSetup.iNh, iSetup.iNh, iSetup.iNh, iSetup.iNh);
@@ -98,7 +107,7 @@ sccdt_mp::sccdt_mp(electrongas bs, double a){
     T3.map_indices();
     //check_matrix_consistency();
     energy();
-    for(int i = 0; i < 25; i++){
+    for(int i = 0; i < 100; i++){
         iterations += 1;
         advance();
     }
@@ -339,6 +348,7 @@ void sccdt_mp::advance(){
     int Ns = iSetup.iNh;
 
     sp_mat zeromat; //used to zero out the various t3 flexmat objects to ease memory usage
+    flexmat6 zeroflex; // same as above
 
     bool timing = false; //time each contribution calculation and print to screen (each iteration)
 
@@ -355,8 +365,8 @@ void sccdt_mp::advance(){
 
 
 
-    L1_dense_multiplication(); //The pp-pp diagrama, given special treatment to limit memory usage
-
+    //L1_dense_multiplication(); //The pp-pp diagrama, given special treatment to limit memory usage
+    L1 = vpppp.pq_rs()*T.pq_rs();
 
 
     L2 = T.pq_rs()*vhhhh.pq_rs();
@@ -396,6 +406,8 @@ void sccdt_mp::advance(){
     // #########################
     // ##   Linear t2 terms   ##
     // #########################
+
+    // 7 8
 
     /*
     t2a.update_as_qru_pst(vppph.pqs_r()*T.q_prs(), Np,Np,Np,Nr,Nr,Nr);
@@ -444,43 +456,53 @@ void sccdt_mp::advance(){
 
 
 
-    sp_mat t3_temp = t2a.pqr_stu() - t2b.pqr_stu(); //CCDT-1 contribution
+    sp_mat t3_temp = t2a.pqr_stu()*diags(7) - t2b.pqr_stu()*diags(8); //CCDT-1 contribution
 
-    t2a.update_as_pqs_rtu(zeromat, Np, Np, Np, Nr, Nr, Nr);
-    t2b.update_as_pqs_rtu(zeromat, Np, Np, Np, Nr, Nr, Nr);
+    //t2a.update_as_pqs_rtu(zeromat, Np, Np, Np, Nr, Nr, Nr);
+    //t2b.update_as_pqs_rtu(zeromat, Np, Np, Np, Nr, Nr, Nr);
+    t2a = zeroflex;
+    t3b = zeroflex;
 
     // #########################
     // ##  Quadratic t2 terms ##
     // #########################
 
 
+    //10 11 12
+
     // These terms need special treatment due to lines exciting out of the interaction
 
     fmt2temp.update(T.pr_sq()*vhppp.pr_qs(), Np, Nr, Np, Np);
     t2t2b.update_as_psq_rtu(fmt2temp.pqr_s()*T.p_qrs(), Np,Np,Np,Nr,Nr,Nr);
     t2t2b.update_as_pqr_stu(t2t2b.pqr_stu()-t2t2b.qpr_stu()-t2t2b.rpq_stu()-t2t2b.rpq_tsu()+t2t2b.prq_stu()+t2t2b.qrp_tsu()-t2t2b.qrp_ust()+t2t2b.rqp_tsu()+t2t2b.pqr_ust(), Np,Np,Np,Nr,Nr,Nr);
-    t3_temp += t2t2b.pqr_stu();
-
-
-    t2t2b.update_as_pqs_rtu(zeromat, Np, Np, Np, Nr, Nr, Nr);
+    if(diags(10) == 1){
+        t3_temp += t2t2b.pqr_stu();
+    }
+    t2t2b = zeroflex;
+    //t2t2b.update_as_pqs_rtu(zeromat, Np, Np, Np, Nr, Nr, Nr);
 
 
     fmt2temp.update(T.rs_pq()*vhppp.rs_pq(), Nr, Nr, Nr, Np);
     t2t2c.update_as_tur_pqs(fmt2temp.pqs_r()*T.s_pqr(), Np,Np,Np,Nr,Nr,Nr); //check this one later!!!!
     t2t2c.update_as_pqr_stu(t2t2c.pqr_stu()-t2t2c.rqp_stu()-t2t2c.rpq_stu()-t2t2c.rpq_tsu()+t2t2c.qpr_stu()+t2t2c.qrp_tsu()-t2t2c.qrp_ust()+t2t2c.prq_tsu()+t2t2c.pqr_ust(), Np, Np, Np, Nr, Nr, Nr);
-    t3_temp -= .5*t2t2c.pqr_stu(); // (*)
 
+    if(diags(11) == 1){
+        t3_temp -= .5*t2t2c.pqr_stu(); // (*)
+    }
 
-    t2t2c.update_as_pqs_rtu(zeromat, Np, Np, Np, Nr, Nr, Nr);
+    //t2t2c.update_as_pqs_rtu(zeromat, Np, Np, Np, Nr, Nr, Nr);
+    t2t2c = zeroflex;
 
 
     fmt2temp.update(T.pq_rs()*vhhhp.pq_sr(), Np, Np, Np, Nr);
     t2t2d.update_as_qru_pst(fmt2temp.pqs_r()*T.q_prs(), Np,Np,Np,Nr,Nr,Nr);
     t2t2d.update_as_pqr_stu(t2t2d.pqr_stu()-t2t2d.qpr_stu()-t2t2d.rpq_stu()-t2t2d.rpq_uts()+t2t2d.prq_stu()+t2t2d.qrp_uts()-t2t2d.qrp_ust()+t2t2d.rqp_uts()+t2t2d.pqr_ust(), Np, Np, Np, Nr, Nr, Nr);
-    t3_temp += .5*t2t2d.pqr_stu();
+    if(diags(12) == 1){
+        t3_temp += .5*t2t2d.pqr_stu();
+    }
 
-
-    t2t2d.update_as_pqs_rtu(zeromat, Np, Np, Np, Nr, Nr, Nr);
+    //t2t2d.update_as_pqs_rtu(zeromat, Np, Np, Np, Nr, Nr, Nr);
+    t2t2d = zeroflex;
 
 
     if(timing){
@@ -494,24 +516,48 @@ void sccdt_mp::advance(){
     // ##  Linear t3 terms    ##
     // #########################
 
-    t3b.update_as_pqru_st(T3.pqrs_tu()*vhhhh.pq_rs(), Np,Np,Np,Nr,Nr,Nr); //replaced interaction (symmetries)
-    t3b.update_as_pqr_stu(t3b.pqr_stu()-t3b.pqr_sut()-t3b.pqr_tus(), Np, Np, Np, Nr, Nr, Nr);
+    // 13, 14, 15
 
+
+    t3a.update_as_pq_rstu(vpppp.pq_rs()*T3.pq_rstu(), Np, Np, Np, Nr, Nr, Nr);
+    T3.Vpq_rstu = zeromat;
+    if(diags(13) == 1){
+        t3_temp += .5*t3a.pqr_stu();
+    }
+    t3a = zeroflex;
+
+    t3b.update_as_pqru_st(T3.pqrs_tu()*vhhhh.pq_rs(), Np,Np,Np,Nr,Nr,Nr); //replaced interaction (symmetries)
+    T3.Vpqrs_tu = zeromat;
+    t3b.update_as_pqr_stu(t3b.pqr_stu()-t3b.pqr_sut()-t3b.pqr_tus(), Np, Np, Np, Nr, Nr, Nr);
+    if(diags(14) == 1){
+        t3_temp += .5*t3b.pqr_stu();
+    }
+    t3b = zeroflex;
 
 
     t3c.update_as_ps_qrtu(vhpph.qs_pr()*T3.sp_qrtu(), Np,Np,Np,Nr,Nr,Nr);
     t3c.update_as_pqr_stu(t3c.pqr_stu()-t3c.qpr_stu()-t3c.rpq_stu()-t3c.rpq_tsu()+t3c.prq_stu()+t3c.qrp_tsu()-t3c.qrp_ust()+t3c.rqp_tsu()+t3c.pqr_ust(), Np, Np, Np, Nr, Nr, Nr);
+
+    T3.Vsp_qrtu = zeromat;
+
 
     if(timing){
         cout << "Linear t3 terms:" << tm-omp_get_wtime() << endl;
         tm = omp_get_wtime();
     }
 
+    if(diags(15) == 1){
+        t3_temp += t3c.pqr_stu();      // (*)
+    }
+
+
+
+
     // #########################
     // ## Mixed t2*t3 terms   ##
     // #########################
 
-
+    // 16 17 18 19 20 21 22
 
     if(timing){
         cout << "Linear t3 terms:" << tm-omp_get_wtime() << endl;
@@ -521,6 +567,8 @@ void sccdt_mp::advance(){
     t2t3a.update_as_qtru_ps(T3.qtru_sp()*vhhpp.qs_pr()*T.sq_pr(), Np, Np, Np, Nr, Nr, Nr );
     t2t3a.update_as_pqr_stu(t2t3a.pqr_stu()-t2t3a.qpr_stu()-t2t3a.rpq_stu()-t2t3a.rpq_tsu()+t2t3a.prq_stu()+t2t3a.qrp_tsu()-t2t3a.qrp_ust()+t2t3a.rqp_tsu()+t2t3a.pqr_ust(), Np, Np, Np, Nr, Nr, Nr);
 
+    T3.Vqtru_sp = zeromat;
+
     if(timing){
 
         cout << "Mixed t2t3a:" << tm-omp_get_wtime() << endl;
@@ -529,27 +577,45 @@ void sccdt_mp::advance(){
 
     }
 
+    if(diags(16) == 1){
+        t3_temp += t2t3a.pqr_stu();
+    }
+
+
     t2t3b.update_as_pqtru_s(T3.pqtru_s()*(vhhpp.q_prs()*T.rpq_s()), Np, Np, Np, Nr, Nr, Nr);
     t2t3b.update_as_pqr_stu(t2t3b.pqr_stu()-t2t3b.pqr_tsu()-t2t3b.pqr_ust(), Np, Np, Np, Nr, Nr, Nr);
 
+    T3.Vpqtru_s = zeromat;
     if(timing){
         cout << "Mixed t2t3b:" << tm-omp_get_wtime() << endl;
 
         tm = omp_get_wtime();
     }
+    if(diags(17) == 1){
+        t3_temp -= .5*t2t3b.pqr_stu();
+    }
+
+
 
     t2t3c.update_as_sqtru_p(T3.sqtru_p()*(vhhpp.s_pqr()*T.rsp_q()), Np, Np, Np, Nr, Nr, Nr);
     t2t3c.update_as_pqr_stu(t2t3c.pqr_stu()-t2t3c.qpr_stu()-t2t3c.rpq_stu(), Np, Np, Np, Nr, Nr, Nr);
 
+    T3.Vsqtru_p = zeromat;
     if(timing){
         cout << "Mixed t2t3c:" << tm-omp_get_wtime() << endl;
         tm = omp_get_wtime();
 
     }
+    if(diags(18) == 1){
+        t3_temp -= .5*t2t3c.pqr_stu();
+    }
+    t2t3c = zeroflex;
+
 
     t2t3d.update_as_qru_pst(T3.pru_stq()*vhhpp.pqs_r()*T.q_prs(), Np, Np, Np, Nr, Nr, Nr);
     t2t3d.update_as_pqr_stu(t2t3d.pqr_stu()-t2t3d.qpr_stu()-t2t3d.rpq_stu()-t2t3d.rpq_sut()+t2t3d.prq_stu()+t2t3d.qrp_sut()-t2t3d.qrp_tus()+t2t3d.rqp_sut()+t2t3d.pqr_tus(), Np, Np, Np, Nr, Nr, Nr);
 
+    T3.Vpru_stq = zeromat;
 
 
     if(timing){
@@ -557,28 +623,50 @@ void sccdt_mp::advance(){
         tm = omp_get_wtime();
 
     }
+    if(diags(19) == 1){
+        t3_temp -= .5*t2t3d.pqr_stu();
+    }
+    t2t3d = zeroflex;
+
     t2t3e.update_as_tru_pqs((T3.sru_tpq()*vhhpp.qrs_p())*T.s_pqr(), Np, Np, Np, Nr, Nr, Nr);
     t2t3e.update_as_pqr_stu(t2t3e.pqr_stu()-t2t3e.rqp_stu()-t2t3e.rpq_stu()-t2t3e.rpq_tsu()+t2t3e.qpr_stu()+t2t3e.qrp_tsu()-t2t3e.qrp_ust()+t2t3e.prq_tsu()+t2t3e.pqr_ust(), Np, Np, Np, Nr, Nr, Nr);
+
+    T3.Vsru_tpq = zeromat;
 
     if(timing){
         cout << "Mixed t2t3e:" << tm-omp_get_wtime() << endl;
         tm = omp_get_wtime();
     }
+    if(diags(20) == 1){
+        t3_temp -= .5*t2t3e.pqr_stu();
+    }
+    t2t3e = zeroflex;
+
+
     t2t3f.update_as_pqru_st(T3.pqru_st()*vhhpp.pq_rs()*T.pq_rs(), Np, Np, Np, Nr, Nr, Nr);
     t2t3f.update_as_pqr_stu(t2t3f.pqr_stu()-t2t3f.pqr_uts()-t2t3f.pqr_ust(), Np, Np, Np, Nr, Nr, Nr);
 
+    T3.Vpqru_st = zeromat;
 
     if(timing){
         cout << "Mixed t2t3f:" << tm-omp_get_wtime() << endl;
         tm = omp_get_wtime();
     }
+    if(diags(21) == 1){t3_temp += .25*t2t3f.pqr_stu();
+    }
+    t2t3f = zeroflex;
+
     t2t3g.update_as_stru_pq(T3.stru_pq()*vhhpp.rs_pq()*T.rs_pq(), Np, Np, Np, Nr, Nr, Nr);
     t2t3g.update_as_pqr_stu(t2t3g.pqr_stu()-t2t3g.rqp_stu()-t2t3g.rpq_stu(), Np, Np, Np, Nr, Nr, Nr);
 
+    T3.Vstru_pq = zeromat;
     if(timing){
         cout << "Mixed t2t3g:" << tm-omp_get_wtime() << endl;
         tm = omp_get_wtime();
     }
+    if(diags(22) == 1){t3_temp += .25*t2t3g.pqr_stu();
+    }
+    t2t3g = zeroflex;
 
 
     // ########################
@@ -595,12 +683,6 @@ void sccdt_mp::advance(){
     t3_temp -= .5*t2t3e.pqr_stu();
     t3_temp += .25*t2t3f.pqr_stu();
     t3_temp += .25*t2t3g.pqr_stu();
-
-
-
-
-
-
 
     t3_temp += .5*t3a.pqr_stu();
     t3_temp += .5*t3b.pqr_stu();
@@ -642,11 +724,13 @@ void sccdt_mp::advance(){
     // #########################
 
 
-    Tprev.update(T.pq_rs(), Np,Nq,Nr,Ns); //When using relaxation we need to store the previous amplitudes
+    //Tprev.update(T.pq_rs(), Np,Nq,Nr,Ns); //When using relaxation we need to store the previous amplitudes
 
-    T.update(vpphh.pq_rs() + .5*(L1 + L2) + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4 + .5*(fmD10b.pq_rs() - fmD10c.pq_rs()), Np, Nq, Nr, Ns);
+
+    T.update(alpha*t2prev + (1-alpha)*(vpphh.pq_rs() + .5*(L1 + L2) + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4 + .5*(fmD10b.pq_rs() - fmD10c.pq_rs())), Np, Nq, Nr, Ns);
     T.set_amplitudes(ebs.vHFEnergy); //divide updated amplitides by energy denominator
-    T.update(alpha*Tprev.pq_rs() + (1.0-alpha)*T.pq_rs(), Np, Nq,Nr,Ns);
+    //T.update(alpha*Tprev.pq_rs() + (1.0-alpha)*T.pq_rs(), Np, Nq,Nr,Ns);
+    t2prev = T.pq_rs(); //store previous amplitude for relaxation
 
 
     energy(); //Calculate the energy

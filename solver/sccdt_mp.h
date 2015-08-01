@@ -133,6 +133,10 @@ public:
 
 
     flexmat6 T3, T3prev;
+    sp_mat t3prev;
+    sp_mat t2prev;
+
+    uvec diags;
 
     flexmat6 t2t3a, t2t3b,t2t3c,t2t3d,t2t3e,t2t3f,t2t3g, t2t2b,t2t2c,t2t2d, t3a, t3b,t3c,t2a,t2b;
 
