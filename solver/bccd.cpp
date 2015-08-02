@@ -21,7 +21,10 @@ bccd::bccd(electrongas fgas, double relaxation)
     cout << "[BCCD]Energy:" << energy() << endl;
     dRelaxation_parameter = relaxation;
 
-    solve(120);
+    cout << sum(abs(t2.vElements)) << endl;
+    cout << sum(t2.vElements) << endl;
+
+    solve(36);
 }
 
 void bccd::activate_diagrams(){
@@ -392,13 +395,17 @@ void bccd::solve(uint Nt){
             // ############################################
 
 
+
+
             #pragma omp parallel for num_threads(nthreads)
             for(uint i = 0; i < t2aconfig.n_rows; ++i){
                 mat block = vppph.getblock(0,t2aconfig(i,1))*t2.getblock(8,t2aconfig(i,0));
 
                 //t3temp.addblock(1,t2aconfig(i,2),acT2a*block);
                 t3.addblock_temp(3,t2aconfig(i,2),acT2a*block);
+
             }
+
 
             //if(t3temp.vElements(0) !=0){
             //    cout << "Value error in vElements" << endl;
@@ -441,6 +448,7 @@ void bccd::solve(uint Nt){
             // ############################################
             t3temp.zeros();
             t3.tempZeros();
+
 
             #pragma omp parallel for num_threads(nthreads)
             for(uint i = 0; i < t2bconfig.n_rows; ++i){
@@ -529,7 +537,7 @@ void bccd::solve(uint Nt){
         }
 
         t2n.divide_energy();
-        t2.vElements = t2.vElements*(1-dRelaxation_parameter) + t2n.vElements*dRelaxation_parameter; //relaxation
+        t2.vElements = t2.vElements*dRelaxation_parameter + t2n.vElements*(1-dRelaxation_parameter); //relaxation
         //t2 =t2n;
         cout << "[" << mode << "][" << t << "]Energy:" << energy() << endl;
         //cout << "[" << mode << "]   Iteration time:" << omp_get_wtime()-tm << endl;

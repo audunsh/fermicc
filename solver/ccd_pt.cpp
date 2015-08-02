@@ -84,8 +84,29 @@ ccd_pt::ccd_pt(electrongas bs, double a){
     //check_matrix_consistency();
 
     //mat spectrogram(11,25);
+    cout << sum(abs(T.vValues)) << endl;
+    cout << sum(T.vValues) << endl;
+
+    /*
+    mat V(T.pq_rs());
+    for(u64 a = 0; a<iSetup.iNp; ++a){
+        for(u64 b = 0; b<iSetup.iNp; ++b){
+            for(u64 i = 0; i<iSetup.iNh; ++i){
+                for(u64 j = 0; j<iSetup.iNh; ++j){
+                    double v = iSetup.bs.v
+                    if(V(a + b*iSetup.iNp, i+j*iSetup.iNh)!= )
+                }
+
+            }
+
+        }
+
+    }*/
+
+
+
     energy();
-    for(int i = 0; i < 10; i++){
+    for(int i = 0; i < 100; i++){
         //spectrogram.col(i) = spectrum();
         iterations += 1;
         advance();
@@ -299,6 +320,8 @@ void ccd_pt::advance(){
     int Ns = iSetup.iNh;
     bool timing = false; //time each contribution calculation and print to screen (each iteration)
 
+
+
     // ##################################################
     // ##                                              ##
     // ## Calculating doubles amplitude                ##
@@ -331,8 +354,11 @@ void ccd_pt::advance(){
     // ##################################################
     sp_mat tempt2a;
     tempt2a = vppph.pqs_r()*T.q_prs();
+
+
     t2a.update_as_qru_pst(tempt2a, Np,Np,Np,Nr,Nr,Nr);
     //t2a.update_as_pqr_stu(t2a.pqr_stu()-t2a.qpr_stu()-t2a.rpq_stu()-t2a.rpq_uts()+t2a.prq_stu()+t2a.qrp_uts()-t2a.qrp_ust()+t2a.rqp_uts()+t2a.pqr_ust(), Np,Np,Np,Nr,Nr,Nr);
+
 
 
     t2a.update_as_pqr_stu(t2a.pqr_stu()
@@ -347,6 +373,7 @@ void ccd_pt::advance(){
 
 
     t2b.update_as_pqs_rtu(T.pqr_s()*vhphh.p_qrs(), Np,Np,Np,Nr,Nr,Nr);
+
 
 
 
@@ -416,6 +443,6 @@ void ccd_pt::energy(){
 
     correlation_energy = .25*C_;
     cout << "[CCD_pt]["  << iterations  << "]" << "Energy               :" << .25*C_ << endl;
-    cout << "[CCD_pt]["  << iterations  << "]" << "Energy (per particle):" << .25*C_/iSetup.iNh << endl;
+    //cout << "[CCD_pt]["  << iterations  << "]" << "Energy (per particle):" << .25*C_/iSetup.iNh << endl;
 
 }

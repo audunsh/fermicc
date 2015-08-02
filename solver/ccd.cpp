@@ -122,7 +122,7 @@ ccd::ccd(electrongas bs, double a){
 
     energy();
 
-    for(int i = 0; i < 25; i++){
+    for(int i = 0; i < 75; i++){
         //advance_intermediates();
         //cout << i+1 << " ";
         iterations += 1;
@@ -524,6 +524,6 @@ void ccd::energy(){
 
     correlation_energy = .25*C_;
     cout << "["  << iterations  << "]" << "[CCD]Energy               :" << .25*C_ << endl;
-    cout << "["  << iterations  << "]" << "[CCD]Energy (per particle):" << .25*C_/iSetup.iNh << endl;
+    //cout << "["  << iterations  << "]" << "[CCD]Energy (per particle):" << .25*C_/iSetup.iNh << endl;
 
 }

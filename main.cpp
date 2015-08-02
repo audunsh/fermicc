@@ -30,7 +30,7 @@ int main()
     //2. Experiment with uniquely reduced t3amps in setup
     //3. parallellization
     electrongas fgas;
-    fgas.generate_state_list2(3.0,2.0, 14);
+    fgas.generate_state_list2(5.0,1.0, 14);
     cout << "[Main] " << setprecision(16) << "Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;
     cout << "[Main] G.Baardsens results:" << 1.9434 << endl;
 
@@ -40,13 +40,14 @@ int main()
 
 
     //triples diagrams corresponds to eachother when added in separately, but not together (deviation)
-    //bccd solver1(fgas, .3);
+    //bccd solver1(fgas,.3);
+    //ccd_pt solver2(fgas, .3);
 
 
     //cout << endl;
-    //ccd_pt solver(fgas, 0);
+    //ccd solver(fgas, .2);
 
-    sccdt_mp(fgas, .2);
+    sccdt_mp(fgas, .3);
 
     /*
     double tm = omp_get_wtime();
@@ -65,13 +66,17 @@ int main()
 
     //testing largest possible uints
 
-    /*
-    Col<u64> g(2000);
 
-    for(uint i = 0; i < 2000; ++i){
+    //Col<u64> g(2000);
+
+    //uvec g(2000);
+
+    /*
+    for(int i = 0; i < 200; ++i){
         cout << i << " " << i*i*i*14*14*14 << endl;
         //g(i) = i*i*i*14*14*14;
     }*/
+
 
     return 0;
 

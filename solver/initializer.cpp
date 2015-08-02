@@ -82,7 +82,7 @@ vec initializer::V3(uvec p, uvec q, uvec r, uvec s){
     vec vVals;
     vVals.set_size(p.n_rows);
     for(int n = 0; n< p.n_rows; n++){
-        vVals(n) = bs.v2(p(n), q(n), r(n), s(n));
+        vVals(n) = bs.v3(p(n), q(n), r(n), s(n));
     }
     return vVals;
 }
