@@ -59,7 +59,9 @@ sccdt_mp::sccdt_mp(electrongas bs, double a){
 
     //diags = {1,1,1,1,1,1,1, 1,1, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}; //which diagrams to include (0-7: CCD, 7,8: CCDT t2, 9:- t3)
     //diags = {1, 1, 1, 1, 1, 1, 1,   1,  1,     1,      1,1,1,    1,1,1,      1,1,1,1,1,1,1,  1,1}; //which diagrams to include (0-7: CCD, 7,8: CCDT t2, 9:- t3)
-    diags = {1, 1, 1, 1, 1, 1, 1,   1,  1,     0,      0,0,0,    1,1,1,      0,0,0,0,0,0,0,  0,0}; //which diagrams to include (0-7: CCD, 7,8: CCDT t2, 9:- t3)
+    //diags = {1, 1, 1, 1, 1, 1, 1,   1,  1,     0,      0,0,0,    1,1,1,      0,0,0,0,0,0,0,  0,0}; //which diagrams to include (0-7: CCD, 7,8: CCDT t2, 9:- t3)
+    diags = {1, 1, 1, 1, 1, 1, 1,   1,  1,     0,      1,1,1,    1,0,0,      0,0,0,0,0,0,0,  0,0}; //which diagrams to include (0-7: CCD, 7,8: CCDT t2, 9:- t3)
+
     //       La Lb Lc Qa Qb Qc Qd   t2a t2b      t2t2: b,c,d  t3:a,b,c  t2t3:a,b,c,d,e,f,g, CCDT-1b
     iSetup.sVppppO();
     vpppp.init(iSetup.vValsVpppp, iSetup.aVpppp, iSetup.bVpppp, iSetup.cVpppp, iSetup.dVpppp, iSetup.iNp, iSetup.iNp, iSetup.iNp, iSetup.iNp);
@@ -108,7 +110,7 @@ sccdt_mp::sccdt_mp(electrongas bs, double a){
     T3.map_indices();
     //check_matrix_consistency();
     energy();
-    for(int i = 0; i < 1000; i++){
+    for(int i = 0; i < 60; i++){
         iterations += 1;
         advance();
     }
@@ -526,7 +528,14 @@ void sccdt_mp::advance(){
 
     if(diags(13) == 1){
         t3a.update_as_pq_rstu(vpppp.pq_rs()*T3.pq_rstu(), Np, Np, Np, Nr, Nr, Nr);
+        t3a.update_as_pqr_stu(t3a.pqr_stu() - t3a.rqp_stu() - t3a.prq_stu(), Np, Np, Np, Nr, Nr, Nr);
         T3.Vpq_rstu = zeromat;
+        T3.Npq_rstu = 0;
+        //cout << accu(abs(vpppp.pq_rs())) << endl;
+        //cout << sum(abs(T3.vValues)) << endl;
+        //cout << accu(abs(T3.pq_rstu())) << endl;
+        //cout << vpppp.vValues.n_rows << endl;
+        //cout << sum(abs(t3a.vValues)) << endl;
 
         t3_temp += .5*t3a.pqr_stu();
     }

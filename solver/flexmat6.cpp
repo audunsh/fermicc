@@ -1720,10 +1720,10 @@ sp_mat flexmat6::pq_rstu(){
         locations.col(0) = vp + vq*iNp;
         Vpq_rstu = sp_mat(locations.t(), vValues, iNp*iNq,iNr*iNs*iNt*iNu);
         Npq_rstu = 1;
-        return Vrstu_pq;
+        return Vpq_rstu;
     }
     else{
-        return Vrstu_pq;
+        return Vpq_rstu;
     }
 }
 

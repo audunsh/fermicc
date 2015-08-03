@@ -29,14 +29,14 @@ int main()
     //1. Speed up initialization
     //2. Experiment with uniquely reduced t3amps in setup
     //3. parallellization
-    electrongas fgas;
-    fgas.generate_state_list2(5.0,1.0, 14);
-    cout << "[Main] " << setprecision(16) << "Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;
-    cout << "[Main] G.Baardsens results:" << 1.9434 << endl;
+    //electrongas fgas;
+    //fgas.generate_state_list2(3.0,1.0, 14);
+    //cout << "[Main] " << setprecision(16) << "Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;
+    //cout << "[Main] G.Baardsens results:" << 1.9434 << endl;
 
 
-    uint Np = fgas.iNbstates-fgas.iNparticles; //conflicting notation here
-    uint Nh = fgas.iNparticles;
+    //uint Np = fgas.iNbstates-fgas.iNparticles; //conflicting notation here
+    //uint Nh = fgas.iNparticles;
 
 
     //triples diagrams corresponds to eachother when added in separately, but not together (deviation)
@@ -47,7 +47,25 @@ int main()
     //cout << endl;
     //ccd solver(fgas, .2);
 
-    sccdt_mp(fgas, .3);
+    //sccdt_mp(fgas, .3);
+
+
+
+    vec results(16);
+
+    for(uint i = 0; i < 16; ++i){
+        double r_s = .5 + i*.1;
+        electrongas fgas;
+        fgas.generate_state_list2(3.0,r_s, 14);
+        cout << setprecision(16) << r_s << endl;
+        sccdt_mp solve(fgas, .3);
+        results(i) = solve.correlation_energy;
+        cout << r_s << endl;
+    }
+    for(uint i = 0; i < 16; ++i){
+        cout << setprecision(16) << .5 + i*.1 << "      " << results(i) << endl;
+    }
+
 
     /*
     double tm = omp_get_wtime();
