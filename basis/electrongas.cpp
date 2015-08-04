@@ -99,7 +99,7 @@ void electrongas::generate_state_list2(int Ne, double rs, int Np){
         }
         energy_integer += 1;
     }
-    cout << "#Electrongas: number of states:" << nStates << endl;
+    //cout << "#Electrongas: number of states:" << nStates << endl;
     k_step = 2*vKx.max()+3;
     //k_step = 20*Nmax + 3;
 
@@ -108,9 +108,6 @@ void electrongas::generate_state_list2(int Ne, double rs, int Np){
     for(uint i = 0; i < nStates; ++i){
         vHFEnergy(i) = F(i);
     }
-    cout << "k_step:" << k_step << endl;
-    cout << "k_step:" << vKx.max() << endl;
-
 }
 
 int electrongas::unique_int(uint p){

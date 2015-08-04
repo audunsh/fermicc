@@ -90,6 +90,10 @@ public:
     uint acD10c;
     uint acD10b;
 
+    double dCorrelationEnergy;
+    double dTreshold; //energy treshold
+    uint nthreads;
+
 
 
 };

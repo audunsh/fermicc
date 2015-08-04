@@ -29,18 +29,19 @@ int main()
     //1. Speed up initialization
     //2. Experiment with uniquely reduced t3amps in setup
     //3. parallellization
-    //electrongas fgas;
-    //fgas.generate_state_list2(3.0,1.0, 14);
+    electrongas fgas;
+    fgas.generate_state_list2(5.0,1.0, 14);
     //cout << "[Main] " << setprecision(16) << "Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;
     //cout << "[Main] G.Baardsens results:" << 1.9434 << endl;
 
 
-    //uint Np = fgas.iNbstates-fgas.iNparticles; //conflicting notation here
-    //uint Nh = fgas.iNparticles;
+    uint Np = fgas.iNbstates-fgas.iNparticles; //conflicting notation here
+    uint Nh = fgas.iNparticles;
 
 
     //triples diagrams corresponds to eachother when added in separately, but not together (deviation)
-    //bccd solver1(fgas,.3);
+    bccd solver1(fgas,.3);
+    cout << solver1.dCorrelationEnergy << endl;
     //ccd_pt solver2(fgas, .3);
 
 
@@ -51,6 +52,7 @@ int main()
 
 
 
+    /*
     vec results(16);
 
     for(uint i = 0; i < 16; ++i){
@@ -64,7 +66,7 @@ int main()
     }
     for(uint i = 0; i < 16; ++i){
         cout << setprecision(16) << .5 + i*.1 << "      " << results(i) << endl;
-    }
+    }*/
 
 
     /*

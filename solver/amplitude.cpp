@@ -516,7 +516,7 @@ void amplitude::map_t3_236_145(ivec Kk_unique){
 
     //field<uvec> tempRows = partition_hhp(bck, K_unique);
     //field<uvec> tempCols = partition_hpp(aij, K_unique);
-    cout << "Number of blocks:" << K_unique.n_rows << endl;
+    //cout << "Number of blocks:" << K_unique.n_rows << endl;
     field<uvec> tempRows = partition_pph(bck, K_unique);
     field<uvec> tempCols = partition_phh(aij, K_unique);
 

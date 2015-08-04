@@ -17,13 +17,15 @@ bccd::bccd(electrongas fgas, double relaxation)
     Np = fgas.iNbstates-fgas.iNparticles;
     Nh = fgas.iNparticles; //conflicting naming here
     activate_diagrams();
+    nthreads = 5;
     init();
-    cout << "[BCCD]Energy:" << energy() << endl;
+    cout << setprecision(16) <<"[BCCD]Energy:" << energy() << endl;
+
     dRelaxation_parameter = relaxation;
+    dCorrelationEnergy = 1000;
+    dTreshold = 0.0000000000000001;
 
-    cout << sum(abs(t2.vElements)) << endl;
-    cout << sum(t2.vElements) << endl;
-
+    t3.nthreads = nthreads;
     solve(36);
 }
 
@@ -164,6 +166,7 @@ void bccd::init(){
         tm = omp_get_wtime();
 
         t3.init(eBs, 5, {Np, Np, Np, Nh, Nh, Nh});
+        t3.nthreads = nthreads;
         t3.make_t3();
         t3.uiCurrent_block = 1;
         //t3.map_t3_permutations();
@@ -174,8 +177,8 @@ void bccd::init(){
         t3.map_t3_623_451(vphpp.fvConfigs(0)); //for d10b,
         t3.map_t3_124_356(vhhhp.fvConfigs(0)); //for d10c + t2.fvConfigs(9)
         t3.map_t3_236_145(t2.fvConfigs(8)); //check this one
-
         //count memory usage in maps
+        /*
         u64 memsize2 = 0;
         for(uint u = 1; u < 4; ++u){
             for(uint i = 0; i < t3.fmBlocks(u).n_rows; ++i){
@@ -183,15 +186,16 @@ void bccd::init(){
             }
         }
         cout << "Memory usage from blocks:" << (memsize2*4)/(1000000000.0) <<  " Gb" << endl;
-
+        */
 
 
 
         t3.map_t3_permutations_bconfig_sparse();
-        cout << "Number of enrolled (sparse) states (t3):" << t3.debug_enroll << " of " << t3.uvElements.n_rows << endl;
+
+        //cout << "Number of enrolled (sparse) states (t3):" << t3.debug_enroll << " of " << t3.uvElements.n_rows << endl;
 
         t3.init_t3_amplitudes();
-        cout << "Memory usage from elements:" << (3*t3.vElements.n_elem*8)/(1000000000.0) <<  " Gb" << endl;
+        //cout << "Memory usage from elements:" << (3*t3.vElements.n_elem*8)/(1000000000.0) <<  " Gb" << endl;
 
         cout << "[" << mode << "] Approx of initialized memory for t3    :" << t3.memsize*8/1000000000.0 << " GB" << endl;
 
@@ -273,10 +277,10 @@ void bccd::solve(uint Nt){
 
 
     t2n.zeros(); //zero out next amplitudes
-    cout << "[" << mode << "] Time spent intersecting blocks:" << omp_get_wtime()-tm << endl;
+    //cout << "[" << mode << "] Time spent intersecting blocks:" << omp_get_wtime()-tm << endl;
     tm = omp_get_wtime();
 
-    uint nthreads = 5;
+    //uint nthreads = 5;
     for(uint t = 0; t < Nt; ++t){
 
         double tm = omp_get_wtime();
@@ -538,6 +542,12 @@ void bccd::solve(uint Nt){
 
         t2n.divide_energy();
         t2.vElements = t2.vElements*dRelaxation_parameter + t2n.vElements*(1-dRelaxation_parameter); //relaxation
+        double dNewEnergy = energy();
+        if(abs(dCorrelationEnergy-dNewEnergy)<dTreshold){
+            t = Nt;
+
+        }
+        dCorrelationEnergy = dNewEnergy;
         //t2 =t2n;
         cout << "[" << mode << "][" << t << "]Energy:" << energy() << endl;
         //cout << "[" << mode << "]   Iteration time:" << omp_get_wtime()-tm << endl;

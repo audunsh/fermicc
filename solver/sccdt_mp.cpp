@@ -60,8 +60,7 @@ sccdt_mp::sccdt_mp(electrongas bs, double a){
     //diags = {1,1,1,1,1,1,1, 1,1, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}; //which diagrams to include (0-7: CCD, 7,8: CCDT t2, 9:- t3)
     //diags = {1, 1, 1, 1, 1, 1, 1,   1,  1,     1,      1,1,1,    1,1,1,      1,1,1,1,1,1,1,  1,1}; //which diagrams to include (0-7: CCD, 7,8: CCDT t2, 9:- t3)
     //diags = {1, 1, 1, 1, 1, 1, 1,   1,  1,     0,      0,0,0,    1,1,1,      0,0,0,0,0,0,0,  0,0}; //which diagrams to include (0-7: CCD, 7,8: CCDT t2, 9:- t3)
-    diags = {1, 1, 1, 1, 1, 1, 1,   1,  1,     0,      1,1,1,    1,0,0,      0,0,0,0,0,0,0,  0,0}; //which diagrams to include (0-7: CCD, 7,8: CCDT t2, 9:- t3)
-
+    diags = {1, 1, 1, 1, 1, 1, 1,   1,  1,     0,      1,1,1,    1,1,1,      1,1,1,1,1,1,1,  0,0}; //which diagrams to include (0-7: CCD, 7,8: CCDT t2, 9:- t3)
     //       La Lb Lc Qa Qb Qc Qd   t2a t2b      t2t2: b,c,d  t3:a,b,c  t2t3:a,b,c,d,e,f,g, CCDT-1b
     iSetup.sVppppO();
     vpppp.init(iSetup.vValsVpppp, iSetup.aVpppp, iSetup.bVpppp, iSetup.cVpppp, iSetup.dVpppp, iSetup.iNp, iSetup.iNp, iSetup.iNp, iSetup.iNp);
