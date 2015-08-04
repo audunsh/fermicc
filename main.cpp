@@ -1,8 +1,8 @@
 #define ARMA_64BIT_WORD
 #include <armadillo>
 
-#include <fstream>
 #include <iomanip>
+#include <fstream>
 #include <time.h>
 #include <string>
 #include "basis/electrongas.h"
@@ -23,19 +23,39 @@ using namespace std;
 using namespace arma;
 
 
-int main()
+int main(int argc, char *argv[] )
 {
-    electrongas fgas;
-    fgas.generate_state_list2(8.0,2.0, 14);
+    int i0 = 3;
+    int i1 = 5;
+    if ( argc == 3 ){
+        i0 = atoi(argv[1]);
+        i1 = atoi(argv[2]);
+    }
+
+    //electrongas fgas;
+    //fgas.generate_state_list2(4.0,2.0, 14);
     //cout << "[Main] " << setprecision(16) << "Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;
     //cout << "[Main] G.Baardsens results:" << 1.9434 << endl;
 
 
-    uint Np = fgas.iNbstates-fgas.iNparticles; //conflicting notation here
-    uint Nh = fgas.iNparticles;
+    //uint Np = fgas.iNbstates-fgas.iNparticles; //conflicting notation here
+    //uint Nh = fgas.iNparticles;
 
-    bccd solver1(fgas,.3);
-    cout << solver1.dCorrelationEnergy << endl;
+
+    //bccd solver1(fgas,.3);
+
+    for(int i = i0; i < i1; ++i){
+        electrongas fgas;
+        fgas.generate_state_list2(i,1.0, 14);
+        //cout << setprecision(16) << r_s << endl;
+        //sccdt_mp solve(fgas, .3);
+        bccd solver1(fgas,.3);
+        cout << setprecision(9) << fgas.iNbstates << "     " << solver1.dCorrelationEnergy << "     " << solver1.convergence_diff << "     "<< solver1.convergence << endl;
+
+    }
+
+
+
 
 
     //ccd_pt solver2(fgas, .3);
@@ -60,12 +80,6 @@ int main()
     for(uint i = 0; i < 16; ++i){
         cout << setprecision(16) << .5 + i*.1 << "      " << results(i) << endl;
     }*/
-
-
-
-
-
-
 
     return 0;
 

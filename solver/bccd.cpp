@@ -17,15 +17,16 @@ bccd::bccd(electrongas fgas, double relaxation)
     Np = fgas.iNbstates-fgas.iNparticles;
     Nh = fgas.iNparticles; //conflicting naming here
     activate_diagrams();
-    nthreads = 5;
+    nthreads = omp_get_max_threads();
     init();
-    cout << setprecision(16) <<"[BCCD]E_MBPT(2):" << energy() << endl;
+    //cout << setprecision(16) <<"[BCCD]E_MBPT(2):" << energy() << endl;
 
     dRelaxation_parameter = relaxation;
     dCorrelationEnergy = 1000;
-    dTreshold = 0.0000000000000001;
+    dTreshold = 0.00000001;
 
     t3.nthreads = nthreads;
+    //cout << nthreads << endl;
     solve(100);
 }
 
@@ -45,7 +46,7 @@ void bccd::activate_diagrams(){
     acQ4 = 1;
 
     acT2a = 1;
-    acT2b = 0;
+    acT2b = 1;
 
     acD10b = 1;
     acD10c = 1;
@@ -192,7 +193,7 @@ void bccd::init(){
         //cout << "Number of enrolled (sparse) states (t3):" << t3.debug_enroll << " of " << t3.uvElements.n_rows << endl;
 
         t3.init_t3_amplitudes();
-        cout << "Memory usage from elements:" << (3*t3.vElements.n_elem*8)/(1000000000.0) <<  " Gb" << endl;
+        //cout << "Memory usage from elements:" << (3*t3.vElements.n_elem*8)/(1000000000.0) <<  " Gb" << endl;
 
         //cout << "[" << mode << "] Approx of initialized memory for t3    :" << t3.memsize*8/1000000000.0 << " GB" << endl;
 
@@ -518,6 +519,9 @@ void bccd::solve(uint Nt){
         double dNewEnergy = energy();
         cout << "[" << mode << "][" << t << "]Energy:" << dNewEnergy << endl;
         if(abs(dCorrelationEnergy-dNewEnergy)<dTreshold){
+            convergence = t;
+            convergence_diff = dCorrelationEnergy-dNewEnergy;
+
             t = Nt;
 
         }

@@ -93,6 +93,8 @@ public:
     double dCorrelationEnergy;
     double dTreshold; //energy treshold
     uint nthreads;
+    uint convergence;
+    double convergence_diff;
 
 
 
