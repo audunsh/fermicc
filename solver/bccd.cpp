@@ -19,14 +19,14 @@ bccd::bccd(electrongas fgas, double relaxation)
     activate_diagrams();
     nthreads = 5;
     init();
-    cout << setprecision(16) <<"[BCCD]Energy:" << energy() << endl;
+    cout << setprecision(16) <<"[BCCD]E_MBPT(2):" << energy() << endl;
 
     dRelaxation_parameter = relaxation;
     dCorrelationEnergy = 1000;
     dTreshold = 0.0000000000000001;
 
     t3.nthreads = nthreads;
-    solve(36);
+    solve(100);
 }
 
 void bccd::activate_diagrams(){
@@ -45,7 +45,7 @@ void bccd::activate_diagrams(){
     acQ4 = 1;
 
     acT2a = 1;
-    acT2b = 1;
+    acT2b = 0;
 
     acD10b = 1;
     acD10c = 1;
@@ -140,9 +140,9 @@ void bccd::init(){
     vhpph.init(eBs, 3, {Nh, Np, Np, Nh});
     vhpph.map({-4,2},{3,-1}); //for use in L3 (0)
 
-    cout << "[" << mode << "] Time spent initializing doubles.:" << omp_get_wtime()-tm << endl;
-    t = clock();
-    tm = omp_get_wtime();
+    //cout << "[" << mode << "] Time spent initializing doubles.:" << omp_get_wtime()-tm << endl;
+    //t = clock();
+    //tm = omp_get_wtime();
 
     // #############################################
     // ## Perturbative triples setup              ##
@@ -151,18 +151,15 @@ void bccd::init(){
         mode = "CCDT-1";
         vhphh.init(eBs, 3, {Nh, Np, Nh, Nh});
         vhphh.map({1},{-2,3,4});
-
         vppph.init(eBs, 3, {Np, Np, Np, Nh});
-
         vppph.map({1,2,-4},{3});
-
 
         vphpp.init(eBs, 3, {Np, Nh, Np, Np});
         vphpp.map({1},{-2,3,4});
-
         vhhhp.init(eBs, 3, {Nh,Nh,Nh,Np});
         vhhhp.map({-4, 1,2},{3});
-        cout << "[" << mode << "] Time spent initializing triples interaction:" << omp_get_wtime()-tm << endl;
+
+        //cout << "[" << mode << "] Time spent initializing triples interaction:" << omp_get_wtime()-tm << endl;
         tm = omp_get_wtime();
 
         t3.init(eBs, 5, {Np, Np, Np, Nh, Nh, Nh});
@@ -195,9 +192,9 @@ void bccd::init(){
         //cout << "Number of enrolled (sparse) states (t3):" << t3.debug_enroll << " of " << t3.uvElements.n_rows << endl;
 
         t3.init_t3_amplitudes();
-        //cout << "Memory usage from elements:" << (3*t3.vElements.n_elem*8)/(1000000000.0) <<  " Gb" << endl;
+        cout << "Memory usage from elements:" << (3*t3.vElements.n_elem*8)/(1000000000.0) <<  " Gb" << endl;
 
-        cout << "[" << mode << "] Approx of initialized memory for t3    :" << t3.memsize*8/1000000000.0 << " GB" << endl;
+        //cout << "[" << mode << "] Approx of initialized memory for t3    :" << t3.memsize*8/1000000000.0 << " GB" << endl;
 
         /*
         t3temp.map_t3_236_145(t2.fvConfigs(8)); //check this one
@@ -274,7 +271,6 @@ void bccd::solve(uint Nt){
 
 
     //t2aconfig.print();
-
 
     t2n.zeros(); //zero out next amplitudes
     //cout << "[" << mode << "] Time spent intersecting blocks:" << omp_get_wtime()-tm << endl;
@@ -411,25 +407,11 @@ void bccd::solve(uint Nt){
             }
 
 
-            //if(t3temp.vElements(0) !=0){
-            //    cout << "Value error in vElements" << endl;
-            //}
-
             #pragma omp parallel for num_threads(nthreads)
             for(uint i = 0; i < t3.fvConfigs(4).n_rows; ++i){
                 //for(uint i = 0; i < t3temp.fvConfigs(3).n_rows; ++i){
                 uint b = 3;
-                /*
-                mat block = t3temp.getsblock(3,i)
-                                - t3temp.getsblock_permuted(3,i,0)
-                                - t3temp.getsblock_permuted(3,i,1)
-                                - t3temp.getsblock_permuted(3,i,4)
-                                + t3temp.getsblock_permuted(3,i,7)
-                                + t3temp.getsblock_permuted(3,i,10)
-                                - t3temp.getsblock_permuted(3,i,5)
-                                + t3temp.getsblock_permuted(3,i,8)
-                                + t3temp.getsblock_permuted(3,i,11)
-                                ;*/
+
                 mat block2 = t3.getsblock_temp(3,i)
                                 - t3.getsblock_permuted_temp(3,i,0)
                                 - t3.getsblock_permuted_temp(3,i,1)
@@ -465,21 +447,11 @@ void bccd::solve(uint Nt){
             //    cout << "Value error in vElements" << endl;
             //}
 
+
             #pragma omp parallel for num_threads(nthreads)
             for(uint i = 0; i < t3.fvConfigs(4).n_rows; ++i){
                 //1 - ac - cb - ij + ij/ac + ij/cb - ik +ik/ac + ik/cb
                 //umat aligned = t3temp.getfspBlock(i);
-                /*
-                mat block = -1.0*(t3temp.getsblock(3,i)
-                                - t3temp.getsblock_permuted(3,i,1)
-                                - t3temp.getsblock_permuted(3,i,2)
-                                - t3temp.getsblock_permuted(3,i,3)
-                                + t3temp.getsblock_permuted(3,i,9)
-                                + t3temp.getsblock_permuted(3,i,12)
-                                - t3temp.getsblock_permuted(3,i,4)
-                                + t3temp.getsblock_permuted(3,i,10)
-                                + t3temp.getsblock_permuted(3,i,13)
-                                );*/
 
                 mat block2 = -1.0*(t3.getsblock_temp(3,i)
                                 - t3.getsblock_permuted_temp(3,i,1)
@@ -494,6 +466,7 @@ void bccd::solve(uint Nt){
 
                 t3.addsblock(0,i,block2);
             }
+
             // ############################################
             // ## Set up T3                           ##
             // ############################################
@@ -543,13 +516,14 @@ void bccd::solve(uint Nt){
         t2n.divide_energy();
         t2.vElements = t2.vElements*dRelaxation_parameter + t2n.vElements*(1-dRelaxation_parameter); //relaxation
         double dNewEnergy = energy();
+        cout << "[" << mode << "][" << t << "]Energy:" << dNewEnergy << endl;
         if(abs(dCorrelationEnergy-dNewEnergy)<dTreshold){
             t = Nt;
 
         }
         dCorrelationEnergy = dNewEnergy;
         //t2 =t2n;
-        cout << "[" << mode << "][" << t << "]Energy:" << energy() << endl;
+
         //cout << "[" << mode << "]   Iteration time:" << omp_get_wtime()-tm << endl;
     }
 }

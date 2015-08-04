@@ -25,12 +25,8 @@ using namespace arma;
 
 int main()
 {
-    //TODO LIST
-    //1. Speed up initialization
-    //2. Experiment with uniquely reduced t3amps in setup
-    //3. parallellization
     electrongas fgas;
-    fgas.generate_state_list2(5.0,1.0, 14);
+    fgas.generate_state_list2(8.0,2.0, 14);
     //cout << "[Main] " << setprecision(16) << "Energy per particle:" << 2*fgas.eref(14)/14.0 << " (rydberg)"  << endl;
     //cout << "[Main] G.Baardsens results:" << 1.9434 << endl;
 
@@ -38,16 +34,13 @@ int main()
     uint Np = fgas.iNbstates-fgas.iNparticles; //conflicting notation here
     uint Nh = fgas.iNparticles;
 
-
-    //triples diagrams corresponds to eachother when added in separately, but not together (deviation)
     bccd solver1(fgas,.3);
     cout << solver1.dCorrelationEnergy << endl;
+
+
     //ccd_pt solver2(fgas, .3);
-
-
     //cout << endl;
     //ccd solver(fgas, .2);
-
     //sccdt_mp(fgas, .3);
 
 
@@ -69,33 +62,9 @@ int main()
     }*/
 
 
-    /*
-    double tm = omp_get_wtime();
-
-    #pragma omp parallel for num_threads(4)
-    for(uint i = 0; i < 1000000; ++i){
-        mat block(100,100);
-        block*=0;
-    }*/
-
-    //cout << "ts:" << omp_get_wtime()-tm << endl;
-
-    //umat test(4,1);
-    //test(0,0) = 0;
-    //test.print();
-
-    //testing largest possible uints
 
 
-    //Col<u64> g(2000);
 
-    //uvec g(2000);
-
-    /*
-    for(int i = 0; i < 200; ++i){
-        cout << i << " " << i*i*i*14*14*14 << endl;
-        //g(i) = i*i*i*14*14*14;
-    }*/
 
 
     return 0;
