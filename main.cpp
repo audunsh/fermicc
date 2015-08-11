@@ -30,7 +30,7 @@ int main(int argc, char *argv[] )
     int i1 = 4;
     double rs = 1.0;
     uint iterations = 20;
-    uint uiStatAlloc = 1000000;
+    uint uiStatAlloc = 10000000;
 
     if ( argc == 6 ){
         i0 = atoi(argv[1]);
