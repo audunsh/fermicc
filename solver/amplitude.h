@@ -33,7 +33,7 @@ public:
     void print_block_maximum();
 
 
-    void consolidate_blocks(uint uiN, uint tempElementsSize, field<Col<u64> > & tempElements, field<uvec> & tempBlockmap1,field<uvec> & tempBlockmap2,field<uvec> & tempBlockmap3);
+    void consolidate_blocks(uint uiN, uint tempElementsSize, field<Col<u64> >  tempElements, field<uvec>  tempBlockmap1,field<uvec>  tempBlockmap2,field<uvec>  tempBlockmap3);
     void enroll_block(umat umBlock,uint tempElementsSize, uvec tempElements, uvec tempBlockmap1,uvec tempBlockmap2,uvec tempBlockmap3);
     uvec uvNsort1; // = sort_index(uvElements);
 

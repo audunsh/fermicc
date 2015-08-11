@@ -240,7 +240,7 @@ void amplitude::enroll_block(umat umBlock, uint tempElementsSize, uvec tempEleme
 }
 
 
-void amplitude::consolidate_blocks(uint uiN, uint tempElementsSize, field<Col<u64> > & tempElements, field<uvec> & tempBlockmap1,field<uvec> & tempBlockmap2,field<uvec> & tempBlockmap3){
+void amplitude::consolidate_blocks(uint uiN, uint tempElementsSize, field<Col<u64> > tempElements, field<uvec>  tempBlockmap1,field<uvec>  tempBlockmap2,field<uvec>  tempBlockmap3){
 
     //Flatten fields into 1d uvecs
 

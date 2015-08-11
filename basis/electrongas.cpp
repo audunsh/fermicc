@@ -18,7 +18,7 @@ void electrongas::generate_state_list2(int Ne, double rs, int Np){
     dr_s = rs;
 
     double Nmax = iN + 1; //sqrt(iN) + 1;
-    int energy = 0;
+    //int energy = 0;
     int nStates = 0;
     iNparticles = Np;
     int energy_integer = 0;
@@ -105,7 +105,7 @@ void electrongas::generate_state_list2(int Ne, double rs, int Np){
 
     //setup Fock matrix
     vHFEnergy.set_size(nStates);
-    for(uint i = 0; i < nStates; ++i){
+    for(int i = 0; i < nStates; ++i){
         vHFEnergy(i) = F(i);
     }
 }
@@ -232,7 +232,7 @@ int electrongas::kd(int A, int B){
 
 int electrongas::kd_vec(rowvec A, rowvec B){
     int D = 1;
-    for(int i = 0; i < A.n_elem; i++){
+    for(uint i = 0; i < A.n_elem; i++){
         D*=(A(i)==B(i));
     }
     return D;
@@ -422,7 +422,7 @@ double electrongas::v(int P, int Q, int R, int S){
 
     value = kd_vec((kp+kq), (kr+ks));
 
-    double spin1, spin2;
+    double spin1; //, spin2;
 
 
     if(value ==0 ){

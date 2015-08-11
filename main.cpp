@@ -26,11 +26,11 @@ using namespace arma;
 int main(int argc, char *argv[] )
 {
     //default setup
-    int i0 = 3;
-    int i1 = 4;
+    int i0 = 5;
+    int i1 = 6;
     double rs = 1.0;
     uint iterations = 20;
-    uint uiStatAlloc = 10000000;
+    uint uiStatAlloc = 1000000;
 
     if ( argc == 6 ){
         i0 = atoi(argv[1]);
@@ -71,10 +71,11 @@ int main(int argc, char *argv[] )
     for(int i = i0; i < i1; ++i){
         electrongas fgas;
         fgas.generate_state_list2(i,rs, 14);
-        //cout << setprecision(16) << r_s << endl;
+        cout << setprecision(9) << rs << endl;
         //sccdt_mp solve(fgas, .3);
         bccd solver1(fgas,.3);
         solver1.uiStatAlloc = uiStatAlloc;
+        solver1.init();
         solver1.solve(iterations);
         cout << "Number of states, correlation energy, difference in last convergence, number of iterations passed" << endl;
         cout << setprecision(9) << fgas.iNbstates << "     " << solver1.dCorrelationEnergy << "     " << solver1.convergence_diff << "     "<< solver1.convergence << endl;

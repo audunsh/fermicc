@@ -18,7 +18,7 @@ bccd::bccd(electrongas fgas, double relaxation)
     Nh = fgas.iNparticles; //conflicting naming here
     activate_diagrams();
     nthreads = omp_get_max_threads();
-    init();
+    //init();
     //cout << setprecision(16) <<"[BCCD]E_MBPT(2):" << energy() << endl;
 
     dRelaxation_parameter = relaxation;
