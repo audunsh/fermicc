@@ -27,6 +27,7 @@ amplitude::amplitude(electrongas bs, int n_configs, uvec size)
     uvSize = size; //true state configurations (Np, Np, Nh, Nh) or (Np, Np, Np, Nh, Nh, Nh) (or similar)
 
     memsize = 0; //bookkeeping for allocated memory (presently only for t3 amplitudes)
+    uiStatAlloc = 10000000;
 
 }
 
@@ -49,7 +50,7 @@ void amplitude::init(electrongas bs, int n_configs, uvec size){
     uvSize = size; //true state configurations (Np, Np, Nh, Nh) or (Np, Np, Np, Nh, Nh, Nh) (or similar)
 
     ivBconfigs.set_size(0);
-
+    uiStatAlloc = 100000;
     memsize = 0;
 }
 
@@ -262,10 +263,15 @@ void amplitude::consolidate_blocks(uint uiN, uint tempElementsSize, field<Col<u6
 
             counter += 1;
         }
-        tempElements(ni).set_size(0);
-        tempBlockmap1(ni).set_size(0);
-        tempBlockmap2(ni).set_size(0);
-        tempBlockmap3(ni).set_size(0);
+        //tempElements(ni).set_size(0);
+        //tempBlockmap1(ni).set_size(0);
+        //tempBlockmap2(ni).set_size(0);
+        //tempBlockmap3(ni).set_size(0);
+
+        //tempElements(ni).clear();
+        //tempBlockmap1(ni).clear();
+        //tempBlockmap2(ni).clear();
+        //tempBlockmap3(ni).clear();
 
     }
     // ####################################################################
@@ -1383,7 +1389,7 @@ field<uvec> amplitude::blocksort(ivec LHS, ivec K_unique){
     uint uiS = l_sorted.n_rows;
 
     int C = K_unique(i);
-    uvec row(100000);
+    uvec row(uiStatAlloc);
     uint nx = 0;
     int l_c= LHS(l_sorted(lc));
     field<uvec> tempRows(uiN);
@@ -3535,7 +3541,7 @@ field<uvec> amplitude::partition(ivec LHS, ivec K_unique){
     uint uiS = l_sorted.n_rows;
 
     int C = K_unique(i);
-    uvec row(1000000); //arbitrarily large number (biggest possible block)
+    uvec row(uiStatAlloc); //arbitrarily large number (biggest possible block)
     uint nx = 0;
     int l_c= LHS(l_sorted(lc));
     field<uvec> tempRows(uiN);
@@ -3621,13 +3627,12 @@ field<uvec> amplitude::partition_pp(field<ivec> LHS, ivec K_unique){
     uint b;
     //uint c;
     uint l_sorted_lc;
-    uvec row(1000000);
-    //uvec row_b(1000000);
+    uvec row(uiStatAlloc);
 
 
     uvec Na = conv_to<uvec>::from(LHS(0));
     uvec Nb = conv_to<uvec>::from(LHS(1));
-    uvec pab(1000000);
+    uvec pab(uiStatAlloc);
 
     while(lc < uiS){
         l_sorted_lc = l_sorted(lc);
@@ -3721,8 +3726,7 @@ field<uvec> amplitude::partition_ppp(field<ivec> LHS, ivec K_unique){
     uint p,q,r;
 
     uint l_sorted_lc;
-    uvec row(1000000);
-    //uvec row_b(1000000);
+    uvec row(uiStatAlloc);
 
 
     uvec Na = conv_to<uvec>::from(LHS(0));
@@ -3820,12 +3824,12 @@ field<uvec> amplitude::partition_hh_permutations(field<ivec> LHS, ivec K_unique)
     uint a;
     uint b;
     uint l_sorted_lc;
-    uvec row(1000000);
+    uvec row(uiStatAlloc);
 
 
     uvec Na = conv_to<uvec>::from(LHS(0));
     uvec Nb = conv_to<uvec>::from(LHS(1));
-    uvec pab(1000000);
+    uvec pab(uiStatAlloc);
 
     while(lc < uiS){
         l_sorted_lc = l_sorted(lc);
@@ -3941,13 +3945,12 @@ field<uvec> amplitude::partition_pp_permutations(field<ivec> LHS, ivec K_unique)
     uint b;
     //uint c;
     uint l_sorted_lc;
-    uvec row(1000000);
-    //uvec row_b(1000000);
+    uvec row(uiStatAlloc);
 
 
     uvec Na = conv_to<uvec>::from(LHS(0));
     uvec Nb = conv_to<uvec>::from(LHS(1));
-    uvec pab(1000000);
+    uvec pab(uiStatAlloc);
 
     while(lc < uiS){
         l_sorted_lc = l_sorted(lc);
@@ -4070,17 +4073,16 @@ field<uvec> amplitude::partition_ppp_permutations(field<ivec> LHS, ivec K_unique
     uint a,b,c;
 
     uint l_sorted_lc;
-    uvec row(1000000);
-    //uvec row_b(1000000);
+    uvec row(uiStatAlloc);
 
 
     uvec Na = conv_to<uvec>::from(LHS(0));
     uvec Nb = conv_to<uvec>::from(LHS(1));
     uvec Nc = conv_to<uvec>::from(LHS(2));
 
-    uvec permute_ab(1000000);
-    uvec permute_ac(1000000);
-    uvec permute_bc(1000000);
+    uvec permute_ab(uiStatAlloc);
+    uvec permute_ac(uiStatAlloc);
+    uvec permute_bc(uiStatAlloc);
 
 
 
@@ -4353,17 +4355,17 @@ field<uvec> amplitude::partition_hhh_permutations(field<ivec> LHS, ivec K_unique
     uint a,b,c;
 
     uint l_sorted_lc;
-    uvec row(1000000);
-    //uvec row_b(1000000);
+    uvec row(uiStatAlloc);
+
 
 
     uvec Ni = conv_to<uvec>::from(LHS(0));
     uvec Nj = conv_to<uvec>::from(LHS(1));
     uvec Nk = conv_to<uvec>::from(LHS(2));
 
-    uvec permute_ij(1000000);
-    uvec permute_ik(1000000);
-    uvec permute_jk(1000000);
+    uvec permute_ij(uiStatAlloc);
+    uvec permute_ik(uiStatAlloc);
+    uvec permute_jk(uiStatAlloc);
 
 
 
@@ -4627,8 +4629,8 @@ field<uvec> amplitude::partition_hpp(field<ivec> LHS, ivec K_unique){
     uint p,q,r;
 
     uint l_sorted_lc;
-    uvec row(1000000);
-    //uvec row_b(1000000);
+    uvec row(uiStatAlloc);
+
 
 
     uvec Ni = conv_to<uvec>::from(LHS(0));
@@ -4703,8 +4705,8 @@ field<uvec> amplitude::partition_php(field<ivec> LHS, ivec K_unique){
     uint p,q,r;
 
     uint l_sorted_lc;
-    uvec row(1000000);
-    //uvec row_b(1000000);
+    uvec row(uiStatAlloc);
+
 
 
     uvec Ni = conv_to<uvec>::from(LHS(0));
@@ -4780,8 +4782,8 @@ field<uvec> amplitude::partition_pph(field<ivec> LHS, ivec K_unique){
     uint p,q,r;
 
     uint l_sorted_lc;
-    uvec row(1000000);
-    //uvec row_b(1000000);
+    uvec row(uiStatAlloc);
+
 
 
     uvec Ni = conv_to<uvec>::from(LHS(0));
@@ -4861,8 +4863,8 @@ field<uvec> amplitude::partition_phh(field<ivec> LHS, ivec K_unique){
     uint p,q,r;
 
     uint l_sorted_lc;
-    uvec row(1000000);
-    //uvec row_b(1000000);
+    uvec row(uiStatAlloc);
+
 
 
     uvec Ni = conv_to<uvec>::from(LHS(0));
@@ -4939,8 +4941,8 @@ field<uvec> amplitude::partition_hph(field<ivec> LHS, ivec K_unique){
     uint p,q,r;
 
     uint l_sorted_lc;
-    uvec row(1000000);
-    //uvec row_b(1000000);
+    uvec row(uiStatAlloc);
+
 
 
     uvec Ni = conv_to<uvec>::from(LHS(0));
@@ -5017,8 +5019,8 @@ field<uvec> amplitude::partition_hhp(field<ivec> LHS, ivec K_unique){
     uint p,q,r;
 
     uint l_sorted_lc;
-    uvec row(1000000);
-    //uvec row_b(1000000);
+    uvec row(uiStatAlloc);
+
 
 
     uvec Ni = conv_to<uvec>::from(LHS(0));

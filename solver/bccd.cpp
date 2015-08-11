@@ -24,10 +24,11 @@ bccd::bccd(electrongas fgas, double relaxation)
     dRelaxation_parameter = relaxation;
     dCorrelationEnergy = 1000;
     dTreshold = 0.00000001;
+    uiStatAlloc = 100000;
 
     t3.nthreads = nthreads;
     //cout << nthreads << endl;
-    solve(100);
+    //solve(100);
 }
 
 void bccd::activate_diagrams(){
@@ -164,6 +165,7 @@ void bccd::init(){
         tm = omp_get_wtime();
 
         t3.init(eBs, 5, {Np, Np, Np, Nh, Nh, Nh});
+        t3.uiStatAlloc = uiStatAlloc;
         t3.nthreads = nthreads;
         t3.make_t3();
         t3.uiCurrent_block = 1;

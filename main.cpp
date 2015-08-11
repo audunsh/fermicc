@@ -25,12 +25,36 @@ using namespace arma;
 
 int main(int argc, char *argv[] )
 {
+    //default setup
     int i0 = 3;
-    int i1 = 5;
-    if ( argc == 3 ){
+    int i1 = 4;
+    double rs = 1.0;
+    uint iterations = 20;
+    uint uiStatAlloc = 1000000;
+
+    if ( argc == 6 ){
         i0 = atoi(argv[1]);
         i1 = atoi(argv[2]);
+        rs = atof(argv[3]);
+
+        iterations = atoi(argv[4]);
+        uiStatAlloc = atoi(argv[5]);
     }
+    else{
+        cout << "FermiCC, by Audun Skau Hansen 2015." << endl;
+        cout << "Usage:" << endl;
+        cout << "./FermiCC [start] [end] [rs] [iterations] [static allocation]" << endl;
+        cout << endl;
+        cout << "start/end        :       Number of the first shell (start) and up to (but not including) the last shell (end)."<< endl;
+        cout << "rs               :       Wigner-Seiz radi. See thesis." << endl;
+        cout << "iterations       :       Maximum number of iterations." << endl;
+        cout << "static allocation:       Maximum size of staticly allocated vectors. (use 100000 on smaller calculations.)" << endl;
+
+        cout << "Running default calculation, i.e.:" << endl;
+        cout << "./FermiCC 3 4 1.0 20 100000" << endl;
+
+    }
+
 
     //electrongas fgas;
     //fgas.generate_state_list2(4.0,2.0, 14);
@@ -46,10 +70,13 @@ int main(int argc, char *argv[] )
 
     for(int i = i0; i < i1; ++i){
         electrongas fgas;
-        fgas.generate_state_list2(i,1.0, 14);
+        fgas.generate_state_list2(i,rs, 14);
         //cout << setprecision(16) << r_s << endl;
         //sccdt_mp solve(fgas, .3);
         bccd solver1(fgas,.3);
+        solver1.uiStatAlloc = uiStatAlloc;
+        solver1.solve(iterations);
+        cout << "Number of states, correlation energy, difference in last convergence, number of iterations passed" << endl;
         cout << setprecision(9) << fgas.iNbstates << "     " << solver1.dCorrelationEnergy << "     " << solver1.convergence_diff << "     "<< solver1.convergence << endl;
 
     }

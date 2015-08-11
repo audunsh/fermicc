@@ -94,6 +94,7 @@ public:
     double dTreshold; //energy treshold
     uint nthreads;
     uint convergence;
+    uint uiStatAlloc;
     double convergence_diff;
 
 
