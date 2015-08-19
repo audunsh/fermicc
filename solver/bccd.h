@@ -22,7 +22,7 @@ using namespace arma;
 class bccd
 {
 public:
-    bccd(electrongas fgas, double relaxation);
+    bccd(electrongas fgas, double relaxation, double threshold);
 
     //internal functions
     double energy(); //calculate energy
@@ -43,8 +43,8 @@ public:
 
     //internal objects and parameters
     electrongas eBs;
-    uint Np;
-    uint Nh;
+    u64 Np;
+    u64 Nh;
 
     //amplitudes and interactions
 

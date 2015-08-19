@@ -8,7 +8,7 @@ using namespace arma;
 
 blockmap::blockmap(){}
 
-void blockmap::init(electrongas bs, int n_configs, uvec size){
+void blockmap::init(electrongas bs, int n_configs, Col<u64> size){
     eBs = bs;
     k_step = 2*eBs.vKx.max()+3; //stepsize for identifying unique regions
     iNconfigs = n_configs;
@@ -265,7 +265,7 @@ field<uvec> blockmap::blocksort_symmetric(ivec K_unique){
 
     uvec l_sorted = sort_index(LHS);
     //uvec l_sorted = linspace<uvec>(0,Ndim-1, Ndim);
-    bool adv = false;
+
 
     uint lc = 0;
     uint i = 0;
@@ -289,9 +289,9 @@ field<uvec> blockmap::blocksort_symmetric(ivec K_unique){
 
     //want to find row indices where LHS == k_config(i)
     //now: l_c == C
-    bool br = false;
+
     bool row_collect = false;
-    int ll_c = l_c;
+
     uint a;
     uint b;
     uint l_sorted_lc;
@@ -350,7 +350,7 @@ field<uvec> blockmap::blocksort_symmetric(ivec K_unique){
 
 field<uvec> blockmap::blocksort(ivec LHS, ivec K_unique){
     uvec l_sorted = sort_index(LHS);
-    bool adv = false;
+
 
     uint lc = 0;
     uint i = 0;
@@ -372,7 +372,7 @@ field<uvec> blockmap::blocksort(ivec LHS, ivec K_unique){
     //want to find row indices where LHS == k_config(i)
     //now: l_c == C
     bool row_collect = false;
-    int ll_c = l_c;
+
 
     while(lc < uiS){
         l_c = LHS(l_sorted(lc));
@@ -794,8 +794,8 @@ field<ivec> blockmap::pp(){
     ivec a(N);
     ivec b(N);
     uint count = 0;
-    for(int na = 0; na<Np; ++na){
-        for(int nb = 0; nb<na+1; ++nb){
+    for(u64 na = 0; na<Np; ++na){
+        for(u64 nb = 0; nb<na+1; ++nb){
             a(count) = na;
             b(count) = nb;
             count += 1;
@@ -820,9 +820,9 @@ field<ivec> blockmap::ppp(ivec signs){
     ivec b(N);
     ivec c(N);
     uint count = 0;
-    for(int na = 0; na<Np; ++na){
-        for(int nb = 0; nb<na+1; ++nb){
-            for(int nc = 0; nc<nb+1; ++nc){
+    for(u64 na = 0; na<Np; ++na){
+        for(u64 nb = 0; nb<na+1; ++nb){
+            for(u64 nc = 0; nc<nb+1; ++nc){
                 a(count) = na;
                 b(count) = nb;
                 c(count) = nc;
@@ -849,9 +849,9 @@ field<ivec> blockmap::hpp(){
     ivec a(N);
     ivec b(N);
     uint count = 0;
-    for(int ni = 0; ni<Nh; ++ni){
-        for(int na = 0; na<Np; ++na){
-            for(int nb = 0; nb<na+1; ++nb){
+    for(u64 ni = 0; ni<Nh; ++ni){
+        for(u64 na = 0; na<Np; ++na){
+            for(u64 nb = 0; nb<na+1; ++nb){
                 i(count) = ni;
                 a(count) = na;
                 b(count) = nb;
@@ -877,9 +877,9 @@ field<ivec> blockmap::php(){
     ivec i(N);
     ivec b(N);
     uint count = 0;
-    for(int na = 0; na<Np; ++na){
-        for(int ni = 0; ni<Nh; ++ni){
-            for(int nb = 0; nb<na+1; ++nb){
+    for(u64 na = 0; na<Np; ++na){
+        for(u64 ni = 0; ni<Nh; ++ni){
+            for(u64 nb = 0; nb<na+1; ++nb){
                 i(count) = ni;
                 a(count) = na;
                 b(count) = nb;
@@ -906,9 +906,9 @@ field<ivec> blockmap::pph(){
     ivec a(N);
     ivec b(N);
     uint count = 0;
-    for(int na = 0; na<Np; ++na){
-        for(int nb = 0; nb<na+1; ++nb){
-            for(int ni = 0; ni<Nh; ++ni){
+    for(u64 na = 0; na<Np; ++na){
+        for(u64 nb = 0; nb<na+1; ++nb){
+            for(u64 ni = 0; ni<Nh; ++ni){
                 i(count) = ni;
                 a(count) = na;
                 b(count) = nb;
@@ -1249,7 +1249,7 @@ field<uvec> blockmap::partition_hpp(field<ivec> LHS, ivec K_unique){
     uvec Na = conv_to<uvec>::from(LHS(1));
     uvec Nb = conv_to<uvec>::from(LHS(2));
 
-    uint Np2 =Np*Np;
+
     while(lc < uiS){
         l_sorted_lc = l_sorted(lc);
         l_c = LHS(3)(l_sorted_lc);

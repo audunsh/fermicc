@@ -12,7 +12,7 @@ class blockmap
 public:
     blockmap();
     blockmap(electrongas bs, int n_configs, uvec size);
-    void init(electrongas bs, int n_configs, uvec size);
+    void init(electrongas bs, int n_configs, Col<u64> size);
 
     //internal functions
     uint to(uint p, uint q, uint r, uint s);  //compressed index
@@ -61,7 +61,7 @@ public:
     field<ivec> fvConfigs; //configuration in quantum numbers of each block
     uvec blocklengths;  //number of blocks in each configuration
     field<imat> fmOrdering; //the ordering of each configuration
-    uvec uvSize; //particle-hole organization
+    Col<u64> uvSize; //particle-hole organization
     int iNconfigs;
     uint Np, Nh;
     uint uiCurrent_block;

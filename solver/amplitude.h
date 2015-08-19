@@ -23,7 +23,7 @@ public:
 
     void zeros(); //zero out all elements
     void insert_zeros(); //append a zero element at end of vElements
-    uint uiLastind;
+    u64 uiLastind;
     void scan_uvElements();
 
     void init_amplitudes(); //initialize as amplitude
@@ -34,8 +34,8 @@ public:
 
 
     void consolidate_blocks(uint uiN, uint tempElementsSize, field<Col<u64> >  tempElements, field<uvec>  tempBlockmap1,field<uvec>  tempBlockmap2,field<uvec>  tempBlockmap3);
-    void enroll_block(umat umBlock,uint tempElementsSize, uvec tempElements, uvec tempBlockmap1,uvec tempBlockmap2,uvec tempBlockmap3);
-    uvec uvNsort1; // = sort_index(uvElements);
+    void enroll_block(Mat<u64> umBlock, uint tempElementsSize, Col<u64> tempElements, uvec tempBlockmap1,uvec tempBlockmap2,uvec tempBlockmap3);
+    Col<u64> uvNsort1; // = sort_index(uvElements);
 
     //test
     //uvec uvElemtemp1;// = uvElements.elem(uvNsort);
@@ -44,8 +44,8 @@ public:
     uvec uvBsort1;// = sort_index(uvNsort); //backsort
     //field<SpMat<uint> > fspBlocks; //sparse blocks with t3 amplitudes
     field<umat> fspBlocks;
-    umat fspDims;
-    umat getfspBlock(uint i);
+    Mat<u64> fspDims;
+    Mat<u64> getfspBlock(uint i);
 
 
 
@@ -96,15 +96,15 @@ public:
     Col<u64> uvElements; //element storage (prior to initialization)
     //field<umat> fmBlocks; //block of indices
 
-    //field<field <Mat<u64> > > fmBlocks;
-    field<field <umat> > fmBlocks;
+    field<field <Mat<u64> > > fmBlocks;
+    //field<field <umat> > fmBlocks;
 
 
     field<ivec> fvConfigs; //configuration in quantum numbers of each block
 
     ivec ivBconfigs; //track aligned configurations
 
-    uvec blocklengths;  //number of blocks in each configuration
+    Col<u64> blocklengths;  //number of blocks in each configuration
     field<imat> fmOrdering; //the ordering of each configuration
 
 
@@ -113,7 +113,7 @@ public:
 
 
     int iNconfigs;
-    uint Np, Nh;
+    u64 Np, Nh;
     uint uiCurrent_block;
 
     field<uvec> permutative_ordering; //for use with unpermuted basic initialization.
@@ -123,12 +123,12 @@ public:
 
     field<uvec> partition_pp_permutations(field<ivec> LHS, ivec K_unique);
     field<uvec> partition_hh_permutations(field<ivec> LHS, ivec K_unique);
-    field<uvec> Pab;
-    field<uvec> Pac;
-    field<uvec> Pbc;
-    field<uvec> Pij;
-    field<uvec> Pik;
-    field<uvec> Pjk;
+    field<Col<u64> > Pab;
+    field<Col<u64> > Pac;
+    field<Col<u64> > Pbc;
+    field<Col<u64> > Pij;
+    field<Col<u64> > Pik;
+    field<Col<u64> > Pjk;
 
 
 
@@ -174,7 +174,7 @@ public:
 
     field<uvec> partition(ivec LHS, ivec K_unique);
     field<uvec> partition_pp(field<ivec> LHS, ivec K_unique);
-    field<uvec> partition_ppp(field<ivec> LHS, ivec K_unique);
+    field<Col<u64> > partition_ppp(field<ivec> LHS, ivec K_unique);
 
     field<ivec> hpp();
     field<ivec> php();

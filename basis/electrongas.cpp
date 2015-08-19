@@ -13,13 +13,13 @@ electrongas::electrongas()
 {
 }
 
-void electrongas::generate_state_list2(int Ne, double rs, int Np){
+void electrongas::generate_state_list2(int Ne, double rs, u64 Np){
     iN = Ne; //number of shells
     dr_s = rs;
 
     double Nmax = iN + 1; //sqrt(iN) + 1;
     //int energy = 0;
-    int nStates = 0;
+    u64 nStates = 0;
     iNparticles = Np;
     int energy_integer = 0;
     bool is_shell;
@@ -105,7 +105,7 @@ void electrongas::generate_state_list2(int Ne, double rs, int Np){
 
     //setup Fock matrix
     vHFEnergy.set_size(nStates);
-    for(int i = 0; i < nStates; ++i){
+    for(u64 i = 0; i < nStates; ++i){
         vHFEnergy(i) = F(i);
     }
 }
@@ -120,7 +120,7 @@ ivec electrongas::unique(uvec p){
     //return k_step*k_step*k_step*k_step + vKx.elem(p)*k_step*k_step*k_step + vKy.elem(p)*k_step*k_step + vKz.elem(p)*k_step + vMs.elem(p);
 }
 
-void electrongas::generate_state_list(int Ne, double rs, int Np){
+void electrongas::generate_state_list(int Ne, double rs, u64 Np){
     iN = Ne;
 
     //Volum = nokkuperte*4.d0*pi*r_s**3/3.d0

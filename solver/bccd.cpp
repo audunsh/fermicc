@@ -11,7 +11,7 @@ using namespace std;
 using namespace arma;
 
 
-bccd::bccd(electrongas fgas, double relaxation)
+bccd::bccd(electrongas fgas, double relaxation, double threshold)
 {
     eBs = fgas;
     Np = fgas.iNbstates-fgas.iNparticles;
@@ -23,12 +23,13 @@ bccd::bccd(electrongas fgas, double relaxation)
 
     dRelaxation_parameter = relaxation;
     dCorrelationEnergy = 1000;
-    dTreshold = 0.00000001;
+    dTreshold = threshold;
     uiStatAlloc = 100000;
 
     t3.nthreads = nthreads;
     //cout << nthreads << endl;
     //solve(100);
+    pert_triples = true;
 }
 
 void bccd::activate_diagrams(){
@@ -64,12 +65,8 @@ void bccd::init(){
     // ## Initializing the needed configurations ##
     // ############################################
     mode = "CCD";
-    pert_triples = true;
 
-    clock_t t;
-    t = clock();
 
-    double tm = omp_get_wtime();
 
 
     t2.init(eBs, 10, {Np, Np, Nh, Nh});
@@ -121,16 +118,16 @@ void bccd::init(){
     t2temp.zeros();
 
     vhhpp.init(eBs, 4, {Nh,Nh,Np,Np});
-    vhhpp.init_interaction({0,0,Nh,Nh});
+    vhhpp.init_interaction({0,0,int (Nh),int (Nh)});
     vhhpp.map({1,-3},{-2,4}); //for use in Q2 (1)
     vhhpp.map({2},{-1,3,4});  //for use in Q3 (2)
     vhhpp.map({1,2,-4},{3});  //for use in Q4 (3)
 
     v0.init(eBs, 3, {Nh,Nh,Np,Np});
-    v0.init_interaction({0,0,Nh,Nh});
+    v0.init_interaction({0,0,int (Nh),int (Nh)});
 
     vpphh.init(eBs, 3, {Np, Np, Nh, Nh});
-    vpphh.init_interaction({Nh,Nh,0,0});
+    vpphh.init_interaction({int(Nh),int (Nh),0,0});
 
 
     vpppp.init(eBs, 3, {Np, Np, Np, Np});
@@ -150,6 +147,7 @@ void bccd::init(){
     // ## Perturbative triples setup              ##
     // #############################################
     if(pert_triples){
+        //cout << "t3:stage0 passed" << endl;
         mode = "CCDT-1";
         vhphh.init(eBs, 3, {Nh, Np, Nh, Nh});
         vhphh.map({1},{-2,3,4});
@@ -162,7 +160,7 @@ void bccd::init(){
         vhhhp.map({-4, 1,2},{3});
 
         //cout << "[" << mode << "] Time spent initializing triples interaction:" << omp_get_wtime()-tm << endl;
-        tm = omp_get_wtime();
+
 
         t3.init(eBs, 5, {Np, Np, Np, Nh, Nh, Nh});
         t3.uiStatAlloc = uiStatAlloc;
@@ -170,13 +168,17 @@ void bccd::init(){
         t3.make_t3();
         t3.uiCurrent_block = 1;
         //t3.map_t3_permutations();
+        //cout << "t3:stage1 passed" << endl;
 
 
 
 
         t3.map_t3_623_451(vphpp.fvConfigs(0)); //for d10b,
+        //cout << "t3:stage2 passed" << endl;
         t3.map_t3_124_356(vhhhp.fvConfigs(0)); //for d10c + t2.fvConfigs(9)
+        //cout << "t3:stage3 passed" << endl;
         t3.map_t3_236_145(t2.fvConfigs(8)); //check this one
+        //cout << "t3:stage4 passed" << endl;
         //count memory usage in maps
         /*
         u64 memsize2 = 0;
@@ -191,10 +193,12 @@ void bccd::init(){
 
 
         t3.map_t3_permutations_bconfig_sparse();
+        //cout << "t3:stage5 passed" << endl;
 
         //cout << "Number of enrolled (sparse) states (t3):" << t3.debug_enroll << " of " << t3.uvElements.n_rows << endl;
 
         t3.init_t3_amplitudes();
+        //cout << "t3:stage6 passed" << endl;
         //cout << "Memory usage from elements:" << (3*t3.vElements.n_elem*8)/(1000000000.0) <<  " Gb" << endl;
 
         //cout << "[" << mode << "] Approx of initialized memory for t3    :" << t3.memsize*8/1000000000.0 << " GB" << endl;
@@ -229,6 +233,7 @@ void bccd::init(){
     }
     //t3temp.insert_zeros();
     t3.insert_zeros();
+    //cout << "t3:stage7 passed" << endl;
 
 
 
@@ -239,7 +244,7 @@ void bccd::solve(uint Nt){
     // ############################################
     // ## Solve Nt steps                         ##
     // ############################################
-    double tm = omp_get_wtime();
+
 
     //set up needed vectors of corresponding blocks in contractions (intersecting configurations)
     umat vpppp_t2 = intersect_blocks(t2,0,vpppp,0);
@@ -277,12 +282,12 @@ void bccd::solve(uint Nt){
 
     t2n.zeros(); //zero out next amplitudes
     //cout << "[" << mode << "] Time spent intersecting blocks:" << omp_get_wtime()-tm << endl;
-    tm = omp_get_wtime();
+
 
     //uint nthreads = 5;
     for(uint t = 0; t < Nt; ++t){
 
-        double tm = omp_get_wtime();
+
         // ############################################
         // ## Reset next amplitude                   ##
         // ############################################
@@ -413,7 +418,7 @@ void bccd::solve(uint Nt){
             #pragma omp parallel for num_threads(nthreads)
             for(uint i = 0; i < t3.fvConfigs(4).n_rows; ++i){
                 //for(uint i = 0; i < t3temp.fvConfigs(3).n_rows; ++i){
-                uint b = 3;
+
 
                 mat block2 = t3.getsblock_temp(3,i)
                                 - t3.getsblock_permuted_temp(3,i,0)

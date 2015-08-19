@@ -135,29 +135,29 @@ void amplitude::init_amplitudes(){
 } //initialize as amplitude
 
 
-void amplitude::enroll_block(umat umBlock, uint tempElementsSize, uvec tempElements, uvec tempBlockmap1,uvec tempBlockmap2,uvec tempBlockmap3){
+void amplitude::enroll_block(Mat<u64> umBlock, uint tempElementsSize, Col<u64> tempElements, uvec tempBlockmap1,uvec tempBlockmap2,uvec tempBlockmap3){
 
     // ####################################################################
     // ## Consolidate block  with existing configuration                 ##
     // ####################################################################
 
-    umat n = sort_index(tempElements);
+    Mat<u64> n = sort_index(tempElements);
     Col<u64> flatElements = tempElements.elem(n);
-    uvec flatBlockmap1 = tempBlockmap1.elem(n); //DOES THIS SORT PROPERLY? UNKNOWN,
-    uvec flatBlockmap2 = tempBlockmap2.elem(n); //DOES THIS SORT PROPERLY? UNKNOWN,
-    uvec flatBlockmap3 = tempBlockmap3.elem(n); //DOES THIS SORT PROPERLY? UNKNOWN,
+    Col<u64> flatBlockmap1 = tempBlockmap1.elem(n); //DOES THIS SORT PROPERLY? UNKNOWN,
+    Col<u64> flatBlockmap2 = tempBlockmap2.elem(n); //DOES THIS SORT PROPERLY? UNKNOWN,
+    Col<u64> flatBlockmap3 = tempBlockmap3.elem(n); //DOES THIS SORT PROPERLY? UNKNOWN,
 
-    uint tempN = 0;
-    uint trueN = 0;
-    uint tempL = flatElements.n_rows;
-    uint trueL = uvElements.n_rows;
+    u64 tempN = 0;
+    u64 trueN = 0;
+    u64 tempL = flatElements.n_rows;
+    u64 trueL = uvElements.n_rows;
 
     //uvec uvNsort = sort_index(uvElements);
     //uvec uvElemtemp = uvElements.elem(uvNsort);
     //uvec uvBsort = sort_index(uvNsort); //backsort
 
-    uvec remains(flatElements.n_rows);
-    uint remN = 0;
+    Col<u64> remains(flatElements.n_rows);
+    u64 remN = 0;
 
 
 
@@ -165,8 +165,8 @@ void amplitude::enroll_block(umat umBlock, uint tempElementsSize, uvec tempEleme
     fspDims(flatBlockmap1(0), 1) = umBlock.n_cols; //ny
 
 
-    umat sparseblock(3, tempL);
-    uint count = 0;
+    Mat<u64> sparseblock(3, tempL);
+    u64 count = 0;
     //for(tempN = 0; tempN < tempL; tempN++){
     while(tempN < tempL){
         if(trueN<trueL){
@@ -215,11 +215,11 @@ void amplitude::enroll_block(umat umBlock, uint tempElementsSize, uvec tempEleme
     //cout << "remains:" << remN << endl;
 
 
-    umat b(3,count+1);
+    Mat<u64> b(3,count+1);
     b(0,0) =0;
     b(1,0) = 0;
     b(2,0) = 0;
-    for(uint i = 0; i < count; ++i){
+    for(u64 i = 0; i < count; ++i){
         b(0,i+1) = sparseblock(0,i);
         b(1,i+1) = sparseblock(1,i);
         b(2,i+1) = sparseblock(2,i);
@@ -244,14 +244,14 @@ void amplitude::consolidate_blocks(uint uiN, uint tempElementsSize, field<Col<u6
 
     //Flatten fields into 1d uvecs
 
-    uvec flatElements(tempElementsSize);
-    uvec flatBlockmap1(tempElementsSize);
-    uvec flatBlockmap2(tempElementsSize);
-    uvec flatBlockmap3(tempElementsSize);
+    Col<u64> flatElements(tempElementsSize);
+    Col<u64> flatBlockmap1(tempElementsSize);
+    Col<u64> flatBlockmap2(tempElementsSize);
+    Col<u64> flatBlockmap3(tempElementsSize);
 
     ivec flatBconfig(tempElementsSize);
 
-    uint counter = 0;
+    u64 counter = 0;
     for(uint ni = 0; ni<uiN; ++ni){
         for(uint nj = 0; nj < tempElements(ni).n_rows; ++nj){
             flatElements(counter) = tempElements(ni)(nj);
@@ -285,16 +285,16 @@ void amplitude::consolidate_blocks(uint uiN, uint tempElementsSize, field<Col<u6
     flatBlockmap2 = flatBlockmap2.elem(n); //DOES THIS SORT PROPERLY? UNKNOWN,
     flatBlockmap3 = flatBlockmap3.elem(n); //DOES THIS SORT PROPERLY? UNKNOWN,
 
-    uint tempN = 0;
-    uint trueN = 0;
-    uint tempL = flatElements.n_rows;
-    uint trueL = uvElements.n_rows;
+    u64 tempN = 0;
+    u64 trueN = 0;
+    u64 tempL = flatElements.n_rows;
+    u64 trueL = uvElements.n_rows;
 
-    uvec uvNsort = sort_index(uvElements);
+    Col<u64>  uvNsort = sort_index(uvElements);
     Col<u64> uvElemtemp = uvElements.elem(uvNsort);
-    uvec uvBsort = sort_index(uvNsort); //backsort
+    Col<u64>  uvBsort = sort_index(uvNsort); //backsort
 
-    uvec remains(flatElements.n_rows);
+    Col<u64>  remains(flatElements.n_rows);
     uint remN = 0;
 
 
@@ -445,7 +445,7 @@ uvec amplitude::unpack_uvec(uint vStream, imat imOrder){
     ivec M(iMsize);
     M(iMsize-1) = 1;
     uint mn = 1;
-    for(int i = 0; i < iMsize-1; ++i){
+    for(u64 i = 0; i < iMsize-1; ++i){
         mn *= uvSize(imOrder(i,0));
         M(iMsize - i-2) = mn;
     }
@@ -523,8 +523,8 @@ void amplitude::map_t3_236_145(ivec Kk_unique){
     //field<uvec> tempRows = partition_hhp(bck, K_unique);
     //field<uvec> tempCols = partition_hpp(aij, K_unique);
     //cout << "Number of blocks:" << K_unique.n_rows << endl;
-    field<uvec> tempRows = partition_pph(bck, K_unique);
-    field<uvec> tempCols = partition_phh(aij, K_unique);
+    field<Col<u64> > tempRows = partition_pph(bck, K_unique);
+    field<Col<u64> > tempCols = partition_phh(aij, K_unique);
 
 
     //Kk_unique.print();
@@ -561,7 +561,7 @@ void amplitude::map_t3_236_145(ivec Kk_unique){
         //cout << Nx << " " << Ny << " " << " " << K_unique(n) << endl;
         Mat<u64> block(Nx,Ny);
         uvec pqrs(6);
-        uvec tElements(Nx*Ny);
+        Col<u64>  tElements(Nx*Ny);
         uvec tBlockmap1(Nx*Ny);
         uvec tBlockmap2(Nx*Ny);
         uvec tBlockmap3(Nx*Ny);
@@ -607,7 +607,7 @@ void amplitude::map_t3_236_145(ivec Kk_unique){
 
     ivec flatBconfig(tempElementsSize);
 
-    uint counter = 0;
+    u64 counter = 0;
     for(uint ni = 0; ni<uiN; ++ni){
         for(uint nj = 0; nj < tempElements(ni).n_rows; ++nj){
 
@@ -746,7 +746,7 @@ void amplitude::map_t3_623_451(ivec Kk_unique){
     uint tempElementsSize = 0;
     //uvec a,b,c,i,j,k;
     //uint systemsize = 0;
-    uint Np2 = Np*Np;
+    //uint Np2 = Np*Np;
     uint Nph = Np*Nh;
     uint Nh2 = Nh*Nh;
 
@@ -835,14 +835,14 @@ void amplitude::map_t3_623_451(ivec Kk_unique){
     // ####################################################################
     // ## Flatten tempElements and tempBlockmap                          ##
     // ####################################################################
-    uvec flatElements(tempElementsSize);
-    uvec flatBlockmap1(tempElementsSize);
-    uvec flatBlockmap2(tempElementsSize);
-    uvec flatBlockmap3(tempElementsSize);
+    Col<u64> flatElements(tempElementsSize);
+    Col<u64> flatBlockmap1(tempElementsSize);
+    Col<u64> flatBlockmap2(tempElementsSize);
+    Col<u64> flatBlockmap3(tempElementsSize);
 
     ivec flatBconfig(tempElementsSize);
 
-    uint counter = 0;
+    u64 counter = 0;
     for(uint ni = 0; ni<uiN; ++ni){
         for(uint nj = 0; nj < tempElements(ni).n_rows; ++nj){
             flatElements(counter) = tempElements(ni)(nj);
@@ -869,16 +869,16 @@ void amplitude::map_t3_623_451(ivec Kk_unique){
     // ####################################################################
 
 
-    umat n = sort_index(flatElements);  //traverse flatElements in increasing order (existing elements already sorted)
+    Mat<u64> n = sort_index(flatElements);  //traverse flatElements in increasing order (existing elements already sorted)
     flatElements = flatElements.elem(n);
     flatBlockmap1 = flatBlockmap1.elem(n);
     flatBlockmap2 = flatBlockmap2.elem(n);
     flatBlockmap3 = flatBlockmap3.elem(n);
 
-    uint tempN = 0;
-    uint trueN = 0;
-    uint tempL = flatElements.n_rows; //number of elements in this projection
-    uint trueL = uvElements.n_rows; //number of existing elem
+    u64 tempN = 0;
+    u64 trueN = 0;
+    u64 tempL = flatElements.n_rows; //number of elements in this projection
+    u64 trueL = uvElements.n_rows; //number of existing elem
     bool all_resolved = false;
     while(trueN < trueL){
         if(uvElements(trueN) == flatElements(tempN)){
@@ -909,7 +909,7 @@ void amplitude::map_t3_623_451(ivec Kk_unique){
     //if(tempN<tempL){
     if(all_resolved != true){
         //cout << "remaining  blocks" << endl;
-        uvec remaining(tempL-tempN);
+        Col<u64> remaining(tempL-tempN);
         uint tN = 0;
         while(tempN<tempL){
             //cout << trueN + tN << endl;
@@ -920,7 +920,7 @@ void amplitude::map_t3_623_451(ivec Kk_unique){
         }
 
         //cout << tempL << " "<< tempN << " " << remaining.n_elem << " " << uvElements.n_elem << endl;
-        uvElements = join_cols<umat>(uvElements, remaining);
+        uvElements = join_cols<Mat<u64> >(uvElements, remaining);
 
     }
 
@@ -938,8 +938,8 @@ void amplitude::map_t3_124_356(ivec Kk_unique){
 
     ivec K_unique = intersect1d(k_unique, Kk_unique);
 
-    field<uvec> tempRows = partition_pph(abi, K_unique);
-    field<uvec> tempCols = partition_phh(cjk, K_unique);
+    field<Col<u64> > tempRows = partition_pph(abi, K_unique); //these could possibly cause segfault (uvec)
+    field<Col<u64> > tempCols = partition_phh(cjk, K_unique);
     //Kk_unique.print();
     uint uiN = K_unique.n_elem;
 
@@ -963,8 +963,8 @@ void amplitude::map_t3_124_356(ivec Kk_unique){
     #pragma omp parallel for num_threads(nthreads)
     for(uint n = 0; n <K_unique.n_rows; ++n){
         uvec dim(6);
-        uvec row = tempRows(n);
-        uvec col = tempCols(n);
+        Col<u64>  row = tempRows(n); //should this be col<u64> ?
+        Col<u64>  col = tempCols(n);
         //systemsize += row.n_rows*col.n_rows;
 
 
@@ -973,7 +973,7 @@ void amplitude::map_t3_124_356(ivec Kk_unique){
         //cout << Nx << " " << Ny << " " << " " << K_unique(n) << endl;
         Mat<u64> block(Nx,Ny);
         uvec pqrs(6);
-        uvec tElements(Nx*Ny);
+        Col<u64>  tElements(Nx*Ny);
         uvec tBlockmap1(Nx*Ny);
         uvec tBlockmap2(Nx*Ny);
         uvec tBlockmap3(Nx*Ny);
@@ -1378,7 +1378,7 @@ field<uvec> amplitude::blocksort(ivec LHS, ivec K_unique){
 
 
     uvec l_sorted = sort_index(LHS); //most time is spent doing this -- maybe we should reorganize the items so they are sorted all along?
-    bool adv = false;
+    //bool adv = false;
 
     //LHS.elem(l_sorted).print();
     //cout << endl;
@@ -1404,7 +1404,7 @@ field<uvec> amplitude::blocksort(ivec LHS, ivec K_unique){
 
     //want to find row indices where LHS == k_config(i)
     //now: l_c == C
-    bool br = false;
+    //bool br = false;
     bool row_collect = false;
     while(lc < uiS){
         l_c = LHS(l_sorted(lc));
@@ -1772,9 +1772,9 @@ void amplitude::map_regions6(imat L, imat R){
 
     uint tempElementsSize = 0;
 
-    clock_t t0;
+    //clock_t t0;
 
-    t0 = clock();
+    //t0 = clock();
     //experiment, trying to speed up initialization
     field<uvec> tempRows = blocksort(LHS, K_unique);
     field<uvec> tempCols = blocksort(RHS, K_unique);
@@ -1957,7 +1957,7 @@ void amplitude::map_t2_permutations(){
 
     uint tempElementsSize = 0;
     //uvec a,b,c,i,j,k;
-    uint systemsize = 0;
+    //uint systemsize = 0;
 
     //#pragma omp parallel for num_threads(nthreads)
     for(uint n = 0; n <K_unique.n_rows; ++n){
@@ -2135,7 +2135,7 @@ void amplitude::map_t3_permutations(){
 
     uint tempElementsSize = 0;
     //uvec a,b,c,i,j,k;
-    uint systemsize = 0;
+    //uint systemsize = 0;
     for(uint n = 0; n <K_unique.n_rows; ++n){
         uvec dim(6);
         row = tempRows(n);
@@ -2319,7 +2319,7 @@ void amplitude::map_t3_permutations_bconfig(){
 
     uint tempElementsSize = 0;
     //uvec a,b,c,i,j,k;
-    uint systemsize = 0;
+    //uint systemsize = 0;
     for(uint n = 0; n <K_unique.n_rows; ++n){
         uvec dim(6);
         row = tempRows(n);
@@ -2470,18 +2470,20 @@ void amplitude::map_t3_permutations_bconfig_sparse(){
     // ###################################################################
     // ## Set up amplitude as t3temp with index permutations in blocks  ##
     // ###################################################################
-
+    //cout << "mapping:level1 passed" << endl;
     //Basically, we set up the standard amplitude sorting as abc-ijk, but store dimensions of each block so we ,may easily permute them later
     field<ivec> abc = ppp({1,1,1});
     field<ivec> ijk = hhh();
-
+    //cout << "mapping:level2 passed" << endl;
     ivec K_unique = intersect1d(unique(abc(3)), unique(ijk(3)));
 
     K_unique = intersect1d(K_unique, ivBconfigs); //map against preexisting configs
-
-    field<uvec> tempRows = partition_ppp_permutations(abc, K_unique);
+    //cout << "mapping:level3 passed" << endl;
+    field<Col<u64> > tempRows = partition_ppp_permutations(abc, K_unique); //this one will contain extremely large values
     //field<uvec> tempCols = partition(ijk(3), K_unique);
+    //cout << "mapping:level4 passed" << endl;
     field<uvec> tempCols = partition_hhh_permutations(ijk, K_unique);
+    //cout << "mapping:level5 passed" << endl;
     //uvec row;
     //uvec col;
     //uvec a,b,c;
@@ -2490,44 +2492,47 @@ void amplitude::map_t3_permutations_bconfig_sparse(){
 
     //for use in actual amplitude mapping
     permutative_ordering.set_size(K_unique.n_rows);
-    uint uiN = K_unique.n_elem;
+    u64 uiN = K_unique.n_elem;
 
     blocklengths(uiCurrent_block) = uiN; //number of blocks in config
     fvConfigs(uiCurrent_block) = K_unique; //ordering
     fmBlocks(uiCurrent_block).set_size(uiN);
     fspBlocks.set_size(uiN);
     fspDims.set_size(uiN,2);
+    //cout << "mapping:level6 passed" << endl;
 
     field<Col<u64> > tempElements(uiN);
-    field<uvec> tempBlockmap1(uiN);
-    field<uvec> tempBlockmap2(uiN);
-    field<uvec> tempBlockmap3(uiN);
+    field<Col<u64> > tempBlockmap1(uiN);
+    field<Col<u64> > tempBlockmap2(uiN);
+    field<Col<u64> > tempBlockmap3(uiN);
 
-    uint tempElementsSize = 0;
+    u64 tempElementsSize = 0;
     //uvec a,b,c,i,j,k;
-    uint systemsize = 0;
+    //u64 systemsize = 0;
+    //cout << "mapping:level7 passed" << endl;
 
     uvNsort1 = sort_index(uvElements);
     uvElemtemp1 = uvElements.elem(uvNsort1);
     //uvBsort1 = sort_index(uvNsort1); //backsort
+    //cout << "mapping:level8 passed" << endl;
 
     #pragma omp parallel for num_threads(nthreads)
-    for(uint n = 0; n <K_unique.n_rows; ++n){
-        uvec dim(6);
-        uvec row = tempRows(n);
-        uvec col = tempCols(n);
+    for(u64 n = 0; n <K_unique.n_rows; ++n){
+        //uvec dim(6);
+        Col<u64> row = tempRows(n);
+        Col<u64> col = tempCols(n);
         //systemsize += row.n_rows*col.n_rows;
 
 
-        int Nx = row.n_rows;
-        int Ny = col.n_rows;
+        u64 Nx = row.n_rows;
+        u64 Ny = col.n_rows;
         //cout << Nx << " " << Ny << " " << " " << K_unique(i) << endl;
-        umat block(Nx,Ny);
-        uvec pqrs(4);
-        uvec tElements(Nx*Ny);
-        uvec tBlockmap1(Nx*Ny);
-        uvec tBlockmap2(Nx*Ny);
-        uvec tBlockmap3(Nx*Ny);
+        Mat<u64> block(Nx,Ny);
+        //uvec pqrs(4);
+        Col<u64> tElements(Nx*Ny);
+        Col<u64> tBlockmap1(Nx*Ny);
+        Col<u64> tBlockmap2(Nx*Ny);
+        Col<u64> tBlockmap3(Nx*Ny);
 
         uvec c = floor(row/(Np*Np)); //k
         uvec b = floor(((row - c*Np*Np))/Np);
@@ -2540,8 +2545,8 @@ void amplitude::map_t3_permutations_bconfig_sparse(){
 
         u64 index;
         tempElementsSize += Nx*Ny;
-        for(int nx = 0; nx < Nx; nx++){
-            for(int ny = 0; ny < Ny; ny++){
+        for(u64 nx = 0; nx < Nx; nx++){
+            for(u64 ny = 0; ny < Ny; ny++){
 
                 index = to6(a(nx), b(nx), c(nx), i(ny), j(ny), k(ny));
 
@@ -2929,16 +2934,16 @@ mat amplitude::getblock_permuted(int u, int i, int n){
     return block;
 }
 
-umat amplitude::getfspBlock(uint i){
-    uint Nx = fspDims(i,0);
-    uint Ny = fspDims(i,1);
-    umat block(Nx, Ny);
+Mat<u64> amplitude::getfspBlock(uint i){
+    u64 Nx = fspDims(i,0);
+    u64 Ny = fspDims(i,1);
+    Mat<u64> block(Nx, Ny);
     //block*=0;
     block.fill(uiLastind);
 
-    umat indices = fspBlocks(i);
+    Mat<u64> indices = fspBlocks(i);
     //indices.print();
-    for(uint ni = 0; ni < indices.n_cols; ++ni){
+    for(u64 ni = 0; ni < indices.n_cols; ++ni){
 
         block(indices(1,ni), indices(2,ni)) = indices(0,ni);
     }
@@ -3201,8 +3206,8 @@ field<ivec> amplitude::pp(){
     ivec b(N);
     uint count = 0;
     //#pragma omp parallel for num_threads(4)
-    for(int na = 0; na<Np; ++na){
-        for(int nb = 0; nb<na+1; ++nb){
+    for(u64 na = 0; na<Np; ++na){
+        for(u64 nb = 0; nb<na+1; ++nb){
             a(count) = na;
             b(count) = nb;
             count += 1;
@@ -3228,8 +3233,8 @@ field<ivec> amplitude::hh_compact(){
     ivec a(N);
     ivec b(N);
     uint count = 0;
-    for(int na = 0; na<Nh; ++na){
-        for(int nb = 0; nb<na+1; ++nb){
+    for(u64 na = 0; na<Nh; ++na){
+        for(u64 nb = 0; nb<na+1; ++nb){
             a(count) = na;
             b(count) = nb;
             count += 1;
@@ -3248,15 +3253,15 @@ field<ivec> amplitude::hh_compact(){
 field<ivec> amplitude::ppp(ivec signs){
     //return a "compacted" particle particle particle unique indexvector
     //length of "compacted" vector
-    uint N = Np*(Np+1)*(Np+2)/6;
+    u64 N = Np*(Np+1)*(Np+2)/6;
     //indices
     ivec a(N);
     ivec b(N);
     ivec c(N);
-    uint count = 0;
-    for(int na = 0; na<Np; ++na){
-        for(int nb = 0; nb<na+1; ++nb){
-            for(int nc = 0; nc<nb+1; ++nc){
+    u64 count = 0;
+    for(u64 na = 0; na<Np; ++na){
+        for(u64 nb = 0; nb<na+1; ++nb){
+            for(u64 nc = 0; nc<nb+1; ++nc){
                 a(count) = na;
                 b(count) = nb;
                 c(count) = nc;
@@ -3283,9 +3288,9 @@ field<ivec> amplitude::hpp(){
     ivec a(N);
     ivec b(N);
     uint count = 0;
-    for(int ni = 0; ni<Nh; ++ni){
-        for(int na = 0; na<Np; ++na){
-            for(int nb = 0; nb<na+1; ++nb){
+    for(u64 ni = 0; ni<Nh; ++ni){
+        for(u64 na = 0; na<Np; ++na){
+            for(u64 nb = 0; nb<na+1; ++nb){
                 i(count) = ni;
                 a(count) = na;
                 b(count) = nb;
@@ -3311,9 +3316,9 @@ field<ivec> amplitude::php(){
     ivec i(N);
     ivec b(N);
     uint count = 0;
-    for(int na = 0; na<Np; ++na){
-        for(int ni = 0; ni<Nh; ++ni){
-            for(int nb = 0; nb<na+1; ++nb){
+    for(u64 na = 0; na<Np; ++na){
+        for(u64 ni = 0; ni<Nh; ++ni){
+            for(u64 nb = 0; nb<na+1; ++nb){
                 i(count) = ni;
                 a(count) = na;
                 b(count) = nb;
@@ -3340,9 +3345,9 @@ field<ivec> amplitude::pph(){
     ivec a(N);
     ivec b(N);
     uint count = 0;
-    for(int na = 0; na<Np; ++na){
-        for(int nb = 0; nb<na+1; ++nb){
-            for(int ni = 0; ni<Nh; ++ni){
+    for(u64 na = 0; na<Np; ++na){
+        for(u64 nb = 0; nb<na+1; ++nb){
+            for(u64 ni = 0; ni<Nh; ++ni){
                 i(count) = ni;
                 a(count) = na;
                 b(count) = nb;
@@ -3373,9 +3378,9 @@ field<ivec> amplitude::phh(){
     ivec a(N);
     ivec b(N);
     uint count = 0;
-    for(int ni = 0; ni<Np; ++ni){
-        for(int na = 0; na<Nh; ++na){
-            for(int nb = 0; nb<na+1; ++nb){
+    for(u64 ni = 0; ni<Np; ++ni){
+        for(u64 na = 0; na<Nh; ++na){
+            for(u64 nb = 0; nb<na+1; ++nb){
                 i(count) = ni;
                 a(count) = na;
                 b(count) = nb;
@@ -3401,9 +3406,9 @@ field<ivec> amplitude::hph(){
     ivec i(N);
     ivec b(N);
     uint count = 0;
-    for(int na = 0; na<Nh; ++na){
-        for(int ni = 0; ni<Np; ++ni){
-            for(int nb = 0; nb<na+1; ++nb){
+    for(u64 na = 0; na<Nh; ++na){
+        for(u64 ni = 0; ni<Np; ++ni){
+            for(u64 nb = 0; nb<na+1; ++nb){
                 i(count) = ni;
                 a(count) = na;
                 b(count) = nb;
@@ -3430,9 +3435,9 @@ field<ivec> amplitude::hhp(){
     ivec a(N);
     ivec b(N);
     uint count = 0;
-    for(int na = 0; na<Nh; ++na){
-        for(int nb = 0; nb<na+1; ++nb){
-            for(int ni = 0; ni<Np; ++ni){
+    for(u64 na = 0; na<Nh; ++na){
+        for(u64 nb = 0; nb<na+1; ++nb){
+            for(u64 ni = 0; ni<Np; ++ni){
                 i(count) = ni;
                 a(count) = na;
                 b(count) = nb;
@@ -3483,9 +3488,9 @@ field<ivec> amplitude::hhh(){
     ivec b(N);
     ivec c(N);
     uint count = 0;
-    for(int na = 0; na<Nh; ++na){
-        for(int nb = 0; nb<na+1; ++nb){
-            for(int nc = 0; nc<nb+1; ++nc){
+    for(u64 na = 0; na<Nh; ++na){
+        for(u64 nb = 0; nb<na+1; ++nb){
+            for(u64 nc = 0; nc<nb+1; ++nc){
                 a(count) = na;
                 b(count) = nb;
                 c(count) = nc;
@@ -3693,7 +3698,7 @@ field<uvec> amplitude::partition_pp(field<ivec> LHS, ivec K_unique){
     return tempRows;
 }
 
-field<uvec> amplitude::partition_ppp(field<ivec> LHS, ivec K_unique){
+field<Col<u64> > amplitude::partition_ppp(field<ivec> LHS, ivec K_unique){
     //partition particle-particle rows into blocks with preserved quantum numbers
     uvec l_sorted = sort_index(LHS(3));
     //bool adv = false;
@@ -3707,7 +3712,7 @@ field<uvec> amplitude::partition_ppp(field<ivec> LHS, ivec K_unique){
 
     uint nx = 0;
     int l_c= LHS(3)(l_sorted(lc));
-    field<uvec> tempRows(uiN);
+    field<Col<u64> > tempRows(uiN);
     //tempRows(uiN) = K_unique;
     //tempRows(0).set_size(uiN);
     //tempRows(1).set_size(uiN);
@@ -4041,10 +4046,10 @@ field<uvec> amplitude::partition_ppp_permutations(field<ivec> LHS, ivec K_unique
     uvec l_sorted = sort_index(LHS(3));
     //bool adv = false;
 
-    uint lc = 0;
-    uint i = 0;
+    u64 lc = 0;
+    u64 i = 0;
     uint uiN = K_unique.n_rows;
-    uint uiS = l_sorted.n_rows;
+    u64 uiS = l_sorted.n_rows;
 
     Pab.set_size(uiN);
     Pac.set_size(uiN);
@@ -4052,9 +4057,9 @@ field<uvec> amplitude::partition_ppp_permutations(field<ivec> LHS, ivec K_unique
 
     int C = K_unique(i);
 
-    uint nx = 0;
+    u64 nx = 0;
     int l_c= LHS(3)(l_sorted(lc));
-    field<uvec> tempRows(uiN);
+    field<Col<u64> > tempRows(uiN);
     //tempRows(uiN) = K_unique;
     //tempRows(0).set_size(uiN);
     //tempRows(1).set_size(uiN);
@@ -4070,23 +4075,26 @@ field<uvec> amplitude::partition_ppp_permutations(field<ivec> LHS, ivec K_unique
     //bool br = false;
     bool row_collect = false;
     //int ll_c = l_c;
-    uint a,b,c;
+    u64 a,b,c;
 
     uint l_sorted_lc;
-    uvec row(uiStatAlloc);
+    Col<u64> row(uiStatAlloc);
 
 
     uvec Na = conv_to<uvec>::from(LHS(0));
     uvec Nb = conv_to<uvec>::from(LHS(1));
     uvec Nc = conv_to<uvec>::from(LHS(2));
 
-    uvec permute_ab(uiStatAlloc);
-    uvec permute_ac(uiStatAlloc);
-    uvec permute_bc(uiStatAlloc);
+    Col<u64> permute_ab(uiStatAlloc);
+    Col<u64> permute_ac(uiStatAlloc);
+    Col<u64> permute_bc(uiStatAlloc);
+    //permute_bc*= 0;
+    //permute_ab*= 0;
+    //permute_ac*=0;
 
 
 
-    uint nx0 = 0;
+    //uint nx0 = 0;
     uint Np2 =Np*Np;
     while(lc < uiS){
         l_sorted_lc = l_sorted(lc);
@@ -4225,39 +4233,40 @@ field<uvec> amplitude::partition_ppp_permutations(field<ivec> LHS, ivec K_unique
         //if row is complete
         else{
             if(row_collect){
-                uvec sorted = sort_index(row(span(0,nx-1)));
-                uvec rr = row(span(0,nx-1));
-                uvec pab = permute_ab(span(0,nx-1));
-                uvec pac = permute_ac(span(0,nx-1));
-                uvec pbc = permute_bc(span(0,nx-1));
+                Col<u64> sorted = sort_index(row(span(0,nx-1)));
+                Col<u64> rr = row(span(0,nx-1));
+                Col<u64> pab = permute_ab(span(0,nx-1));
+                Col<u64> pac = permute_ac(span(0,nx-1));
+                Col<u64> pbc = permute_bc(span(0,nx-1)); //this array contains unallocated values. why?
+
+                //cout << pbc.max() << " " << pbc.n_rows << " " << pab.max() << " " << pab.n_rows << " " << pac.max() << " " << pac.n_rows << endl;
+                //test this part here.
+                
+                //do major 
 
                 tempRows(i) = rr.elem(sorted);
+                Col<u64> r_inv = sort_index(sorted);
+                Col<u64> ab_perm(pab.n_rows);
+                Col<u64> ac_perm(pab.n_rows);
+                Col<u64> bc_perm(pab.n_rows);
+                for(u64 h =0; h < ab_perm.n_rows; ++h){
+                    u64 current = r_inv(h);
 
-
-
-
-                uvec r_inv = sort_index(sorted);
-                uvec ab_perm(pab.n_rows);
-                uvec ac_perm(pab.n_rows);
-                uvec bc_perm(pab.n_rows);
-
-
-                for(uint h =0; h < ab_perm.n_rows; ++h){
-                    uint current = r_inv(h);
-
-                    uint ab_new = r_inv(pab(h));
+                    u64 ab_new = r_inv(pab(h));
                     ab_perm(current) = ab_new;
                     ab_perm(ab_new) = current;
 
-                    uint ac_new = r_inv(pac(h));
+                    u64 ac_new = r_inv(pac(h));
                     ac_perm(current) = ac_new;
                     ac_perm(ac_new) = current;
 
-                    uint bc_new = r_inv(pbc(h));
+                    //u64 pach = pac(h);
+                    //u64 pabh = pab(h);
+                    u64 pbch = pbc(h); //this one fails
+
+                    u64 bc_new = r_inv(pbch);
                     bc_perm(current) = bc_new;
                     bc_perm(bc_new) = current;
-
-
                 }
 
                 Pab(i) = ab_perm; //pab.elem(sorted);
@@ -4277,32 +4286,32 @@ field<uvec> amplitude::partition_ppp_permutations(field<ivec> LHS, ivec K_unique
     //collect final block
     //tempRows(i) = sort(row(span(0,nx-1))); //is this needed?
     if(nx>0){
-        uvec sorted = sort_index(row(span(0,nx-1)));
-        uvec rr = row(span(0,nx-1));
-        uvec pab = permute_ab(span(0,nx-1));
-        uvec pac = permute_ac(span(0,nx-1));
-        uvec pbc = permute_bc(span(0,nx-1));
+        Col<u64> sorted = sort_index(row(span(0,nx-1)));
+        Col<u64> rr = row(span(0,nx-1));
+        Col<u64> pab = permute_ab(span(0,nx-1));
+        Col<u64> pac = permute_ac(span(0,nx-1));
+        Col<u64> pbc = permute_bc(span(0,nx-1));
 
         tempRows(i) = rr.elem(sorted);
 
-        uvec r_inv = sort_index(sorted);
-        uvec ab_perm(pab.n_rows);
-        uvec ac_perm(pab.n_rows);
-        uvec bc_perm(pab.n_rows);
+        Col<u64> r_inv = sort_index(sorted);
+        Col<u64> ab_perm(pab.n_rows);
+        Col<u64> ac_perm(pab.n_rows);
+        Col<u64> bc_perm(pab.n_rows);
 
 
-        for(uint h =0; h < ab_perm.n_rows; ++h){
-            uint current = r_inv(h);
+        for(u64 h =0; h < ab_perm.n_rows; ++h){
+            u64 current = r_inv(h);
 
-            uint ab_new = r_inv(pab(h));
+            u64 ab_new = r_inv(pab(h));
             ab_perm(current) = ab_new;
             ab_perm(ab_new) = current;
 
-            uint ac_new = r_inv(pac(h));
+            u64 ac_new = r_inv(pac(h));
             ac_perm(current) = ac_new;
             ac_perm(ac_new) = current;
 
-            uint bc_new = r_inv(pbc(h));
+            u64 bc_new = r_inv(pbc(h));
             bc_perm(current) = bc_new;
             bc_perm(bc_new) = current;
 
@@ -4369,7 +4378,7 @@ field<uvec> amplitude::partition_hhh_permutations(field<ivec> LHS, ivec K_unique
 
 
 
-    uint nx0 = 0;
+    //uint nx0 = 0;
     uint Nh2 =Nh*Nh;
     while(lc < uiS){
         l_sorted_lc = l_sorted(lc);
@@ -4608,7 +4617,7 @@ field<uvec> amplitude::partition_hpp(field<ivec> LHS, ivec K_unique){
     uint lc = 0;
     uint i = 0;
     uint uiN = K_unique.n_rows;
-    uint uiS = l_sorted.n_rows;
+    //uint uiS = l_sorted.n_rows;
     int C = K_unique(i);
 
     uint nx = 0;
@@ -4637,7 +4646,7 @@ field<uvec> amplitude::partition_hpp(field<ivec> LHS, ivec K_unique){
     uvec Na = conv_to<uvec>::from(LHS(1));
     uvec Nb = conv_to<uvec>::from(LHS(2));
 
-    uint Np2 =Np*Np;
+    //uint Np2 =Np*Np;
     while(i < uiN){
         l_sorted_lc = l_sorted(lc);
         l_c = LHS(3)(l_sorted_lc);
@@ -4713,7 +4722,7 @@ field<uvec> amplitude::partition_php(field<ivec> LHS, ivec K_unique){
     uvec Na = conv_to<uvec>::from(LHS(1));
     uvec Nb = conv_to<uvec>::from(LHS(2));
 
-    uint Np2 =Np*Np;
+    //uint Np2 =Np*Np;
     while(lc < uiS){
         l_sorted_lc = l_sorted(lc);
         l_c = LHS(3)(l_sorted_lc);
@@ -4756,11 +4765,11 @@ field<uvec> amplitude::partition_php(field<ivec> LHS, ivec K_unique){
 field<uvec> amplitude::partition_pph(field<ivec> LHS, ivec K_unique){
     //partition particle-particle rows into blocks with preserved quantum numbers
     uvec l_sorted = sort_index(LHS(3));
-    int Nhp = Np*Nh;
+    //int Nhp = Np*Nh;
     uint lc = 0;
     uint i = 0;
     uint uiN = K_unique.n_rows;
-    uint uiS = l_sorted.n_rows;
+    //uint uiS = l_sorted.n_rows;
     int C = K_unique(i);
     //K_unique.print();
 
@@ -4842,7 +4851,7 @@ field<uvec> amplitude::partition_phh(field<ivec> LHS, ivec K_unique){
     uint lc = 0;
     uint i = 0;
     uint uiN = K_unique.n_rows;
-    uint uiS = l_sorted.n_rows;
+    //uint uiS = l_sorted.n_rows;
     int C = K_unique(i);
 
     uint nx = 0;
@@ -4871,7 +4880,7 @@ field<uvec> amplitude::partition_phh(field<ivec> LHS, ivec K_unique){
     uvec Na = conv_to<uvec>::from(LHS(1));
     uvec Nb = conv_to<uvec>::from(LHS(2));
 
-    uint Nh2 =Nh*Nh;
+    //uint Nh2 =Nh*Nh;
     //while(lc < uiS){
     while(i < uiN){
 
@@ -4949,7 +4958,7 @@ field<uvec> amplitude::partition_hph(field<ivec> LHS, ivec K_unique){
     uvec Na = conv_to<uvec>::from(LHS(1));
     uvec Nb = conv_to<uvec>::from(LHS(2));
 
-    uint Nh2 =Nh*Nh;
+    //uint Nh2 =Nh*Nh;
     while(lc < uiS){
         l_sorted_lc = l_sorted(lc);
         l_c = LHS(3)(l_sorted_lc);
@@ -4992,11 +5001,11 @@ field<uvec> amplitude::partition_hph(field<ivec> LHS, ivec K_unique){
 field<uvec> amplitude::partition_hhp(field<ivec> LHS, ivec K_unique){
     //partition particle-particle rows into blocks with preserved quantum numbers
     uvec l_sorted = sort_index(LHS(3));
-    int Nhp = Np*Nh;
+    //int Nhp = Np*Nh;
     uint lc = 0;
     uint i = 0;
     uint uiN = K_unique.n_rows;
-    uint uiS = l_sorted.n_rows;
+    //uint uiS = l_sorted.n_rows;
     int C = K_unique(i);
 
     //K_unique.print();

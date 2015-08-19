@@ -222,7 +222,7 @@ void ccd_mp::advance(){
     int Nq = iSetup.iNp;
     int Nr = iSetup.iNh;
     int Ns = iSetup.iNh;
-    bool timing = false; //time each contribution calculation and print to screen (each iteration)
+    //bool timing = false; //time each contribution calculation and print to screen (each iteration)
     //clock_t t;
     //t = clock();
     L1_dense_multiplication();
@@ -250,7 +250,7 @@ void ccd_mp::advance(){
     Tprev.update(T.pq_rs(), Np,Nq,Nr,Ns);
 
     T.update(vpphh.pq_rs() + .5*(L1 + L2) + L3 + .25*Q1 + Q2 - .5*Q3 - .5*Q4, Np, Nq, Nr, Ns);
-    T.set_amplitudes(ebs.vEnergy); //divide updated amplitides by energy denominator
+    T.set_amplitudes(ebs.vHFEnergy); //divide updated amplitides by energy denominator
     T.update(alpha*Tprev.pq_rs() + (1.0-alpha)*T.pq_rs(), Np, Nq,Nr,Ns);
 
     energy();

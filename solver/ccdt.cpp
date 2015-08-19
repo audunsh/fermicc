@@ -270,7 +270,7 @@ void ccdt::advance(){
     int Nq = iSetup.iNp;
     int Nr = iSetup.iNh;
     int Ns = iSetup.iNh;
-    bool timing = false; //time each contribution calculation and print to screen (each iteration)
+    //bool timing = false; //time each contribution calculation and print to screen (each iteration)
 
     // ##################################################
     // ##                                              ##

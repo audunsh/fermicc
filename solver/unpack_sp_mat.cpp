@@ -23,8 +23,8 @@ unpack_sp_mat::unpack_sp_mat(sp_mat c)
     }
 
     for(i= 0; i<c.n_cols; i++){
-        int current_column = c.col_ptrs[i];
-        int n_elem_in_column = c.col_ptrs[i+1]-c.col_ptrs[i];
+        uint current_column = c.col_ptrs[i];
+        uint n_elem_in_column = c.col_ptrs[i+1]-c.col_ptrs[i];
         for(e = 0; e<n_elem_in_column; e++){
             vT1[current_column + e] = i;
         }

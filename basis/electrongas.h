@@ -11,8 +11,8 @@ class electrongas
 {
 public:
     electrongas();
-    void generate_state_list2(int Ne, double rs, int Np);
-    void generate_state_list(int Ne, double rs, int Np);
+    void generate_state_list2(int Ne, double rs, u64 Np);
+    void generate_state_list(int Ne, double rs, u64 Np);
     vec F_vectorized(uint p); //fock eigenvalues vectorized
     double absdiff2(rowvec A, rowvec B);
     double v(int P, int Q, int R, int S);
@@ -40,8 +40,8 @@ public:
     double dL3; //L*L*L
     double dL2; //L*L
     double dr_s;
-    int iN;
-    int iNbstates;
+    u64 iN;
+    u64 iNbstates;
 
     mat mSortedEnergy;
     vec vEnergy;
@@ -49,7 +49,7 @@ public:
     double dPrefactor1;
     double dPrefactor2;
     double mu;
-    int iNparticles;
+    u64 iNparticles;
     int k_step;
 
     double pi = 4*atan(1);
