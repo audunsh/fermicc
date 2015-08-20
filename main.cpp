@@ -28,34 +28,39 @@ int main(int argc, char *argv[] )
     //default setup
     int i0 = 3;
     int i1 = 4;
+    uint iNp = 14;
     double rs = 1.0;
     uint iterations = 20;
     uint uiStatAlloc = 100000;
-    uint uiMode = 1;
+    uint uiMode = 3;
     double dConvergenceThreshold = 0.0000000001;
     double dRelaxation = .3;
 
     if ( argc == 9 ){
         i0 = atoi(argv[1]);
         i1 = atoi(argv[2]);
-        rs = atof(argv[3]);
 
-        iterations = atoi(argv[4]);
-        dConvergenceThreshold = atof(argv[5])/10.0;
-        dRelaxation = atof(argv[6]);
+        iNp = atoi(argv[3]);
 
-        uiStatAlloc = atoi(argv[7]);
-        uiMode = atoi(argv[8]);
+        rs = atof(argv[4]);
+
+        iterations = atoi(argv[5]);
+        dConvergenceThreshold = atof(argv[6])/10.0;
+        dRelaxation = atof(argv[7]);
+
+        uiStatAlloc = atoi(argv[8]);
+        uiMode = atoi(argv[9]);
 
 
     }
     else{
         cout << "FermiCC, by Audun Skau Hansen 2015." << endl;
         cout << "Usage:" << endl;
-        cout << "./FermiCC [start] [end] [rs] [iterations] [precision] [relaxation] [static allocation] [mode]" << endl;
+        cout << "./FermiCC [start] [end] [Np] [rs] [iterations] [precision] [relaxation] [static allocation] [mode]" << endl;
         cout << endl;
         cout << "start/end        :       Number of the first shell (start) and up to (but not including) the last shell (end)."<< endl;
-        cout << "rs               :       Wigner-Seiz radi. See thesis." << endl;
+        cout << "Np               :       Number of electrons." << endl;
+        cout << "rs               :       Wigner-Seiz radius. See thesis." << endl;
         cout << "iterations       :       Maximum number of iterations." << endl;
         cout << "precision        :       Number of decimals in answer" << endl;
         cout << "relaxation       :       Relaxation for amplitude updates." << endl;
@@ -68,7 +73,7 @@ int main(int argc, char *argv[] )
         cout << "                                5 CCDT" << endl;
         cout << "---------------------------------------------------------------" << endl;
         cout << "Running default calculation, i.e.:" << endl;
-        cout << "./FermiCC 3 4 1.0 20 10 100000 1" << endl;
+        cout << "./FermiCC 3 4 14 1.0 20 10 100000 1" << endl;
 
     }
 
@@ -91,7 +96,7 @@ int main(int argc, char *argv[] )
 
     for(int i = i0; i < i1; ++i){
         electrongas fgas;
-        fgas.generate_state_list2(i,rs, 14);
+        fgas.generate_state_list2(i,rs, iNp);
         cout << setprecision(9) << rs << "  " << fgas.iNbstates << endl;
         //sccdt_mp solve(fgas, .3);
         if(uiMode==1){
@@ -118,7 +123,7 @@ int main(int argc, char *argv[] )
             ccd_mp solver1(fgas,.3);
             //solver1.uiStatAlloc = uiStatAlloc;
             //solver1.init();
-            //solver1.solve(iterations);
+            //solver1.solve(iterations, dRelaxation, dConvergenceThreshold);
             cout << "Number of states, correlation energy, difference in last convergence, number of iterations passed" << endl;
 
             cout << setprecision(9) << "[CCD (sparse)]"<< fgas.iNbstates << "     " << solver1.correlation_energy <<  endl;

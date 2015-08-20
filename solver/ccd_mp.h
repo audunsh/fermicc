@@ -32,6 +32,10 @@ public:
 
 
     void advance();
+
+    void solve(int iters, double relaxation, double threshold);
+    double dEnergy;
+
     void L1_dense_multiplication(); //block ladder calculation
 
     void check_matrix_consistency();
