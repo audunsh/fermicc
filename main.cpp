@@ -31,12 +31,12 @@ int main(int argc, char *argv[] )
     uint iNp = 14;
     double rs = 1.0;
     uint iterations = 20;
-    uint uiStatAlloc = 100000;
-    uint uiMode = 3;
+    uint uiStatAlloc = 10000000;
+    uint uiMode = 2;
     double dConvergenceThreshold = 0.0000000001;
     double dRelaxation = .3;
 
-    if ( argc == 9 ){
+    if ( argc == 10 ){
         i0 = atoi(argv[1]);
         i1 = atoi(argv[2]);
 
@@ -45,11 +45,18 @@ int main(int argc, char *argv[] )
         rs = atof(argv[4]);
 
         iterations = atoi(argv[5]);
-        dConvergenceThreshold = atof(argv[6])/10.0;
+        dConvergenceThreshold = pow(10.0,-1*atof(argv[6]));
         dRelaxation = atof(argv[7]);
 
         uiStatAlloc = atoi(argv[8]);
         uiMode = atoi(argv[9]);
+        cout << "start/end        :" << i0 << "/" << i1 << endl;
+        cout << "Np               :" << iNp<< endl;
+        cout << "rs               :" << rs << endl;
+        cout << "iterations       :" << iterations << endl;
+        cout << "precision        :" << dConvergenceThreshold << endl;
+        cout << "relaxation       :" << dRelaxation << endl;
+        cout << "static allocation:" << uiStatAlloc << endl;
 
 
     }
@@ -97,7 +104,7 @@ int main(int argc, char *argv[] )
     for(int i = i0; i < i1; ++i){
         electrongas fgas;
         fgas.generate_state_list2(i,rs, iNp);
-        cout << setprecision(9) << rs << "  " << fgas.iNbstates << endl;
+        cout << setprecision(10) << rs << "  " << fgas.iNbstates << endl;
         //sccdt_mp solve(fgas, .3);
         if(uiMode==1){
             bccd solver1(fgas,.3, dConvergenceThreshold);
@@ -123,7 +130,29 @@ int main(int argc, char *argv[] )
             ccd_mp solver1(fgas,.3);
             //solver1.uiStatAlloc = uiStatAlloc;
             //solver1.init();
+            solver1.solve(iterations, dRelaxation, dConvergenceThreshold);
+            cout << "Number of states, correlation energy, difference in last convergence, number of iterations passed" << endl;
+
+            cout << setprecision(9) << "[CCD (sparse)]"<< fgas.iNbstates << "     " << solver1.correlation_energy <<  endl;
+        }
+
+        if(uiMode==4){
+            cout << "Mode not available in this version." << endl;
+
+            //ccd_mp solver1(fgas,.3);
+            //solver1.uiStatAlloc = uiStatAlloc;
+            //solver1.init();
             //solver1.solve(iterations, dRelaxation, dConvergenceThreshold);
+            //cout << "Number of states, correlation energy, difference in last convergence, number of iterations passed" << endl;
+
+            //cout << setprecision(9) << "[CCD (sparse)]"<< fgas.iNbstates << "     " << solver1.correlation_energy <<  endl;
+        }
+
+        if(uiMode==5){
+            sccdt_mp solver1(fgas,dRelaxation);
+            //solver1.uiStatAlloc = uiStatAlloc;
+            //solver1.init();
+            solver1.solve(iterations, dConvergenceThreshold);
             cout << "Number of states, correlation energy, difference in last convergence, number of iterations passed" << endl;
 
             cout << setprecision(9) << "[CCD (sparse)]"<< fgas.iNbstates << "     " << solver1.correlation_energy <<  endl;

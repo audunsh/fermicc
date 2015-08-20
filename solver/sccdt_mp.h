@@ -143,6 +143,9 @@ public:
 
 
     double correlation_energy;
+    double correlation_energy_prev;
+
+    void solve(int iters, double thresh);
 
 
 

@@ -50,6 +50,7 @@ public:
 
     double CCSD_SG_energy();
     double correlation_energy;
+    double correlation_energy_prev;
 
     int iterations;
 

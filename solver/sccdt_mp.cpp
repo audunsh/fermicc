@@ -109,12 +109,18 @@ sccdt_mp::sccdt_mp(electrongas bs, double a){
     T3.map_indices();
     //check_matrix_consistency();
     energy();
-    for(int i = 0; i < 60; i++){
-        iterations += 1;
-        advance();
-    }
+
 }
 
+void sccdt_mp::solve(int iters,double thresh){
+    for(int i = 0; i < iters; i++){
+        iterations += 1;
+        advance();
+        if(abs(correlation_energy-correlation_energy_prev)<thresh){
+            break;
+        }
+    }
+}
 
 
 void sccdt_mp::check_matrix_consistency(){
@@ -750,6 +756,7 @@ void sccdt_mp::advance(){
     // #########################
     // ##  Updating t2        ##
     // #########################
+    double correlation_energy;
 
 
     Tprev.update(T.pq_rs(), Np,Nq,Nr,Ns); //When using relaxation we need to store the previous amplitudes
@@ -784,6 +791,7 @@ void sccdt_mp::energy(){
         C_+= Cv(i,i);
     }
 
+    correlation_energy_prev = correlation_energy; //retain previous iteration
     correlation_energy = .25*C_;
     cout << "[CCDT]["  << iterations  << "]" << "Energy               :" << .25*C_ << endl;
     //cout << "[CCDT]["  << iterations  << "]" << "Energy (per particle):" << .25*C_/iSetup.iNh << endl;

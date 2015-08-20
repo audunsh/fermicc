@@ -547,7 +547,7 @@ void amplitude::map_t3_236_145(ivec Kk_unique){
 
     field<ivec> bconfigs(uiN); //normally aligned configurations for each block
     uint bconfig_len = 0;
-    #pragma omp parallel for num_threads(nthreads)
+    #pragma omp parallel for num_threads(nthreads) reduction(+:tempElementsSize)
     for(uint n = 0; n <K_unique.n_rows; ++n){
         uvec dim(6);
         uvec row = tempRows(n);
@@ -753,7 +753,7 @@ void amplitude::map_t3_623_451(ivec Kk_unique){
     field<ivec> bconfigs(uiN); //normally aligned configurations for each block
     uint bconfig_len = 0;
 
-    #pragma omp parallel for num_threads(nthreads)
+    #pragma omp parallel for num_threads(nthreads) reduction(+:tempElementsSize)
     for(uint n = 0; n <K_unique.n_rows; ++n){
         uvec dim(6);
         uvec row = tempRows(n);
@@ -952,6 +952,8 @@ void amplitude::map_t3_124_356(ivec Kk_unique){
     field<uvec> tempBlockmap2(uiN);
     field<uvec> tempBlockmap3(uiN);
 
+    //field<uvec>
+
     uint tempElementsSize = 0;
     //uvec a,b,c,i,j,k;
     //uint systemsize = 0;
@@ -960,7 +962,7 @@ void amplitude::map_t3_124_356(ivec Kk_unique){
 
     field<ivec> bconfigs(uiN); //normally aligned configurations for each block
     uint bconfig_len = 0;
-    #pragma omp parallel for num_threads(nthreads)
+    #pragma omp parallel for num_threads(nthreads) reduction(+:tempElementsSize)
     for(uint n = 0; n <K_unique.n_rows; ++n){
         uvec dim(6);
         Col<u64>  row = tempRows(n); //should this be col<u64> ?
@@ -2516,7 +2518,7 @@ void amplitude::map_t3_permutations_bconfig_sparse(){
     //uvBsort1 = sort_index(uvNsort1); //backsort
     //cout << "mapping:level8 passed" << endl;
 
-    #pragma omp parallel for num_threads(nthreads)
+    #pragma omp parallel for num_threads(nthreads) reduction(+:tempElementsSize)
     for(u64 n = 0; n <K_unique.n_rows; ++n){
         //uvec dim(6);
         Col<u64> row = tempRows(n);
@@ -3920,6 +3922,8 @@ field<uvec> amplitude::partition_pp_permutations(field<ivec> LHS, ivec K_unique)
     uvec l_sorted = sort_index(LHS(2));
     //bool adv = false;
 
+
+
     uint lc = 0;
     uint i = 0;
     uint uiN = K_unique.n_rows;
@@ -3958,6 +3962,7 @@ field<uvec> amplitude::partition_pp_permutations(field<ivec> LHS, ivec K_unique)
     uvec pab(uiStatAlloc);
 
     while(lc < uiS){
+        //C = K_unique(i);
         l_sorted_lc = l_sorted(lc);
         l_c = LHS(2)(l_sorted_lc);
 
@@ -4011,7 +4016,10 @@ field<uvec> amplitude::partition_pp_permutations(field<ivec> LHS, ivec K_unique)
                 lc -= 1;
                 i += 1;
                 nx = 0;
-                C = K_unique(i);
+                if(i<K_unique.n_rows){
+                    C = K_unique(i);
+                }
+
                 row_collect = false;
             }
         }
@@ -4276,7 +4284,9 @@ field<uvec> amplitude::partition_ppp_permutations(field<ivec> LHS, ivec K_unique
                 lc -= 1;
                 i += 1;
                 nx = 0;
-                C = K_unique(i);
+                if(i<K_unique.n_rows){
+                    C = K_unique(i);
+                }
                 row_collect = false;
             }
         }
@@ -4672,7 +4682,9 @@ field<uvec> amplitude::partition_hpp(field<ivec> LHS, ivec K_unique){
                 lc -= 1;
                 i += 1;
                 nx = 0;
-                C = K_unique(i);
+                if(i<K_unique.n_rows){
+                    C = K_unique(i);
+                }
                 row_collect = false;
             }
         }
@@ -4829,7 +4841,9 @@ field<uvec> amplitude::partition_pph(field<ivec> LHS, ivec K_unique){
                 lc -= 1;
                 i += 1;
                 nx = 0;
-                C = K_unique(i);
+                if(i<K_unique.n_rows){
+                    C = K_unique(i);
+                }
                 row_collect = false;
             }
         }
@@ -4908,7 +4922,9 @@ field<uvec> amplitude::partition_phh(field<ivec> LHS, ivec K_unique){
                 lc -= 1;
                 i += 1;
                 nx = 0;
-                C = K_unique(i);
+                if(i<K_unique.n_rows){
+                    C = K_unique(i);
+                }
                 row_collect = false;
             }
         }
@@ -5064,7 +5080,9 @@ field<uvec> amplitude::partition_hhp(field<ivec> LHS, ivec K_unique){
                 i += 1;
                 nx = 0;
 
-                C = K_unique(i);
+                if(i<K_unique.n_rows){
+                    C = K_unique(i);
+                }
                 row_collect = false;
             }
         }
